@@ -1,0 +1,3 @@
+se_zest_homepage:
+    path:     /hello
+    defaults: { _controller: SEZestBundle:Advert:index }
