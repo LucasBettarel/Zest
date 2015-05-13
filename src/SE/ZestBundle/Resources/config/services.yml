@@ -1,4 +1,6 @@
 services:
-#    se_zest.example:
-#        class: SE\ZestBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    se_zest.doctrine.notification:
+        class: SE\ZestBundle\DoctrineListener\ApplicationNotification
+        arguments: [@mailer]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }

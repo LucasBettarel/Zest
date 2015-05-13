@@ -1,3 +1,27 @@
-se_zest_homepage:
-    path:     /hello
-    defaults: { _controller: SEZestBundle:Advert:index }
+se_zest_home:
+    path:     /{page}
+    defaults: { _controller: SEZestBundle:Advert:index, page: 1 }
+    requirements:
+        page:   \d*
+
+se_zest_view:
+    path:     /advert/{id}
+    defaults: { _controller: SEZestBundle:Advert:view }
+    requirements:
+        id:   \d+
+
+se_zest_add:
+    path:     /add
+    defaults: { _controller: SEZestBundle:Advert:add }
+
+se_zest_edit:
+    path:      /edit/{id}
+    defaults:  { _controller: SEZestBundle:Advert:edit }
+    requirements:
+        id: \d+
+
+se_zest_delete:
+    path:      /delete/{id}
+    defaults:  { _controller: SEZestBundle:Advert:delete }
+    requirements:
+        id: \d+

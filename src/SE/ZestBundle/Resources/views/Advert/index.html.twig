@@ -1,13 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Bienvenue dans ta chatte!</title>
-    </head>
-    <body>
-        <h1>Le plastique c'est fantastique !</h1>
-    
-        <p>
-            La {{ nom }} est un ensemble de textes considérés comme sacrés par le judaïsme et le christianisme. Les différents groupes religieux peuvent inclure différents livres dans leurs canons, dans un ordre différent.
-        </p>
-    </body>
-</html>
+{% extends "SEZestBundle::layout.html.twig" %}
+
+{% block title %}Accueil - {{ parent() }}{% endblock %}
+
+{% block sezest_body %}
+  <h2>Liste des annonces</h2>
+
+  <ul>
+    {% for advert in listAdverts %}
+      <li>
+        <a href="{{ path('se_zest_view', {'id': advert.id}) }}">
+          {{ advert.title }}
+        </a>
+        par {{ advert.author }},
+        le {{ advert.date|date('d/m/Y') }}
+      </li>
+    {% else %}
+      <li>Pas (encore !) d'annonces</li>
+    {% endfor %}
+  </ul>
+
+  <ul class="pagination">
+  {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
+  {% for p in range(1, nbPages) %}
+    <li{% if p == page %} class="active"{% endif %}>
+      <a href="{{ path('se_zest_home', {'page': p}) }}">{{ p }}</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
