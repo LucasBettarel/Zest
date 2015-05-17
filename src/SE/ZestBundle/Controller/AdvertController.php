@@ -6,6 +6,8 @@ use SE\ZestBundle\Entity\Advert;
 use SE\ZestBundle\Entity\Image;
 use SE\ZestBundle\Entity\Application;
 use SE\ZestBundle\Entity\AdvertSkill;
+use SE\ZestBundle\Form\AdvertType;
+use SE\ZestBundle\Form\AdvertEditType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +21,7 @@ class AdvertController extends Controller
       throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
     }
 
-    $nbPerPage = 3;
+    $nbPerPage = 5;
 
     // On récupère toutes les annonces
     $listAdverts = $this->getDoctrine()
@@ -83,33 +85,15 @@ class AdvertController extends Controller
   public function addAction(Request $request)
     {
      $advert = new Advert();
-     $advert->setDate(new \Datetime());
+     $form = $this->createForm(new AdvertType, $advert);
 
-    $form = $this->get('form.factory')->createBuilder('form', $advert)
-      ->add('date',      'date')
-      ->add('title',     'text')
-      ->add('content',   'textarea')
-      ->add('author',    'text')
-      ->add('published', 'checkbox', array('required' => false))
-      ->add('save',      'submit')
-      ->getForm()
-    ;
-
-    // On fait le lien Requête <-> Formulaire
-    // À partir de maintenant, la variable $advert contient les valeurs entrées dans le formulaire par le visiteur
-    $form->handleRequest($request);
-
-    // On vérifie que les valeurs entrées sont correctes
-    // (Nous verrons la validation des objets en détail dans le prochain chapitre)
-    if ($form->isValid()) {
-      // On l'enregistre notre objet $advert dans la base de données, par exemple
+    if ($form->handleRequest($request)->isValid()) {
       $em = $this->getDoctrine()->getManager();
       $em->persist($advert);
       $em->flush();
 
       $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 
-      // On redirige vers la page de visualisation de l'annonce nouvellement créée
       return $this->redirect($this->generateUrl('se_zest_view', array('id' => $advert->getId())));
     }
 
@@ -132,34 +116,23 @@ class AdvertController extends Controller
       throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
     }
 
-    $form = $this->get('form.factory')->createBuilder('form', $advert)
-      ->add('date',      'date')
-      ->add('title',     'text')
-      ->add('content',   'textarea')
-      ->add('author',    'text')
-      ->add('published', 'checkbox')
-      ->add('save',      'submit')
-      ->getForm()
-    ;
+    $form = $this->createForm(new AdvertEditType(), $advert);
 
-    $form->handleRequest($request);
+   if ($form->handleRequest($request)->isValid()) {
+     $em->flush();
 
-   if ($form->isValid()) {
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($advert);
-      $em->flush();
-
-      $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+      $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiee.');
 
       return $this->redirect($this->generateUrl('se_zest_view', array('id' => $advert->getId())));
     }
 
     return $this->render('SEZestBundle:Advert:edit.html.twig', array(
       'form' => $form->createView(),
+      'advert' => $advert
     ));
   }
 
-  public function deleteAction($id)
+  public function deleteAction($id, Request $request)
   { 
     $em = $this->getDoctrine()->getManager();
 
@@ -170,18 +143,23 @@ class AdvertController extends Controller
       throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
     }
 
-    if ($request->isMethod('POST')) {
-      // Si la requête est en POST, on deletea l'article
+    // On crée un formulaire vide, qui ne contiendra que le champ CSRF
+    // Cela permet de protéger la suppression d'annonce contre cette faille
+    $form = $this->createFormBuilder()->getForm();
 
-      $request->getSession()->getFlashBag()->add('info', 'Annonce bien supprimée.');
+    if ($form->handleRequest($request)->isValid()) {
+      $em->remove($advert);
+      $em->flush();
 
-      // Puis on redirige vers l'accueil
+      $request->getSession()->getFlashBag()->add('info', "L'annonce a bien été supprimée.");
+
       return $this->redirect($this->generateUrl('se_zest_home'));
     }
 
-    // Si la requête est en GET, on affiche une page de confirmation avant de delete
+    // Si la requête est en GET, on affiche une page de confirmation avant de supprimer
     return $this->render('SEZestBundle:Advert:delete.html.twig', array(
-      'advert' => $advert
+      'advert' => $advert,
+      'form'   => $form->createView()
     ));
   }
 

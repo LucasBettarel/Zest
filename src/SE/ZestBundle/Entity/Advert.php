@@ -4,6 +4,12 @@ namespace SE\ZestBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use SE\ZestBundle\Validator\Antiflood;
+
 
 /**
  * Advert
@@ -11,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="SE\ZestBundle\Entity\AdvertRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields="title", message="Une annonce existe déjà avec ce titre.")
  */
 class Advert
 {
@@ -25,28 +32,29 @@ class Advert
 
     /**
      * @var \DateTime
-     *
+     * @Assert\DateTime()
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\Length(min=10)
+     * @ORM\Column(name="title", type="string", length=255, unique=true)
      */
     private $title;
 
     /**
      * @var string
-     *
+     * @Assert\Length(min=2)
      * @ORM\Column(name="author", type="string", length=255)
      */
     private $author;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
+     * @Antiflood()
      * @ORM\Column(name="content", type="text")
      */
     private $content;
@@ -57,8 +65,9 @@ class Advert
     private $published = true;
 
     /**
-    * @ORM\OneToOne(targetEntity="SE\ZestBundle\Entity\Image", cascade={"persist"})
-    */
+     * @ORM\OneToOne(targetEntity="SE\ZestBundle\Entity\Image", cascade={"persist", "remove"})
+     * @Assert\Valid()
+     */
     private $image;
 
     /**
@@ -80,6 +89,13 @@ class Advert
       * @ORM\Column(name="nb_applications", type="integer")
       */
     private $nbApplications = 0;
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
 
     public function increaseApplication()
     {
@@ -359,4 +375,46 @@ class Advert
     {
         return $this->nbApplications;
     }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Advert
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+
+  /**
+   * @Assert\Callback
+   */
+  public function isTitleValid(ExecutionContextInterface $context)
+  {
+    $forbiddenWords = array('bite', 'couille');
+
+    // On vérifie que le contenu ne contient pas l'un des mots
+    if (preg_match('#'.implode('|', $forbiddenWords).'#', $this->getTitle())) {
+      // La règle est violée, on définit l'erreur
+      $context
+        ->buildViolation('Contenu invalide car il contient bite ou couille.') // message
+        ->atPath('title')                                                   // attribut de l'objet qui est violé(comme ta soeur)
+        ->addViolation() // ceci déclenche l'erreur, ne l'oubliez pas
+      ;
+    }
+  }
 }
