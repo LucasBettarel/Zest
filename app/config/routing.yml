@@ -1,3 +1,7 @@
+se_input:
+    resource: "@SEInputBundle/Resources/config/routing.yml"
+    prefix:   /input
+
 se_zest:
     resource: "@SEZestBundle/Resources/config/routing.yml"
     prefix:   /zest

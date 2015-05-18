@@ -1,0 +1,3 @@
+se_input_home:
+    path:     /
+    defaults: { _controller: SEInputBundle:Entry:index }

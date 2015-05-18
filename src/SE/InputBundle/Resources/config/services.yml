@@ -1,0 +1,4 @@
+services:
+#    se_input.example:
+#        class: SE\InputBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
