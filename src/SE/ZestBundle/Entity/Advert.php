@@ -40,7 +40,7 @@ class Advert
     /**
      * @var string
      * @Assert\Length(min=10)
-     * @ORM\Column(name="title", type="string", length=255, unique=true)
+     * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
 
@@ -91,7 +91,7 @@ class Advert
     private $nbApplications = 0;
 
     /**
-     * @Gedmo\Slug(fields={"title"})
+     * @Gedmo\Slug(fields={"id"})
      * @ORM\Column(length=128, unique=true)
      */
     private $slug;
