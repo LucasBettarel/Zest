@@ -15,14 +15,23 @@ class EmployeeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('sesa')
-            ->add('remarks')
-            ->add('date_creation')
-            ->add('default_team')
-            ->add('default_shift')
-            ->add('status')
-            ->add('job')
+            ->add('name',    'text')
+            ->add('sesa',    'text')
+            ->add('job', 'entity', array(
+                'class'    => 'SEInputBundle:Job',
+                'property' => 'description', 
+                'multiple' => false,
+                'expanded' => false
+                ))
+            ->add('status', 'entity', array(
+                'class'    => 'SEInputBundle:Status',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => false
+                ))
+            ->add('permanent', 'checkbox', array('required' => false))
+            ->add('remarks', 'textarea', array('required' => false))
+            ->add('save',      'submit')
         ;
     }
     

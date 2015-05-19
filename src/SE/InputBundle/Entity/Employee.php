@@ -48,13 +48,20 @@ class Employee
     private $default_shift;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status")
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Job")
+     * @var boolean
+     *
+     * @ORM\Column(name="permanent", type="boolean")
+     */
+    private $permanent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Job", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $job;
@@ -246,5 +253,51 @@ class Employee
     public function getJob()
     {
         return $this->job;
+    }
+
+    /**
+     * Set permanent
+     *
+     * @param boolean $permanent
+     * @return Employee
+     */
+    public function setPermanent($permanent)
+    {
+        $this->permanent = $permanent;
+
+        return $this;
+    }
+
+    /**
+     * Get permanent
+     *
+     * @return boolean 
+     */
+    public function getPermanent()
+    {
+        return $this->permanent;
+    }
+
+    /**
+     * Set default_shift
+     *
+     * @param \SE\InputBundle\Entity\Shift $defaultShift
+     * @return Employee
+     */
+    public function setDefaultShift(\SE\InputBundle\Entity\Shift $defaultShift = null)
+    {
+        $this->default_shift = $defaultShift;
+
+        return $this;
+    }
+
+    /**
+     * Get default_shift
+     *
+     * @return \SE\InputBundle\Entity\Shift 
+     */
+    public function getDefaultShift()
+    {
+        return $this->default_shift;
     }
 }

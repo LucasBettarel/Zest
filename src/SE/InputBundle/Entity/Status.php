@@ -29,14 +29,6 @@ class Status
     private $name;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="permanent", type="boolean")
-     */
-    private $permanent;
-
-
-    /**
      * Get id
      *
      * @return integer 
@@ -67,28 +59,5 @@ class Status
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set permanent
-     *
-     * @param boolean $permanent
-     * @return Status
-     */
-    public function setPermanent($permanent)
-    {
-        $this->permanent = $permanent;
-
-        return $this;
-    }
-
-    /**
-     * Get permanent
-     *
-     * @return boolean 
-     */
-    public function getPermanent()
-    {
-        return $this->permanent;
     }
 }

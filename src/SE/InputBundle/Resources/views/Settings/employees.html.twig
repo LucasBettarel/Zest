@@ -14,4 +14,15 @@
 	</p>
 
 	<p> Here will be the Employees List -> table with criteria + edit in line </p>
+
+	<ul>
+    {% for employee in listEmployees %}
+      <li>
+        	{{ employee.name }} - {{ employee.sesa }}
+      </li>
+    {% else %}
+      <li> No employee recorded </li>
+    {% endfor %}
+  </ul>
+
 {% endblock %}

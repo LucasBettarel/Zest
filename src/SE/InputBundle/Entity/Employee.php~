@@ -42,13 +42,26 @@ class Employee
     private $default_team;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status")
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Shift")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $default_shift;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Job")
+     * @var boolean
+     *
+     * @ORM\Column(name="permanent", type="boolean")
+     */
+    private $permanent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Job", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $job;
@@ -171,5 +184,74 @@ class Employee
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set date_creation
+     *
+     * @param \DateTime $dateCreation
+     * @return Employee
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->date_creation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get date_creation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->date_creation;
+    }
+
+    /**
+     * Set default_team
+     *
+     * @param \SE\InputBundle\Entity\Team $defaultTeam
+     * @return Employee
+     */
+    public function setDefaultTeam(\SE\InputBundle\Entity\Team $defaultTeam = null)
+    {
+        $this->default_team = $defaultTeam;
+
+        return $this;
+    }
+
+    /**
+     * Get default_team
+     *
+     * @return \SE\InputBundle\Entity\Team 
+     */
+    public function getDefaultTeam()
+    {
+        return $this->default_team;
+    }
+
+    /**
+     * Set job
+     *
+     * @param \SE\InputBundle\Entity\Job $job
+     * @return Employee
+     */
+    public function setJob(\SE\InputBundle\Entity\Job $job)
+    {
+        $this->job = $job;
+
+        return $this;
+    }
+
+    /**
+     * Get job
+     *
+     * @return \SE\InputBundle\Entity\Job 
+     */
+    public function getJob()
+    {
+        return $this->job;
     }
 }

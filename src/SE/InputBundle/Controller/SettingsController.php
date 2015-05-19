@@ -3,7 +3,10 @@
 namespace SE\InputBundle\Controller;
 
 use SE\InputBundle\Entity\Employee;
+use SE\InputBundle\Form\EmployeeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+
 
 class SettingsController extends Controller
 {
@@ -20,9 +23,24 @@ class SettingsController extends Controller
       ));
   	}
 
-  	public function employees_addAction()
+  	public function employees_addAction(Request $request)
   	{
-    	return $this->render('SEInputBundle:Settings:employees_add.html.twig');
+      $employee = new Employee();
+      $form = $this->createForm(new EmployeeType(), $employee);
+
+      if ($form->handleRequest($request)->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($employee);
+        $em->flush();
+
+      $request->getSession()->getFlashBag()->add('notice', 'new employee entry saved');
+
+      return $this->redirect($this->generateUrl('se_input_employees'));
+      }
+
+      return $this->render('SEInputBundle:Settings:employees_add.html.twig', array(
+      'form' => $form->createView(),
+      ));
   	}
 
   	public function activitiesAction()

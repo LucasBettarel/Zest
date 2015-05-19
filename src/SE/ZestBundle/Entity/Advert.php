@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use SE\ZestBundle\Validator\Antiflood;
 
@@ -89,12 +88,6 @@ class Advert
       * @ORM\Column(name="nb_applications", type="integer")
       */
     private $nbApplications = 0;
-
-    /**
-     * @Gedmo\Slug(fields={"id"})
-     * @ORM\Column(length=128, unique=true)
-     */
-    private $slug;
 
 
     public function increaseApplication()
@@ -375,30 +368,6 @@ class Advert
     {
         return $this->nbApplications;
     }
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Advert
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
 
   /**
    * @Assert\Callback

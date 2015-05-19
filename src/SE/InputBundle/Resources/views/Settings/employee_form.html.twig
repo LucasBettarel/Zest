@@ -1,3 +1,17 @@
 <div class="well">
-  {{ form(form) }}
+ {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+  {{ form_errors(form) }}
+
+  {{ form_row(form.name) }}
+  {{ form_row(form.sesa) }}
+  {{ form_row(form.job) }}
+  {{ form_row(form.status) }}
+  {{ form_row(form.permanent) }}
+  {{ form_row(form.remarks) }}
+  {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+  
+  {{ form_rest(form) }}
+  {{ form_end(form) }}
+  
 </div>
