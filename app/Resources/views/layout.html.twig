@@ -7,7 +7,7 @@
   <title>{% block title %}Zest{% endblock %}</title>
 
   {% block stylesheets %}
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link href="{{ asset('bundles/seinput/css/layout_style.css') }}" type="text/css" rel="stylesheet" />
   {% endblock %}
 </head>
@@ -38,11 +38,13 @@
     </div>
   </nav>
 
-  <div class="container">
+  <!--<div class="container">-->
 
-    <div id="menu" class="col-md-3 well">
-      {% block menu %}
-      {% endblock %}
+    <div id="menu" class="col-md-3">
+      <div class="panel panel-primary">
+        {% block menu %}
+        {% endblock %}
+      </div>
     </div>
 
     <div id="content" class="col-md-9">
@@ -51,11 +53,11 @@
     </div>
 
     <hr>
-  </div>
+  <!--</div>-->
 
   <footer class="footer">
     <div class="container">
-     <p>Lucas Bettarel © {{ 'now'|date('Y') }} and beyond.</p>
+     <p>Lucas Bettarel © {{ 'now'|date('Y') }}</p>
     </div>
   </footer>
 
@@ -63,7 +65,7 @@
   {% block javascripts %}
     {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
   {% endblock %}
 
 </body>

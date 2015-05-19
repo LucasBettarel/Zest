@@ -1,0 +1,22 @@
+{% extends "SEInputBundle::layout.html.twig" %}
+
+{% block title %}
+  New Employee - {{ parent() }}
+{% endblock %}
+
+{% block seinput_body %}
+	<h2>New Employee</h2>
+
+	<p> Here will be the form to add a new Employee</p>
+
+	<p>
+    <a href="{{ path('se_input_employees') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Return
+    </a>
+    <a href=# class="btn btn-success">
+      <i class="glyphicon glyphicon-floppy-disk"></i>
+      Save
+    </a>
+  </p>
+{% endblock %}

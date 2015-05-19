@@ -1,0 +1,17 @@
+{% extends "SEInputBundle::layout.html.twig" %}
+
+{% block title %}
+  Employees - {{ parent() }}
+{% endblock %}
+
+{% block seinput_body %}
+	<h2>Employees</h2>
+	<p>
+	    <a href="{{ path('se_input_employees_add') }}"  class="btn btn-success">
+	      <i class="glyphicon glyphicon-plus"></i>
+	      Add a new employee
+	    </a>
+	</p>
+
+	<p> Here will be the Employees List -> table with criteria + edit in line </p>
+{% endblock %}

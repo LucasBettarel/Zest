@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block menu %}
-  <h4>Dernières annonces</h4>
+  <div class="panel-heading">
+    <h4>Dernières annonces</h4>
+  </div>
+  <div class="panel-body">
       {{ render(controller("SEZestBundle:Advert:menu")) }}
+  </div>
 {% endblock %}
 
 {% block body %}

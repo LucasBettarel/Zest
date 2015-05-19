@@ -1,3 +1,19 @@
 se_input_home:
     path:     /
     defaults: { _controller: SEInputBundle:Entry:index }
+
+se_input_employees:
+    path:     /employees
+    defaults: { _controller: SEInputBundle:Settings:employees }
+
+se_input_employees_add:
+    path:     /employees/add
+    defaults: { _controller: SEInputBundle:Settings:employees_add }
+
+se_input_activities:
+    path:     /activities
+    defaults: { _controller: SEInputBundle:Settings:activities }
+
+se_input_activities_add:
+    path:     /activities/add
+    defaults: { _controller: SEInputBundle:Settings:activities_add }
