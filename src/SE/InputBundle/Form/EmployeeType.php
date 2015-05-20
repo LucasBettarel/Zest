@@ -17,6 +17,18 @@ class EmployeeType extends AbstractType
         $builder
             ->add('name',    'text')
             ->add('sesa',    'text')
+            ->add('defaultTeam', 'entity', array(
+                'class'    => 'SEInputBundle:Team',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => true
+                ), array('required' => false))
+            ->add('defaultShift', 'entity', array(
+                'class'    => 'SEInputBundle:Shift',
+                'property' => 'identifier', 
+                'multiple' => false,
+                'expanded' => true
+                ), array('required' => false))
             ->add('job', 'entity', array(
                 'class'    => 'SEInputBundle:Job',
                 'property' => 'description', 

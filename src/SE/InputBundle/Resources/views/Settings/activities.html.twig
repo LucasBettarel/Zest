@@ -14,4 +14,37 @@
 	</p>
 
 	<p> Here will be the Activities List -> table with criteria + edit in line </p>
+
+	<ul>
+    {% for activity in listActivities %}
+      <li>
+        	<p>
+        		<h4>{{ activity.name }}</h4>
+        		{% if activity.defaultTarget is not null %}
+        			<br>target : {{ activity.defaultTarget }} TO lines/h
+        		{% endif %}
+        	</p>
+        	{% if not activity.workstations.empty %}
+	        	<p>Workstations: </p>
+	        	<ul>
+					<li>
+					    {% for workstation in activity.workstations %}
+					      <div class="label label-primary">
+					        {{ workstation.name }} 
+					        {% if workstation.target is defined %}
+	        					- (target : {{ workstation.target }} TO lines/h)
+	        				{% endif %}
+	        				{% if not loop.last %} {% endif %}
+					      </div>
+					       &nbsp; 
+					    {% endfor %}
+					  </li>
+				</ul>
+			{% endif %}
+      </li>
+    {% else %}
+      <li> No employee recorded </li>
+    {% endfor %}
+  </ul>
+
 {% endblock %}

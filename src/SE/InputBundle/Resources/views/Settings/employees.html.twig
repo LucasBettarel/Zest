@@ -18,7 +18,16 @@
 	<ul>
     {% for employee in listEmployees %}
       <li>
-        	{{ employee.name }} - {{ employee.sesa }}
+        	<h4>{{ employee.name }}</h4>
+        	{{ employee.sesa }}
+        	<p>
+	        	{% if employee.defaultTeam is not null %}
+		        	Team: {{ employee.defaultTeam.name }}
+				{% endif %}
+				{% if employee.defaultShift is not null %}
+		        	- Shift: {{ employee.defaultShift.identifier }}
+				{% endif %}
+			</p>
       </li>
     {% else %}
       <li> No employee recorded </li>

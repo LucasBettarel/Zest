@@ -16,7 +16,7 @@ class WorkstationType extends AbstractType
     {
         $builder
             ->add('name', 'text')
-            ->add('target', 'number')
+            ->add('target', 'number', array('required' => false))
         ;
     }
     

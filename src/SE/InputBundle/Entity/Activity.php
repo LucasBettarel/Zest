@@ -31,8 +31,7 @@ class Activity
     /**
      * @var double
      *
-     * @ORM\Column(name="default_target", type="decimal")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\Column(name="default_target", type="decimal", nullable=true)
      */
     private $default_target;
 

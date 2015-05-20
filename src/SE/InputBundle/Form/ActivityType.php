@@ -16,18 +16,12 @@ class ActivityType extends AbstractType
     {
         $builder
             ->add('name',   'text')
-            ->add('default_target', 'number')
-            ->add('workstations', 'entity', array(
-                'class'    => 'SEInputBundle:Workstation',
-                'property' => 'name', 
-                'multiple' => false,
-                'expanded' => false
-                ))
+            ->add('default_target', 'number', array('required' => false))
             ->add('workstations', 'collection', array(
                 'type'         => new WorkstationType(),
                 'allow_add'    => true,
                 'allow_delete' => true
-                ))
+                ), array('required' => false))
             ->add('save', 'submit')
         ;
     }
