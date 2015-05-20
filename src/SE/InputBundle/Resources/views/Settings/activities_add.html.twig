@@ -7,15 +7,12 @@
 {% block seinput_body %}
 	<h2>New Activity</h2>
 
-	<p> Here will be the form to add a new Activity</p>
+	{{ include("SEInputBundle:Settings:activity_form.html.twig") }}
+
 	<p>
     <a href="{{ path('se_input_activities') }}" class="btn btn-default">
       <i class="glyphicon glyphicon-chevron-left"></i>
       Return
-    </a>
-    <a href=# class="btn btn-success">
-      <i class="glyphicon glyphicon-floppy-disk"></i>
-      Save
     </a>
   </p>
 {% endblock %}

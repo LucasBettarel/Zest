@@ -29,10 +29,11 @@ class Workstation
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Activity")
-     * @ORM\JoinColumn(nullable=true)
+     * @var double
+     *
+     * @ORM\Column(name="target", type="decimal")
      */
-    private $activity;
+    private $target;
 
 
     /**
@@ -67,4 +68,5 @@ class Workstation
     {
         return $this->name;
     }
+
 }

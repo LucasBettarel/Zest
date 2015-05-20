@@ -4,6 +4,8 @@ namespace SE\InputBundle\Controller;
 
 use SE\InputBundle\Entity\Employee;
 use SE\InputBundle\Form\EmployeeType;
+use SE\InputBundle\Entity\Activity;
+use SE\InputBundle\Form\ActivityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -56,8 +58,23 @@ class SettingsController extends Controller
       ));
   	}
 
-  	public function activities_addAction()
+  	public function activities_addAction(Request $request)
   	{
-    	return $this->render('SEInputBundle:Settings:activities_add.html.twig');
-  	}
+      $activity = new Activity();
+      $form = $this->createForm(new ActivityType(), $activity);
+
+      if ($form->handleRequest($request)->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($activity);
+        $em->flush();
+
+      $request->getSession()->getFlashBag()->add('notice', 'new activity entry saved');
+
+      return $this->redirect($this->generateUrl('se_input_activities'));
+      }
+
+      return $this->render('SEInputBundle:Settings:activities_add.html.twig', array(
+      'form' => $form->createView(),
+      ));
+    }
 }

@@ -29,10 +29,12 @@ class Workstation
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Activity")
+     * @var double
+     *
+     * @ORM\Column(name="target", type="decimal")
      * @ORM\JoinColumn(nullable=true)
      */
-    private $activity;
+    private $target;
 
 
     /**
@@ -68,26 +70,27 @@ class Workstation
         return $this->name;
     }
 
+
     /**
-     * Set activity
+     * Set target
      *
-     * @param \SE\InputBundle\Entity\Activity $activity
+     * @param double $target
      * @return Workstation
      */
-    public function setActivity(\SE\InputBundle\Entity\Activity $activity = null)
+    public function setTarget($target = null)
     {
-        $this->activity = $activity;
+        $this->target = $target;
 
         return $this;
     }
 
     /**
-     * Get activity
+     * Get target
      *
-     * @return \SE\InputBundle\Entity\Activity 
+     * @return double 
      */
-    public function getActivity()
+    public function getTarget()
     {
-        return $this->activity;
+        return $this->target;
     }
 }
