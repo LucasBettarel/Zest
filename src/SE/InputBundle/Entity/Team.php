@@ -35,6 +35,12 @@ class Team
      */
     private $shiftnb;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Activity", mappedBy="teams", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $activities;
+
 
     /**
      * Get id
@@ -90,5 +96,46 @@ class Team
     public function getShiftnb()
     {
         return $this->shiftnb;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add activities
+     *
+     * @param \SE\InputBundle\Entity\Activity $activities
+     * @return Team
+     */
+    public function addActivity(\SE\InputBundle\Entity\Activity $activities)
+    {
+        $this->activities[] = $activities;
+
+        return $this;
+    }
+
+    /**
+     * Remove activities
+     *
+     * @param \SE\InputBundle\Entity\Activity $activities
+     */
+    public function removeActivity(\SE\InputBundle\Entity\Activity $activities)
+    {
+        $this->activities->removeElement($activities);
+        $activities->removeTeam($this);
+    }
+
+    /**
+     * Get activities
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActivities()
+    {
+        return $this->activities;
     }
 }

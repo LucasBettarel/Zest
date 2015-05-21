@@ -24,6 +24,18 @@
         			<br>target : {{ activity.defaultTarget }} TO lines/h
         		{% endif %}
         	</p>
+        	{% if not activity.teams.empty %}
+	        	<p>Teams: </p>
+	        	<ul>
+					{% for team in activity.teams %}
+					    <li>
+					      <div class="label label-warning">
+					        {{ team.name }} 
+					      </div>
+					    </li> 
+					{% endfor %}
+				</ul>
+			{% endif %}
         	{% if not activity.activityZones.empty %}
 	        	<p>Zones: </p>
 	        	<ul>

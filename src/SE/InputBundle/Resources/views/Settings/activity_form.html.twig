@@ -5,6 +5,7 @@
 
   {{ form_row(form.name) }}
   {{ form_row(form.default_target) }}
+  {{ form_row(form.teams) }}
   {{ form_row(form.activity_zones) }}
   {{ form_row(form.workstations) }}
   {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
@@ -28,26 +29,25 @@
     var $addLink2 = $('<a href="#" id="add_activity_zones" class="btn btn-default">Add a zone</a>');
     $container2.append($addLink2);
  
-    // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+    // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+    var index = $container.find(':input').length;
+    var index2 = $container2.find(':input').length;
+
+   // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
     $addLink.click(function(e) {
-      addElement($container, $label);
+      index = addElement($container, $label, index);
       e.preventDefault(); // évite qu'un # apparaisse dans l'URL
       return false;
     });
     $addLink2.click(function(e) {
-      addElement($container2, $label2);
+      index2 = addElement($container2, $label2, index2);
       e.preventDefault(); // évite qu'un # apparaisse dans l'URL
       return false;
     });
 
-        // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-    var index = $container.find(':input').length;
-    var index2 = $container2.find(':input').length;
-
-
     // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
     if (index == 0) {
-      addElement($container, $label);
+      index = addElement($container, $label, index);
     } else {
       // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
       $container.children('div').each(function() {
@@ -56,7 +56,7 @@
     }
 
     if (index2 == 0) {
-      addElement($container2, $label2);
+      index2 = addElement($container2, $label2, index2);
     } else {
       // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
       $container2.children('div').each(function() {
@@ -66,21 +66,21 @@
 
 
     // La fonction qui ajoute un formulaire Categorie
-    function addElement($container, $label) {
+    function addElement($container, $label, i) {
       // Dans le contenu de l'attribut « data-prototype », on remplace :
       // - le texte "__name__label__" qu'il contient par le label du champ
       // - le texte "__name__" qu'il contient par le numéro du champ
-      var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, $label + (index+1))
-          .replace(/__name__/g, index));
+      var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, $label + (i+1))
+          .replace(/__name__/g, i));
 
       // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
       addDeleteLink($prototype);
 
       // On ajoute le prototype modifié à la fin de la balise <div>
       $container.append($prototype);
-
       // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-      index++;
+      i++;
+      return i;
     }
 
     // La fonction qui ajoute un lien de suppression d'une catégorie

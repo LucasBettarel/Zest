@@ -5,12 +5,12 @@ namespace SE\InputBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Workstation
+ * Team
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\WorkstationRepository")
+ * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\TeamRepository")
  */
-class Workstation
+class Team
 {
     /**
      * @var integer
@@ -29,11 +29,17 @@ class Workstation
     private $name;
 
     /**
-     * @var double
+     * @var integer
      *
-     * @ORM\Column(name="target", type="decimal", nullable=true)
+     * @ORM\Column(name="shiftnb", type="integer")
      */
-    private $target;
+    private $shiftnb;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Activity", mappedBy="teams", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $activities;
 
 
     /**
@@ -50,7 +56,7 @@ class Workstation
      * Set name
      *
      * @param string $name
-     * @return Workstation
+     * @return Team
      */
     public function setName($name)
     {
@@ -69,27 +75,26 @@ class Workstation
         return $this->name;
     }
 
-
     /**
-     * Set target
+     * Set shiftnb
      *
-     * @param double $target
-     * @return Workstation
+     * @param integer $shiftnb
+     * @return Team
      */
-    public function setTarget($target = null)
+    public function setShiftnb($shiftnb)
     {
-        $this->target = $target;
+        $this->shiftnb = $shiftnb;
 
         return $this;
     }
 
     /**
-     * Get target
+     * Get shiftnb
      *
-     * @return double 
+     * @return integer 
      */
-    public function getTarget()
+    public function getShiftnb()
     {
-        return $this->target;
+        return $this->shiftnb;
     }
 }

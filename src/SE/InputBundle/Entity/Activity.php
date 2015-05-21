@@ -36,6 +36,12 @@ class Activity
     private $default_target;
 
     /**
+     * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Team", inversedBy="activities", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $teams;
+
+    /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityZone", mappedBy="activity", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -178,5 +184,39 @@ class Activity
     public function getActivityZones()
     {
         return $this->activity_zones;
+    }
+
+    /**
+     * Add teams
+     *
+     * @param \SE\InputBundle\Entity\Team $teams
+     * @return Activity
+     */
+    public function addTeam(\SE\InputBundle\Entity\Team $teams)
+    {
+        $this->teams[] = $teams;
+        $teams->addActivity($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove teams
+     *
+     * @param \SE\InputBundle\Entity\Team $teams
+     */
+    public function removeTeam(\SE\InputBundle\Entity\Team $teams)
+    {
+        $this->teams->removeElement($teams);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTeams()
+    {
+        return $this->teams;
     }
 }

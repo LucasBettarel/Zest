@@ -17,6 +17,12 @@ class ActivityType extends AbstractType
         $builder
             ->add('name',   'text')
             ->add('default_target', 'number', array('required' => false))
+            ->add('teams', 'entity', array(
+                'class'    => 'SEInputBundle:Team',
+                'property' => 'name', 
+                'multiple' => true,
+                'expanded' => true
+                ))
             ->add('activity_zones', 'collection', array(
                 'type'         => new ActivityZoneType(),
                 'allow_add'    => true,
