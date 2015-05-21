@@ -16,7 +16,7 @@
 	<p> Here will be the Employees List -> table with criteria + edit in line </p>
 
 	<div class="table-responsive">
-		<table class="table table-bordered">
+		<table class="table table-hover table-striped">
 			<thead>
 				<tr>
 					<th>#</th>
@@ -29,7 +29,7 @@
 					<th>Remarks</th>
 				</tr>
 			</thead>
-			<tbody class="table-striped table-hover">
+			<tbody>
 				{% for employee in listEmployees %}
 		      		<tr>
 		      			<td>{{ employee.id }}</td>

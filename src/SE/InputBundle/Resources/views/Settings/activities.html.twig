@@ -15,63 +15,67 @@
 
 	<p> Here will be the Activities List -> table with criteria + edit in line </p>
 
-	<ul>
-    {% for activity in listActivities %}
-      <li>
-        	<p>
-        		<h4>{{ activity.name }}</h4>
-        		{% if activity.defaultTarget is not null %}
-        			<br>target : {{ activity.defaultTarget }} TO lines/h
-        		{% endif %}
-        	</p>
-        	{% if not activity.teams.empty %}
-	        	<p>Teams: </p>
-	        	<ul>
-					{% for team in activity.teams %}
-					    <li>
-					      <div class="label label-warning">
-					        {{ team.name }} 
-					      </div>
-					    </li> 
-					{% endfor %}
-				</ul>
-			{% endif %}
-        	{% if not activity.activityZones.empty %}
-	        	<p>Zones: </p>
-	        	<ul>
-					{% for activityZones in activity.activityZones %}
-					    <li>
-					      <div class="label label-success">
-					        {{ activityZones.zone.name }} 
-					        {% if activityZones.target is defined %}
-	        					- (target : {{ activityZones.target }} TO lines/h)
-	        				{% endif %}
-	        				{% if not loop.last %} {% endif %}
-					      </div>
-					    </li> 
-					{% endfor %}
-				</ul>
-			{% endif %}
-        	{% if not activity.workstations.empty %}
-	        	<p>Workstations: </p>
-	        	<ul>
-					{% for workstation in activity.workstations %}
-					    <li>
-					      <div class="label label-primary">
-					        {{ workstation.name }} 
-					        {% if workstation.target is defined %}
-	        					- (target : {{ workstation.target }} TO lines/h)
-	        				{% endif %}
-	        				{% if not loop.last %} {% endif %}
-					      </div>
-					    </li> 
-					{% endfor %}
-				</ul>
-			{% endif %}
-      </li>
-    {% else %}
-      <li> No employee recorded </li>
-    {% endfor %}
-  </ul>
+	<div class="table-responsive">
+		<table class="table table-hover table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Teams</th>
+					<th>Zones</th>
+					<th>Workstations</th>
+					<th>Target (TO Lines/h)</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for activity in listActivities %}
+		      		<tr>
+		      			<td>{{ activity.id }}</td>
+		      			<td>{{ activity.name }}</td>
+		      			<td>{% if not activity.teams.empty %}
+		        				{% for team in activity.teams %}
+					    			{{ team.name }} 
+					      		{% endfor %}
+							{% endif %}
+		      			</td>
+		      			<td>{% if not activity.activityZones.empty %}
+		        				{% for activityZones in activity.activityZones %}
+					    			{{ activityZones.zone.name }} 
+					      		{% endfor %}
+							{% endif %}
+		      			</td>
+		      			<td>{% if not activity.workstations.empty %}
+		        				{% for workstation in activity.workstations %}
+					    			{{ workstation.name }} 
+					      		{% endfor %}
+							{% endif %}
+		      			</td>
+		      			<td>{% if activity.defaultTarget is not null %}
+    							default : {{ activity.defaultTarget }}
+    						{% endif %}
+    						{% if not activity.activityZones.empty %}
+		      					zones :
+			        			{% for activityZones in activity.activityZones %}
+			        				{% if activityZones.target is defined %}
+        								{{ activityZones.target }}
+        							{% endif %}
+			        			{% endfor %}	
+			        		{% endif %}
+			        		{% if not activity.workstations.empty %}
+			        			workstations :
+			        			{% for workstation in activity.workstations %}
+			        				{% if workstation.target is defined %}
+        								{{ workstation.target }}
+        							{% endif %}
+			        			{% endfor %}	
+			        		{% endif %}
+		      			</td>
+					</tr>
+		    {% else %}
+		      <tr><td> No activity recorded </td></tr>
+		    {% endfor %}
+		  </tbody>
+		</table>
+	</div>
 
 {% endblock %}
