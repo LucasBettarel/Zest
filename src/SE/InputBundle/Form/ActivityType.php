@@ -17,6 +17,11 @@ class ActivityType extends AbstractType
         $builder
             ->add('name',   'text')
             ->add('default_target', 'number', array('required' => false))
+            ->add('activity_zones', 'collection', array(
+                'type'         => new ActivityZoneType(),
+                'allow_add'    => true,
+                'allow_delete' => true
+                ), array('required' => false))
             ->add('workstations', 'collection', array(
                 'type'         => new WorkstationType(),
                 'allow_add'    => true,

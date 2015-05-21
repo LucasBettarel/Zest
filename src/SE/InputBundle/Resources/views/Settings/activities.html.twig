@@ -24,11 +24,27 @@
         			<br>target : {{ activity.defaultTarget }} TO lines/h
         		{% endif %}
         	</p>
+        	{% if not activity.activityZones.empty %}
+	        	<p>Zones: </p>
+	        	<ul>
+					{% for activityZones in activity.activityZones %}
+					    <li>
+					      <div class="label label-success">
+					        {{ activityZones.zone.name }} 
+					        {% if activityZones.target is defined %}
+	        					- (target : {{ activityZones.target }} TO lines/h)
+	        				{% endif %}
+	        				{% if not loop.last %} {% endif %}
+					      </div>
+					    </li> 
+					{% endfor %}
+				</ul>
+			{% endif %}
         	{% if not activity.workstations.empty %}
 	        	<p>Workstations: </p>
 	        	<ul>
-					<li>
-					    {% for workstation in activity.workstations %}
+					{% for workstation in activity.workstations %}
+					    <li>
 					      <div class="label label-primary">
 					        {{ workstation.name }} 
 					        {% if workstation.target is defined %}
@@ -36,9 +52,8 @@
 	        				{% endif %}
 	        				{% if not loop.last %} {% endif %}
 					      </div>
-					       &nbsp; 
-					    {% endfor %}
-					  </li>
+					    </li> 
+					{% endfor %}
 				</ul>
 			{% endif %}
       </li>

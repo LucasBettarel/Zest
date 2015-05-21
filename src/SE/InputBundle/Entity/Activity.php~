@@ -31,12 +31,18 @@ class Activity
     /**
      * @var double
      *
-     * @ORM\Column(name="target", type="decimal")
+     * @ORM\Column(name="default_target", type="decimal", nullable=true)
      */
     private $default_target;
 
     /**
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityZone", mappedBy="activity")
+     */
+    private $activity_zones;
+
+    /**
      * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Workstation", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $workstations;
 
@@ -74,28 +80,6 @@ class Activity
         return $this->name;
     }
 
-    /**
-     * Set target
-     *
-     * @param double $target
-     * @return Activity
-     */
-    public function setTarget($target)
-    {
-        $this->target = $target;
-
-        return $this;
-    }
-
-    /**
-     * Get target
-     *
-     * @return double 
-     */
-    public function getTarget()
-    {
-        return $this->target;
-    }
     /**
      * Constructor
      */
@@ -135,5 +119,28 @@ class Activity
     public function getWorkstations()
     {
         return $this->workstations;
+    }
+
+    /**
+     * Set default_target
+     *
+     * @param double $defaultTarget
+     * @return Activity
+     */
+    public function setDefaultTarget($defaultTarget = null)
+    {
+        $this->default_target = $defaultTarget;
+
+        return $this;
+    }
+
+    /**
+     * Get default_target
+     *
+     * @return double 
+     */
+    public function getDefaultTarget()
+    {
+        return $this->default_target;
     }
 }

@@ -36,6 +36,12 @@ class Activity
     private $default_target;
 
     /**
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityZone", mappedBy="activity", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $activity_zones;
+
+    /**
      * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Workstation", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -137,5 +143,40 @@ class Activity
     public function getDefaultTarget()
     {
         return $this->default_target;
+    }
+
+    /**
+     * Add activity_zones
+     *
+     * @param \SE\InputBundle\Entity\ActivityZone $activityZones
+     * @return Activity
+     */
+    public function addActivityZone(\SE\InputBundle\Entity\ActivityZone $activityZones)
+    {
+        $this->activity_zones[] = $activityZones;
+        $activityZones->setActivity($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove activity_zones
+     *
+     * @param \SE\InputBundle\Entity\ActivityZone $activityZones
+     */
+    public function removeActivityZone(\SE\InputBundle\Entity\ActivityZone $activityZones)
+    {
+        $this->activity_zones->removeElement($activityZones);
+        $activity_zones->setActivity(null);
+    }
+
+    /**
+     * Get activity_zones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActivityZones()
+    {
+        return $this->activity_zones;
     }
 }
