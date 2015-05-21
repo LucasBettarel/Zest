@@ -15,26 +15,52 @@
 
 	<p> Here will be the Employees List -> table with criteria + edit in line </p>
 
-	<ul>
-    {% for employee in listEmployees %}
-      <li>
-        	<h4>{{ employee.name }}</h4>
-        	{{ employee.sesa }}
-        	<p>
-	        	{% if employee.defaultTeam is not null %}
-		        	Team: {{ employee.defaultTeam.name }}
-				{% endif %}
-				{% if employee.defaultShift is not null %}
-		        	- Shift: {{ employee.defaultShift.identifier }}
-				{% endif %}
-				{% if employee.defaultActivity is not null %}
-		        	- Activity: {{ employee.defaultActivity.name }}
-				{% endif %}
-			</p>
-      </li>
-    {% else %}
-      <li> No employee recorded </li>
-    {% endfor %}
-  </ul>
+	<div class="table-responsive">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>SESA</th>
+					<th>Team</th>
+					<th>Shift</th>
+					<th>Main Activity</th>
+					<th>Job</th>
+					<th>Remarks</th>
+				</tr>
+			</thead>
+			<tbody class="table-striped table-hover">
+				{% for employee in listEmployees %}
+		      		<tr>
+		      			<td>{{ employee.id }}</td>
+		      			<td>{{ employee.name }}</td>
+		      			<td>{{ employee.sesa }}</td>
+		      			<td>{% if employee.defaultTeam is not null %}
+		      					{{ employee.defaultTeam.name }}
+							{% endif %}
+						</td>
+						<td>{% if employee.defaultShift is not null %}
+				        		{{ employee.defaultShift.identifier }}
+							{% endif %}
+						</td>
+						<td>{% if employee.defaultActivity is not null %}
+				        		{{ employee.defaultActivity.name }}
+							{% endif %}
+						</td>
+						<td>{% if employee.job is not null %}
+				        		{{ employee.job.description }}
+							{% endif %}
+						</td>
+						<td>{% if employee.remarks is not null %}
+				        		{{ employee.remarks }}
+							{% endif %}
+						</td>
+					</tr>
+		    {% else %}
+		      <tr><td> No employee recorded </td></tr>
+		    {% endfor %}
+		  </tbody>
+		</table>
+	</div>
 
 {% endblock %}
