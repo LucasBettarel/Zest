@@ -48,6 +48,12 @@ class Employee
     private $default_shift;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Activity")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $default_activity;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -299,5 +305,28 @@ class Employee
     public function getDefaultShift()
     {
         return $this->default_shift;
+    }
+
+    /**
+     * Set default_activity
+     *
+     * @param \SE\InputBundle\Entity\Activity $defaultActivity
+     * @return Employee
+     */
+    public function setDefaultActivity(\SE\InputBundle\Entity\Activity $defaultActivity = null)
+    {
+        $this->default_activity = $defaultActivity;
+
+        return $this;
+    }
+
+    /**
+     * Get default_activity
+     *
+     * @return \SE\InputBundle\Entity\Activity 
+     */
+    public function getDefaultActivity()
+    {
+        return $this->default_activity;
     }
 }

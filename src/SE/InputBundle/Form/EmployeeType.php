@@ -29,6 +29,12 @@ class EmployeeType extends AbstractType
                 'multiple' => false,
                 'expanded' => true
                 ), array('required' => false))
+            ->add('defaultActivity', 'entity', array(
+                'class'    => 'SEInputBundle:Activity',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => false
+                ), array('required' => false))
             ->add('job', 'entity', array(
                 'class'    => 'SEInputBundle:Job',
                 'property' => 'description', 

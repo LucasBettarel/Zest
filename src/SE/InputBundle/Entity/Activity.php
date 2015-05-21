@@ -42,6 +42,13 @@ class Activity
     private $teams;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="productive", type="boolean")
+     */
+    private $productive;
+
+    /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityZone", mappedBy="activity", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -218,5 +225,28 @@ class Activity
     public function getTeams()
     {
         return $this->teams;
+    }
+
+    /**
+     * Set productive
+     *
+     * @param boolean $productive
+     * @return Activity
+     */
+    public function setProductive($productive)
+    {
+        $this->productive = $productive;
+
+        return $this;
+    }
+
+    /**
+     * Get productive
+     *
+     * @return boolean 
+     */
+    public function getProductive()
+    {
+        return $this->productive;
     }
 }

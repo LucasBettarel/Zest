@@ -27,6 +27,9 @@
 				{% if employee.defaultShift is not null %}
 		        	- Shift: {{ employee.defaultShift.identifier }}
 				{% endif %}
+				{% if employee.defaultActivity is not null %}
+		        	- Activity: {{ employee.defaultActivity.name }}
+				{% endif %}
 			</p>
       </li>
     {% else %}
