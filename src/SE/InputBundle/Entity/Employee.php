@@ -92,6 +92,12 @@ class Employee
     private $remarks;
 
     /**
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\InputEntry", mappedBy="employee", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $inputs;
+
+    /**
     * @ORM\Column(name="date_creation", type="date")
     */
     protected $date_creation;
@@ -422,5 +428,38 @@ class Employee
     public function updateDate()
     {
         $this->setUpdatedAt(new \Datetime());
+    }
+
+    /**
+     * Add inputs
+     *
+     * @param \SE\InputBundle\Entity\InputEntry $inputs
+     * @return Employee
+     */
+    public function addInput(\SE\InputBundle\Entity\InputEntry $inputs)
+    {
+        $this->inputs[] = $inputs;
+
+        return $this;
+    }
+
+    /**
+     * Remove inputs
+     *
+     * @param \SE\InputBundle\Entity\InputEntry $inputs
+     */
+    public function removeInput(\SE\InputBundle\Entity\InputEntry $inputs)
+    {
+        $this->inputs->removeElement($inputs);
+    }
+
+    /**
+     * Get inputs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInputs()
+    {
+        return $this->inputs;
     }
 }

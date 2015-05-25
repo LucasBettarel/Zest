@@ -125,44 +125,4 @@ class InputEntry
     {
         return $this->presence;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->activity_hours = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add activity_hours
-     *
-     * @param \SE\InputBundle\Entity\ActivityHours $activityHours
-     * @return InputEntry
-     */
-    public function addActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHours)
-    {
-        $this->activity_hours[] = $activityHours;
-
-        return $this;
-    }
-
-    /**
-     * Remove activity_hours
-     *
-     * @param \SE\InputBundle\Entity\ActivityHours $activityHours
-     */
-    public function removeActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHours)
-    {
-        $this->activity_hours->removeElement($activityHours);
-    }
-
-    /**
-     * Get activity_hours
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getActivityHours()
-    {
-        return $this->activity_hours;
-    }
 }
