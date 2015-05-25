@@ -1,0 +1,59 @@
+<?php
+
+namespace SE\InputBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * UserInput
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\UserInputRepository")
+ */
+class UserInput
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\InputEntry")
+     */
+    private $input_entries;
+
+    /**
+     * @var \DateTime
+     * @Assert\DateTime()
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function __construct()
+    {
+     $this->date = new \Datetime();
+    }
+
+
+}

@@ -60,6 +60,15 @@ class Activity
      */
     private $workstations;
 
+    /**
+     * @ORM\Column(name="date_creation", type="date")
+     */
+    protected $date_creation;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * Get id
@@ -100,6 +109,8 @@ class Activity
     public function __construct()
     {
         $this->workstations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->date_creation = new \Datetime();
+
     }
 
     /**
@@ -248,5 +259,59 @@ class Activity
     public function getProductive()
     {
         return $this->productive;
+    }
+
+    /**
+     * Set date_creation
+     *
+     * @param \DateTime $dateCreation
+     * @return Activity
+     */
+    public function setDateCreation($dateCreation)
+    {
+        $this->date_creation = $dateCreation;
+
+        return $this;
+    }
+
+    /**
+     * Get date_creation
+     *
+     * @return \DateTime 
+     */
+    public function getDateCreation()
+    {
+        return $this->date_creation;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Activity
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setUpdatedAt(new \Datetime());
     }
 }

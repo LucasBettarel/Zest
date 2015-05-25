@@ -60,6 +60,15 @@ class Activity
      */
     private $workstations;
 
+    /**
+     * @ORM\Column(name="date_creation", type="date")
+     */
+    protected $date_creation;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * Get id
@@ -100,6 +109,8 @@ class Activity
     public function __construct()
     {
         $this->workstations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->date_creation = new \Datetime();
+
     }
 
     /**
@@ -225,5 +236,28 @@ class Activity
     public function getTeams()
     {
         return $this->teams;
+    }
+
+    /**
+     * Set productive
+     *
+     * @param boolean $productive
+     * @return Activity
+     */
+    public function setProductive($productive)
+    {
+        $this->productive = $productive;
+
+        return $this;
+    }
+
+    /**
+     * Get productive
+     *
+     * @return boolean 
+     */
+    public function getProductive()
+    {
+        return $this->productive;
     }
 }

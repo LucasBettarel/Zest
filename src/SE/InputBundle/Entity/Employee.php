@@ -54,6 +54,18 @@ class Employee
     private $default_activity;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Zone")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $default_zone;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Workstation")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $default_workstation;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -83,6 +95,11 @@ class Employee
     * @ORM\Column(name="date_creation", type="date")
     */
     protected $date_creation;
+
+    /**
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -328,5 +345,82 @@ class Employee
     public function getDefaultActivity()
     {
         return $this->default_activity;
+    }
+
+    /**
+     * Set default_zone
+     *
+     * @param \SE\InputBundle\Entity\Zone $defaultZone
+     * @return Employee
+     */
+    public function setDefaultZone(\SE\InputBundle\Entity\Zone $defaultZone = null)
+    {
+        $this->default_zone = $defaultZone;
+
+        return $this;
+    }
+
+    /**
+     * Get default_zone
+     *
+     * @return \SE\InputBundle\Entity\Zone 
+     */
+    public function getDefaultZone()
+    {
+        return $this->default_zone;
+    }
+
+    /**
+     * Set default_workstation
+     *
+     * @param \SE\InputBundle\Entity\Workstation $defaultWorkstation
+     * @return Employee
+     */
+    public function setDefaultWorkstation(\SE\InputBundle\Entity\Workstation $defaultWorkstation = null)
+    {
+        $this->default_workstation = $defaultWorkstation;
+
+        return $this;
+    }
+
+    /**
+     * Get default_workstation
+     *
+     * @return \SE\InputBundle\Entity\Workstation 
+     */
+    public function getDefaultWorkstation()
+    {
+        return $this->default_workstation;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return UserInput
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate()
+    {
+        $this->setUpdatedAt(new \Datetime());
     }
 }
