@@ -1,6 +1,6 @@
 se_input_home:
     path:     /
-    defaults: { _controller: SEInputBundle:Entry:index }
+    defaults: { _controller: SEInputBundle:Entry:input }
 
 se_input_employees:
     path:     /employees
