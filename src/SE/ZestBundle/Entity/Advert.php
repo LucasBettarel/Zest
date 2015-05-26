@@ -53,7 +53,6 @@ class Advert
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Antiflood()
      * @ORM\Column(name="content", type="text")
      */
     private $content;

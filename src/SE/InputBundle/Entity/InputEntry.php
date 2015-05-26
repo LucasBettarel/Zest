@@ -46,6 +46,12 @@ class InputEntry
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\UserInput", inversedBy="input_entries", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user_input;
+
 
     /**
      * Get id
@@ -164,5 +170,28 @@ class InputEntry
     public function getActivityHours()
     {
         return $this->activity_hours;
+    }
+
+    /**
+     * Set user_input
+     *
+     * @param \SE\InputBundle\Entity\UserInput $userInput
+     * @return InputEntry
+     */
+    public function setUserInput(\SE\InputBundle\Entity\UserInput $userInput)
+    {
+        $this->user_input = $userInput;
+
+        return $this;
+    }
+
+    /**
+     * Get user_input
+     *
+     * @return \SE\InputBundle\Entity\UserInput 
+     */
+    public function getUserInput()
+    {
+        return $this->user_input;
     }
 }

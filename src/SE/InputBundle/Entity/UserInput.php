@@ -23,7 +23,8 @@ class UserInput
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\InputEntry")
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\InputEntry", mappedBy="user_input", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $input_entries;
 
@@ -35,9 +36,14 @@ class UserInput
     private $date;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", length=255, nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\Column(name="user", type="string", nullable=false)
+     */
+    private $user;
 
 
     /**
@@ -132,5 +138,51 @@ class UserInput
     public function updateDate()
     {
         $this->setUpdatedAt(new \Datetime());
+    }
+
+    /**
+     * Set user
+     *
+     * @param string $user
+     * @return UserInput
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add input_entries
+     *
+     * @param \SE\InputBundle\Entity\InputEntry $inputEntries
+     * @return UserInput
+     */
+    public function addInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntries)
+    {
+        $this->input_entries[] = $inputEntries;
+
+        return $this;
+    }
+
+    /**
+     * Remove input_entries
+     *
+     * @param \SE\InputBundle\Entity\InputEntry $inputEntries
+     */
+    public function removeInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntries)
+    {
+        $this->input_entries->removeElement($inputEntries);
     }
 }

@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class UserInputType extends AbstractType
+class PresenceType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,13 +15,10 @@ class UserInputType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', 'text')
-            ->add('input_entries', 'collection', array(
-                'type'         => new InputEntryType(),
-                'allow_add'    => true,
-                'allow_delete' => false
-                ), array('required' => true))
-            ->add('save',      'submit')
+            ->add('present', 'checkbox', array(
+                  'data' => true
+                ))
+            ->add('absenceReason', 'textarea')
         ;
     }
     
@@ -31,7 +28,7 @@ class UserInputType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SE\InputBundle\Entity\UserInput'
+            'data_class' => 'SE\InputBundle\Entity\Presence'
         ));
     }
 
@@ -40,6 +37,6 @@ class UserInputType extends AbstractType
      */
     public function getName()
     {
-        return 'se_inputbundle_userinput';
+        return 'se_inputbundle_presence';
     }
 }

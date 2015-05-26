@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class UserInputType extends AbstractType
+class InputEntryType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,13 +15,19 @@ class UserInputType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', 'text')
-            ->add('input_entries', 'collection', array(
-                'type'         => new InputEntryType(),
-                'allow_add'    => true,
-                'allow_delete' => false
+            ->add('employee', 'entity', array(
+                'class'    => 'SEInputBundle:Employee',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => false
                 ), array('required' => true))
-            ->add('save',      'submit')
+            ->add('presence', new PresenceType())
+            ->add('activity_hours', 'collection', array(
+                'type'         => new ActivityHoursType(),
+                'allow_add'    => true,
+                'allow_delete' => true
+                ), array('required' => true))
+            ->add('comments')
         ;
     }
     
@@ -31,7 +37,7 @@ class UserInputType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SE\InputBundle\Entity\UserInput'
+            'data_class' => 'SE\InputBundle\Entity\InputEntry'
         ));
     }
 
@@ -40,6 +46,6 @@ class UserInputType extends AbstractType
      */
     public function getName()
     {
-        return 'se_inputbundle_userinput';
+        return 'se_inputbundle_inputentry';
     }
 }

@@ -30,7 +30,7 @@ class AntifloodValidator extends ConstraintValidator
 
     // On vérifie si cette IP a déjà posté une candidature il y a moins de 15 secondes
     $isFlood = $this->em
-      ->getRepository('SEZesBundle:Application')
+      ->getRepository('SEZestBundle:Application')
       ->isFlood($ip, 15) // Bien entendu, il faudrait écrire cette méthode isFlood, c'est pour l'exemple
     ;
 
