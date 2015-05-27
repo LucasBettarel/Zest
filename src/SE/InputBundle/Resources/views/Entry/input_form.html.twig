@@ -30,69 +30,88 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-    var $container = $('div#se_inputbundle_userinput_input_entries');
 
-    // On ajoute un lien pour ajouter une nouvelle catégorie
-    var $addLink = $('<a href="#" id="add_entry" class="btn btn-default">Add an entry</a>');
-    $container.append($addLink);
+    var $entryContainer = $('div#se_inputbundle_userinput_input_entries');
+    var entryLabel = 'Entry n*';
+    var entryIndex = $entryContainer.find(':input').length;
+  
+    var $addEntryLink = $('<a href="#" id="add_entry" class="btn btn-default">Add an entry</a>');
+    $entryContainer.append($addEntryLink);
 
-    // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-    $addLink.click(function(e) {
-      addEntry($container);
-      e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+    $addEntryLink.click(function(e) {
+      entryIndex = addElement($entryContainer, entryLabel, entryIndex);
+      e.preventDefault(); 
+      addSubCollection($entryContainer.children('div'), entryIndex -1);
       return false;
     });
 
-    // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-    var index = $container.find(':input').length;
-
-    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
-    if (index == 0) {
+    if (entryIndex == 0) {
         for (var i = 0; i < {{ EmployeeCount }}; i++) {
-          addEntry($container);
+          entryIndex = addElement($entryContainer, entryLabel, entryIndex);
         } 
     } else {
-      // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
-      $container.children('div').each(function() {
+      $entryContainer.children('div').each(function() {
         addDeleteLink($(this));
       });
     }
 
-    // La fonction qui ajoute un formulaire Categorie
-    function addEntry($container) {
-      // Dans le contenu de l'attribut « data-prototype », on remplace :
-      // - le texte "__name__label__" qu'il contient par le label du champ
-      // - le texte "__name__" qu'il contient par le numéro du champ
-      var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Entry n°' + (index+1))
-          .replace(/__name__/g, index));
+    //array de ahcontainer pour chaque entry
+    var $ah = {
+      container : [],
+      idt : []
+    };
+    var ahLabel = 'Activity n*';
+    var $addActivityLink = [];
+ 
+    //on initialise les index et container de chaque ah
+    $entryContainer.children('div').each(function(j) {
+        addSubCollection($(this), j);
+    }); 
 
-      // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+    function addElement($container, lab, i) {
+      var $prototype = $($container.attr('data-prototype').replace(/__name__label__/, lab + (i+1))
+          .replace(/__name__/, i));
       addDeleteLink($prototype);
-
-      // On ajoute le prototype modifié à la fin de la balise <div>
       $container.append($prototype);
-
-      // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-      index++;
+      i++;
+      return i;
     }
 
-    // La fonction qui ajoute un lien de suppression d'une catégorie
     function addDeleteLink($prototype) {
-      // Création du lien
       $deleteLink = $('<a href="#" class="btn btn-danger">Delete</a>');
-
-      // Ajout du lien
       $prototype.append($deleteLink);
-
-      // Ajout du listener sur le clic du lien
       $deleteLink.click(function(e) {
         $prototype.remove();
-        e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+        e.preventDefault();
         return false;
       });
     }
+
+    function addSubCollection($parent, j) {  // j = parent new index $parent = $entryContainer.children('div') //.last()
+      
+      $ah.container.push($parent.find($("div[id*='se_inputbundle_userinput_input_entries_'][id*='_activity_hours']")).last());
+      $ah.idt.push($ah.container[j].find(':input').length);
+
+      $addActivityLink.push($('<a href="#" id="add_entry" class="btn btn-default">Add an activity</a>'));
+      $ah.container[j].append($addActivityLink[j]);
+
+      $addActivityLink[j].click(function(e) {
+        $ah.idt[j] = addElement($ah.container[j], ahLabel, $ah.idt[j]);
+        e.preventDefault(); 
+        return false;
+      });
+
+      if ($ah.idt[j] == 0) {
+        $ah.idt[j] = addElement($ah.container[j], ahLabel, $ah.idt[j]);
+      } else {
+        $ah.container[j].children('div').each(function() {
+          addDeleteLink($(this));
+        });
+      }
+    }
+
   });
+
 </script>
 
 {% endblock %}

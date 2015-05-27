@@ -34,7 +34,7 @@ class ActivityHours
     private $activity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Workhours")
+     * @ORM\OneToOne(targetEntity="SE\InputBundle\Entity\Workhours", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $workhours;
