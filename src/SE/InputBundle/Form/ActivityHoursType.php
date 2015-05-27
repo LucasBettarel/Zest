@@ -21,7 +21,10 @@ class ActivityHoursType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => true))
-            ->add('workhours')
+            ->add('regularHours', 'number')
+            ->add('otHours', 'number')
+            ->add('otStartTime', 'time')
+            ->add('otEndTime', 'time')
             ->add('team', 'entity', array(
                 'class'    => 'SEInputBundle:Team',
                 'property' => 'name', 
