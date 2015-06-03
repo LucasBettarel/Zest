@@ -25,9 +25,11 @@ class InputEntryType extends AbstractType
             ->add('activity_hours', 'collection', array(
                 'type'         => new ActivityHoursType(),
                 'allow_add'    => true,
-                'allow_delete' => true
-                ), array('required' => true))
-            ->add('comments')
+                'allow_delete' => true,
+                'prototype' => true,
+                
+                ), array('required' => false))
+            ->add('comments', 'textarea')
         ;
     }
     

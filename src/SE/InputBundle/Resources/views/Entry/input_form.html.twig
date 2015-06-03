@@ -16,10 +16,60 @@
     </div>
 
     <div class="form-group">
-      {{ form_row(form.input_entries) }}  
+      <div class="table-responsive">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Employee</th>
+              <th>Presence</th>
+              <th>Activity Hours</th>
+              <th>Comments</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            <div 
+            id="entries-prototype"
+            data-prototype="{{ form_row(form.input_entries.vars.prototype) | e }}">
+
+              {% for entry in form.input_entries %}
+                {{ form_widget(entry.employee) }}
+                {{ form_widget(entry.presence) }}
+                <div 
+                  id="activity-hours-prototype"
+                  data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
+                    {% for activityhours in entry.activity_hours %}
+                      {{ form_widget(activityhours.activity) }} 
+                      {{ form_widget(activityhours.regularHours) }}
+                      {{ form_widget(activityhours.otHours) }}
+                      {{ form_widget(activityhours.otStartTime) }}
+                      {{ form_widget(activityhours.otStartTime) }}
+                      {{ form_widget(activityhours.otEndTime) }}
+                      {{ form_widget(activityhours.team) }}
+                      {{ form_widget(activityhours.shift) }}
+                      {{ form_widget(activityhours.zone) }}
+                      {{ form_widget(activityhours.workstation) }}
+                      {{ form_row(activityhours) }}   
+                    {% endfor %}
+                </div>
+                {{ form_widget(entry.comments) }}
+                {{ form_row(entry) }}
+              {% endfor %}
+            </div>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <a href=# id="add_entry" class="btn btn-success">
+          <i class="glyphicon glyphicon-plus"></i>
+        </a>
+      </p>
     </div>
 
-    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+    <div class="form-group">
+      {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+    </div>
     
     {{ form_rest(form) }}
     {{ form_end(form) }}
@@ -31,14 +81,14 @@
 <script type="text/javascript">
   $(document).ready(function() {
 
-    var $entryContainer = $('div#se_inputbundle_userinput_input_entries');
-    var entryLabel = 'Entry n*';
+    var $entryContainer = $('div#entries-prototype');
+    var entryLabel = '#';
     var entryIndex = $entryContainer.find(':input').length;
   
-    var $addEntryLink = $('<a href="#" id="add_entry" class="btn btn-default">Add an entry</a>');
-    $entryContainer.append($addEntryLink);
+   // var $addEntryLink = $('<a href="#" id="add_entry" class="btn btn-default">Add an entry</a>');
+   // $entryContainer.append($addEntryLink);
 
-    $addEntryLink.click(function(e) {
+    $('#add_entry').click(function(e) {
       entryIndex = addElement($entryContainer, entryLabel, entryIndex);
       e.preventDefault(); 
       addSubCollection($entryContainer.children('div'), entryIndex -1);
@@ -78,7 +128,7 @@
     }
 
     function addDeleteLink($prototype) {
-      $deleteLink = $('<a href="#" class="btn btn-danger">Delete</a>');
+      $deleteLink = $('<p><a href=# class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a></p>');
       $prototype.append($deleteLink);
       $deleteLink.click(function(e) {
         $prototype.remove();
@@ -92,7 +142,7 @@
       $ah.container.push($parent.find($("div[id*='se_inputbundle_userinput_input_entries_'][id*='_activity_hours']")).last());
       $ah.idt.push($ah.container[j].find(':input').length);
 
-      $addActivityLink.push($('<a href="#" id="add_entry" class="btn btn-default">Add an activity</a>'));
+      $addActivityLink.push($('<a href=# id="add_entry" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a>'));
       $ah.container[j].append($addActivityLink[j]);
 
       $addActivityLink[j].click(function(e) {

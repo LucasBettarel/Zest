@@ -19,8 +19,10 @@ class UserInputType extends AbstractType
             ->add('input_entries', 'collection', array(
                 'type'         => new InputEntryType(),
                 'allow_add'    => true,
-                'allow_delete' => false
-                ), array('required' => true))
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false
+                ))
             ->add('save',      'submit')
         ;
     }
