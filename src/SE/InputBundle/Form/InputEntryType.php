@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class InputEntryType extends AbstractType
 {
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -27,7 +28,7 @@ class InputEntryType extends AbstractType
                 'allow_add'    => true,
                 'allow_delete' => true,
                 'prototype' => true,
-                
+                'by_reference' => false,
                 ), array('required' => false))
             ->add('comments', 'textarea')
         ;

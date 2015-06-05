@@ -59,6 +59,7 @@ class UserInput
     public function __construct()
     {
      $this->date = new \Datetime();
+     $this->input_entries = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -169,10 +170,10 @@ class UserInput
      * @param \SE\InputBundle\Entity\InputEntry $inputEntries
      * @return UserInput
      */
-    public function addInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntries)
+    public function addInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntry)
     {
-        $this->input_entries[] = $inputEntries;
-
+        $this->input_entries[] = $inputEntry;
+        $inputEntry->setUserInput($this);
         return $this;
     }
 
@@ -181,8 +182,9 @@ class UserInput
      *
      * @param \SE\InputBundle\Entity\InputEntry $inputEntries
      */
-    public function removeInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntries)
+    public function removeInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntry)
     {
-        $this->input_entries->removeElement($inputEntries);
+        $this->input_entries->removeElement($inputEntry);
+        //$inputEntry->setUserInput(null);
     }
 }

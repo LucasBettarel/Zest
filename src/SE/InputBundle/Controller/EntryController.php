@@ -19,8 +19,8 @@ class EntryController extends Controller
     ;
 
     $EmployeeCount = sizeof($listEmployees);
-
-	  $userInput = new UserInput();
+  
+    $userInput = new UserInput();
     $form = $this->createForm(new UserInputType(), $userInput);
 
     if ($form->handleRequest($request)->isValid()) {

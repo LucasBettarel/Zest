@@ -148,6 +148,7 @@ class InputEntry
     public function addActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHours)
     {
         $this->activity_hours[] = $activityHours;
+        $activityHours->setInput($this);
 
         return $this;
     }
@@ -160,6 +161,7 @@ class InputEntry
     public function removeActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHours)
     {
         $this->activity_hours->removeElement($activityHours);
+       // $activityHours->setInput(null);
     }
 
     /**

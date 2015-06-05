@@ -21,8 +21,8 @@ class ActivityHoursType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => true))
-            ->add('regularHours', 'number')
-            ->add('otHours', 'number')
+            ->add('regularHours', 'integer')
+            ->add('otHours', 'integer')
             ->add('otStartTime', 'time')
             ->add('otEndTime', 'time')
             ->add('team', 'entity', array(
