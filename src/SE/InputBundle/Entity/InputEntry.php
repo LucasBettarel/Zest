@@ -145,10 +145,10 @@ class InputEntry
      * @param \SE\InputBundle\Entity\ActivityHours $activityHours
      * @return InputEntry
      */
-    public function addActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHours)
+    public function addActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHour)
     {
-        $this->activity_hours[] = $activityHours;
-        $activityHours->setInput($this);
+        $this->activity_hours[] = $activityHour;
+        $activityHour->setInput($this);
 
         return $this;
     }
@@ -158,9 +158,9 @@ class InputEntry
      *
      * @param \SE\InputBundle\Entity\ActivityHours $activityHours
      */
-    public function removeActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHours)
+    public function removeActivityHour(\SE\InputBundle\Entity\ActivityHours $activityHour)
     {
-        $this->activity_hours->removeElement($activityHours);
+        $this->activity_hours->removeElement($activityHour);
        // $activityHours->setInput(null);
     }
 
