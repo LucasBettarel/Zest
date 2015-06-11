@@ -23,51 +23,19 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for to_line in list_import %}
+				{% for to_line in listImport %}
 		      		<tr>
 		      			<td>{{ to_line.id }}</td>
-		      			<td>{{ to_line.name }}</td>
-		      			<td>{% if not to_line.teams.empty %}
-		        				{% for team in activity.teams %}
-					    			{{ team.name }} 
-					      		{% endfor %}
-							{% endif %}
-		      			</td>
-		      			<td>{% if not activity.activityZones.empty %}
-		        				{% for activityZones in activity.activityZones %}
-					    			{{ activityZones.zone.name }} 
-					      		{% endfor %}
-							{% endif %}
-		      			</td>
-		      			<td>{% if not activity.workstations.empty %}
-		        				{% for workstation in activity.workstations %}
-					    			{{ workstation.name }} 
-					      		{% endfor %}
-							{% endif %}
-		      			</td>
-		      			<td>{% if activity.defaultTarget is not null %}
-    							default : {{ activity.defaultTarget }}
-    						{% endif %}
-    						{% if not activity.activityZones.empty %}
-		      					zones :
-			        			{% for activityZones in activity.activityZones %}
-			        				{% if activityZones.target is defined %}
-        								{{ activityZones.target }}
-        							{% endif %}
-			        			{% endfor %}	
-			        		{% endif %}
-			        		{% if not activity.workstations.empty %}
-			        			workstations :
-			        			{% for workstation in activity.workstations %}
-			        				{% if workstation.target is defined %}
-        								{{ workstation.target }}
-        							{% endif %}
-			        			{% endfor %}	
-			        		{% endif %}
-		      			</td>
+		      			<td>{{ to_line.warehouse }}</td>
+		      			<td>{{ to_line.material }}</td>
+		      			<td>{{ to_line.plant }}</td>
+		      			<td>{{ to_line.dateConfirmation }}</td>
+		      			<td>{{ to_line.timeConfirmation }}</td>
+		      			<td>{{ to_line.user }}</td>
+		      			<td>{{ to_line.sourceStorageType }}</td>
 					</tr>
 		    {% else %}
-		      <tr><td> No activity recorded </td></tr>
+		      <tr><td> No line recorded </td></tr>
 		    {% endfor %}
 		  </tbody>
 		</table>

@@ -20,11 +20,14 @@ class EntryController extends Controller
     $connection->saveTable($res, $em);
     $connection->sapClose();
 
-    return $this->render('SEInputBundle:Import:sap_import.html.twig');
-	}
+    $listImport = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('SEInputBundle:SAPRF')
+        ->findAll()
+      ;
 
-	public function menuAction()
-  	{
-    	return $this->render('SEInputBundle:Entry:menu.html.twig');
-  	}
+    return $this->render('SEInputBundle:Import:sap_import.html.twig', array(
+        'listImport' => $listImport
+        ));
+	}
 }
