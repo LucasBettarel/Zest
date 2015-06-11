@@ -1,5 +1,47 @@
 {% extends "SEInputBundle:Entry:input.html.twig" %}
 
+{% macro collection(entry) %}
+  <tr>
+    <td>#</td>
+    <td>{{ form_widget(entry.employee) }}</td>
+    <td>{{ form_widget(entry.presence) }}</td>
+    <td>
+      <div>
+        <a href=# id="add add_activity" class="btn btn-success">
+          <i class="glyphicon glyphicon-plus"></i>
+        </a>
+      </div> 
+{#    <div 
+        id="activity-hours-prototype"
+        data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
+          {% for activityhours in entry.activity_hours %}
+            {{ form_widget(activityhours.activity) }} 
+            {{ form_widget(activityhours.regularHours) }}
+            {{ form_widget(activityhours.otHours) }}
+            {{ form_widget(activityhours.otStartTime) }}
+            {{ form_widget(activityhours.otStartTime) }}
+            {{ form_widget(activityhours.otEndTime) }}
+            {{ form_widget(activityhours.team) }}
+            {{ form_widget(activityhours.shift) }}
+            {{ form_widget(activityhours.zone) }}
+            {{ form_widget(activityhours.workstation) }}
+            {{ form_widget(activityhours) }}
+            <a href=# id="rmv rmv_activity" class="btn btn-danger">
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>   
+          {% endfor %}
+      </div>
+#}    </td>
+    <td>{{ form_widget(entry.comments) }}</td>
+    <td>
+      <a href=# id="rmv rmv_entry" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </td>
+    {{ form_widget(entry) }}
+  </tr>
+{% endmacro %}
+
  {% block seinput_form %}
 
   <div class="well">
@@ -14,9 +56,10 @@
           {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
-
+    
     <div class="form-group">
-      <div class="table-responsive">
+     
+     <div class="table-responsive">
         <table class="table table-hover table-striped">
           <thead>
             <tr>
@@ -31,42 +74,60 @@
           <tbody>
             <div 
             id="entries-prototype"
-            data-prototype="{{ form_row(form.input_entries.vars.prototype) | e }}">
-
+            data-prototype="{{ _self.collection(form.input_entries.vars.prototype)|e }}">
+                         {#"{{ form_row(form.input_entries.vars.prototype) | e }}">#} 
               {% for entry in form.input_entries %}
-                {{ form_widget(entry.employee) }}
-                {{ form_widget(entry.presence) }}
-                <div 
-                  id="activity-hours-prototype"
-                  data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
-                    {% for activityhours in entry.activity_hours %}
-                      {{ form_widget(activityhours.activity) }} 
-                      {{ form_widget(activityhours.regularHours) }}
-                      {{ form_widget(activityhours.otHours) }}
-                      {{ form_widget(activityhours.otStartTime) }}
-                      {{ form_widget(activityhours.otStartTime) }}
-                      {{ form_widget(activityhours.otEndTime) }}
-                      {{ form_widget(activityhours.team) }}
-                      {{ form_widget(activityhours.shift) }}
-                      {{ form_widget(activityhours.zone) }}
-                      {{ form_widget(activityhours.workstation) }}
-                      {{ form_row(activityhours) }}   
-                    {% endfor %}
-                </div>
-                {{ form_widget(entry.comments) }}
-                {{ form_row(entry) }}
-              {% endfor %}
+                {{ _self.collection(entry) }}
+{#                <tr>
+                  <td>{{ form_widget(entry.employee) }}</td>
+                  <td>{{ form_widget(entry.presence) }}</td>
+                  <td>
+                    <div>
+                      <a href=# id="add add_activity" class="btn btn-success">
+                        <i class="glyphicon glyphicon-plus"></i>
+                      </a>
+                    </div> 
+                    <div 
+                      id="activity-hours-prototype"
+                      data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
+                        {% for activityhours in entry.activity_hours %}
+                          {{ form_widget(activityhours.activity) }} 
+                          {{ form_widget(activityhours.regularHours) }}
+                          {{ form_widget(activityhours.otHours) }}
+                          {{ form_widget(activityhours.otStartTime) }}
+                          {{ form_widget(activityhours.otStartTime) }}
+                          {{ form_widget(activityhours.otEndTime) }}
+                          {{ form_widget(activityhours.team) }}
+                          {{ form_widget(activityhours.shift) }}
+                          {{ form_widget(activityhours.zone) }}
+                          {{ form_widget(activityhours.workstation) }}
+                          {{ form_widget(activityhours) }}
+                          <a href=# id="rmv rmv_activity" class="btn btn-danger">
+                            <i class="glyphicon glyphicon-trash"></i>
+                          </a>   
+                        {% endfor %}
+                    </div>
+                  </td>
+                  <td>{{ form_widget(entry.comments) }}</td>
+                  <td>
+                    <a href=# id="rmv rmv_entry" class="btn btn-danger">
+                      <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                  </td>
+                  {{ form_widget(entry) }}
+                </tr>
+#}              {% endfor %}
             </div>
           </tbody>
         </table>
       </div>
       <p>
-        <a href=# id="add_entry" class="btn btn-success">
+        <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
           <i class="glyphicon glyphicon-plus"></i>
         </a>
-      </p>
+      </p> 
     </div>
-
+ 
     <div class="form-group">
       {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
     </div>
@@ -78,8 +139,12 @@
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
+{% javascripts '@SEInputBundle/Resources/public/js/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+{#
+$(document).ready(function() {
 
     var $entryContainer = $('div#entries-prototype');
     var entryLabel = '#';
@@ -161,7 +226,6 @@
     }
 
   });
-
 </script>
-
+#}
 {% endblock %}

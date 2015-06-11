@@ -9,7 +9,7 @@ vendor/*
 */logs/*
 */cache/*
 web/uploads/*
-#web/bundles/*
+web/bundles/*
 web/vendor/*
 
 # Configuration files
