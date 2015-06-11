@@ -7,12 +7,13 @@ use SE\InputBundle\Extensions\SapConnection;
 use SE\InputBundle\Entity\SAPRF;
 
 
-class EntryController extends Controller
+class ImportController extends Controller
 {
 	public function sapAction()
 	{
     $connection = new SapConnection();
-    $connection->setUp()->sapConnect();
+    $connection->setUp();
+    $connection->sapConnect();
 
     $em = $this->getDoctrine()->getManager();
 

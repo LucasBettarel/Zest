@@ -1,4 +1,7 @@
 <?php
+
+namespace SE\InputBundle\Extensions;
+
 /**
    * Spyc -- A Simple PHP YAML Class
    * @version 0.4.5
