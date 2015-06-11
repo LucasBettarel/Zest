@@ -29,7 +29,6 @@ $(document).ready(function() {
 
     $('#add').click(function(e) {
         var $collectionHolder = $('#' + $(this).attr('data-target'));
-        e.preventDefault(); 
 
         console.log('collectionHolder', $collectionHolder);
 
@@ -45,10 +44,11 @@ $(document).ready(function() {
         $collectionHolder.attr('data-counter', Number($collectionHolder.attr('data-counter')) + 1);
         $('tbody').append($form);
 
+        e && e.preventDefault(); 
 
     //    addElement($entryContainer, entryLabel, entryIndex);
     //  addSubCollection($entryContainer.children('div'), entryIndex -1);
-      return false;
+        return false;
     });
 
 /*

@@ -5,7 +5,7 @@
     <td>#</td>
     <td>{{ form_widget(entry.employee) }}</td>
     <td>{{ form_widget(entry.presence) }}</td>
-    <td>
+    <td id=#>
       <div>
         <a href=# id="add add_activity" class="btn btn-success">
           <i class="glyphicon glyphicon-plus"></i>
@@ -78,45 +78,7 @@
                          {#"{{ form_row(form.input_entries.vars.prototype) | e }}">#} 
               {% for entry in form.input_entries %}
                 {{ _self.collection(entry) }}
-{#                <tr>
-                  <td>{{ form_widget(entry.employee) }}</td>
-                  <td>{{ form_widget(entry.presence) }}</td>
-                  <td>
-                    <div>
-                      <a href=# id="add add_activity" class="btn btn-success">
-                        <i class="glyphicon glyphicon-plus"></i>
-                      </a>
-                    </div> 
-                    <div 
-                      id="activity-hours-prototype"
-                      data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
-                        {% for activityhours in entry.activity_hours %}
-                          {{ form_widget(activityhours.activity) }} 
-                          {{ form_widget(activityhours.regularHours) }}
-                          {{ form_widget(activityhours.otHours) }}
-                          {{ form_widget(activityhours.otStartTime) }}
-                          {{ form_widget(activityhours.otStartTime) }}
-                          {{ form_widget(activityhours.otEndTime) }}
-                          {{ form_widget(activityhours.team) }}
-                          {{ form_widget(activityhours.shift) }}
-                          {{ form_widget(activityhours.zone) }}
-                          {{ form_widget(activityhours.workstation) }}
-                          {{ form_widget(activityhours) }}
-                          <a href=# id="rmv rmv_activity" class="btn btn-danger">
-                            <i class="glyphicon glyphicon-trash"></i>
-                          </a>   
-                        {% endfor %}
-                    </div>
-                  </td>
-                  <td>{{ form_widget(entry.comments) }}</td>
-                  <td>
-                    <a href=# id="rmv rmv_entry" class="btn btn-danger">
-                      <i class="glyphicon glyphicon-trash"></i>
-                    </a>
-                  </td>
-                  {{ form_widget(entry) }}
-                </tr>
-#}              {% endfor %}
+              {% endfor %}
             </div>
           </tbody>
         </table>
@@ -143,89 +105,4 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
-{#
-$(document).ready(function() {
-
-    var $entryContainer = $('div#entries-prototype');
-    var entryLabel = '#';
-    var entryIndex = $entryContainer.find(':input').length;
-  
-   // var $addEntryLink = $('<a href="#" id="add_entry" class="btn btn-default">Add an entry</a>');
-   // $entryContainer.append($addEntryLink);
-
-    $('#add_entry').click(function(e) {
-      entryIndex = addElement($entryContainer, entryLabel, entryIndex);
-      e.preventDefault(); 
-      addSubCollection($entryContainer.children('div'), entryIndex -1);
-      return false;
-    });
-
-    if (entryIndex == 0) {
-        for (var i = 0; i < {{ EmployeeCount }}; i++) {
-          entryIndex = addElement($entryContainer, entryLabel, entryIndex);
-        } 
-    } else {
-      $entryContainer.children('div').each(function() {
-        addDeleteLink($(this));
-      });
-    }
-
-    //array de ahcontainer pour chaque entry
-    var $ah = {
-      container : [],
-      idt : []
-    };
-    var ahLabel = 'Activity n*';
-    var $addActivityLink = [];
- 
-    //on initialise les index et container de chaque ah
-    $entryContainer.children('div').each(function(j) {
-        addSubCollection($(this), j);
-    }); 
-
-    function addElement($container, lab, i) {
-      var $prototype = $($container.attr('data-prototype').replace(/__name__label__/, lab + (i+1))
-          .replace(/__name__/, i));
-      addDeleteLink($prototype);
-      $container.append($prototype);
-      i++;
-      return i;
-    }
-
-    function addDeleteLink($prototype) {
-      $deleteLink = $('<p><a href=# class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a></p>');
-      $prototype.append($deleteLink);
-      $deleteLink.click(function(e) {
-        $prototype.remove();
-        e.preventDefault();
-        return false;
-      });
-    }
-
-    function addSubCollection($parent, j) {  // j = parent new index $parent = $entryContainer.children('div') //.last()
-      
-      $ah.container.push($parent.find($("div[id*='se_inputbundle_userinput_input_entries_'][id*='_activity_hours']")).last());
-      $ah.idt.push($ah.container[j].find(':input').length);
-
-      $addActivityLink.push($('<a href=# id="add_entry" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a>'));
-      $ah.container[j].append($addActivityLink[j]);
-
-      $addActivityLink[j].click(function(e) {
-        $ah.idt[j] = addElement($ah.container[j], ahLabel, $ah.idt[j]);
-        e.preventDefault(); 
-        return false;
-      });
-
-      if ($ah.idt[j] == 0) {
-        $ah.idt[j] = addElement($ah.container[j], ahLabel, $ah.idt[j]);
-      } else {
-        $ah.container[j].children('div').each(function() {
-          addDeleteLink($(this));
-        });
-      }
-    }
-
-  });
-</script>
-#}
 {% endblock %}
