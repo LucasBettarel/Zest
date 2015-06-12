@@ -38,29 +38,24 @@
     </div>
   </nav>
 
-  <!--<div class="container">-->
-
-    <div id="menu" class="col-md-3">
-      <div class="panel panel-primary">
-        {% block menu %}
-        {% endblock %}
-      </div>
+  <div id="menu" class="col-md-3">
+    <div>
+      {% block menu %}
+      {% endblock %}
     </div>
+    <footer class="footer">
+      <div class="container">
+       <p>Lucas Bettarel © {{ 'now'|date('Y') }}</p>
+      </div>
+    </footer>
+  </div>
 
-    <div id="content" class="col-md-9">
+  <div id="content">
+    <div class="col-md-12">
       {% block body %}
       {% endblock %}
     </div>
-
-    <hr>
-  <!--</div>-->
-
-  <footer class="footer">
-    <div class="container">
-     <p>Lucas Bettarel © {{ 'now'|date('Y') }}</p>
-    </div>
-  </footer>
-
+  </div>
 
   {% block javascripts %}
     {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
