@@ -8,6 +8,10 @@ use SE\InputBundle\Entity\SAPRF;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use sapnwrfc;
+use sapnwrfcConnectionException;
+use sapnwrfcCallException;
+
 extension_loaded("sapnwrfc");
 
 global $SAP_CONFIG;
@@ -17,7 +21,6 @@ class SapConnection
     public function setUp() {
         global $SAP_CONFIG;
         $this->config = Spyc::YAMLLoad($SAP_CONFIG);
-       // $this->confog = Spyc::spyc_load($SAP_CONFIG);
     }
 
     public function sapConnect() {
