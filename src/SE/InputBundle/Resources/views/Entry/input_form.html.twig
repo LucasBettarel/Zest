@@ -10,31 +10,13 @@
         {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control'}}) }}
     </td>
     <td>
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-              <th>Activity</th>
-              <th>Hours</th>
-              <th>Transfer Out</th>
-              <th>Workstation</th>
-              <th>
-                <a href=# id="add" class="btn btn-success" data-target="activities-prototype">
-                  <i class="glyphicon glyphicon-plus"></i>
-                </a>
-              </th>
-            </tr>
-        </thead>
-        <tbody id="activities">
-          <div 
-            id="activities-prototype"
-            data-prototype="{{ _self.activityCollection(entry.activity_hours.vars.prototype) | e }}">
-              {#{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">#}
-              {% for activity in entry.activity_hours %}
-                {{ _self.activityCollection(activity) }}
-              {% endfor %}
-          </div>
-        </tbody>
-      </table>
+      <div 
+        id="activities-prototype"
+        data-prototype="{{ _self.activityCollection(entry.activity_hours.vars.prototype) | e }}">
+          {% for activity in entry.activity_hours %}
+            {{ _self.activityCollection(activity) }}
+          {% endfor %}
+      </div>
     </td>
     <td>
       {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
@@ -45,36 +27,58 @@
       <a href=# id="info" class="btn btn-info">
         <i class="glyphicon glyphicon-info-sign"></i>
       </a>
+      <a href=# id="add" class="btn btn-success" data-target="activities-prototype">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
     </td>
     {{ form_widget(entry) }}
   </tr>
 {% endmacro %}
 
 {% macro activityCollection(activity) %}
-  <tr>
-    <td>{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </td>
-    <td>
-      {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
-      {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
-      <br>
-      {{ form_widget(activity.otStartTime) }}
-      {{ form_widget(activity.otEndTime) }}
-    </td>
-    <td>
+  <div>
+    <div class="col-md-2">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
+    <div class="col-md-5">
+      <div>
+        <div class="col-xs-3">
+          {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-xs-3">
+          {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-xs-3">
+          <div class="input-group clockpicker" data-autoclose="true">
+            {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+            </span>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="input-group clockpicker" data-autoclose="true">
+            {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
       {{ form_widget(activity.team, {'attr': {'class': 'form-control'}}) }}
       {{ form_widget(activity.shift, {'attr': {'class': 'form-control'}}) }}
-    </td>
-    <td>
+    </div>
+    <div class="col-md-2">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
       {{ form_widget(activity.workstation, {'attr': {'class': 'form-control'}}) }}
-    </td>
-    <td>
+    </div>
+    <div class="col-md-1">
       <a href=# id="rmv" class="btn btn-danger" data-target="activities-prototype">
         <i class="glyphicon glyphicon-trash"></i>
       </a>
-    </td>   
+    </div>   
     {{ form_widget(activity) }}
-  </tr>
+  </div>
 {% endmacro %}
 
  {% block seinput_form %}
@@ -100,7 +104,20 @@
             <tr>
               <th>#</th>
               <th>Employee</th>
-              <th>Activity Hours</th>
+              <th>
+                <table>
+                <thead>
+                  <tr>
+                      <th class="col-xs-2">Activity</th>
+                      <th class="col-xs-5" >Hours</th>
+                      <th class="col-xs-2">Transfer Out</th>
+                      <th class="col-xs-2">Workstation</th>
+                      <th class="col-xs-1">
+                      </th>
+                    </tr>
+                </thead>
+              </table>
+              </th>
               <th>Comments</th>
             </tr>
           </thead>
@@ -130,11 +147,13 @@
     {{ form_end(form) }}
   </div>
 
-
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 {% javascripts '@SEInputBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
+<script type="text/javascript">
+  $('.clockpicker').clockpicker();
+</script>
 
 {% endblock %}
