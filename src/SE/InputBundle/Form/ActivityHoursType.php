@@ -25,18 +25,6 @@ class ActivityHoursType extends AbstractType
             ->add('otHours', 'integer')
             ->add('otStartTime', 'time')
             ->add('otEndTime', 'time')
-            ->add('team', 'entity', array(
-                'class'    => 'SEInputBundle:Team',
-                'property' => 'name', 
-                'multiple' => false,
-                'expanded' => false
-                ), array('required' => true))
-            ->add('shift', 'entity', array(
-                'class'    => 'SEInputBundle:Shift',
-                'property' => 'identifier', 
-                'multiple' => false,
-                'expanded' => false
-                ), array('required' => true))
             ->add('zone', 'entity', array(
                 'class'    => 'SEInputBundle:Zone',
                 'property' => 'name', 

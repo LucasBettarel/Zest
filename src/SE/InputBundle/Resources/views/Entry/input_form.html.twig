@@ -6,8 +6,10 @@
     <td>
         {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
         <p>SESA000000</p>
-        {{ form_row(entry.presence.present) }}
-        {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control'}}) }}
+    </td>
+    <td id="presence">
+        {{ form_widget(entry.presence.present, {'attr': {'id': 'present'}}) }}
+        {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control hide absent'}}) }}
     </td>
     <td>
       <div 
@@ -40,33 +42,28 @@
     <div class="col-md-2">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
     <div class="col-md-5">
       <div>
-        <div class="col-xs-3">
+        <div class="col-md-3">
           {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
         </div>
-        <div class="col-xs-3">
+        <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">
+        <div class="input-group col-md-3">
           {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
+          <span class="input-group-addon">
+            <span id="overtime" class="glyphicon glyphicon-time">
+            </span>
+          </span>
         </div>
-        <div class="col-xs-3">
-          <div class="input-group clockpicker" data-autoclose="true">
+         </a>
+        <div class="col-md-3">
             {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-          </div>
         </div>
-        <div class="col-xs-3">
-          <div class="input-group clockpicker" data-autoclose="true">
+        <div class="col-md-3">
             {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-          </div>
         </div>
       </div>
     </div>
     <div class="col-md-2">
-      {{ form_widget(activity.team, {'attr': {'class': 'form-control'}}) }}
-      {{ form_widget(activity.shift, {'attr': {'class': 'form-control'}}) }}
+      <input class="transfer" type="checkbox" value="0" checked="unchecked">
     </div>
     <div class="col-md-2">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
@@ -104,15 +101,16 @@
             <tr>
               <th>#</th>
               <th>Employee</th>
-              <th>
+              <th>Presence</th>
+              <th class="col-md-6">
                 <table>
                 <thead>
                   <tr>
-                      <th class="col-xs-2">Activity</th>
-                      <th class="col-xs-5" >Hours</th>
-                      <th class="col-xs-2">Transfer Out</th>
-                      <th class="col-xs-2">Workstation</th>
-                      <th class="col-xs-1">
+                      <th class="col-md-2">Activity</th>
+                      <th class="col-md-5" >Hours</th>
+                      <th class="col-md-2">Transfer Out</th>
+                      <th class="col-md-2">Workstation</th>
+                      <th class="col-md-1">
                       </th>
                     </tr>
                 </thead>
@@ -147,13 +145,11 @@
     {{ form_end(form) }}
   </div>
 
+  <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 {% javascripts '@SEInputBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-<script type="text/javascript">
-  $('.clockpicker').clockpicker();
-</script>
 
 {% endblock %}

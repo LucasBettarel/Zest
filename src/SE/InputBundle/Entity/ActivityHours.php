@@ -62,18 +62,6 @@ class ActivityHours
     private $otEndTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Team")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $team;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Shift")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $shift;
-
-    /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Zone")
      * @ORM\JoinColumn(nullable=true)
      */
