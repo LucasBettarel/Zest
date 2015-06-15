@@ -31,13 +31,7 @@ class ActivityHoursType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => false))
-            ->add('workstation', 'entity', array(
-                'class'    => 'SEInputBundle:Workstation',
-                'property' => 'name', 
-                'multiple' => false,
-                'expanded' => false
-                ), array('required' => false))
-        ;
+            ;
     }
     
     /**

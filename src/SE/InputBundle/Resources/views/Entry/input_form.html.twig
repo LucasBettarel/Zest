@@ -3,15 +3,17 @@
 {% macro entryCollection(entry) %}
   <tr>
     <td>#</td>
-    <td>
+    <td class="table-size">
+      <div class="float-left">
         {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
         <p>SESA000000</p>
-    </td>
-    <td id="presence">
+      </div>
+      <div id="presence">
         {{ form_widget(entry.presence.present, {'attr': {'id': 'present'}}) }}
-        {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control hide absent'}}) }}
+        {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control hide txtarea-sm'}}) }}
+      </div>
     </td>
-    <td>
+    <td id="activities">
       <div 
         id="activities-prototype"
         data-prototype="{{ _self.activityCollection(entry.activity_hours.vars.prototype) | e }}">
@@ -20,9 +22,10 @@
           {% endfor %}
       </div>
     </td>
-    <td>
-      {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
-      <br>
+    <td class="table-size">
+      <a href=# id="comment" class="btn btn-primary">
+        <i class="glyphicon glyphicon-comment"></i>
+      </a>
       <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype">
         <i class="glyphicon glyphicon-trash"></i>
       </a>
@@ -32,51 +35,51 @@
       <a href=# id="add" class="btn btn-success" data-target="activities-prototype">
         <i class="glyphicon glyphicon-plus"></i>
       </a>
+      <div class="hide txtarea-sm">
+        {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
+      </div>  
     </td>
     {{ form_widget(entry) }}
   </tr>
 {% endmacro %}
 
 {% macro activityCollection(activity) %}
-  <div>
-    <div class="col-md-2">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
-    <div class="col-md-5">
-      <div>
-        <div class="col-md-3">
-          {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">
-        <div class="input-group col-md-3">
-          {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
-          <span class="input-group-addon">
-            <span id="overtime" class="glyphicon glyphicon-time">
-            </span>
+  <div class="row">
+    <div class="col-md-3">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
+    <div class="col-md-4">
+      <div class="float-left col-xs-6">
+        {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
+      </div>
+      <div class="input-group float-left col-xs-6" 
+           data-toggle="popover" 
+           data-trigger="click" 
+           title="OT Hours" 
+           data-content="lalala">
+        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
+        <span class="input-group-addon">
+          <span id="overtime" class="glyphicon glyphicon-time">
           </span>
-        </div>
-         </a>
-        <div class="col-md-3">
-            {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
-        </div>
-        <div class="col-md-3">
-            {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
-        </div>
+        </span>
+      </div>
+      <div class='hide ghost float-left'>
+          {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
+          {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
       </div>
     </div>
-    <div class="col-md-2">
+    <div class="float-left">
       <input class="transfer" type="checkbox" value="0" checked="unchecked">
     </div>
-    <div class="col-md-2">
+    <div class="float-left">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
-      {{ form_widget(activity.workstation, {'attr': {'class': 'form-control'}}) }}
     </div>
-    <div class="col-md-1">
+    <div>
       <a href=# id="rmv" class="btn btn-danger" data-target="activities-prototype">
         <i class="glyphicon glyphicon-trash"></i>
       </a>
     </div>   
     {{ form_widget(activity) }}
   </div>
-{% endmacro %}
+  {% endmacro %}
 
  {% block seinput_form %}
 
@@ -100,23 +103,15 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Employee</th>
-              <th>Presence</th>
-              <th class="col-md-6">
-                <table>
-                <thead>
-                  <tr>
-                      <th class="col-md-2">Activity</th>
-                      <th class="col-md-5" >Hours</th>
-                      <th class="col-md-2">Transfer Out</th>
-                      <th class="col-md-2">Workstation</th>
-                      <th class="col-md-1">
-                      </th>
-                    </tr>
-                </thead>
-              </table>
+              <th class="table-size">Employee</th>
+              <th>
+                <div class="col-md-2">Activity</div>
+                <div class="col-md-5" >Hours</div>
+                <div class="col-md-2">Transfer Out</div>
+                <div class="col-md-2">Workstation</div>
+                <div class="col-md-1"></div>
               </th>
-              <th>Comments</th>
+              <th class="table-size">Comments</th>
             </tr>
           </thead>
           <tbody id="entries">

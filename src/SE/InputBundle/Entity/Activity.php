@@ -55,12 +55,6 @@ class Activity
     private $activity_zones;
 
     /**
-     * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Workstation", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $workstations;
-
-    /**
      * @ORM\Column(name="date_creation", type="date")
      */
     protected $date_creation;
@@ -108,42 +102,8 @@ class Activity
      */
     public function __construct()
     {
-        $this->workstations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->date_creation = new \Datetime();
 
-    }
-
-    /**
-     * Add workstations
-     *
-     * @param \SE\InputBundle\Entity\Workstation $workstations
-     * @return Activity
-     */
-    public function addWorkstation(\SE\InputBundle\Entity\Workstation $workstations)
-    {
-        $this->workstations[] = $workstations;
-
-        return $this;
-    }
-
-    /**
-     * Remove workstations
-     *
-     * @param \SE\InputBundle\Entity\Workstation $workstations
-     */
-    public function removeWorkstation(\SE\InputBundle\Entity\Workstation $workstations)
-    {
-        $this->workstations->removeElement($workstations);
-    }
-
-    /**
-     * Get workstations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getWorkstations()
-    {
-        return $this->workstations;
     }
 
     /**

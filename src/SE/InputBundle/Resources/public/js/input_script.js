@@ -3,5 +3,11 @@ $(document).ready(function() {
 		$(this).next('textarea').toggleClass('hide');
 	});
 
-	$('[data-toggle="popover"]').popover();
+	$(document).on('click', '#comment', function(e) {
+		$(this).siblings('div').toggleClass('hide');
+	});
+
+	$(document).on('click', '[data-toggle="popover"]', function(e) {
+		$(this).popover();
+	});
 });

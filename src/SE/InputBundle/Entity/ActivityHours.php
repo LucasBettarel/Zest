@@ -68,12 +68,6 @@ class ActivityHours
     private $zone;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Workstation")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $workstation;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -177,29 +171,6 @@ class ActivityHours
     }
 
     /**
-     * Set workstation
-     *
-     * @param \SE\InputBundle\Entity\Workstation $workstation
-     * @return ActivityHours
-     */
-    public function setWorkstation(\SE\InputBundle\Entity\Workstation $workstation = null)
-    {
-        $this->workstation = $workstation;
-
-        return $this;
-    }
-
-    /**
-     * Get workstation
-     *
-     * @return \SE\InputBundle\Entity\Workstation 
-     */
-    public function getWorkstation()
-    {
-        return $this->workstation;
-    }
-
-    /**
      * Set input
      *
      * @param \SE\InputBundle\Entity\InputEntry $input
@@ -246,29 +217,6 @@ class ActivityHours
     }
 
     /**
-     * Set otHours
-     *
-     * @param string $otHours
-     * @return ActivityHours
-     */
-    public function setOtHours($otHours)
-    {
-        $this->otHours = $otHours;
-
-        return $this;
-    }
-
-    /**
-     * Get otHours
-     *
-     * @return string 
-     */
-    public function getOtHours()
-    {
-        return $this->otHours;
-    }
-
-    /**
      * Set otStartTime
      *
      * @param \DateTime $otStartTime
@@ -312,5 +260,28 @@ class ActivityHours
     public function getOtEndTime()
     {
         return $this->otEndTime;
+    }
+
+    /**
+     * Set otHours
+     *
+     * @param string $otHours
+     * @return ActivityHours
+     */
+    public function setOtHours($otHours)
+    {
+        $this->otHours = $otHours;
+
+        return $this;
+    }
+
+    /**
+     * Get otHours
+     *
+     * @return string 
+     */
+    public function getOtHours()
+    {
+        return $this->otHours;
     }
 }
