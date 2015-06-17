@@ -12,7 +12,7 @@ class ImportController extends Controller
 	public function sapAction()
 	{
     $connection = new SapConnection();
-    $connection->setUp();
+   // $connection->setUp();
     $connection->sapConnect();
 
     $em = $this->getDoctrine()->getManager();
@@ -31,4 +31,10 @@ class ImportController extends Controller
         'listImport' => $listImport
         ));
 	}
+
+    public function setAction()
+    {
+
+        return $this->render('SEInputBundle:Import:set_import.html.twig');
+    }
 }

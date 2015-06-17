@@ -21,3 +21,7 @@ se_input_activities_add:
 se_input_import_sap:
     path:     /import
     defaults: { _controller: SEInputBundle:Import:sap }
+
+se_input_set_import:
+    path:     /extimport
+    defaults: { _controller: SEInputBundle:Import:set }

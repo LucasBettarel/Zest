@@ -8,11 +8,11 @@ use SE\InputBundle\Entity\SAPRF;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use sapnwrfc;
-use sapnwrfcConnectionException;
-use sapnwrfcCallException;
+//extension_loaded("sapnwrfc");
 
-extension_loaded("sapnwrfc");
+use \sapnwrfc;
+use \sapnwrfcConnectionException;
+use \sapnwrfcCallException;
 
 global $SAP_CONFIG;
 
@@ -21,24 +21,38 @@ class SapConnection
     public function setUp() {
         global $SAP_CONFIG;
         $this->config = Spyc::YAMLLoad($SAP_CONFIG);
+        //$arraylala = $this->config;
+        //echo "<script type='text/javascript'>alert('array = '+JSON.stringify($arraylala));</script>";
     }
 
     public function sapConnect() {
+
+        $config = [
+            'ASHOST' => 'prhci.sg.schneider-electric.com',
+            'SYSNR' => '00',
+            'CLIENT' => '200',
+            'user' => 'SESA282699',
+            'passwd' => 'Weight.3',
+            'LANG' => 'en',
+            'TRACE' => 1,
+            'LOGLEVEL' => 'warn'
+        ];
+        
         try {
-            $this->conn = new sapnwrfc($this->config);
+            $this->conn = new \sapnwrfc($config);
         }
-        catch (sapnwrfcConnectionException $e) {
+        catch (\sapnwrfcConnectionException $e) {
             echo "Exception type: ".$e."<br />";
             echo "Exception key: ".$e->key."<br />";
             echo "Exception code: ".$e->code."<br />";
             echo "Exception message: ".$e->getMessage();
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             echo "Exception type: ".$e."\n";
             echo "Exception key: ".$e->key."\n";
             echo "Exception code: ".$e->code."\n";
             echo "Exception message: ".$e->getMessage();
-            throw new Exception('Connection failed.');
+            throw new \Exception('Connection failed.');
         }    
     }
 
@@ -108,3 +122,10 @@ class SapConnection
        $this->conn->close();
     }
 }
+
+    $connection = new SapConnection();
+    $connection->setUp();
+    $connection->sapConnect();
+    echo "ok";
+
+

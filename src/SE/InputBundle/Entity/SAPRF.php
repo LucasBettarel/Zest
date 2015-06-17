@@ -24,58 +24,64 @@ class SAPRF
     /**
      * @var string
      *
-     * @ORM\Column(name="warehouse", type="string", length=255)
-     */
+     * @ORM\Column(name="warehouse", type="string", length=255, nullable=true)     */
     private $warehouse;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="transfer_order", type="integer")
+     * @ORM\Column(name="transfer_order", type="integer", nullable=true)
      */
     private $transferOrder;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="material", type="string", length=255)
+     * @ORM\Column(name="material", type="string", length=255, nullable=true)
      */
     private $material;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="plant", type="string", length=255)
+     * @ORM\Column(name="plant", type="string", length=255, nullable=true)
      */
     private $plant;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_confirmation", type="date")
+     * @ORM\Column(name="date_confirmation", type="date", nullable=true)
      */
     private $dateConfirmation;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="time_confirmation", type="time")
+     * @ORM\Column(name="time_confirmation", type="time", nullable=true)
      */
     private $timeConfirmation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="user", type="string", length=255)
+     * @ORM\Column(name="user", type="string", length=255, nullable=true)
      */
     private $user;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="source_storage_type", type="string", length=255)
+     * @ORM\Column(name="source_storage_type", type="string", length=255, nullable=true)
      */
     private $sourceStorageType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="source_storage_bin", type="string", length=255, nullable=true)
+     */
+    private $sourceStorageBin;
 
 
     /**
@@ -270,5 +276,28 @@ class SAPRF
     public function getSourceStorageType()
     {
         return $this->sourceStorageType;
+    }
+
+    /**
+     * Set sourceStorageBin
+     *
+     * @param string $sourceStorageBin
+     * @return SAPRF
+     */
+    public function setSourceStorageBin($sourceStorageBin)
+    {
+        $this->sourceStorageBin = $sourceStorageBin;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceStorageBin
+     *
+     * @return string 
+     */
+    public function getSourceStorageBin()
+    {
+        return $this->sourceStorageBin;
     }
 }
