@@ -5,16 +5,15 @@
 {% endblock %}
 
 {% block seinput_body %}
-	<h2>SAP Import Settings</h2>
 
-	<div class="well">
-		<h3>New Import</h3>
+	<div class="well col-md-7">
+		<h3>New SAP Import</h3>
 
-		<form class="form-inline" method="get" action="http://localhost/SE/Import/Import.php"> 
+		<form class="form-inline" method="post" action="http://localhost/SE/Import/Import.php"> 
    			<div class="form-group">
 			    <label for="dateinput">Date of confirmation : </label>
 			    <div class="input-group">
-			    	<input type="date" class="form-control" id="dateinput" placeholder="{{ 'now'|date('d-m-Y') }}" name="date">
+			    	<input type="date" class="form-control" id="dateinput" value="{{ 'now'|date('d/m/Y') }}" name="date">
 				    <span class="input-group-addon">
 	          			<span id="overtime" class="glyphicon glyphicon-time"></span>
 			        </span>
@@ -22,5 +21,6 @@
 			</div>
 			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Import</button>
 		</form>
+	</div>
 
 {% endblock %}
