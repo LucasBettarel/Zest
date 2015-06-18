@@ -5,6 +5,7 @@ namespace SE\InputBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use SE\InputBundle\Extensions\SapConnection;
 use SE\InputBundle\Entity\SAPRF;
+use SE\InputBundle\Entity\SapImports;
 
 
 class ImportController extends Controller
@@ -34,7 +35,14 @@ class ImportController extends Controller
 
     public function setAction()
     {
+        $listSapImport = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('SEInputBundle:SapImports')
+        ->findAll()
+      ;
 
-        return $this->render('SEInputBundle:Import:set_import.html.twig');
+        return $this->render('SEInputBundle:Import:set_import.html.twig', array(
+            'listSapImport' => $listSapImport
+            ));
     }
 }

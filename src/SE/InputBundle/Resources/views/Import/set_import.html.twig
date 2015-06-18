@@ -6,9 +6,8 @@
 
 {% block seinput_body %}
 
-	<div class="well col-md-7">
+	<div class="well col-md-6">
 		<h3>New SAP Import</h3>
-
 		<form class="form-inline" method="post" action="http://localhost/SE/Import/Import.php"> 
    			<div class="form-group">
 			    <label for="dateinput">Date of confirmation : </label>
@@ -21,6 +20,42 @@
 			</div>
 			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Import</button>
 		</form>
+	</div>
+
+	<div class="well col-md-10">
+		<h3>Last SAP Imports</h3>
+		<div class="table-responsive">
+			<table class="table table-hover table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Date</th>
+						<th>Import</th>
+						<th>Process</th>
+						<th>Review</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for importSap in listSapImport %}
+			      		<tr>
+			      			<td>{{ importSap.id }}</td>
+			      			<td>{{ importSap.date }}</td>
+			      			<td>{{ importSap.import }}</td>
+			      			<td>{% if importSap.process is not null %}
+			      					{{ importSap.process }}
+								{% endif %}
+							</td>
+							<td>{% if importSap.review is not null %}
+					        		{{ importSap.review }}
+								{% endif %}
+							</td>
+						</tr>
+			    {% else %}
+			      <tr><td> No import recorded </td></tr>
+			    {% endfor %}
+			  </tbody>
+			</table>
+		</div>
 	</div>
 
 {% endblock %}
