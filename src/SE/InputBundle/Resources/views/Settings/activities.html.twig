@@ -43,12 +43,6 @@
 					      		{% endfor %}
 							{% endif %}
 		      			</td>
-		      			<td>{% if not activity.workstations.empty %}
-		        				{% for workstation in activity.workstations %}
-					    			{{ workstation.name }} 
-					      		{% endfor %}
-							{% endif %}
-		      			</td>
 		      			<td>{% if activity.defaultTarget is not null %}
     							default : {{ activity.defaultTarget }}
     						{% endif %}

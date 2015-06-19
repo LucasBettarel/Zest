@@ -22,12 +22,6 @@ class SAPRF
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="warehouse", type="string", length=255, nullable=true)     */
-    private $warehouse;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="transfer_order", type="integer", nullable=true)
@@ -40,13 +34,6 @@ class SAPRF
      * @ORM\Column(name="material", type="string", length=255, nullable=true)
      */
     private $material;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="plant", type="string", length=255, nullable=true)
-     */
-    private $plant;
 
     /**
      * @var \DateTime
@@ -95,29 +82,6 @@ class SAPRF
     }
 
     /**
-     * Set warehouse
-     *
-     * @param string $warehouse
-     * @return SAPRF
-     */
-    public function setWarehouse($warehouse)
-    {
-        $this->warehouse = $warehouse;
-
-        return $this;
-    }
-
-    /**
-     * Get warehouse
-     *
-     * @return string 
-     */
-    public function getWarehouse()
-    {
-        return $this->warehouse;
-    }
-
-    /**
      * Set transferOrder
      *
      * @param integer $transferOrder
@@ -161,29 +125,6 @@ class SAPRF
     public function getMaterial()
     {
         return $this->material;
-    }
-
-    /**
-     * Set plant
-     *
-     * @param string $plant
-     * @return SAPRF
-     */
-    public function setPlant($plant)
-    {
-        $this->plant = $plant;
-
-        return $this;
-    }
-
-    /**
-     * Get plant
-     *
-     * @return string 
-     */
-    public function getPlant()
-    {
-        return $this->plant;
     }
 
     /**
