@@ -1,5 +1,86 @@
 {% extends "SEInputBundle:Entry:input.html.twig" %}
 
+{% macro entryCollection(entry) %}
+  <tr>
+    <td>#</td>
+    <td class="table-size">
+      <div class="float-left">
+        {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
+        <p>SESA000000</p>
+      </div>
+      <div id="presence">
+        {{ form_widget(entry.presence.present, {'attr': {'id': 'present'}}) }}
+        {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control hide txtarea-sm'}}) }}
+      </div>
+    </td>
+    <td id="activities">
+      <div 
+        id="activities-prototype"
+        data-prototype="{{ _self.activityCollection(entry.activity_hours.vars.prototype) | e }}">
+          {% for activity in entry.activity_hours %}
+            {{ _self.activityCollection(activity) }}
+          {% endfor %}
+      </div>
+    </td>
+    <td class="table-size">
+      <a href=# id="comment" class="btn btn-primary">
+        <i class="glyphicon glyphicon-comment"></i>
+      </a>
+      <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+      <a href=# id="info" class="btn btn-info">
+        <i class="glyphicon glyphicon-info-sign"></i>
+      </a>
+      <a href=# id="add" class="btn btn-success" data-target="activities-prototype">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+      <div class="hide txtarea-sm">
+        {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
+      </div>  
+    </td>
+    {{ form_widget(entry) }}
+  </tr>
+{% endmacro %}
+
+{% macro activityCollection(activity) %}
+  <div class="row">
+    <div class="col-md-3">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
+    <div class="col-md-4">
+      <div class="float-left col-xs-6">
+        {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
+      </div>
+      <div class="input-group float-left col-xs-6" 
+           data-toggle="popover" 
+           data-trigger="click" 
+           title="OT Hours" 
+           data-content="lalala">
+        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
+        <span class="input-group-addon">
+          <span id="overtime" class="glyphicon glyphicon-time">
+          </span>
+        </span>
+      </div>
+      <div class='hide ghost float-left'>
+          {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
+          {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
+      </div>
+    </div>
+    <div class="float-left">
+      <input class="transfer" type="checkbox" value="0" checked="unchecked">
+    </div>
+    <div class="float-left">
+      {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div>
+      <a href=# id="rmv" class="btn btn-danger" data-target="activities-prototype">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </div>   
+    {{ form_widget(activity) }}
+  </div>
+  {% endmacro %}
+
  {% block seinput_form %}
 
   <div class="well">
@@ -14,154 +95,56 @@
           {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
         </div>
     </div>
-
+    
     <div class="form-group">
-      <div class="table-responsive">
+     
+     <div class="table-responsive">
         <table class="table table-hover table-striped">
           <thead>
             <tr>
               <th>#</th>
-              <th>Employee</th>
-              <th>Presence</th>
-              <th>Activity Hours</th>
-              <th>Comments</th>
-              <th>Remove</th>
+              <th class="table-size">Employee</th>
+              <th>
+                <div class="col-md-2">Activity</div>
+                <div class="col-md-5" >Hours</div>
+                <div class="col-md-2">Transfer Out</div>
+                <div class="col-md-2">Workstation</div>
+                <div class="col-md-1"></div>
+              </th>
+              <th class="table-size">Comments</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="entries">
             <div 
             id="entries-prototype"
-            data-prototype="{{ form_row(form.input_entries.vars.prototype) | e }}">
-
+            data-prototype="{{ _self.entryCollection(form.input_entries.vars.prototype)|e }}">
               {% for entry in form.input_entries %}
-                {{ form_widget(entry.employee) }}
-                {{ form_widget(entry.presence) }}
-                <div 
-                  id="activity-hours-prototype"
-                  data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
-                    {% for activityhours in entry.activity_hours %}
-                      {{ form_widget(activityhours.activity) }} 
-                      {{ form_widget(activityhours.regularHours) }}
-                      {{ form_widget(activityhours.otHours) }}
-                      {{ form_widget(activityhours.otStartTime) }}
-                      {{ form_widget(activityhours.otStartTime) }}
-                      {{ form_widget(activityhours.otEndTime) }}
-                      {{ form_widget(activityhours.team) }}
-                      {{ form_widget(activityhours.shift) }}
-                      {{ form_widget(activityhours.zone) }}
-                      {{ form_widget(activityhours.workstation) }}
-                      {{ form_row(activityhours) }}   
-                    {% endfor %}
-                </div>
-                {{ form_widget(entry.comments) }}
-                {{ form_row(entry) }}
+                {{ _self.entryCollection(entry) }}
               {% endfor %}
             </div>
           </tbody>
         </table>
       </div>
       <p>
-        <a href=# id="add_entry" class="btn btn-success">
+        <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
           <i class="glyphicon glyphicon-plus"></i>
         </a>
-      </p>
+      </p> 
     </div>
-
+ 
     <div class="form-group">
       {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
     </div>
     
-    {{ form_widget(form._token) }}
+    {{ form_rest(form) }}
     {{ form_end(form) }}
   </div>
 
-
+  <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
-
-    var $entryContainer = $('div#entries-prototype');
-    var entryLabel = '#';
-    var entryIndex = $entryContainer.find(':input').length;
-  
-   // var $addEntryLink = $('<a href="#" id="add_entry" class="btn btn-default">Add an entry</a>');
-   // $entryContainer.append($addEntryLink);
-
-    $('#add_entry').click(function(e) {
-      entryIndex = addElement($entryContainer, entryLabel, entryIndex);
-      e.preventDefault(); 
-      addSubCollection($entryContainer.children('div'), entryIndex -1);
-      return false;
-    });
-
-    if (entryIndex == 0) {
-        for (var i = 0; i < {{ EmployeeCount }}; i++) {
-          entryIndex = addElement($entryContainer, entryLabel, entryIndex);
-        } 
-    } else {
-      $entryContainer.children('div').each(function() {
-        addDeleteLink($(this));
-      });
-    }
-
-    //array de ahcontainer pour chaque entry
-    var $ah = {
-      container : [],
-      idt : []
-    };
-    var ahLabel = 'Activity n*';
-    var $addActivityLink = [];
- 
-    //on initialise les index et container de chaque ah
-    $entryContainer.children('div').each(function(j) {
-        addSubCollection($(this), j);
-    }); 
-
-    function addElement($container, lab, i) {
-      var $prototype = $($container.attr('data-prototype').replace(/__name__label__/, lab + (i+1))
-          .replace(/__name__/, i));
-      addDeleteLink($prototype);
-      $container.append($prototype);
-      i++;
-      return i;
-    }
-
-    function addDeleteLink($prototype) {
-      $deleteLink = $('<p><a href=# class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i></a></p>');
-      $prototype.append($deleteLink);
-      $deleteLink.click(function(e) {
-        $prototype.remove();
-        e.preventDefault();
-        return false;
-      });
-    }
-
-    function addSubCollection($parent, j) {  // j = parent new index $parent = $entryContainer.children('div') //.last()
-      
-      $ah.container.push($parent.find($("div[id*='se_inputbundle_userinput_input_entries_'][id*='_activity_hours']")).last());
-      $ah.idt.push($ah.container[j].find(':input').length);
-
-      $addActivityLink.push($('<a href=# id="add_entry" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i></a>'));
-      $ah.container[j].append($addActivityLink[j]);
-
-      $addActivityLink[j].click(function(e) {
-        $ah.idt[j] = addElement($ah.container[j], ahLabel, $ah.idt[j]);
-        e.preventDefault(); 
-        return false;
-      });
-
-      if ($ah.idt[j] == 0) {
-        $ah.idt[j] = addElement($ah.container[j], ahLabel, $ah.idt[j]);
-      } else {
-        $ah.container[j].children('div').each(function() {
-          addDeleteLink($(this));
-        });
-      }
-    }
-
-  });
-
-</script>
+{% javascripts '@SEInputBundle/Resources/public/js/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
 {% endblock %}

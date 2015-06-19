@@ -24,14 +24,14 @@ class Presence
     /**
      * @var boolean
      *
-     * @ORM\Column(name="present", type="boolean")
+     * @ORM\Column(name="present", type="boolean", nullable=true)
      */
     private $present;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="absence_reason", type="string", length=255)
+     * @ORM\Column(name="absence_reason", type="string", length=255, nullable=true)
      */
     private $absenceReason;
 

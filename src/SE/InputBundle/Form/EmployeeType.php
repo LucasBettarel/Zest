@@ -41,12 +41,6 @@ class EmployeeType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => false))
-            ->add('defaultWorkstation', 'entity', array(
-                'class'    => 'SEInputBundle:Workstation',
-                'property' => 'name', 
-                'multiple' => false,
-                'expanded' => false
-                ), array('required' => false))
             ->add('job', 'entity', array(
                 'class'    => 'SEInputBundle:Job',
                 'property' => 'description', 

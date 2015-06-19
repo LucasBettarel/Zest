@@ -1,0 +1,40 @@
+{% for entry in form.input_entries %}
+  <tr>
+    <td>{{ form_widget(entry.employee) }}</td>
+    <td>{{ form_widget(entry.presence) }}</td>
+    <td>
+      <div>
+        <a href=# id="add add_activity" class="btn btn-success">
+          <i class="glyphicon glyphicon-plus"></i>
+        </a>
+      </div> 
+      <div 
+        id="activity-hours-prototype"
+        data-prototype="{{ form_row(entry.vars.prototype.children['activity_hours'].vars.prototype) | e }}">
+          {% for activityhours in entry.activity_hours %}
+            {{ form_widget(activityhours.activity) }} 
+            {{ form_widget(activityhours.regularHours) }}
+            {{ form_widget(activityhours.otHours) }}
+            {{ form_widget(activityhours.otStartTime) }}
+            {{ form_widget(activityhours.otStartTime) }}
+            {{ form_widget(activityhours.otEndTime) }}
+            {{ form_widget(activityhours.team) }}
+            {{ form_widget(activityhours.shift) }}
+            {{ form_widget(activityhours.zone) }}
+            {{ form_widget(activityhours.workstation) }}
+            {{ form_widget(activityhours) }}
+            <a href=# id="rmv rmv_activity" class="btn btn-danger">
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>   
+          {% endfor %}
+      </div>
+    </td>
+    <td>{{ form_widget(entry.comments) }}</td>
+    <td>
+      <a href=# id="rmv rmv_entry" class="btn btn-danger">
+        <i class="glyphicon glyphicon-trash"></i>
+      </a>
+    </td>
+    {{ form_widget(entry) }}
+  </tr>
+{% endfor %}
