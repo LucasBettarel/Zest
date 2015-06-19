@@ -1,0 +1,70 @@
+{% extends "SEInputBundle::layout.html.twig" %}
+
+{% block title %}
+  SAP Import Settings- {{ parent() }}
+{% endblock %}
+
+{% block seinput_body %}
+
+	<div class="well col-md-6">
+		<h3>New SAP Import</h3>
+		<form class="form-inline" method="post" action="http://localhost/SE/Import/Import.php"> 
+   			<div class="form-group">
+			    <label for="dateinput">Date of confirmation : </label>
+			    <div class="input-group">
+			    	<input type="date" class="form-control" id="dateinput" value="{{ 'now'|date('d/m/Y') }}" name="date">
+				    <span class="input-group-addon">
+	          			<span id="overtime" class="glyphicon glyphicon-time"></span>
+			        </span>
+			    </div>
+			</div>
+			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Import</button>
+		</form>
+	</div>
+
+	<div class="well col-md-10">
+		<h3>Last SAP Imports</h3>
+		<div class="table-responsive">
+			<table class="table table-hover table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Date</th>
+						<th>Import</th>
+						<th>Process</th>
+						<th>Review</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for importSap in listSapImport %}
+			      		<tr>
+			      			<td>{{ importSap.id }}</td>
+			      			<td>{{ importSap.date|date('d-m-Y') }}</td>
+			      			<td>{% if importSap.import == 1 %}
+			      					<i class="glyphicon glyphicon-thumbs-up text-success"></i>
+					        	{% else %}
+					        		<i class="glyphicon glyphicon-thumbs-down text-danger"></i>
+								{% endif %}
+							</td>
+			      			<td>{% if importSap.process == 1 %}
+			      					<i class="glyphicon glyphicon-thumbs-up text-success"></i>
+					        	{% else %}
+					        		<i class="glyphicon glyphicon-remove text-danger"></i>
+								{% endif %}
+							</td>
+							<td>{% if importSap.review == 1 %}
+					        		<i class="glyphicon glyphicon-thumbs-up text-success"></i>
+					        	{% else %}
+					        		<i class="glyphicon glyphicon-remove text-danger"></i>
+								{% endif %}
+							</td>
+						</tr>
+			    {% else %}
+			      <tr><td> No import recorded </td></tr>
+			    {% endfor %}
+			  </tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

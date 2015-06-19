@@ -35,5 +35,10 @@ nav{
 	background-color: #333;
 	color:#ddd;
 	position: fixed;
-    box-shadow: 0px 5px 10px #888;
+  box-shadow: 0px 5px 10px #888;
+}
+
+nav img{
+  margin-top: -9px;
+  height: 200%;
 }
