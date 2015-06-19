@@ -6,7 +6,6 @@
     <td class="table-size">
       <div class="float-left">
         {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
-        <p>SESA000000</p>
       </div>
       <div id="presence">
         {{ form_widget(entry.presence.present, {'attr': {'id': 'present'}}) }}
@@ -89,11 +88,16 @@
     {{ form_errors(form) }}
 
      <div class="form-group">
-        {{ form_label(form.user, "User", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_label(form.user, "User", {'label_attr': {'class': 'col-md-4 control-label'}}) }}
         {{ form_errors(form.user) }}
-        <div class="col-sm-4">
+        <div class="col-md-4">
           {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
         </div>
+        <div class="col-md-2 col-md-offset-2">
+          <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
+            <i class="glyphicon glyphicon-plus"></i> Add Employee
+          </a>
+        </div> 
     </div>
     
     <div class="form-group">
@@ -105,9 +109,9 @@
               <th>#</th>
               <th class="table-size">Employee</th>
               <th>
-                <div class="col-md-2">Activity</div>
-                <div class="col-md-5" >Hours</div>
-                <div class="col-md-2">Transfer Out</div>
+                <div class="col-md-3">Activity</div>
+                <div class="col-md-3" >Hours</div>
+                <div class="col-md-2">TransferOut</div>
                 <div class="col-md-2">Workstation</div>
                 <div class="col-md-1"></div>
               </th>
@@ -125,22 +129,15 @@
           </tbody>
         </table>
       </div>
-      <p>
-        <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
-          <i class="glyphicon glyphicon-plus"></i>
-        </a>
-      </p> 
     </div>
  
     <div class="form-group">
-      {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+      {{ form_widget(form.save, {'attr': {'class': 'btn btn-success btn-lg'}}) }}
     </div>
     
     {{ form_rest(form) }}
     {{ form_end(form) }}
   </div>
-
-  <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 {% javascripts '@SEInputBundle/Resources/public/js/*' %}
