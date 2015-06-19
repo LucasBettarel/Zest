@@ -39,14 +39,23 @@
 					{% for importSap in listSapImport %}
 			      		<tr>
 			      			<td>{{ importSap.id }}</td>
-			      			<td>{{ importSap.date }}</td>
-			      			<td>{{ importSap.import }}</td>
-			      			<td>{% if importSap.process is not null %}
-			      					{{ importSap.process }}
+			      			<td>{{ importSap.date|date('d-m-Y') }}</td>
+			      			<td>{% if importSap.import == 1 %}
+			      					<i class="glyphicon glyphicon-thumbs-up text-success"></i>
+					        	{% else %}
+					        		<i class="glyphicon glyphicon-thumbs-down text-danger"></i>
 								{% endif %}
 							</td>
-							<td>{% if importSap.review is not null %}
-					        		{{ importSap.review }}
+			      			<td>{% if importSap.process == 1 %}
+			      					<i class="glyphicon glyphicon-thumbs-up text-success"></i>
+					        	{% else %}
+					        		<i class="glyphicon glyphicon-remove text-danger"></i>
+								{% endif %}
+							</td>
+							<td>{% if importSap.review == 1 %}
+					        		<i class="glyphicon glyphicon-thumbs-up text-success"></i>
+					        	{% else %}
+					        		<i class="glyphicon glyphicon-remove text-danger"></i>
 								{% endif %}
 							</td>
 						</tr>
