@@ -15,10 +15,10 @@ class PresenceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('present', 'checkbox', array(
-                  'data' => true
-                ))
-            ->add('absenceReason', 'textarea')
+            ->add('present', 'checkbox', 
+                    array('data' => true,
+                          'required' => false))
+            ->add('absenceReason', 'textarea', array('required' => false))
         ;
     }
     

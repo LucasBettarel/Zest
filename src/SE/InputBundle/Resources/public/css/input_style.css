@@ -1,0 +1,29 @@
+.hide {
+	display: none;
+}
+
+.table input[type=checkbox]{
+	margin: 8px;
+}
+
+.ghost{
+	width: 0px;
+	height: 0px;
+}
+
+.float-left{
+	float: left;
+}
+.txtarea-sm{
+	max-width: 170px;
+	margin: 2px;
+}
+
+.table-size{
+	min-width: 210px;	
+}
+
+#activities div{
+	padding-left: 1px;
+	padding-right: 1px;
+}

@@ -29,8 +29,9 @@ class InputEntryType extends AbstractType
                 'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
+                'prototype_name' => 'activity_name',
                 ), array('required' => false))
-            ->add('comments', 'textarea')
+            ->add('comments', 'textarea', array('required' => false))
         ;
     }
     
