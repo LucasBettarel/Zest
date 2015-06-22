@@ -63,7 +63,7 @@ $(document).ready(function() {
       $sub.find('.transfer').attr('data-sub-target', $prototypeHolder.attr('id'));
       var parentContent = $prototypeHolder.closest('tr').attr('data-content');
       $sub.find('.transfer').attr('data-target', parentContent);
-      $sub.find('.transfer').attr('data-disabled', false);
+      $sub.find('.transfer').attr('data-disabled', 0);
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
     }
 
