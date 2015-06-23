@@ -1,0 +1,25 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+  Reports - {{ parent() }}
+{% endblock %}
+
+{% block menu %}
+	<div class="menu-heading">
+		<h4>Reports Panel</h4>
+	</div>
+	<div class="menu-body">
+		{{ render(controller("SEReportBundle:Productivity:menu")) }}
+	</div>
+{% endblock %}
+
+{% block body %}
+
+  <h1>Reports</h1>
+
+  <hr>
+
+  {% block sereport_body %}
+  {% endblock %}
+
+{% endblock %}

@@ -52,24 +52,6 @@ $(document).ready(function() {
        
       return $form;
 
-     /* $collectionHolder.attr('data-counter', Number($collectionHolder.attr('data-counter')) + 1);
-      
-      if($collectionHolder.is("#entries-prototype")){
-        $('tbody#entries').append($form);
-        $item = $('tbody#entries').children().last();
-        content = $collectionHolder.attr('id')+'_'+$collectionHolder.attr('data-counter');
-      }else{
-        $('tbody#activities').append($form);
-        $item = $('tbody#activities').children().last(); 
-        content = $collectionHolder.attr('id')+'_'+$collectionHolder.attr('data-counter'); 
-      }
-
-      if (!$item.attr('data-content')) {
-        $item.attr('data-content', content);
-        $item.find('#rmv').attr('data-target', content);
-      }
-      */
-
     }
 
     function addSubElement($prototypeHolder){
@@ -78,6 +60,10 @@ $(document).ready(function() {
       var $sub = $prototypeHolder.children().last();
       var content = $prototypeHolder.attr('id')+'_'+$prototypeHolder.attr('data-counter');
       attachData($sub, content);
+      $sub.find('.transfer').attr('data-sub-target', $prototypeHolder.attr('id'));
+      var parentContent = $prototypeHolder.closest('tr').attr('data-content');
+      $sub.find('.transfer').attr('data-target', parentContent);
+      $sub.find('.transfer').attr('data-disabled', 0);
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
     }
 

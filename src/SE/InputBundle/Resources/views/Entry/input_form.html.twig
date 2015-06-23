@@ -4,13 +4,15 @@
   <tr>
     <td>#</td>
     <td class="table-size">
-      <div class="float-left">
+      <div class="float-left input-employee">
         {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
-        <p>SESA000000</p>
+      </div>
+      <div class="float-left input-sesa">
+        {{ form_widget(entry.sesa, {'attr': {'class': 'form-control'}}) }}
       </div>
       <div id="presence">
-        {{ form_widget(entry.presence.present, {'attr': {'id': 'present'}}) }}
-        {{ form_widget(entry.presence.absenceReason, {'attr': {'class': 'form-control hide txtarea-sm'}}) }}
+        {{ form_widget(entry.present) }}
+        {{ form_widget(entry.absence_reason, {'attr': {'class': 'form-control hide toggling'}}) }}
       </div>
     </td>
     <td id="activities">
@@ -35,7 +37,7 @@
       <a href=# id="add" class="btn btn-success" data-target="activities-prototype">
         <i class="glyphicon glyphicon-plus"></i>
       </a>
-      <div class="hide txtarea-sm">
+      <div class="hide toggling txtarea-sm">
         {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
       </div>  
     </td>
@@ -53,21 +55,21 @@
       <div class="input-group float-left col-xs-6" 
            data-toggle="popover" 
            data-trigger="click" 
-           title="OT Hours" 
-           data-content="lalala">
+           title="OT Hou se fsefe fsef se fse se sese esrs" 
+           data-content="lalalssssssasasaxac ef sef ef af aefafa  faa">
         {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
         <span class="input-group-addon">
           <span id="overtime" class="glyphicon glyphicon-time">
           </span>
         </span>
       </div>
-      <div class='hide ghost float-left'>
-          {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
-          {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
+      <div class='float-left'>
+          {{ form_widget(activity.otStartTime) }}
+          {{ form_widget(activity.otEndTime) }}
       </div>
     </div>
     <div class="float-left">
-      <input class="transfer" type="checkbox" value="0" checked="unchecked">
+      <input class="transfer" type="checkbox" value="0">
     </div>
     <div class="float-left">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
@@ -89,11 +91,16 @@
     {{ form_errors(form) }}
 
      <div class="form-group">
-        {{ form_label(form.user, "User", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_label(form.user, "User", {'label_attr': {'class': 'col-md-1 control-label'}}) }}
         {{ form_errors(form.user) }}
-        <div class="col-sm-4">
+        <div class="col-md-4">
           {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
         </div>
+        <div class="col-md-2 pull-right">
+          <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
+            <i class="glyphicon glyphicon-plus"></i> Add Employee
+          </a>
+        </div> 
     </div>
     
     <div class="form-group">
@@ -105,9 +112,9 @@
               <th>#</th>
               <th class="table-size">Employee</th>
               <th>
-                <div class="col-md-2">Activity</div>
-                <div class="col-md-5" >Hours</div>
-                <div class="col-md-2">Transfer Out</div>
+                <div class="col-md-4">Activity</div>
+                <div class="col-md-3">Hours</div>
+                <div class="col-md-2">TransferOut</div>
                 <div class="col-md-2">Workstation</div>
                 <div class="col-md-1"></div>
               </th>
@@ -125,22 +132,15 @@
           </tbody>
         </table>
       </div>
-      <p>
-        <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
-          <i class="glyphicon glyphicon-plus"></i>
-        </a>
-      </p> 
     </div>
  
     <div class="form-group">
-      {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
+      {{ form_widget(form.save, {'attr': {'class': 'btn btn-success pull-right'}}) }}
     </div>
     
     {{ form_rest(form) }}
     {{ form_end(form) }}
   </div>
-
-  <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 {% javascripts '@SEInputBundle/Resources/public/js/*' %}
