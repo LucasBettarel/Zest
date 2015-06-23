@@ -1,5 +1,6 @@
 .hide {
 	display: none;
+	width:0px;
 }
 
 .table input[type=checkbox]{
@@ -19,9 +20,7 @@
 	margin: 2px;
 }
 
-.table-size{
-	min-width: 210px;	
-}
+
 
 #activities div{
 	padding-left: 1px;
@@ -34,4 +33,28 @@
 
 .input-employee{
 	width: 160px;
+}
+
+.input-reason{
+	width: 55px;
+}
+
+.input-activity{
+	width: 140px; 
+}
+
+.input-regular-hours{
+	width: 60px;
+}
+
+.input-overtime{
+	width: 100px; 
+}
+
+.input-zone{
+	width: 100px;
+}
+
+#entries td{
+	padding: 1px;
 }

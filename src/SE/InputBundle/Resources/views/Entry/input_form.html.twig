@@ -11,8 +11,8 @@
         {{ form_widget(entry.sesa, {'attr': {'class': 'form-control'}}) }}
       </div>
       <div id="presence">
-        {{ form_widget(entry.present) }}
-        {{ form_widget(entry.absence_reason, {'attr': {'class': 'form-control hide toggling'}}) }}
+        {{ form_widget(entry.present, {'attr': {'class': 'float-left input-present '}}) }}
+        {{ form_widget(entry.absence_reason, {'attr': {'class': 'form-control hide toggling input-reason float-left'}}) }}
       </div>
     </td>
     <td id="activities">
@@ -47,12 +47,12 @@
 
 {% macro activityCollection(activity) %}
   <div class="row">
-    <div class="col-md-3">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
-    <div class="col-md-4">
-      <div class="float-left col-xs-6">
+    <div class="input-activity float-left">{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }} </div>
+    <div class="float-left">
+      <div class="float-left input-regular-hours">
         {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
       </div>
-      <div class="input-group float-left col-xs-6" 
+      <div class="input-group float-left input-overtime" 
            data-toggle="popover" 
            data-trigger="click" 
            title="OT Hou se fsefe fsef se fse se sese esrs" 
@@ -63,7 +63,7 @@
           </span>
         </span>
       </div>
-      <div class='float-left'>
+      <div class='float-left input-ot-time'>
           {{ form_widget(activity.otStartTime) }}
           {{ form_widget(activity.otEndTime) }}
       </div>
@@ -71,12 +71,12 @@
     <div class="float-left">
       <input class="transfer" type="checkbox" value="0">
     </div>
-    <div class="float-left">
+    <div class="float-left input-zone">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
     </div>
     <div>
       <a href=# id="rmv" class="btn btn-danger" data-target="activities-prototype">
-        <i class="glyphicon glyphicon-trash"></i>
+        <i class="glyphicon glyphicon-remove"></i>
       </a>
     </div>   
     {{ form_widget(activity) }}
