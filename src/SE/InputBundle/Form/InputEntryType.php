@@ -22,7 +22,16 @@ class InputEntryType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => true))
-            ->add('presence', new PresenceType())
+            ->add('sesa', 'text', array('required' => false))
+            ->add('present', 'checkbox', 
+                    array('data' => true,
+                          'required' => false))
+            ->add('absence_reason', 'entity', array(
+                'class'    => 'SEInputBundle:AbsenceReason',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => false
+                ), array('required' => false))
             ->add('activity_hours', 'collection', array(
                 'type'         => new ActivityHoursType(),
                 'allow_add'    => true,
