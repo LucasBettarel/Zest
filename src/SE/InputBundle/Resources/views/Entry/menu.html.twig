@@ -1,47 +1,12 @@
-<hr>
-<h5>Imports</h5>
-
-<p>
-	<a href="{{ path('se_input_set_import') }}" class="btn btn-warning">
-	  <i class="glyphicon glyphicon-save"></i>
-	  Import SAP data
-	</a>
-	<a href=# class="btn btn-info">
-	  <i class="glyphicon glyphicon-list-alt"></i>
-	</a>
-</p>
-
-<p>
-	<a href=# class="btn btn-warning">
-	 	<i class="glyphicon glyphicon-save"></i>
-	 	Import WC data 
-	</a>
-	<a href=# class="btn btn-info">
-  		<i class="glyphicon glyphicon-list-alt"></i>
-	</a>
-</p>
-
-<hr>
-<h5>History</h5>
-
-
-<p>
-	<a href=# class="btn btn-danger">
-  		<i class="glyphicon glyphicon-alert"></i>
-   		Review input errors
-	</a>
-</p>
-
-<hr>
-<h5>Settings</h5>
-
-<p>
-	<a href="{{ path('se_input_employees') }}" class="btn btn-default">
-  		<i class="glyphicon glyphicon-user"></i>
-  		Employees
-	</a>
-	<a href="{{ path('se_input_activities') }}" class="btn btn-default">
-  		<i class="glyphicon glyphicon-briefcase"></i>
-  		Activities
-	</a>
- </p>
+<ul class="gn-menu">
+	<li class="gn-search-item">
+	 	<input placeholder="Search" type="search" class="gn-search">
+	  	<a class="gn-icon glyphicon glyphicon-search"><span>Search</span></a>
+	</li>
+	<li><a href="{{ path('se_input_home') }}" class="gn-icon glyphicon glyphicon-pencil">Manhours</a></li>
+	<li><a href="{{ path('se_input_set_import') }}" class="gn-icon glyphicon glyphicon-cloud">SAP</a></li>
+	<li><a class="gn-icon glyphicon glyphicon-scale">Weight control</a></li>
+	<li><a class="gn-icon glyphicon glyphicon-fire">Review input issues</a></li>
+	<li><a href="{{ path('se_input_employees') }}" class="gn-icon glyphicon glyphicon-user">Employees</a></li>
+	<li><a href="{{ path('se_input_activities') }}"class="gn-icon glyphicon glyphicon-briefcase">Activities</a></li>
+</ul>

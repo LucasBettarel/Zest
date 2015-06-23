@@ -8,52 +8,32 @@
 
   {% block stylesheets %}
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <link href="{{ asset('bundles/seinput/css/layout_style.css') }}" type="text/css" rel="stylesheet" />
-    <link href="{{ asset('bundles/seinput/css/bootstrap-clockpicker.min.css') }}" type="text/css" rel="stylesheet" />
-    <link href="{{ asset('bundles/seinput/css/input_style.css') }}" type="text/css" rel="stylesheet" />
-  
+    {% stylesheets '../app/Resources/public/css/*' %}
+      <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+    {% endstylesheets %}
   {% endblock %}
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="coontainer-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{{ path('se_input_home') }}">
-          <img alt="Schneider Electric" src="{{ asset('bundles/sezest/img/logo.png') }}" height="150%">
-        </a>
-      </div>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="{{ path('se_input_home') }}"><i class="glyphicon glyphicon-pencil"></i> Manhours</a></li>
-          <li><a href="{{ path('se_report_home') }}"><i class="glyphicon glyphicon-stats"></i> Reports</a></li>
-          <li><a href="{{ path('se_zest_home') }}"><i class="glyphicon glyphicon-glass"></i> Tutorial</a></li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div>
-  </nav>
-
-  <div id="menu" class="col-md-3">
-    <div>
-      {% block menu %}
-      {% endblock %}
-    </div>
-    <footer class="footer">
-      <div class="container">
-       <p>Lucas Bettarel © {{ 'now'|date('Y') }}</p>
-      </div>
-    </footer>
-  </div>
-
+  <ul id="gn-menu" class="gn-menu-main">
+    <li class="gn-trigger">
+      <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+      <nav class="gn-menu-wrapper">
+        <div class="gn-scroller">
+          {% block menu %}
+          {% endblock %}
+        </div><!-- /gn-scroller -->
+      </nav>
+    </li>
+    <li>
+      <a href="{{ path('se_input_home') }}"><img alt="Schneider Electric" src="{{ asset('bundles/sezest/img/logo.png') }}"></a>
+    </li>
+    <li><a href="{{ path('se_input_home') }}"><i class="glyphicon glyphicon-pencil"></i> Manhours Input</a></li>
+    <li><a href="{{ path('se_report_home') }}"><i class="glyphicon glyphicon-stats"></i> Reports</a></li>
+    <li><a href="{{ path('se_zest_home') }}"><i class="glyphicon glyphicon-glass"></i> Tutorial</a></li>
+  </ul>
+ 
   <div id="content">
     <div class="col-md-12">
       {% block body %}
@@ -62,9 +42,14 @@
   </div>
 
   {% block javascripts %}
-    {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    {% javascripts '../app/Resources/public/js/*' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    <script>
+      new gnMenu( document.getElementById( 'gn-menu' ) );
+    </script>
   {% endblock %}
 
 </body>

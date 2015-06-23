@@ -5,20 +5,10 @@
 {% endblock %}
 
 {% block menu %}
-	<div class="menu-heading">
-		<h4>Input Config Panel</h4>
-	</div>
-	<div class="menu-body">
-		{{ render(controller("SEInputBundle:Entry:menu")) }}
-	</div>
+  {{ render(controller("SEInputBundle:Entry:menu")) }}
 {% endblock %}
 
 {% block body %}
-
-  {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
-  <h1>Input</h1>
-
-  <hr>
 
   {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
   {% block seinput_body %}
