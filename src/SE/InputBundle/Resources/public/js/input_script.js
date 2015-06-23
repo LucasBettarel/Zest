@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	$(document).on('click', '#presence :checkbox', function(e) {
-		$(this).next('textarea').toggleClass('hide');
+		$(this).next('.toggling').toggleClass('hide');
 	});
 
 	$(document).on('click', '#comment', function(e) {

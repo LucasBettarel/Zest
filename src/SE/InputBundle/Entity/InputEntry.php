@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\InputEntryRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class InputEntry
 {
@@ -28,10 +29,22 @@ class InputEntry
     private $employee;
 
     /**
-     * @ORM\OneToOne(targetEntity="SE\InputBundle\Entity\Presence", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(name="sesa", type="string", length=255, nullable=true)
      */
-    private $presence;
+    private $sesa;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="present", type="boolean")
+     */
+    private $present;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\AbsenceReason", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $absence_reason;
 
     /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityHours", mappedBy="input", cascade={"persist"})
@@ -51,6 +64,26 @@ class InputEntry
      * @ORM\JoinColumn(nullable=false)
      */
     private $user_input;
+
+    /**
+     * @ORM\Column(name="total_hours", type="integer", nullable=false)
+     */
+    private $totalHours = 0;
+
+    /**
+     * @ORM\Column(name="total_working_hours", type="integer", nullable=false)
+     */
+    private $totalWorkingHours = 0;
+
+    /**
+     * @ORM\Column(name="total_to", type="integer", nullable=true)
+     */
+    private $totalTo = 0;
+
+    /**
+     * @ORM\Column(name="total_prod", type="decimal", nullable=true)
+     */
+    private $totalProd = 0;
 
 
     /**
@@ -195,5 +228,200 @@ class InputEntry
     public function getUserInput()
     {
         return $this->user_input;
+    }
+
+
+    /**
+     * Set sesa
+     *
+     * @param string $sesa
+     * @return InputEntry
+     */
+    public function setSesa($sesa)
+    {
+        $this->sesa = $sesa;
+
+        return $this;
+    }
+
+    /**
+     * Get sesa
+     *
+     * @return string 
+     */
+    public function getSesa()
+    {
+        return $this->sesa;
+    }
+
+    /**
+     * Set totalHours
+     *
+     * @param integer $totalHours
+     * @return InputEntry
+     */
+    public function setTotalHours($totalHours)
+    {
+        $this->totalHours = $totalHours;
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function computeTotalHours(){
+        $totalHours = 0;
+        $totalWorkingHours = 0;
+        foreach ($this->getActivityHours() as $activityHour) {
+            $totalHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
+            if ($activityHour->getActivity()->getProductive()){
+                $totalWorkingHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
+            }
+        }
+        $this->totalHours = $totalHours;
+        $this->totalWorkingHours = $totalWorkingHours;
+    }
+
+    /**
+     * Get totalHours
+     *
+     * @return integer 
+     */
+    public function getTotalHours()
+    {
+        return $this->totalHours;
+    }
+
+    /**
+     * Set totalTo
+     *
+     * @param integer $totalTo
+     * @return InputEntry
+     */
+    public function setTotalTo($totalTo)
+    {
+        $this->totalTo = $totalTo;
+
+        return $this;
+    }
+
+    /**
+     * Get totalTo
+     *
+     * @return integer 
+     */
+    public function getTotalTo()
+    {
+        return $this->totalTo;
+    }
+
+    /**
+     * Set totalProd
+     *
+     * @param string $totalProd
+     * @return InputEntry
+     */
+    public function setTotalProd($totalProd)
+    {
+        $this->totalProd = $totalProd;
+
+        return $this;
+    }
+
+    /**
+     * Get totalProd
+     *
+     * @return string 
+     */
+    public function getTotalProd()
+    {
+        return $this->totalProd;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function computeProd(){
+        $productiveHours = 0;
+
+        foreach ($this->getActivityHours() as $activityHour) {
+            if ($activityHour->getActivity()->getTrackable() and $activityHour->getActivity()->getProductive()){
+                $productiveHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
+            }
+        }
+
+        if( $this->totalTo > 0){
+            $this->totalProd = $this->totalTo / $productiveHours;
+        }
+    }
+
+    /**
+     * Set totalWorkingHours
+     *
+     * @param integer $totalWorkingHours
+     * @return InputEntry
+     */
+    public function setTotalWorkingHours($totalWorkingHours)
+    {
+        $this->totalWorkingHours = $totalWorkingHours;
+
+        return $this;
+    }
+
+    /**
+     * Get totalWorkingHours
+     *
+     * @return integer 
+     */
+    public function getTotalWorkingHours()
+    {
+        return $this->totalWorkingHours;
+    }
+
+    /**
+     * Set present
+     *
+     * @param boolean $present
+     * @return InputEntry
+     */
+    public function setPresent($present)
+    {
+        $this->present = $present;
+
+        return $this;
+    }
+
+    /**
+     * Get present
+     *
+     * @return boolean 
+     */
+    public function getPresent()
+    {
+        return $this->present;
+    }
+
+    /**
+     * Set absence_reason
+     *
+     * @param \SE\InputBundle\Entity\AbsenceReason $absenceReason
+     * @return InputEntry
+     */
+    public function setAbsenceReason(\SE\InputBundle\Entity\AbsenceReason $absenceReason = null)
+    {
+        $this->absence_reason = $absenceReason;
+
+        return $this;
+    }
+
+    /**
+     * Get absence_reason
+     *
+     * @return \SE\InputBundle\Entity\AbsenceReason 
+     */
+    public function getAbsenceReason()
+    {
+        return $this->absence_reason;
     }
 }

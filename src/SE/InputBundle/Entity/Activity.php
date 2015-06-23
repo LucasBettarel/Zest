@@ -47,6 +47,13 @@ class Activity
      * @ORM\Column(name="productive", type="boolean")
      */
     private $productive;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="trackable", type="boolean")
+     */
+    private $trackable = false;
 
     /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityZone", mappedBy="activity", cascade={"persist"})
@@ -273,5 +280,28 @@ class Activity
     public function updateDate()
     {
         $this->setUpdatedAt(new \Datetime());
+    }
+
+    /**
+     * Set trackable
+     *
+     * @param boolean $trackable
+     * @return Activity
+     */
+    public function setTrackable($trackable)
+    {
+        $this->trackable = $trackable;
+
+        return $this;
+    }
+
+    /**
+     * Get trackable
+     *
+     * @return boolean 
+     */
+    public function getTrackable()
+    {
+        return $this->trackable;
     }
 }

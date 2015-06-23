@@ -23,6 +23,12 @@ class ActivityType extends AbstractType
                 'multiple' => true,
                 'expanded' => true
                 ))
+            ->add('productive', 'checkbox', 
+                    array('data' => true,
+                          'required' => false))
+            ->add('trackable', 'checkbox', 
+                    array('data' => true,
+                          'required' => false))
             ->add('activity_zones', 'collection', array(
                 'type'         => new ActivityZoneType(),
                 'allow_add'    => true,
