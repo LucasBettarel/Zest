@@ -26,7 +26,6 @@
 					<th>Shift</th>
 					<th>Main Activity</th>
 					<th>Main Zone</th>
-					<th>Main Workstation</th>
 					<th>Job</th>
 					<th>Remarks</th>
 				</tr>
@@ -51,10 +50,6 @@
 						</td>
 						<td>{% if employee.defaultZone is not null %}
 				        		{{ employee.defaultZone.name }}
-							{% endif %}
-						</td>
-						<td>{% if employee.defaultWorkstation is not null %}
-				        		{{ employee.defaultWorkstation.name }}
 							{% endif %}
 						</td>
 						<td>{% if employee.job is not null %}

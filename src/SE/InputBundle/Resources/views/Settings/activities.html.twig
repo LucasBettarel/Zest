@@ -23,7 +23,6 @@
 					<th>Name</th>
 					<th>Teams</th>
 					<th>Zones</th>
-					<th>Workstations</th>
 					<th>Target (TO Lines/h)</th>
 				</tr>
 			</thead>
@@ -44,12 +43,6 @@
 					      		{% endfor %}
 							{% endif %}
 		      			</td>
-		      			<td>{% if not activity.workstations.empty %}
-		        				{% for workstation in activity.workstations %}
-					    			{{ workstation.name }} 
-					      		{% endfor %}
-							{% endif %}
-		      			</td>
 		      			<td>{% if activity.defaultTarget is not null %}
     							default : {{ activity.defaultTarget }}
     						{% endif %}
@@ -58,14 +51,6 @@
 			        			{% for activityZones in activity.activityZones %}
 			        				{% if activityZones.target is defined %}
         								{{ activityZones.target }}
-        							{% endif %}
-			        			{% endfor %}	
-			        		{% endif %}
-			        		{% if not activity.workstations.empty %}
-			        			workstations :
-			        			{% for workstation in activity.workstations %}
-			        				{% if workstation.target is defined %}
-        								{{ workstation.target }}
         							{% endif %}
 			        			{% endfor %}	
 			        		{% endif %}

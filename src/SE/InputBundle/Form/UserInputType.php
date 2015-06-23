@@ -22,6 +22,7 @@ class UserInputType extends AbstractType
                 'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
+                'prototype_name' => 'entry_name',
                 ))
             ->add('save',      'submit')
         ;

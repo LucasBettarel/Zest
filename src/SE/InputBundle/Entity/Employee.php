@@ -60,12 +60,6 @@ class Employee
     private $default_zone;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Workstation")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $default_workstation;
-
-    /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Status", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -374,29 +368,6 @@ class Employee
     public function getDefaultZone()
     {
         return $this->default_zone;
-    }
-
-    /**
-     * Set default_workstation
-     *
-     * @param \SE\InputBundle\Entity\Workstation $defaultWorkstation
-     * @return Employee
-     */
-    public function setDefaultWorkstation(\SE\InputBundle\Entity\Workstation $defaultWorkstation = null)
-    {
-        $this->default_workstation = $defaultWorkstation;
-
-        return $this;
-    }
-
-    /**
-     * Get default_workstation
-     *
-     * @return \SE\InputBundle\Entity\Workstation 
-     */
-    public function getDefaultWorkstation()
-    {
-        return $this->default_workstation;
     }
 
     /**
