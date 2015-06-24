@@ -3,7 +3,9 @@ $(document).ready(function() {
     initCollection();
 
    $(document).on('click', '#add[data-target]', function(e) {
-      addElement($(this));
+      var $proto = $('#' + $(this).attr('data-target'));
+      defaultValues = [0, 1,"", 0, 0, 0];
+      addElement($proto, defaultValues);
       e && e.preventDefault(); 
       return false;
     });
@@ -14,10 +16,8 @@ $(document).ready(function() {
       return false;
     });
 
-    function addElement($element){
-      var $prototypeHolder = $('#' + $element.attr('data-target'));
+    function addElement($prototypeHolder, values){
       if($prototypeHolder.is("#entries-prototype")){
-
         var $element = definePrototype($prototypeHolder, true);
         $('tbody#entries').append($element);
         var $item = $('tbody#entries').children().last();
@@ -36,6 +36,9 @@ $(document).ready(function() {
 
         //increment
         $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
+
+        //set default values
+        setDefaultData($item, values);
       }
       else{
         addSubElement($prototypeHolder);
@@ -92,17 +95,21 @@ $(document).ready(function() {
     //set default value
     }
 
-    function initCollection(){
-      //list length
-      var count = 0;
-      $('.input-shift').val(1);
-      for(var i = 0; i < employeesData.length; ++i){
-          if(employeesData[i][2] == $('.input-team').val() && employeesData[i][3] == $('.input-shift').val()){
-            count++;
-          }
-      }
-
-      console.log('team', $('.input-team').val(), 'shift', $('.input-shift').val(), 'count', count);
+    function setDefaultData($item, values){
+      $item.find('.input-employee select').val(values[0]);
+      $item.find('.input-sesa input').val(values[2]);
+      $item.find('.input-activity select').val(values[5]);
+      $item.find('.input-regular-hours input').val(8);
+      $item.find('.input-overtime input').val(0);
+      $item.find('.input-zone input').val(0);
     }
 
+    function initCollection(){
+      $('.input-shift').val(1);
+      for(var i = 0; i < employeesData.length; ++i){
+          if(employeesData[i][3] == $('.input-team').val() && employeesData[i][4] == $('.input-shift').val()){
+            addElement($('#entries-prototype'), employeesData[i]);
+          }
+      }
+    }
 });

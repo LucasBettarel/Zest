@@ -164,7 +164,7 @@
     var employeesData = [];
     var singleData = [];
     {% for employee in listEmployees %}
-    singleData = [{{employee.name|json_encode|raw}}, {{employee.sesa|json_encode|raw}},{{employee.defaultTeam.id|json_encode|raw}},{{employee.defaultShift.id|json_encode|raw}},{{employee.defaultActivity.id|json_encode|raw}}];
+    singleData = [{{employee.id|json_encode|raw}}, {{employee.name|json_encode|raw}}, {{employee.sesa|json_encode|raw}},{{employee.defaultTeam.id|json_encode|raw}},{{employee.defaultShift.id|json_encode|raw}},{{employee.defaultActivity.id|json_encode|raw}}];
     employeesData.push(singleData);
     {% endfor %}
   </script>
