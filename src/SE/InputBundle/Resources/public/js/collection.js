@@ -31,18 +31,23 @@ $(document).ready(function() {
         $activitiesPrototypeHolder.attr('id',content+'_activities-prototype');
 
         //add first activity
-        addSubElement($activitiesPrototypeHolder);
+        var $sub = addSubElement($activitiesPrototypeHolder);
         $item.find('#add').attr('data-target', $activitiesPrototypeHolder.attr('id'));
 
         //increment
         $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
 
-        //set default values
-        setDefaultData($item, values);
+        $item.find('.input-employee select').val(values[0]);
+        $item.find('.input-sesa input').val(values[2]);
       }
       else{
-        addSubElement($prototypeHolder);
+        var $sub = addSubElement($prototypeHolder);
       }
+       //set default values
+       $sub.find('.input-activity select').val(values[5]);
+       $sub.find('.input-regular-hours input').val(8);
+       $sub.find('.input-overtime input').val(0);
+       $sub.find('.input-zone input').val(0);
 
     }
 
@@ -76,6 +81,8 @@ $(document).ready(function() {
       $sub.find('.transfer').attr('data-target', parentContent);
       $sub.find('.transfer').attr('data-disabled', 0);
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
+
+      return $sub;
     }
 
     function attachData($item, content){
@@ -95,17 +102,9 @@ $(document).ready(function() {
     //set default value
     }
 
-    function setDefaultData($item, values){
-      $item.find('.input-employee select').val(values[0]);
-      $item.find('.input-sesa input').val(values[2]);
-      $item.find('.input-activity select').val(values[5]);
-      $item.find('.input-regular-hours input').val(8);
-      $item.find('.input-overtime input').val(0);
-      $item.find('.input-zone input').val(0);
-    }
-
     function initCollection(){
       $('.input-shift').val(1);
+      $(".input-shift input[value=1]").attr('checked', 'checked');
       for(var i = 0; i < employeesData.length; ++i){
           if(employeesData[i][3] == $('.input-team').val() && employeesData[i][4] == $('.input-shift').val()){
             addElement($('#entries-prototype'), employeesData[i]);
