@@ -284,3 +284,12 @@ input.gn-search:focus {
   height: 70%;
 }
 
+
+#gn-menu li a{
+    font-family: 'Lato', Arial, sans-serif;
+}
+
+
+#gn-menu li a:before{
+    font-family: 'Glyphicons Halflings';
+}

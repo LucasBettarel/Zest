@@ -3,7 +3,7 @@
 	width:0px;
 }
 
-.table input[type=checkbox]{
+.table input[type=checkbox], .input-rmv{
 	margin: 8px;
 }
 
@@ -20,8 +20,6 @@
 	margin: 2px;
 }
 
-
-
 #activities div{
 	padding-left: 1px;
 	padding-right: 1px;
@@ -36,7 +34,7 @@
 }
 
 .input-reason{
-	width: 55px;
+	width: 75px;
 }
 
 .input-activity{
@@ -52,9 +50,13 @@
 }
 
 .input-zone{
-	width: 100px;
+	width: 110px;
 }
 
 #entries td{
 	padding: 1px;
+}
+
+.expand-cell{
+	width:400px;
 }

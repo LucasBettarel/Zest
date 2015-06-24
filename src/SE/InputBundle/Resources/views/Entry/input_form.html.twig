@@ -24,7 +24,7 @@
           {% endfor %}
       </div>
     </td>
-    <td class="table-size">
+    <td>
       <a href=# id="comment" class="btn btn-primary">
         <i class="glyphicon glyphicon-comment"></i>
       </a>
@@ -75,7 +75,7 @@
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
     </div>
     <div>
-      <a href=# id="rmv" class="btn btn-danger" data-target="activities-prototype">
+      <a href=# id="rmv" class="text-danger input-rmv" data-target="activities-prototype">
         <i class="glyphicon glyphicon-remove"></i>
       </a>
     </div>   
@@ -98,12 +98,12 @@
     {{ form_errors(form) }}
 
      <div class="form-group">
-        {{ form_label(form.user, "User", {'label_attr': {'class': 'col-md-1 control-label'}}) }}
+        {{ form_label(form.user, "User", {'label_attr': {'class': 'pull-right control-label'}}) }}
         {{ form_errors(form.user) }}
-        <div class="col-md-4">
+        <div class="col-md-2">
           {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
         </div>
-        <div class="col-md-2 pull-right">
+        <div class="pull-right">
           <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
             <i class="glyphicon glyphicon-plus"></i> Add Employee
           </a>
@@ -117,13 +117,13 @@
           <thead>
             <tr>
               <th>#</th>
-              <th class="table-size">Employee</th>
+              <th>Employee</th>
               <th>
                 <div class="col-md-4">Activity</div>
-                <div class="col-md-3">Hours</div>
+                <div class="col-md-2">Hours</div>
                 <div class="col-md-2">TransferOut</div>
                 <div class="col-md-2">Workstation</div>
-                <div class="col-md-1"></div>
+                <div class="col-md-2"></div>
               </th>
               <th class="table-size">Comments</th>
             </tr>

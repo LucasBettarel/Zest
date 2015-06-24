@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	$(document).on('click', '#presence :checkbox', function(e) {
 		$(this).next('.toggling').toggleClass('hide');
+		$(this).closest('td').toggleClass('expand-cell');
 	});
 
 	$(document).on('click', '#comment', function(e) {
@@ -23,12 +24,10 @@ $(document).ready(function() {
 				//disable que l'activite, sauf transfer et ajoute la propriete a transfer
 				$rowHolder.find("input, select, textarea").not('.transfer').prop('disabled', true);
 				$(this).attr('data-disabled', 1);
-				console.log('1 ligne disable');
 			}
 			else{
 				$rowHolder.find("input, select, textarea").not('.transfer').prop('disabled', false);
 				$(this).attr('data-disabled', 0);
-				console.log('1 ligne enable');
 			}
 		}
 		else{
@@ -36,12 +35,10 @@ $(document).ready(function() {
 				//disable que l'activite, sauf transfer et ajoute la propriete a transfer
 				$(this).closest('.row').find("input, select").not('.transfer').prop('disabled', true);
 				$(this).attr('data-disabled', 1);
-				console.log('x ligne disable');
 			}
 			else{
 				$(this).closest('.row').find("input, select").not('.transfer').prop('disabled', false);
 				$(this).attr('data-disabled', 0);
-				console.log('x ligne enable');
 			}
 		}
 	});

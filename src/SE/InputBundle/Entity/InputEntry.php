@@ -76,6 +76,11 @@ class InputEntry
     private $totalWorkingHours = 0;
 
     /**
+     * @ORM\Column(name="total_overtime", type="decimal", nullable=false)
+     */
+    private $totalOvertime = 0;
+
+    /**
      * @ORM\Column(name="total_to", type="integer", nullable=true)
      */
     private $totalTo = 0;
@@ -273,14 +278,18 @@ class InputEntry
     public function computeTotalHours(){
         $totalHours = 0;
         $totalWorkingHours = 0;
+        $totalOvertime = 0;
+
         foreach ($this->getActivityHours() as $activityHour) {
-            $totalHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
+            $totalHours += $activityHour->getRegularHours();
+            $totalOvertime += $activityHour->getOtHours();
             if ($activityHour->getActivity()->getProductive()){
                 $totalWorkingHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
             }
         }
-        $this->totalHours = $totalHours;
+        $this->totalHours = $totalHours + $totalOvertime;
         $this->totalWorkingHours = $totalWorkingHours;
+        $this->totalOvertime = $totalOvertime;
     }
 
     /**
@@ -423,5 +432,28 @@ class InputEntry
     public function getAbsenceReason()
     {
         return $this->absence_reason;
+    }
+
+    /**
+     * Set totalOvertime
+     *
+     * @param string $totalOvertime
+     * @return InputEntry
+     */
+    public function setTotalOvertime($totalOvertime)
+    {
+        $this->totalOvertime = $totalOvertime;
+
+        return $this;
+    }
+
+    /**
+     * Get totalOvertime
+     *
+     * @return string 
+     */
+    public function getTotalOvertime()
+    {
+        return $this->totalOvertime;
     }
 }
