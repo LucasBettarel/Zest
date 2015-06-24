@@ -35,7 +35,8 @@ class EntryController extends Controller
 
     return $this->render('SEInputBundle:Entry:input_form.html.twig', array(
     'form' => $form->createView(),
-    'EmployeeCount' => $EmployeeCount
+    'EmployeeCount' => $EmployeeCount,
+    'listEmployees' => $listEmployees
     ));
 	}
 

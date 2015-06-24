@@ -16,6 +16,18 @@ class UserInputType extends AbstractType
     {
         $builder
             ->add('user', 'text')
+            ->add('team', 'entity', array(
+                'class'    => 'SEInputBundle:Team',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => false
+                ), array('required' => true))
+            ->add('shift', 'entity', array(
+                'class'    => 'SEInputBundle:Shift',
+                'property' => 'identifier', 
+                'multiple' => false,
+                'expanded' => true
+                ), array('required' => true))
             ->add('input_entries', 'collection', array(
                 'type'         => new InputEntryType(),
                 'allow_add'    => true,
@@ -24,7 +36,7 @@ class UserInputType extends AbstractType
                 'by_reference' => false,
                 'prototype_name' => 'entry_name',
                 ))
-            ->add('save',      'submit')
+            ->add('save', 'submit')
         ;
     }
     

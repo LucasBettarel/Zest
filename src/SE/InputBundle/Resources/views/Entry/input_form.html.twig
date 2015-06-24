@@ -98,10 +98,16 @@
     {{ form_errors(form) }}
 
      <div class="form-group">
-        {{ form_label(form.user, "User", {'label_attr': {'class': 'pull-right control-label'}}) }}
+        {{ form_label(form.user, "User", {'label_attr': {'class': 'pull-left control-label'}}) }}
         {{ form_errors(form.user) }}
         <div class="col-md-2">
           {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        <div class="col-md-2">
+          {{ form_widget(form.team, {'attr': {'class': 'input-team form-control'}}) }}
+        </div>
+        <div class="col-md-2">
+          {{ form_widget(form.shift, {'attr': {'class': 'input-shift'}}) }}
         </div>
         <div class="pull-right">
           <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
@@ -152,6 +158,16 @@
 
 {% block javascripts %}
   {{ parent() }}
+
+  <script type="text/javascript">
+    //global variable containing details of all employees
+    var employeesData = [];
+    var singleData = [];
+    {% for employee in listEmployees %}
+    singleData = [{{employee.name|json_encode|raw}}, {{employee.sesa|json_encode|raw}},{{employee.defaultTeam.id|json_encode|raw}},{{employee.defaultShift.id|json_encode|raw}},{{employee.defaultActivity.id|json_encode|raw}}];
+    employeesData.push(singleData);
+    {% endfor %}
+  </script>
   {% javascripts '@SEInputBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}

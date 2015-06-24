@@ -1,8 +1,21 @@
 $(document).ready(function() {
 
-   $(document).on('click', '#add[data-target]', function(e) {
-      var $prototypeHolder = $('#' + $(this).attr('data-target'));
+    initCollection();
 
+   $(document).on('click', '#add[data-target]', function(e) {
+      addElement($(this));
+      e && e.preventDefault(); 
+      return false;
+    });
+
+    $(document).on('click', '#rmv[data-target]', function(e) {
+      removeElement($(this));
+      e && e.preventDefault();
+      return false;
+    });
+
+    function addElement($element){
+      var $prototypeHolder = $('#' + $element.attr('data-target'));
       if($prototypeHolder.is("#entries-prototype")){
 
         var $element = definePrototype($prototypeHolder, true);
@@ -27,20 +40,15 @@ $(document).ready(function() {
       else{
         addSubElement($prototypeHolder);
       }
-      
-      e && e.preventDefault(); 
-      return false;
-    });
 
-    $(document).on('click', '#rmv[data-target]', function(e) {
-      target = $(this).attr('data-target');
+    }
+
+    function removeElement($element){
+      target = $element.attr('data-target');
       $('*[data-content="'+target+'"]').remove();
-      e && e.preventDefault();
-      return false;
-    });
+    }
 
     function definePrototype($collectionHolder, level){
-
       if (!$collectionHolder.attr('data-counter')) {
         $collectionHolder.attr('data-counter', $collectionHolder.children().length);
       }
@@ -72,6 +80,29 @@ $(document).ready(function() {
           $item.attr('data-content', content);
         }
       $item.find('#rmv:last').attr('data-target', content);
+    }
+
+    function dynamicList(){
+    //delete all current field
+
+    //reset data counter
+
+    //add good nb fields
+
+    //set default value
+    }
+
+    function initCollection(){
+      //list length
+      var count = 0;
+      $('.input-shift').val(1);
+      for(var i = 0; i < employeesData.length; ++i){
+          if(employeesData[i][2] == $('.input-team').val() && employeesData[i][3] == $('.input-shift').val()){
+            count++;
+          }
+      }
+
+      console.log('team', $('.input-team').val(), 'shift', $('.input-shift').val(), 'count', count);
     }
 
 });

@@ -45,3 +45,4 @@ $(document).ready(function() {
 
 	$('form').children('div').last().hide();
 });
+
