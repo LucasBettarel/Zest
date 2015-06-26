@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * UserInput
  *
- * @ORM\Table()
+ * @ORM\Table(name="userinput")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\UserInputRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -156,29 +156,6 @@ class UserInput
     }
 
     /**
-     * Set input_entries
-     *
-     * @param \SE\InputBundle\Entity\InputEntry $inputEntries
-     * @return UserInput
-     */
-    public function setInputEntries(\SE\InputBundle\Entity\InputEntry $inputEntries = null)
-    {
-        $this->input_entries = $inputEntries;
-
-        return $this;
-    }
-
-    /**
-     * Get input_entries
-     *
-     * @return \SE\InputBundle\Entity\InputEntry 
-     */
-    public function getInputEntries()
-    {
-        return $this->input_entries;
-    }
-
-    /**
      * @ORM\PreUpdate
      */
     public function updateDate()
@@ -231,6 +208,16 @@ class UserInput
     {
         $this->input_entries->removeElement($inputEntry);
         //$inputEntry->setUserInput(null);
+    }
+
+    /**
+     * Get input_entries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInputEntries()
+    {
+        return $this->input_entries;
     }
 
     /**
@@ -424,7 +411,7 @@ class UserInput
         $totalHoursInput = 0;
         $totalWorkingHoursInput = 0;
         $totalOvertimeInput = 0;
-        foreach ($this->getInputEntries as $inputEntry) {
+        foreach ($this->getInputEntries() as $inputEntry) {
             $totalHoursInput += $inputEntry->getTotalHours();
             $totalWorkingHoursInput += $inputEntry->getTotalWorkingHours();
             $totalOvertimeInput += $inputEntry->getTotalOvertime();

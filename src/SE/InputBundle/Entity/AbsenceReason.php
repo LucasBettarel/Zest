@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AbsenceReason
  *
- * @ORM\Table()
+ * @ORM\Table(name="absencereason")
  * @ORM\Entity
  */
 class AbsenceReason

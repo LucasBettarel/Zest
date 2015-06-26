@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SAPRF
  *
- * @ORM\Table()
+ * @ORM\Table(name="saprf")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\SAPRFRepository")
  */
 class SAPRF

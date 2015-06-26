@@ -2,7 +2,7 @@
 
 {% macro entryCollection(entry) %}
   <tr>
-    <td>#</td>
+    <td>time_name</td>
     <td class="table-size">
       <div class="float-left input-employee">
         {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
@@ -69,7 +69,7 @@
       </div>
     </div>
     <div class="float-left">
-      <input class="transfer" type="checkbox" value="0">
+      <input class="transfer" type="checkbox" value="0" data-toggle="tooltip" data-placement="top" title="Transfer out">
     </div>
     <div class="float-left input-zone">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
@@ -98,16 +98,33 @@
     {{ form_errors(form) }}
 
      <div class="form-group">
-        {{ form_label(form.user, "User", {'label_attr': {'class': 'pull-left control-label'}}) }}
         {{ form_errors(form.user) }}
-        <div class="col-md-2">
-          {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+        <div class="col-md-3">
+          <div class="input-group">
+            <span class="input-group-addon">
+              <span id="user" class="glyphicon glyphicon-user">
+              </span>
+            </span>
+            {{ form_widget(form.user, {'attr': {'class': 'form-control', 'placeholder' : 'Please insert your name'}}) }}
+          </div>
         </div>
         <div class="col-md-2">
-          {{ form_widget(form.team, {'attr': {'class': 'input-team form-control'}}) }}
+          <div class="input-group">
+          <span class="input-group-addon">
+              <span id="team" class="glyphicon glyphicon-retweet">
+              </span>
+            </span>
+            {{ form_widget(form.team, {'attr': {'class': 'input-team form-control'}}) }}
+          </div>
         </div>
         <div class="col-md-2">
-          {{ form_widget(form.shift, {'attr': {'class': 'input-shift'}}) }}
+          <div class="input-group">
+            <span class="input-group-addon">
+              <span id="shift" class="glyphicon glyphicon-time">
+              </span>
+            </span>
+            {{ form_widget(form.shift, {'attr': {'class': 'form-control input-shift'}}) }}
+          </div>
         </div>
         <div class="pull-right">
           <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
@@ -125,11 +142,12 @@
               <th>#</th>
               <th>Employee</th>
               <th>
-                <div class="col-md-4">Activity</div>
-                <div class="col-md-2">Hours</div>
-                <div class="col-md-2">TransferOut</div>
-                <div class="col-md-2">Workstation</div>
-                <div class="col-md-2"></div>
+                <div class="input-activity float-left">Activity</div>
+                <div class="input-regular-hours float-left">Hours</div>
+                <div class="header-overtime float-left">Overtime</div>
+                <div class="float-left">Transfer</div>
+                <div class="float-left input-zone"> Workstation</div>
+                <div class="float-left"></div>
               </th>
               <th class="table-size">Comments</th>
             </tr>

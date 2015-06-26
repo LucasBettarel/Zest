@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Shift
  *
- * @ORM\Table()
+ * @ORM\Table(name="shift")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\ShiftRepository")
  */
 class Shift

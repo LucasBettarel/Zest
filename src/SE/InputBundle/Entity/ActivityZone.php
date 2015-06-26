@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ActivityZone
  *
- * @ORM\Table()
+ * @ORM\Table(name="activityzone")
  * @ORM\Entity
  */
 class ActivityZone

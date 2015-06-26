@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Job
  *
- * @ORM\Table()
+ * @ORM\Table(name="job")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\JobRepository")
  */
 class Job

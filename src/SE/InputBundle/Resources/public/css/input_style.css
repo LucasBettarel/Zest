@@ -50,7 +50,8 @@
 }
 
 .input-zone{
-	width: 110px;
+	width: 120px;
+	margin-left: 15px;
 }
 
 #entries td{
@@ -59,4 +60,8 @@
 
 .expand-cell{
 	width:400px;
+}
+
+.header-overtime{
+	width:150px;
 }

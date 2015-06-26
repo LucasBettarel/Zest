@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	//incorporate all that shit in creation of collection -> event listener take ressources!
+
 	$(document).on('click', '#presence :checkbox', function(e) {
 		$(this).next('.toggling').toggleClass('hide');
 		$(this).closest('td').toggleClass('expand-cell');

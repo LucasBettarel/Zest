@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * InputEntry
  *
- * @ORM\Table()
+ * @ORM\Table(name="inputentry")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\InputEntryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -147,28 +147,6 @@ class InputEntry
         return $this->employee;
     }
 
-    /**
-     * Set presence
-     *
-     * @param \SE\InputBundle\Entity\Presence $presence
-     * @return InputEntry
-     */
-    public function setPresence(\SE\InputBundle\Entity\Presence $presence)
-    {
-        $this->presence = $presence;
-
-        return $this;
-    }
-
-    /**
-     * Get presence
-     *
-     * @return \SE\InputBundle\Entity\Presence 
-     */
-    public function getPresence()
-    {
-        return $this->presence;
-    }
     /**
      * Constructor
      */

@@ -2,6 +2,12 @@ $(document).ready(function() {
 
     initCollection();
 
+    $('.input-team, .input-shift input[type=radio]').change(function(e) {
+      var valueSelected = $('.input-shift input[type=radio]:checked').val();
+      dynamicList(valueSelected);
+    });
+
+
    $(document).on('click', '#add[data-target]', function(e) {
       var $proto = $('#' + $(this).attr('data-target'));
       defaultValues = [0, 1,"", 0, 0, 0];
@@ -65,7 +71,8 @@ $(document).ready(function() {
       var type = (level) ? "entry_name" : "activity_name";
       var re = new RegExp(type,"g")
       var $form = $prototype.replace(re, $collectionHolder.attr('data-counter'));
-       
+      $form = $prototype.replace(/time_name/g, parseInt($collectionHolder.attr('data-counter'))+1);
+
       return $form;
 
     }
@@ -76,10 +83,13 @@ $(document).ready(function() {
       var $sub = $prototypeHolder.children().last();
       var content = $prototypeHolder.attr('id')+'_'+$prototypeHolder.attr('data-counter');
       attachData($sub, content);
-      $sub.find('.transfer').attr('data-sub-target', $prototypeHolder.attr('id'));
       var parentContent = $prototypeHolder.closest('tr').attr('data-content');
-      $sub.find('.transfer').attr('data-target', parentContent);
-      $sub.find('.transfer').attr('data-disabled', 0);
+      var $transfer = $sub.find('.transfer').attr({
+        'data-sub-target': $prototypeHolder.attr('id'),
+        'data-target': parentContent,
+        'data-disabled': 0});
+      //ca marche pas
+      $transfer.find('input').tooltip();
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
 
       return $sub;
@@ -92,14 +102,19 @@ $(document).ready(function() {
       $item.find('#rmv:last').attr('data-target', content);
     }
 
-    function dynamicList(){
+    function dynamicList(valueSelect){
     //delete all current field
+    $('#entries').children().remove();
 
     //reset data counter
+    $('#entries-prototype').attr('data-counter', 0);
 
     //add good nb fields
-
-    //set default value
+    for(var i = 0; i < employeesData.length; ++i){
+          if(employeesData[i][3] == $('.input-team').val() && employeesData[i][4] == valueSelect){
+            addElement($('#entries-prototype'), employeesData[i]);
+          }
+      }
     }
 
     function initCollection(){

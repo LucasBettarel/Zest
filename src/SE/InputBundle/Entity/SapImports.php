@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * SapImports
  *
- * @ORM\Table()
+ * @ORM\Table(name="sapimports")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\SapImportsRepository")
  */
 class SapImports
