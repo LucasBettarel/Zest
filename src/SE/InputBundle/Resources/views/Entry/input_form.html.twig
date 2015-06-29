@@ -11,8 +11,12 @@
         {{ form_widget(entry.sesa, {'attr': {'class': 'form-control'}}) }}
       </div>
       <div id="presence">
-        {{ form_widget(entry.present, {'attr': {'class': 'float-left input-present '}}) }}
-        {{ form_widget(entry.absence_reason, {'attr': {'class': 'form-control hide toggling input-reason float-left'}}) }}
+        <div class="float-left" data-toggle="tooltip" title="Presence"> 
+          {{ form_widget(entry.present, {'attr': {'class': 'input-present '}}) }}
+        </div>
+        <div class="hide toggling">
+          {{ form_widget(entry.absence_reason, {'attr': {'class': 'form-control input-reason'}}) }}
+        </div>
       </div>
     </td>
     <td id="activities">
@@ -52,24 +56,24 @@
       <div class="float-left input-regular-hours">
         {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
       </div>
-      <div class="input-group float-left input-overtime" 
-           data-toggle="popover" 
-           data-trigger="click" 
-           title="OT Hou se fsefe fsef se fse se sese esrs" 
-           data-content="lalalssssssasasaxac ef sef ef af aefafa  faa">
-        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
-        <span class="input-group-addon">
-          <span id="overtime" class="glyphicon glyphicon-time">
-          </span>
-        </span>
+      <div class="float-left input-overtime" title="Enter overtime timings">
+        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control', 'readonly':""}}) }}
       </div>
-      <div class='float-left input-ot-time'>
-          {{ form_widget(activity.otStartTime) }}
-          {{ form_widget(activity.otEndTime) }}
+      <div class='float-left toggling input-ot-time hide'>
+        <div class="float-left">
+          <div data-toggle="tooltip" title="Start time">
+            {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
+          </div>
+        </div>
+        <div>
+          <div data-toggle="tooltip" title="End time">
+            {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
+          </div>
+        </div>
       </div>
     </div>
-    <div class="float-left">
-      <input class="transfer" type="checkbox" value="0" data-toggle="tooltip" data-placement="top" title="Transfer out">
+    <div class="float-left" data-toggle="tooltip" title="Transfer out">
+      <input class="transfer" type="checkbox" value="0">
     </div>
     <div class="float-left input-zone">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
@@ -124,6 +128,15 @@
               </span>
             </span>
             {{ form_widget(form.shift, {'attr': {'class': 'form-control input-shift'}}) }}
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group">
+            <span class="input-group-addon">
+              <span id="date-input" class="glyphicon glyphicon-calendar">
+              </span>
+            </span>
+            {{ form_widget(form.dateInput, {'attr': {'class': 'form-control input-date'}}) }}
           </div>
         </div>
         <div class="pull-right">

@@ -45,16 +45,18 @@ $(document).ready(function() {
 
         $item.find('.input-employee select').val(values[0]);
         $item.find('.input-sesa input').val(values[2]);
+        $item.find('.input-reason').val(0);
+        $item.find("*[data-toggle='tooltip']").tooltip();
       }
       else{
         var $sub = addSubElement($prototypeHolder);
+        $sub.find("*[data-toggle='tooltip']").tooltip();
       }
        //set default values
        $sub.find('.input-activity select').val(values[5]);
        $sub.find('.input-regular-hours input').val(8);
        $sub.find('.input-overtime input').val(0);
-       $sub.find('.input-zone input').val(0);
-
+       $sub.find('.input-zone select').val(0);
     }
 
     function removeElement($element){
@@ -70,8 +72,7 @@ $(document).ready(function() {
       var $prototype = $collectionHolder.attr('data-prototype');
       var type = (level) ? "entry_name" : "activity_name";
       var re = new RegExp(type,"g")
-      var $form = $prototype.replace(re, $collectionHolder.attr('data-counter'));
-      $form = $prototype.replace(/time_name/g, parseInt($collectionHolder.attr('data-counter'))+1);
+      var $form = $prototype.replace(re, $collectionHolder.attr('data-counter')).replace(/time_name/g, parseInt($collectionHolder.attr('data-counter'))+1);
 
       return $form;
 
@@ -88,8 +89,7 @@ $(document).ready(function() {
         'data-sub-target': $prototypeHolder.attr('id'),
         'data-target': parentContent,
         'data-disabled': 0});
-      //ca marche pas
-      $transfer.find('input').tooltip();
+      $sub.find('.input-ot-time input').val('00:00');
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
 
       return $sub;

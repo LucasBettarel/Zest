@@ -41,12 +41,16 @@
 	width: 140px; 
 }
 
-.input-regular-hours{
+.input-regular-hours, .input-overtime{
 	width: 60px;
 }
 
-.input-overtime{
-	width: 100px; 
+.input-ot-time input{
+	width: 120px; 
+}
+
+.input-ot-time>div, #presence>div{
+	display: inline-block; 
 }
 
 .input-zone{
@@ -59,7 +63,7 @@
 }
 
 .expand-cell{
-	width:400px;
+	min-width:370px;
 }
 
 .header-overtime{

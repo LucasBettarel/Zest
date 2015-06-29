@@ -2,17 +2,19 @@ $(document).ready(function() {
 	//incorporate all that shit in creation of collection -> event listener take ressources!
 
 	$(document).on('click', '#presence :checkbox', function(e) {
-		$(this).next('.toggling').toggleClass('hide');
+		$(this).closest('#presence').find('.toggling').toggleClass('hide');
 		$(this).closest('td').toggleClass('expand-cell');
+        $(this).closest('#presence').find('.input-reason').val(0);
 	});
 
 	$(document).on('click', '#comment', function(e) {
 		$(this).siblings('div').toggleClass('hide');
 	});
 
-	$(document).on('click', '[data-toggle="popover"]', function(e) {
-		$(this).popover();
-	});
+	$(document).on('click', '.input-overtime', function(e) {
+		$(this).next('.toggling').toggleClass('hide');
+		$(this).next('.toggling').find('input').val('00:00');
+	});	
 
 	$(document).on('click', '.transfer', function(e){
 		$activitiesHolder = $("#"+$(this).attr('data-sub-target'));

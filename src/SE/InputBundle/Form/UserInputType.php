@@ -8,6 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class UserInputType extends AbstractType
 {
+
+    /**
+     * @var \DateTime
+     */
+    private $date;
+
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
@@ -28,6 +39,10 @@ class UserInputType extends AbstractType
                 'multiple' => false,
                 'expanded' => true
                 ), array('required' => true))
+            ->add('dateInput', 'date', array(
+                  'widget' => 'single_text',
+                  'data' => $this->date
+                ))
             ->add('input_entries', 'collection', array(
                 'type'         => new InputEntryType(),
                 'allow_add'    => true,
