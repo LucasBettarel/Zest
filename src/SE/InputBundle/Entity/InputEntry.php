@@ -251,26 +251,6 @@ class InputEntry
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function computeTotalHours(){
-        $totalHours = 0;
-        $totalWorkingHours = 0;
-        $totalOvertime = 0;
-
-        foreach ($this->getActivityHours() as $activityHour) {
-            $totalHours += $activityHour->getRegularHours();
-            $totalOvertime += $activityHour->getOtHours();
-            if ($activityHour->getActivity()->getProductive()){
-                $totalWorkingHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
-            }
-        }
-        $this->totalHours = $totalHours + $totalOvertime;
-        $this->totalWorkingHours = $totalWorkingHours;
-        $this->totalOvertime = $totalOvertime;
-    }
-
-    /**
      * Get totalHours
      *
      * @return integer 
@@ -324,23 +304,6 @@ class InputEntry
     public function getTotalProd()
     {
         return $this->totalProd;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function computeProd(){
-        $productiveHours = 0;
-
-        foreach ($this->getActivityHours() as $activityHour) {
-            if ($activityHour->getActivity()->getTrackable() and $activityHour->getActivity()->getProductive()){
-                $productiveHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
-            }
-        }
-
-        if( $this->totalTo > 0){
-            $this->totalProd = $this->totalTo / $productiveHours;
-        }
     }
 
     /**

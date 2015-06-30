@@ -407,11 +407,30 @@ class UserInput
     /**
      * @ORM\PrePersist
      */
-    public function computeTotalHoursInput(){
+    public function computeHours(){
+
         $totalHoursInput = 0;
         $totalWorkingHoursInput = 0;
         $totalOvertimeInput = 0;
+
         foreach ($this->getInputEntries() as $inputEntry) {
+            
+            $totalHours = 0;
+            $totalWorkingHours = 0;
+            $totalOvertime = 0;
+
+            foreach ($inputEntry->getActivityHours() as $activityHour) {
+                
+                $totalHours += $activityHour->getRegularHours();
+                $totalOvertime += $activityHour->getOtHours();
+                if ($activityHour->getActivity()->getProductive()){
+                    $totalWorkingHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
+                }
+            }
+            $inputEntry->setTotalHours($totalHours + $totalOvertime);
+            $inputEntry->setTotalWorkingHours($totalWorkingHours);
+            $inputEntry->setTotalOvertime($totalOvertime);
+
             $totalHoursInput += $inputEntry->getTotalHours();
             $totalWorkingHoursInput += $inputEntry->getTotalWorkingHours();
             $totalOvertimeInput += $inputEntry->getTotalOvertime();
@@ -425,7 +444,7 @@ class UserInput
     /**
      * @ORM\PreUpdate
      */
-    public function computeProdInput(){
+    public function computeProd(){
         if( $this->totalToInput > 0 and $this->totalWorkingHoursInput > 0){
             $this->totalProdInput = $this->totalToInput / $this->totalWorkingHoursInput;
         }
