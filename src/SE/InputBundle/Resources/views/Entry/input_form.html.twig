@@ -32,6 +32,9 @@
       <a href=# id="comment" class="btn btn-primary">
         <i class="glyphicon glyphicon-comment"></i>
       </a>
+      <a href=# id="manual" class="btn btn-warning">
+        <i class="glyphicon glyphicon-link"></i>
+      </a>
       <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype">
         <i class="glyphicon glyphicon-trash"></i>
       </a>
@@ -43,7 +46,10 @@
       </a>
       <div class="hide toggling txtarea-sm">
         {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
-      </div>  
+      </div>
+      <div class="hide toggling input-manual">
+        <p class="float-left">Manual TO :</p> {{ form_widget(entry.totalTo, {'attr': {'class': 'form-control'}}) }}
+      </div>   
     </td>
     {{ form_widget(entry) }}
   </tr>

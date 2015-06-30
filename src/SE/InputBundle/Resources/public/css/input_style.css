@@ -33,7 +33,7 @@
 	width: 160px;
 }
 
-.input-reason{
+.input-reason, .input-manual input{
 	width: 75px;
 }
 

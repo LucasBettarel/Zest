@@ -8,7 +8,13 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '#comment', function(e) {
-		$(this).siblings('div').toggleClass('hide');
+		$(this).siblings('.txtarea-sm').toggleClass('hide');
+		console.log($(this).siblings('.txtarea-sm'));
+	});
+
+	$(document).on('click', '#manual', function(e) {
+		$(this).siblings('.input-manual').toggleClass('hide');
+		console.log($(this).siblings('.input-manual'));
 	});
 
 	$(document).on('click', '.input-overtime', function(e) {

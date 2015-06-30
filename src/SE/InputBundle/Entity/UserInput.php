@@ -405,48 +405,60 @@ class UserInput
     }
 
     /**
+     * @ORM\PreUpdate
      * @ORM\PrePersist
      */
     public function computeHours(){
 
-        $totalHoursInput = 0;
-        $totalWorkingHoursInput = 0;
-        $totalOvertimeInput = 0;
+        $totHI = 0;
+        $totWHI = 0;
+        $totOI = 0;
+        $totTO = 0;
 
-        foreach ($this->getInputEntries() as $inputEntry) {
+        foreach ($this->getInputEntries() as $i) {
             
-            $totalHours = 0;
-            $totalWorkingHours = 0;
-            $totalOvertime = 0;
+            $totH = 0;
+            $totWH = 0;
+            $totO = 0;
+            $prodH = 0;
 
-            foreach ($inputEntry->getActivityHours() as $activityHour) {
+
+            foreach ($i->getActivityHours() as $a) {
                 
-                $totalHours += $activityHour->getRegularHours();
-                $totalOvertime += $activityHour->getOtHours();
-                if ($activityHour->getActivity()->getProductive()){
-                    $totalWorkingHours += $activityHour->getRegularHours() + $activityHour->getOtHours();
+                $totH += $a->getRegularHours();
+                $totO += $a->getOtHours();
+                if ($a->getActivity()->getProductive()){
+                    $totWH += $a->getRegularHours() + $a->getOtHours();
+                }
+                if ($a->getActivity()->getTrackable() and $a->getActivity()->getProductive()){
+                    $prodH += $a->getRegularHours() + $a->getOtHours();
                 }
             }
-            $inputEntry->setTotalHours($totalHours + $totalOvertime);
-            $inputEntry->setTotalWorkingHours($totalWorkingHours);
-            $inputEntry->setTotalOvertime($totalOvertime);
 
-            $totalHoursInput += $inputEntry->getTotalHours();
-            $totalWorkingHoursInput += $inputEntry->getTotalWorkingHours();
-            $totalOvertimeInput += $inputEntry->getTotalOvertime();
+            //pour input entry
+            $i->setTotalHours($totH + $totO);
+            $i->setTotalWorkingHours($totWH);
+            $i->setTotalOvertime($totO);
+
+            if( $i->getTotalTo() > 0 and $prodH > 0){
+                $i->setTotalProd($i->getTotalTo() / $prodH);
+            }
+
+            //pour user input
+            $totHI += $totH + $totO;
+            $totWHI += $totWH;
+            $totOI += $totO;
+            $totTO += $i->getTotalTo();
         }
-        $this->totalHoursInput = $totalHoursInput;
-        $this->totalWorkingHoursInput = $totalWorkingHoursInput;
-        $this->totalOvertimeInput = $totalOvertimeInput;
-    }
 
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function computeProd(){
+        $this->totalHoursInput = $totHI;
+        $this->totalWorkingHoursInput = $totWHI;
+        $this->totalOvertimeInput = $totOI;
+        $this->totalToInput = $totTO;
+    
         if( $this->totalToInput > 0 and $this->totalWorkingHoursInput > 0){
             $this->totalProdInput = $this->totalToInput / $this->totalWorkingHoursInput;
         }
     }
+
 }
