@@ -8,6 +8,12 @@ $(document).ready(function() {
 
     initCollection();
 
+    $('.input-team, .input-shift input[type=radio]').change(function(e) {
+      var valueSelected = $('.input-shift input[type=radio]:checked').val();
+      dynamicList(valueSelected);
+    });
+
+
    $(document).on('click', '#add[data-target]', function(e) {
       var $proto = $('#' + $(this).attr('data-target'));
       defaultValues = [0, 1,"", 0, 0, 0];
@@ -45,16 +51,18 @@ $(document).ready(function() {
 
         $item.find('.input-employee select').val(values[0]);
         $item.find('.input-sesa input').val(values[2]);
+        $item.find('.input-reason').val(0);
+        $item.find("*[data-toggle='tooltip']").tooltip();
       }
       else{
         var $sub = addSubElement($prototypeHolder);
+        $sub.find("*[data-toggle='tooltip']").tooltip();
       }
        //set default values
        $sub.find('.input-activity select').val(values[5]);
        $sub.find('.input-regular-hours input').val(8);
        $sub.find('.input-overtime input').val(0);
-       $sub.find('.input-zone input').val(0);
-
+       $sub.find('.input-zone select').val(0);
     }
 
     function removeElement($element){
@@ -70,8 +78,8 @@ $(document).ready(function() {
       var $prototype = $collectionHolder.attr('data-prototype');
       var type = (level) ? "entry_name" : "activity_name";
       var re = new RegExp(type,"g")
-      var $form = $prototype.replace(re, $collectionHolder.attr('data-counter'));
-       
+      var $form = $prototype.replace(re, $collectionHolder.attr('data-counter')).replace(/time_name/g, parseInt($collectionHolder.attr('data-counter'))+1);
+
       return $form;
 
     }
@@ -82,10 +90,12 @@ $(document).ready(function() {
       var $sub = $prototypeHolder.children().last();
       var content = $prototypeHolder.attr('id')+'_'+$prototypeHolder.attr('data-counter');
       attachData($sub, content);
-      $sub.find('.transfer').attr('data-sub-target', $prototypeHolder.attr('id'));
       var parentContent = $prototypeHolder.closest('tr').attr('data-content');
-      $sub.find('.transfer').attr('data-target', parentContent);
-      $sub.find('.transfer').attr('data-disabled', 0);
+      var $transfer = $sub.find('.transfer').attr({
+        'data-sub-target': $prototypeHolder.attr('id'),
+        'data-target': parentContent,
+        'data-disabled': 0});
+      $sub.find('.input-ot-time input').val('00:00');
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
 
       return $sub;
@@ -98,14 +108,19 @@ $(document).ready(function() {
       $item.find('#rmv:last').attr('data-target', content);
     }
 
-    function dynamicList(){
+    function dynamicList(valueSelect){
     //delete all current field
+    $('#entries').children().remove();
 
     //reset data counter
+    $('#entries-prototype').attr('data-counter', 0);
 
     //add good nb fields
-
-    //set default value
+    for(var i = 0; i < employeesData.length; ++i){
+          if(employeesData[i][3] == $('.input-team').val() && employeesData[i][4] == valueSelect){
+            addElement($('#entries-prototype'), employeesData[i]);
+          }
+      }
     }
 
     function initCollection(){
@@ -119,18 +134,22 @@ $(document).ready(function() {
     }
 });
 $(document).ready(function() {
+	//incorporate all that shit in creation of collection -> event listener take ressources!
+
 	$(document).on('click', '#presence :checkbox', function(e) {
-		$(this).next('.toggling').toggleClass('hide');
+		$(this).closest('#presence').find('.toggling').toggleClass('hide');
 		$(this).closest('td').toggleClass('expand-cell');
+        $(this).closest('#presence').find('.input-reason').val(0);
 	});
 
 	$(document).on('click', '#comment', function(e) {
 		$(this).siblings('div').toggleClass('hide');
 	});
 
-	$(document).on('click', '[data-toggle="popover"]', function(e) {
-		$(this).popover();
-	});
+	$(document).on('click', '.input-overtime', function(e) {
+		$(this).next('.toggling').toggleClass('hide');
+		$(this).next('.toggling').find('input').val('00:00');
+	});	
 
 	$(document).on('click', '.transfer', function(e){
 		$activitiesHolder = $("#"+$(this).attr('data-sub-target'));

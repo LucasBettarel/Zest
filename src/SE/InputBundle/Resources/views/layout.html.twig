@@ -8,6 +8,13 @@
   {{ render(controller("SEInputBundle:Entry:menu")) }}
 {% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets 'bundles/seinput/css/*' %}
+    <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+{% endblock %}
+
 {% block body %}
 
   {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}

@@ -87,13 +87,6 @@
   </div>
   {% endmacro %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  {% stylesheets 'bundles/seinput/css/*' %}
-    <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
-  {% endstylesheets %}
-{% endblock %}
-
  {% block seinput_form %}
 
   <div class="well">

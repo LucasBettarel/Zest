@@ -293,12 +293,3 @@ input.gn-search:focus {
 #gn-menu li a:before{
     font-family: 'Glyphicons Halflings';
 }
-
-body {
-  margin-top: 60px;
-}
-
-body, html {
-	height: 100%;
- 	position: relative;
-}

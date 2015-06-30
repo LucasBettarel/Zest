@@ -1,27 +1,31 @@
 se_input_home:
-    path:     /
+    path:     /input
     defaults: { _controller: SEInputBundle:Entry:input }
 
 se_input_employees:
-    path:     /employees
+    path:     /input/employees
     defaults: { _controller: SEInputBundle:Settings:employees }
 
 se_input_employees_add:
-    path:     /employees/add
+    path:     /input/employees/add
     defaults: { _controller: SEInputBundle:Settings:employees_add }
 
 se_input_activities:
-    path:     /activities
+    path:     /input/activities
     defaults: { _controller: SEInputBundle:Settings:activities }
 
 se_input_activities_add:
-    path:     /activities/add
+    path:     /input/activities/add
     defaults: { _controller: SEInputBundle:Settings:activities_add }
 
 se_input_import_sap:
-    path:     /import
+    path:     /input/import
     defaults: { _controller: SEInputBundle:Import:sap }
 
 se_input_set_import:
-    path:     /extimport
+    path:     /input/extimport
     defaults: { _controller: SEInputBundle:Import:set }
+
+se_input_welcome:
+    path:     /
+    defaults: { _controller: SEInputBundle:Entry:welcome }

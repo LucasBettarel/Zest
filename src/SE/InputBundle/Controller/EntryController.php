@@ -44,4 +44,9 @@ class EntryController extends Controller
   	{
     	return $this->render('SEInputBundle:Entry:menu.html.twig');
   	}
+
+  public function welcomeAction()
+    {
+      return $this->render('SEInputBundle:Entry:welcome.html.twig');
+    }
 }

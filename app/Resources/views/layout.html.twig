@@ -19,15 +19,11 @@
   <ul id="gn-menu" class="gn-menu-main">
     <li class="gn-trigger">
       <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
-      <nav class="gn-menu-wrapper">
-        <div class="gn-scroller">
-          {% block menu %}
-          {% endblock %}
-        </div><!-- /gn-scroller -->
-      </nav>
+        {% block menu %}
+        {% endblock %}
     </li>
     <li>
-      <a href="{{ path('se_input_home') }}"><img alt="Schneider Electric" src="{{ asset('bundles/sezest/img/logo.png') }}"></a>
+      <a href="{{ path('se_input_welcome') }}"><img alt="Schneider Electric" src="{{ asset('bundles/sezest/img/logo.png') }}"></a>
     </li>
     <li><a href="{{ path('se_input_home') }}"><i class="glyphicon glyphicon-pencil"></i> Manhours Input</a></li>
     <li><a href="{{ path('se_report_home') }}"><i class="glyphicon glyphicon-stats"></i> Reports</a></li>

@@ -1,0 +1,71 @@
+.hide {
+	display: none;
+	width:0px;
+}
+
+.table input[type=checkbox], .input-rmv{
+	margin: 8px;
+}
+
+.ghost{
+	width: 0px;
+	height: 0px;
+}
+
+.float-left{
+	float: left;
+}
+.txtarea-sm{
+	max-width: 170px;
+	margin: 2px;
+}
+
+#activities div{
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+.input-sesa{
+	width: 115px; 
+}
+
+.input-employee{
+	width: 160px;
+}
+
+.input-reason{
+	width: 75px;
+}
+
+.input-activity{
+	width: 140px; 
+}
+
+.input-regular-hours, .input-overtime{
+	width: 60px;
+}
+
+.input-ot-time input{
+	width: 120px; 
+}
+
+.input-ot-time>div, #presence>div{
+	display: inline-block; 
+}
+
+.input-zone{
+	width: 120px;
+	margin-left: 15px;
+}
+
+#entries td{
+	padding: 1px;
+}
+
+.expand-cell{
+	min-width:370px;
+}
+
+.header-overtime{
+	width:150px;
+}

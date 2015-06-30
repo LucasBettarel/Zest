@@ -1,0 +1,24 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets 'bundles/seinput/css/*' filter='cssrewrite' %}
+    <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block body %}
+	<div class="well welcome">
+		<img alt="Zest" src="{{ asset('bundles/seinput/images/Zest.png') }}"></br>
+		<h1>Welcome to Zest.</h1>
+		<a href ="{{ path('se_input_home') }}"><h3>let's get to work! <i class="glyphicon glyphicon-hand-right"> </i></h3></a>
+		<div class="credit">
+			© <a href="mailto:lucas@bettarel.fr">Lucas Bettarel</a> - 2015
+		</div>
+	</div>
+{% endblock %}
