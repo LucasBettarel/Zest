@@ -7,6 +7,13 @@ $(document).ready(function() {
       dynamicList(valueSelected);
     });
 
+    $('.input-ot-time input').change(function(e) {
+      var startTime = $(this).closest('.input-ot-time').find('input:first').val();
+      var endTime = $(this).closest('.input-ot-time').find('input:last').val();
+      var $overTime = $(this).closest('.row').find('.input-overtime input');
+      displayOvertime(endTime, startTime, $overTime);
+    });
+
 
    $(document).on('click', '#add[data-target]', function(e) {
       var $proto = $('#' + $(this).attr('data-target'));
@@ -125,5 +132,12 @@ $(document).ready(function() {
             addElement($('#entries-prototype'), employeesData[i]);
           }
       }
+    }
+
+    function displayOvertime(start, end, $overt){
+      end = end.split(/:/);
+      start = start.split(/:/);
+      var diff = Math.round((end[0] * 3600 + end[1] * 60 - start[0] * 3600 + start[1] * 60)/36)/100;
+      $overt.val(diff);
     }
 });
