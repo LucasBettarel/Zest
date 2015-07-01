@@ -1,12 +1,6 @@
 $(document).ready(function() {
 	//incorporate all that shit in creation of collection -> event listener take ressources!
 
-	$(document).on('click', '#presence :checkbox', function(e) {
-		$(this).closest('#presence').find('.toggling').toggleClass('hide');
-		$(this).closest('td').toggleClass('expand-cell');
-        $(this).closest('#presence').find('.input-reason').val(0);
-	});
-
 	$(document).on('click', '#comment', function(e) {
 		$(this).siblings('.txtarea-sm').toggleClass('hide');
 	});

@@ -29,6 +29,22 @@ $(document).ready(function() {
       return false;
     });
 
+    $(document).on('click', '#presence :checkbox', function(e) {
+      $(this).closest('#presence').find('.toggling').toggleClass('hide');
+      $(this).closest('td').toggleClass('expand-cell');
+      $(this).closest('#presence').find('.input-reason').val(0);
+      var $actProto = $(this).closest('td').siblings('#activities').find('div:first');
+      console.log($actProto);
+      if ($(this).closest('#presence').find('.toggling').hasClass('hide')){
+        //add 1st activity
+        addSubElement($actProto);
+      }
+      else{
+        //rmv activities
+        $actProto.children().remove();
+      }
+    });
+
     function addElement($prototypeHolder, values){
       if($prototypeHolder.is("#entries-prototype")){
         var $element = definePrototype($prototypeHolder, true);
@@ -61,9 +77,6 @@ $(document).ready(function() {
       }
        //set default values
        $sub.find('.input-activity select').val(values[5]);
-       $sub.find('.input-regular-hours input').val(8);
-       $sub.find('.input-overtime input').val(0);
-       $sub.find('.input-zone select').val(0);
     }
 
     function removeElement($element){
@@ -97,6 +110,9 @@ $(document).ready(function() {
         'data-target': parentContent,
         'data-disabled': 0});
       $sub.find('.input-ot-time input').val('00:00');
+      $sub.find('.input-regular-hours input').val(8);
+      $sub.find('.input-overtime input').val(0);
+      //$sub.find('.input-zone select').val(0);
       $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
 
       return $sub;
