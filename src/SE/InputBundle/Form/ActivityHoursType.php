@@ -29,12 +29,12 @@ class ActivityHoursType extends AbstractType
             ->add('otEndTime', 'time', array(
                   'widget' => 'single_text',
                   'required' => false))
-            ->add('zone', 'entity', array(
+            /*->add('zone', 'entity', array(
                 'class'    => 'SEInputBundle:Zone',
                 'property' => 'name', 
                 'multiple' => false,
                 'expanded' => false
-                ), array('required' => false))
+                ), array('required' => false))*/
             ;
     }
     

@@ -12,9 +12,6 @@
 	height: 0px;
 }
 
-.float-left{
-	float: left;
-}
 .txtarea-sm{
 	max-width: 170px;
 	margin: 2px;
@@ -68,4 +65,16 @@
 
 .header-overtime{
 	width:150px;
+}
+
+.th-employee{
+	min-width:315px;
+}
+
+.th-activity{
+	min-width:600px; 
+}
+
+.th-options{
+	min-width: 230px;
 }

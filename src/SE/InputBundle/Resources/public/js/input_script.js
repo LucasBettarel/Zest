@@ -13,7 +13,6 @@ $(document).ready(function() {
 
 	$(document).on('click', '#manual', function(e) {
 		$(this).siblings('.input-manual').toggleClass('hide');
-		console.log($(this).siblings('.input-manual'));
 	});
 
 	$(document).on('click', '.input-overtime', function(e) {
