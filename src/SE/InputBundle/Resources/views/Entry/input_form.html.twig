@@ -3,7 +3,7 @@
 {% macro entryCollection(entry) %}
   <tr>
     <td>time_name</td>
-    <td class="table-size">
+    <td>
       <div class="pull-left input-employee">
         {{ form_widget(entry.employee, {'attr': {'class': 'form-control'}}) }}
       </div>
@@ -29,19 +29,19 @@
       </div>
     </td>
     <td>
-      <a href=# id="comment" class="btn btn-primary">
+      <a href=# id="comment" class="btn btn-primary" data-toggle="tooltip" title="Add a comment">
         <i class="glyphicon glyphicon-comment"></i>
       </a>
-      <a href=# id="manual" class="btn btn-warning">
+      <a href=# id="manual" class="btn btn-warning" data-toggle="tooltip" title="Add manual TO lines">
         <i class="glyphicon glyphicon-link"></i>
       </a>
-      <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype">
+      <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype" data-toggle="tooltip" title="Delete employee from input">
         <i class="glyphicon glyphicon-trash"></i>
       </a>
-      <a href=# id="info" class="btn btn-info">
+      <a href=# id="info" class="btn btn-info" data-toggle="tooltip" title="Go to employee details (not functionnal yet)">
         <i class="glyphicon glyphicon-info-sign"></i>
       </a>
-      <a href=# id="add" class="btn btn-success" data-target="activities-prototype">
+      <a href=# id="add" class="btn btn-success" data-target="activities-prototype" data-toggle="tooltip" title="Add an activity">
         <i class="glyphicon glyphicon-plus"></i>
       </a>
       <div class="hide toggling txtarea-sm">
@@ -84,7 +84,7 @@
     {#<div class="pull-left input-zone">
       {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
     </div>#}
-    <div class="pull-left">
+    <div class="pull-left" data-toggle="tooltip" title="Remove activity">
       <a href=# id="rmv" class="text-danger input-rmv" data-target="activities-prototype">
         <i class="glyphicon glyphicon-remove"></i>
       </a>

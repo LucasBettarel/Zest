@@ -70,6 +70,14 @@ class SAPRF
      */
     private $sourceStorageBin;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="recorded", type="boolean")
+     */
+    private $recorded;
+
+
 
     /**
      * Get id
@@ -240,5 +248,28 @@ class SAPRF
     public function getSourceStorageBin()
     {
         return $this->sourceStorageBin;
+    }
+
+    /**
+     * Set recorded
+     *
+     * @param boolean $recorded
+     * @return SAPRF
+     */
+    public function setRecorded($recorded)
+    {
+        $this->recorded = $recorded;
+
+        return $this;
+    }
+
+    /**
+     * Get recorded
+     *
+     * @return boolean 
+     */
+    public function getRecorded()
+    {
+        return $this->recorded;
     }
 }
