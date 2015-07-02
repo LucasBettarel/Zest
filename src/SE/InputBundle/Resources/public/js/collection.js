@@ -11,7 +11,7 @@ $(document).ready(function() {
       var startTime = $(this).closest('.input-ot-time').find('input:first').val();
       var endTime = $(this).closest('.input-ot-time').find('input:last').val();
       var $overTime = $(this).closest('.row').find('.input-overtime input');
-      displayOvertime(endTime, startTime, $overTime);
+      displayOvertime(startTime, endTime, $overTime);
     });
 
 
@@ -34,7 +34,6 @@ $(document).ready(function() {
       $(this).closest('td').toggleClass('expand-cell');
       $(this).closest('#presence').find('.input-reason').val(0);
       var $actProto = $(this).closest('td').siblings('#activities').find('div:first');
-      console.log($actProto);
       if ($(this).closest('#presence').find('.toggling').hasClass('hide')){
         //add 1st activity
         addSubElement($actProto);
@@ -153,7 +152,10 @@ $(document).ready(function() {
     function displayOvertime(start, end, $overt){
       end = end.split(/:/);
       start = start.split(/:/);
-      var diff = Math.round((end[0] * 3600 + end[1] * 60 - start[0] * 3600 + start[1] * 60)/36)/100;
+      var diff = Math.round((end[0] * 3600 + end[1] * 60 + 43200 - (start[0] * 3600 + start[1] * 60 + 43200))/36)/100;
+      if (diff<0){
+        diff+=24;
+      }
       $overt.val(diff);
     }
 });
