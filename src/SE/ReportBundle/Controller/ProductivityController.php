@@ -9,23 +9,43 @@ class ProductivityController extends Controller
 {
 	public function indexAction()
 	{
-    	return $this->render('SEReportBundle:Productivity:prod.html.twig');
-	}
+		//select sapimports not processed (one...)
+		$sapToProcess = $this->getDoctrine()
+		 ->getManager()
+         ->getRepository('SEInputBundle:SapImports')
+         ->findBy(array('process' => 0))
+        ;
 
-	public function menuAction()
-	{
-		return $this->render('SEReportBundle:Productivity:menu.html.twig');
-	}
+        //select userinput not processed (...toMany)
+		$inputToProcess = $this->getDoctrine()
+		 ->getManager()
+         ->getRepository('SEInputBundle:UserInput')
+         ->findBy(array('process' => 0))
+        ;
 
-	public function refreshAction()
-	{
+        //match table
+        $matchProcess = array();
+
+        //for each sapimport(not processed)
+        foreach ($inputToProcess as $inputToProcessDay) {
+        	if(in_array($inputToProcessDay.getDate(), $sapToProcess.getDate())){
+        		//match: input.date present in sap.date -> add to match tables
+        		$matchProcess[] = array($inputToProcessDay, $sapToProcess.getDate());
+        	}
+        	else{
+        		//sapimport not done->add to error review
+        	}
+
+        }
 		/*
-		select sapimports not processed by date (1)
-		select userinput not processed by date (several)
-		check matches
 		
-		for every single element : add in review input error : sap not imported or no input 
+			for each userinput 
+			if i.getdate = s.getdate
+				->addtocoupletoprocess
+			else-> add to reviewinputerror(type=missing_input, ...)
 		
+		add remaining userinput to > add to reviewinputerror(type=missing_input, ...)
+
 		for every couples sap/user :
 		get shift+team+date
 
@@ -38,19 +58,25 @@ class ProductivityController extends Controller
 						TOlines = countrows in regular hours (between shift.start and shift.end)
 						TOlines += countrows in OT hours (between ot.start and ot.end)
 
-						for each saprf.row selected -> bool process = true
+						for each saprf.row selected -> bool recorded = true
 						update (add) TOlines to userinput (daily team) table
 						update (add) TOlines to input_entry (daily employee) table
 						//-> check if prod is well calculated on update
 					--
 				--
 			--
-		eof : remaining to lines.count -> go to input error table (//define table structure)
+		eof : remaining to lines.count(->recorded=0) -> go to input error table (//define table structure)
 		//??? what else???
 
 		->display data calculated (highchart and data tables)
 		-> take apero
 		*/
-		return $this->render('SEReportBundle:Productivity:prod.html.twig');
+    	return $this->render('SEReportBundle:Productivity:prod.html.twig');
 	}
+
+	public function menuAction()
+	{
+		return $this->render('SEReportBundle:Productivity:menu.html.twig');
+	}
+
 }

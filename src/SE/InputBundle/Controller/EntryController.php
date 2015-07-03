@@ -18,6 +18,8 @@ class EntryController extends Controller
       ->findAll()
     ;
 
+    //foreach list employee-> if activity=null -> id = 0 
+
     $EmployeeCount = sizeof($listEmployees);
   
     $userInput = new UserInput();

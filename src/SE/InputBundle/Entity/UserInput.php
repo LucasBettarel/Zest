@@ -90,6 +90,19 @@ class UserInput
      */
     private $totalProdInput = 0;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="process", type="boolean", nullable=true)
+     */
+    private $process;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="review", type="boolean", nullable=true)
+     */
+    private $review;
 
     /**
      * Get id
@@ -461,4 +474,50 @@ class UserInput
         }
     }
 
+
+    /**
+     * Set process
+     *
+     * @param boolean $process
+     * @return UserInput
+     */
+    public function setProcess($process)
+    {
+        $this->process = $process;
+
+        return $this;
+    }
+
+    /**
+     * Get process
+     *
+     * @return boolean 
+     */
+    public function getProcess()
+    {
+        return $this->process;
+    }
+
+    /**
+     * Set review
+     *
+     * @param boolean $review
+     * @return UserInput
+     */
+    public function setReview($review)
+    {
+        $this->review = $review;
+
+        return $this;
+    }
+
+    /**
+     * Get review
+     *
+     * @return boolean 
+     */
+    public function getReview()
+    {
+        return $this->review;
+    }
 }

@@ -5,12 +5,12 @@ namespace SE\InputBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AbsenceReason
+ * TypeIssue
  *
- * @ORM\Table(name="absencereason")
+ * @ORM\Table(name="typeissue")
  * @ORM\Entity
  */
-class AbsenceReason
+class TypeIssue
 {
     /**
      * @var integer
@@ -31,16 +31,9 @@ class AbsenceReason
     /**
      * @var string
      *
-     * @ORM\Column(name="detail", type="string", length=255)
+     * @ORM\Column(name="criticity", type="string", length=255)
      */
-    private $detail;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="justified", type="boolean")
-     */
-    private $justified;
+    private $criticity;
 
 
     /**
@@ -57,7 +50,7 @@ class AbsenceReason
      * Set name
      *
      * @param string $name
-     * @return AbsenceReason
+     * @return TypeIssue
      */
     public function setName($name)
     {
@@ -77,48 +70,25 @@ class AbsenceReason
     }
 
     /**
-     * Set justified
+     * Set criticity
      *
-     * @param boolean $justified
-     * @return AbsenceReason
+     * @param string $criticity
+     * @return TypeIssue
      */
-    public function setJustified($justified)
+    public function setCriticity($criticity)
     {
-        $this->justified = $justified;
+        $this->criticity = $criticity;
 
         return $this;
     }
 
     /**
-     * Get justified
-     *
-     * @return boolean 
-     */
-    public function getJustified()
-    {
-        return $this->justified;
-    }
-
-    /**
-     * Set detail
-     *
-     * @param string $detail
-     * @return AbsenceReason
-     */
-    public function setDetail($detail)
-    {
-        $this->detail = $detail;
-
-        return $this;
-    }
-
-    /**
-     * Get detail
+     * Get criticity
      *
      * @return string 
      */
-    public function getDetail()
+    public function getCriticity()
     {
-        return $this->detail;
+        return $this->criticity;
     }
 }

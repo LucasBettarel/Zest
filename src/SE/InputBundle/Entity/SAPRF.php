@@ -73,7 +73,7 @@ class SAPRF
     /**
      * @var boolean
      *
-     * @ORM\Column(name="recorded", type="boolean")
+     * @ORM\Column(name="recorded", type="boolean", nullable=true)
      */
     private $recorded;
 

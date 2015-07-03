@@ -5,12 +5,12 @@ namespace SE\InputBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * AbsenceReason
+ * User
  *
- * @ORM\Table(name="absencereason")
+ * @ORM\Table(name="user")
  * @ORM\Entity
  */
-class AbsenceReason
+class User
 {
     /**
      * @var integer
@@ -29,18 +29,16 @@ class AbsenceReason
     private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="detail", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Team")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $detail;
+    private $team;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="justified", type="boolean")
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Shift")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $justified;
+    private $shift;
 
 
     /**
@@ -57,7 +55,7 @@ class AbsenceReason
      * Set name
      *
      * @param string $name
-     * @return AbsenceReason
+     * @return User
      */
     public function setName($name)
     {
@@ -77,48 +75,48 @@ class AbsenceReason
     }
 
     /**
-     * Set justified
+     * Set team
      *
-     * @param boolean $justified
-     * @return AbsenceReason
+     * @param \SE\InputBundle\Entity\Team $team
+     * @return User
      */
-    public function setJustified($justified)
+    public function setTeam(\SE\InputBundle\Entity\Team $team = null)
     {
-        $this->justified = $justified;
+        $this->team = $team;
 
         return $this;
     }
 
     /**
-     * Get justified
+     * Get team
      *
-     * @return boolean 
+     * @return \SE\InputBundle\Entity\Team 
      */
-    public function getJustified()
+    public function getTeam()
     {
-        return $this->justified;
+        return $this->team;
     }
 
     /**
-     * Set detail
+     * Set shift
      *
-     * @param string $detail
-     * @return AbsenceReason
+     * @param \SE\InputBundle\Entity\Shift $shift
+     * @return User
      */
-    public function setDetail($detail)
+    public function setShift(\SE\InputBundle\Entity\Shift $shift = null)
     {
-        $this->detail = $detail;
+        $this->shift = $shift;
 
         return $this;
     }
 
     /**
-     * Get detail
+     * Get shift
      *
-     * @return string 
+     * @return \SE\InputBundle\Entity\Shift 
      */
-    public function getDetail()
+    public function getShift()
     {
-        return $this->detail;
+        return $this->shift;
     }
 }
