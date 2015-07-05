@@ -23,29 +23,51 @@ class ProductivityController extends Controller
          ->findBy(array('process' => 0))
         ;
 
-        //match table
-        $matchProcess = array();
-
-        //for each sapimport(not processed)
+        //for each inputToProcess(not processed)
         foreach ($inputToProcess as $inputToProcessDay) {
-        	if(in_array($inputToProcessDay.getDate(), $sapToProcess.getDate())){
-        		//match: input.date present in sap.date -> add to match tables
-        		$matchProcess[] = array($inputToProcessDay, $sapToProcess.getDate());
-        	}
-        	else{
-        		//sapimport not done->add to error review
-        	}
+        	foreach ($sapToProcess as $sapToProcessDay) {
+        	
+	        	if($inputToProcessDay.getDate() == $sapToProcessDay.getDate()){
+	        		//match: input.date present in sap.date
 
-        }
-		/*
-		
-			for each userinput 
-			if i.getdate = s.getdate
-				->addtocoupletoprocess
-			else-> add to reviewinputerror(type=missing_input, ...)
-		
-		add remaining userinput to > add to reviewinputerror(type=missing_input, ...)
+	        		$inputDate = $inputToProcessDay.getDate();
+	        		$inputTeam = $inputToProcessDay.getTeam();
+	        		$inputShift = $inputToProcessDay.getShift();
 
+	        		foreach ($inputToProcessDay.getInputEntries() as $inputEntry) {
+	        			foreach ($inputEntry.getActivityHours() as $activity) {
+	        				if ($activity.getActivity().getTrackable() == true){
+	        					$sesa = $inputEntry.getSesa();
+	        					$hours = $activity.getRegularHours();
+	        					$overtime = $activity.getOtHours();
+	        					$otStart = $activity.getOtStartTime();
+	        					$otEnd = getOtEndTime();
+
+	        					//go in saprf and do the shit.
+	        				}
+	        			}
+	        		}
+
+	        		//process finished -> +1 input done in sapImport
+	        		$sapToProcessDay.setInputs($sapToProcessDay.getInputs() + 1);
+
+	        		if($sapToProcessDay.getInputs() == 4){
+	        			$sapToProcessDay.setProcess(1);
+	        		}
+
+	        		$inputToProcessDay.setProcess(1);
+	        	}
+	        	else{
+	        		//sapImport not done->add to error review (process = 0)
+	        	}
+        	}//foreach sap
+        }//foreach input
+
+		//check inputs nb in sapImports , and if manque des inputs -> add to error review
+        //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
+
+
+		/*	
 		for every couples sap/user :
 		get shift+team+date
 

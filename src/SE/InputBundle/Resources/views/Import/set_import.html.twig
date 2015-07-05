@@ -31,6 +31,7 @@
 						<th>#</th>
 						<th>Date</th>
 						<th>Import</th>
+						<th>Inputs</th>
 						<th>Process</th>
 						<th>Review</th>
 					</tr>
@@ -46,6 +47,7 @@
 					        		<i class="glyphicon glyphicon-thumbs-down text-danger"></i>
 								{% endif %}
 							</td>
+							<td>{{ importSap.inputs }}</td>
 			      			<td>{% if importSap.process == 1 %}
 			      					<i class="glyphicon glyphicon-thumbs-up text-success"></i>
 					        	{% else %}

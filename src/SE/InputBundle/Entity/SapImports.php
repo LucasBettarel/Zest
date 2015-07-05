@@ -36,6 +36,13 @@ class SapImports
     private $import;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="inputs", type="integer", nullable=true)
+     */
+    private $inputs = 0;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="process", type="boolean", nullable=true)
@@ -150,5 +157,28 @@ class SapImports
     public function getReview()
     {
         return $this->review;
+    }
+
+    /**
+     * Set inputs
+     *
+     * @param integer $inputs
+     * @return SapImports
+     */
+    public function setInputs($inputs)
+    {
+        $this->inputs = $inputs;
+
+        return $this;
+    }
+
+    /**
+     * Get inputs
+     *
+     * @return integer 
+     */
+    public function getInputs()
+    {
+        return $this->inputs;
     }
 }
