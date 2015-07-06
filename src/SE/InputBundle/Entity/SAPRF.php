@@ -75,7 +75,7 @@ class SAPRF
      *
      * @ORM\Column(name="recorded", type="boolean", nullable=true)
      */
-    private $recorded;
+    private $recorded = 0;
 
 
 

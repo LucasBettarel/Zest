@@ -36,14 +36,36 @@ class ProductivityController extends Controller
 
 	        		foreach ($inputToProcessDay.getInputEntries() as $inputEntry) {
 	        			foreach ($inputEntry.getActivityHours() as $activity) {
+	        				//picking or binning
 	        				if ($activity.getActivity().getTrackable() == true){
 	        					$sesa = $inputEntry.getSesa();
-	        					$hours = $activity.getRegularHours();
-	        					$overtime = $activity.getOtHours();
+	        					$start = $inputShift.getStartTime();
+	        					$end = $inputShift.getEndTime();
 	        					$otStart = $activity.getOtStartTime();
 	        					$otEnd = getOtEndTime();
+	        					$to = $inputEntry.getTotalTo();
+	        					$missingTO = 0;
 
 	        					//go in saprf and do the shit.
+        					    $TOlines = $this->getDoctrine()
+								 ->getManager()
+								 ->getRepository('SEInputBundle:SAPRF')
+								 ->findBy(array('recorded' => null, 'user' => $sesa, 'dateConfirmation' => $inputDate))
+								;
+
+								//restrict by hours
+								foreach ($TOlines as $line) {
+									if(($line.getTimeConfirmation() >= $start and $line.getTimeConfirmation() <= $end) or ($line.getTimeConfirmation() >= $otStart and $line.getTimeConfirmation() <= $otEnd)){
+										$to += 1; //ok
+										$line.setRecorded(1);
+									}
+									else{
+										$missingTO += 1; //pas ok
+									}
+								}
+
+								//update in inputentry the to lines
+								$inputEntry.setTotalTo($to);
 	        				}
 	        			}
 	        		}
@@ -51,7 +73,7 @@ class ProductivityController extends Controller
 	        		//process finished -> +1 input done in sapImport
 	        		$sapToProcessDay.setInputs($sapToProcessDay.getInputs() + 1);
 
-	        		if($sapToProcessDay.getInputs() == 4){
+	        		if($sapToProcessDay.getInputs() == 15){ //5 teams*3shifts -> should be changed to team.count*team.shift.count
 	        			$sapToProcessDay.setProcess(1);
 	        		}
 
@@ -61,6 +83,10 @@ class ProductivityController extends Controller
 	        		//sapImport not done->add to error review (process = 0)
 	        	}
         	}//foreach sap
+	
+	        //calculate new to number + new prod ah ah
+			$inputToProcessDay.computeHours();
+			
         }//foreach input
 
 		//check inputs nb in sapImports , and if manque des inputs -> add to error review
