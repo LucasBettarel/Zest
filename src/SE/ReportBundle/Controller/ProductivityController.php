@@ -44,7 +44,7 @@ class ProductivityController extends Controller
 	        					$otStart = $activity.getOtStartTime();
 	        					$otEnd = getOtEndTime();
 	        					$to = $inputEntry.getTotalTo();
-	        					$missingTO = 0;
+	        					$missingTO = array();
 
 	        					//go in saprf and do the shit.
         					    $TOlines = $this->getDoctrine()
@@ -60,17 +60,24 @@ class ProductivityController extends Controller
 										$line.setRecorded(1);
 									}
 									else{
-										$missingTO += 1; //pas ok
+										$missingTO[] = $line; //pas ok
+
 									}
 								}
 
 								//update in inputentry the to lines
 								$inputEntry.setTotalTo($to);
+
+								//add not affected tolines to review input error
+								if(count($missingTO) > 0){
+									//add to review error
+								}
 	        				}
 	        			}
 	        		}
 
 	        		//process finished -> +1 input done in sapImport
+	        		// faire un check error avant
 	        		$sapToProcessDay.setInputs($sapToProcessDay.getInputs() + 1);
 
 	        		if($sapToProcessDay.getInputs() == 15){ //5 teams*3shifts -> should be changed to team.count*team.shift.count
@@ -86,12 +93,18 @@ class ProductivityController extends Controller
 	
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay.computeHours();
-			
+
         }//foreach input
 
 		//check inputs nb in sapImports , and if manque des inputs -> add to error review
         //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
 
+        //select userinput to display (=all basically -> do better with ajax or something)
+		$UserInputDisplay = $this->getDoctrine()
+		 ->getManager()
+         ->getRepository('SEInputBundle:UserInput')
+         ->findBy(array('process' => 1))
+        ;
 
 		/*	
 		for every couples sap/user :
@@ -119,7 +132,8 @@ class ProductivityController extends Controller
 		->display data calculated (highchart and data tables)
 		-> take apero
 		*/
-    	return $this->render('SEReportBundle:Productivity:prod.html.twig');
+    	return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
+    		'UserInputDisplay' => $UserInputDisplay));
 	}
 
 	public function menuAction()
