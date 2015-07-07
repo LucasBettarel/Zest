@@ -159,11 +159,8 @@ class ProductivityController extends Controller
         // on verra plus tard pour celui la
 
         //select userinput to display (=all basically -> do better with ajax or something)
-		$UserInputDisplay = $this->getDoctrine()
-		 ->getManager()
-         ->getRepository('SEInputBundle:UserInput')
-         ->findBy(array('process' => 1))
-        ;
+		$UserInputDisplay = $em->getRepository('SEInputBundle:UserInput')
+         ->findBy(array('process' => 1));
 
 		/*	
 		for every couples sap/user :

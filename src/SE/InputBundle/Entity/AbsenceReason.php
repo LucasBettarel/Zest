@@ -121,4 +121,9 @@ class AbsenceReason
     {
         return $this->detail;
     }
+
+    public function getAbsenceSelect()
+    {
+        return sprintf('%s - %s', $this->name, $this->detail);
+    }
 }
