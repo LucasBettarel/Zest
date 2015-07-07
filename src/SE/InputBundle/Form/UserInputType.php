@@ -26,7 +26,12 @@ class UserInputType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('user', 'text')
+            ->add('user', 'entity', array(
+                'class'    => 'SEInputBundle:User',
+                'property' => 'name', 
+                'multiple' => false,
+                'expanded' => false
+                ), array('required' => true))
             ->add('team', 'entity', array(
                 'class'    => 'SEInputBundle:Team',
                 'property' => 'name', 

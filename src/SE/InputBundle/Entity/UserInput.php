@@ -61,7 +61,8 @@ class UserInput
     private $updatedAt;
 
     /**
-     * @ORM\Column(name="user", type="string", nullable=false)
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
@@ -174,29 +175,6 @@ class UserInput
     public function updateDate()
     {
         $this->setUpdatedAt(new \Datetime());
-    }
-
-    /**
-     * Set user
-     *
-     * @param string $user
-     * @return UserInput
-     */
-    public function setUser($user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return string 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     /**
@@ -519,5 +497,28 @@ class UserInput
     public function getReview()
     {
         return $this->review;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \SE\InputBundle\Entity\User $user
+     * @return UserInput
+     */
+    public function setUser(\SE\InputBundle\Entity\User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SE\InputBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
