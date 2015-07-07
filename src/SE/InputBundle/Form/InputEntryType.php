@@ -28,7 +28,7 @@ class InputEntryType extends AbstractType
                           'required' => false))
             ->add('absence_reason', 'entity', array(
                 'class'    => 'SEInputBundle:AbsenceReason',
-                'property' => 'name', 
+                'property' => 'detail', 
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => false))

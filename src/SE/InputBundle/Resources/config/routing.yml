@@ -29,3 +29,7 @@ se_input_set_import:
 se_input_welcome:
     path:     /
     defaults: { _controller: SEInputBundle:Entry:welcome }
+
+se_input_review:
+    path:     /review
+    defaults: { _controller: SEInputBundle:Entry:review }

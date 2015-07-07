@@ -78,3 +78,36 @@
 .th-options{
 	min-width: 230px;
 }
+
+.panel-import{
+	border-color: #FAC51C;
+}
+
+.panel-import>.panel-heading{
+  color: #fff;
+  background-color: #FAC51C;
+  border-color: #FAC51C;
+}
+
+.panel-input{
+	border-color: #1ABC9C;
+}
+
+.panel-input>.panel-heading{
+  color: #fff;
+  background-color: #1ABC9C;
+  border-color: #1ABC9C;
+}
+
+.panel-hour{
+	border-color: #EB7260;
+}
+
+.panel-hour>.panel-heading{
+  color: #fff;
+  background-color: #EB7260;
+  border-color: #EB7260;
+}
+
+
+

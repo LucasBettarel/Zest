@@ -5,6 +5,7 @@ namespace SE\InputBundle\Controller;
 use SE\InputBundle\Entity\Employee;
 use SE\InputBundle\Entity\UserInput;
 use SE\InputBundle\Form\UserInputType;
+use SE\InputBundle\Entity\InputReview;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -50,5 +51,19 @@ class EntryController extends Controller
   public function welcomeAction()
     {
       return $this->render('SEInputBundle:Entry:welcome.html.twig');
+    }
+
+  public function reviewAction()
+    {
+      //select input errors
+      $inputErrors = $this->getDoctrine()
+       ->getManager()
+       ->getRepository('SEInputBundle:InputReview')
+       ->findAll()
+      ;
+
+      return $this->render('SEInputBundle:Entry:review.html.twig', array(
+        'inputErrors' => $inputErrors
+      ));
     }
 }

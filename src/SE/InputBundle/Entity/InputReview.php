@@ -41,15 +41,16 @@ class InputReview
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\IssueStatus")
-     * @ORM\JoinColumn(nullable=true)
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=true)
      */
-    private $status;
+    private $status = 0;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string", length=255)
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
      */
     private $comment;
 
@@ -223,13 +224,14 @@ class InputReview
         return $this->user;
     }
 
+
     /**
      * Set status
      *
-     * @param \SE\InputBundle\Entity\IssueStatus $status
+     * @param boolean $status
      * @return InputReview
      */
-    public function setStatus(\SE\InputBundle\Entity\IssueStatus $status = null)
+    public function setStatus($status)
     {
         $this->status = $status;
 
@@ -239,7 +241,7 @@ class InputReview
     /**
      * Get status
      *
-     * @return \SE\InputBundle\Entity\IssueStatus 
+     * @return boolean 
      */
     public function getStatus()
     {
