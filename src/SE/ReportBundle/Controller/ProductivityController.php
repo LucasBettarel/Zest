@@ -14,6 +14,7 @@ class ProductivityController extends Controller
 	public function indexAction()
 	{
 		$em = $this->getDoctrine()->getManager();
+		$flusher = false;
 
 		//select sapimports not processed (one...)
 		$sapToProcess = $em->getRepository('SEInputBundle:SapImports')
@@ -74,19 +75,23 @@ class ProductivityController extends Controller
 								if(count($missingTO) > 0){
 					         		$missingHour = new InputReview();
 					         		$missingHour->setDate($inputDate);
-					         		$typeIssue->
-					         		$missingHour->setType(4);
+					         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(4);
+					         		$missingHour->setType($typeIssue);
 					         		$missingHour->setToerror("test");
 					         		$missingHour->setUser($inputUser);
 					         		$missingHour->setStatus(0);
 
 					  		        $em->persist($missingHour);
+					  		        $flusher = true;
 								}
 	        				}
 	        			}
 	        		}
 
-	        		$em->flush();
+	        		if ($flusher){
+	        			$em->flush();
+	        			$flusher = false;
+	        		}
 
 	        		//process finished -> +1 input done in sapImport
 	        		//faire un check error avant
@@ -101,15 +106,19 @@ class ProductivityController extends Controller
 	        	else{
 	        		//sapImport not done->add to error review (process = 0)
 	         		$missingimport = new InputReview();
-
+	         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 	         		$missingimport->setDate($inputDate);
-	         		$missingimport->setType(1);
+	         		$missingimport->setType($typeIssue);
 	         		$missingimport->setStatus(0);
 
 	  		        $em->persist($missingimport);
+	  		        $flusher = true;
 	        	}
         	}//foreach sap
-        	$em->flush();
+		    if ($flusher){
+    			$em->flush();
+    			$flusher = false;
+    		}
 	
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
@@ -138,15 +147,16 @@ class ProductivityController extends Controller
          		$missinginput->setStatus(0);
 
   		        $em->persist($missinginput);
+  		        $flusher = true;
         	}
-        	$em->flush();
+        	if ($flusher){
+    			$em->flush();
+    			$flusher = false;
+    		}
         }
 
         //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
         // on verra plus tard pour celui la
-
-        //flush moi ce bordel
-        
 
         //select userinput to display (=all basically -> do better with ajax or something)
 		$UserInputDisplay = $this->getDoctrine()
