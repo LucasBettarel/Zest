@@ -16,16 +16,12 @@ class ProductivityController extends Controller
 		$em = $this->getDoctrine()->getManager();
 
 		//select sapimports not processed (one...)
-		$sapToProcess = $this->getDoctrine()
-		 ->getManager()
-         ->getRepository('SEInputBundle:SapImports')
+		$sapToProcess = $em->getRepository('SEInputBundle:SapImports')
          ->findBy(array('process' => 0))
         ;
 
         //select userinput not processed (...toMany)
-		$inputToProcess = $this->getDoctrine()
-		 ->getManager()
-         ->getRepository('SEInputBundle:UserInput')
+		$inputToProcess = $em->getRepository('SEInputBundle:UserInput')
          ->findBy(array('process' => 0))
         ;
 
@@ -78,6 +74,7 @@ class ProductivityController extends Controller
 								if(count($missingTO) > 0){
 					         		$missingHour = new InputReview();
 					         		$missingHour->setDate($inputDate);
+					         		$typeIssue->
 					         		$missingHour->setType(4);
 					         		$missingHour->setToerror("test");
 					         		$missingHour->setUser($inputUser);
@@ -88,6 +85,8 @@ class ProductivityController extends Controller
 	        				}
 	        			}
 	        		}
+
+	        		$em->flush();
 
 	        		//process finished -> +1 input done in sapImport
 	        		//faire un check error avant
@@ -110,6 +109,7 @@ class ProductivityController extends Controller
 	  		        $em->persist($missingimport);
 	        	}
         	}//foreach sap
+        	$em->flush();
 	
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
@@ -132,20 +132,21 @@ class ProductivityController extends Controller
         	//and if manque des inputs -> add to error review
         	foreach ($incompleteImports as $incomplete) {
         		$missinginput = new InputReview();
-
+        		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
          		$missinginput->setDate($incomplete->getDate());
-         		$missinginput->setType(2);
+         		$missinginput->setType($typeIssue);
          		$missinginput->setStatus(0);
 
   		        $em->persist($missinginput);
         	}
+        	$em->flush();
         }
 
         //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
         // on verra plus tard pour celui la
 
         //flush moi ce bordel
-        $em->flush();
+        
 
         //select userinput to display (=all basically -> do better with ajax or something)
 		$UserInputDisplay = $this->getDoctrine()
@@ -181,7 +182,10 @@ class ProductivityController extends Controller
 		-> take apero
 		*/
     	return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
-    		'UserInputDisplay' => $UserInputDisplay));
+    		'incompleteImports' => $incompleteImports,
+    		'sapToProcess' => $sapToProcess,
+    		'inputToProcess' => $inputToProcess
+    		));
 	}
 
 	public function menuAction()

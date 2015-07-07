@@ -4,6 +4,27 @@
 
 {% block sereport_body %}
   <h2>Productivity Reports</h2>
- lalal
+
+  <div class="col-md-3 well">
+  	{% for sap in sapToProcess %}
+  		{{ sap.date|date("m/d/Y") }}  - {{ sap.inputs }} - {{ sap.process }}
+  		<br>
+    {% endfor %}
+  </div>	
+
+  <div class="col-md-3 well">
+  	{% for input in inputToProcess %}
+  		{{ input.dateInput|date("m/d/Y") }}  - {{ input.team }} - {{ input.shift }}
+  		<br>
+    {% endfor %}
+  </div>	
+
+   <div class="col-md-3 well">
+  	{% for incomplete in incompleteImports %}
+  		{{ incomplete.date|date("m/d/Y") }}  - {{ incomplete.inputs }} - {{ incomplete.process }}
+  		<br>
+    {% endfor %}
+  </div>
+
 
 {% endblock %}
