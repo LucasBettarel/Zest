@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block seinput_body %}
-	<h2>New Employee</h2>
- {{ include("SEInputBundle:Settings:employee_form.html.twig") }}
+  <header class="h-employee">
+  	<div class="line"></div>
+  	<h2><i class="glyphicon glyphicon-plus"> </i> New Employee</h2>
+  </header>
+
+  {{ include("SEInputBundle:Settings:employee_form.html.twig") }}
 
 	<p>
     <a href="{{ path('se_input_employees') }}" class="btn btn-default">

@@ -3,7 +3,10 @@
 {% block title %}Productivity - {{ parent() }}{% endblock %}
 
 {% block sereport_body %}
-  <h2>Productivity Reports</h2>
+  <header class="h-sap">
+    <div class="line"></div>
+    <h2><i class="glyphicon glyphicon-stats"> </i> Productivity report</h2>
+  </header>
 
   <div class="col-md-3 well">
   	{% for sap in sapToProcess %}

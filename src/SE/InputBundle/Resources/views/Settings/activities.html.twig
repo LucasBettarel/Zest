@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block seinput_body %}
-	<h2>Activities</h2>
-	<p>
+  <header class="h-activity">
+  	<div class="line"></div>
+  	<h2><i class="glyphicon glyphicon-briefcase"> </i> Activities</h2>
+  </header>
+
+  	<p>
 	    <a href="{{ path('se_input_activities_add') }}"  class="btn btn-success">
 	      <i class="glyphicon glyphicon-plus"></i>
 	      Add a new Activity

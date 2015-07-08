@@ -33,7 +33,7 @@ class EntryController extends Controller
 
     $request->getSession()->getFlashBag()->add('notice', 'new working hours entry saved');
 
-    return $this->redirect($this->generateUrl('se_input_home'));
+    return $this->redirect($this->generateUrl('se_input_review'));
     }
 
     return $this->render('SEInputBundle:Entry:input_form.html.twig', array(

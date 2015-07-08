@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block seinput_body %}
-	<h2>Employees</h2>
-	<p>
+  <header class="h-employee">
+  	<div class="line"></div>
+  	<h2><i class="glyphicon glyphicon-user"> </i> Employees</h2>
+  </header>
+
+  <p>
 	    <a href="{{ path('se_input_employees_add') }}"  class="btn btn-success">
 	      <i class="glyphicon glyphicon-plus"></i>
 	      Add a new employee

@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block seinput_body %}
-	<h2>New Activity</h2>
+
+  <header class="h-activity">
+  	<div class="line"></div>
+  	<h2><i class="glyphicon glyphicon-plus"> </i> New Activity</h2>
+  </header>
 
 	{{ include("SEInputBundle:Settings:activity_form.html.twig") }}
 

@@ -1,8 +1,48 @@
 body {
   margin-top: 60px;
+  margin-left: 60px;
 }
 
 body, html {
 	height: 100%;
  	position: relative;
 }
+
+.line{
+  height: 5px;
+  background-color: #1ABC9C;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+header.h-input .line{background-color: #1ABC9C;}
+header.h-review .line{background-color: #EB7260;}
+header.h-sap .line{background-color: #77C5F7;}
+header.h-activity .line{background-color: #9365B8;}
+header.h-employee .line{background-color: #A38F84;}
+header.h-input .line{background-color: #1ABC9C;}
+header.h-input .line{background-color: #1ABC9C;}
+header.h-input .line{background-color: #1ABC9C;}
+header.h-input .line{background-color: #1ABC9C;}
+
+header{
+  height: 75px;
+  background-color: rgba(26, 188, 156, 0.1);
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-bottom: 15px;
+  box-shadow: 0px 0px 10px #888;
+}
+
+header i{font-size: 0.8em;}
+
+header.h-input{background-color: rgba(26, 188, 156, 0.1);}
+header.h-review{background-color: rgba(235, 114, 96, 0.1);}
+header.h-sap{background-color: rgba(119, 197, 247, 0.1);}
+header.h-activity{background-color: rgba(147, 101, 184, 0.1);}
+header.h-employee{background-color: rgba(163, 143, 132, 0.1);}
+header.h-input{background-color: rgba(26, 188, 156, 0.1);}
+header.h-input{background-color: rgba(26, 188, 156, 0.1);}
+header.h-input{background-color: rgba(26, 188, 156, 0.1);}

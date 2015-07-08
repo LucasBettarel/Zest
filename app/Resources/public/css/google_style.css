@@ -84,7 +84,7 @@
     width: 60px; /* will be transitioned to 340px */
     border-top: 1px solid #333;
     background: #333;
-    transform: translateX(-60px); /* will be transitioned to 0px */
+   /* transform: translateX(-60px); /* will be transitioned to 0px */
     transition: transform 0.3s, width 0.3s;
 }
 
@@ -255,29 +255,12 @@ input.gn-search:focus {
 
 /******************CUSTOM THEME*********************/
 
-.gn-menu a.glyphicon-pencil:hover{
-    color:#1ABC9C;
-}
-
-.gn-menu a.glyphicon-cloud:hover, .gn-menu a.glyphicon-refresh:hover{
-    color:#77C5F7;
-}
-
-.gn-menu a.glyphicon-scale:hover, .gn-menu a.glyphicon-file:hover{
-    color:#FAC51C;
-}
-
-.gn-menu a.glyphicon-fire:hover, .gn-menu a.glyphicon-flag:hover{
-    color:#EB7260;
-}
-
-.gn-menu a.glyphicon-user:hover{
-    color:#A38F84;
-}
-
-.gn-menu a.glyphicon-briefcase:hover, .gn-menu a.glyphicon-usd:hover{
-    color:#9365B8;
-}
+.gn-menu a.glyphicon-pencil:hover, .gn-menu li.active a {color:#1ABC9C;}
+.gn-menu a.glyphicon-cloud:hover, .gn-menu a.glyphicon-refresh:hover, .gn-menu li.active a{color:#77C5F7;}
+.gn-menu a.glyphicon-scale:hover, .gn-menu a.glyphicon-file:hover, .gn-menu li.active a {color:#FAC51C;}
+.gn-menu a.glyphicon-dashboard:hover, .gn-menu a.glyphicon-flag:hover, .gn-menu li.active a{color:#EB7260;}
+.gn-menu a.glyphicon-user:hover, .gn-menu li.active a {color:#A38F84;}
+.gn-menu a.glyphicon-briefcase:hover, .gn-menu a.glyphicon-usd:hover, .gn-menu li.active a {color:#9365B8;}
 
 #gn-menu img{
   margin-top: -3px;
@@ -293,3 +276,27 @@ input.gn-search:focus {
 #gn-menu li a:before{
     font-family: 'Glyphicons Halflings';
 }
+
+/****************INDICATOR******************/
+
+.no-touch .gn-menu li a:hover{
+    margin-left: 3px;
+}
+
+.indicator, .indicator:hover{
+    height: 60px;
+    width: 3px;
+    float: left;
+}
+
+.dashboard{background-color: #EB7260;}
+.manhours{background-color: #1ABC9C;}
+.sap{background-color: #77C5F7;}
+.weight{background-color: #FAC51C;}
+.employee{background-color: #A38F84;}
+.activity{background-color: #9365B8;}
+
+li.active{
+    background: #444;
+}
+
