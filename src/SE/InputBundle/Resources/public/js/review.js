@@ -1,12 +1,10 @@
 $(document).ready(function() {
-	totalError = importErrors+inputErrors+toErrors+hourErrors;
-
 	$('#container').highcharts({
         chart: {
             type: 'pie'
         },
         title: {
-            text: totalError+" errors to review!"
+            text: ''
         },
         legend: {
             align: 'right',

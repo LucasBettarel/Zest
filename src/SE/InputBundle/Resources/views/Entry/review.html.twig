@@ -8,13 +8,22 @@
     <h2><i class="glyphicon glyphicon-dashboard"> </i> Inputs dashboard</h2>
   </header>
 
-  <div class="col-md-12">
-    <div class="panel panel-default col-md-6" id="container" style="height:300px;">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>
+          <i class="glyphicon glyphicon-alert"> </i> {{ importErrors|length + inputErrors|length + toErrors|length +  hourErrors|length }} errors to review!
+          </h4>
+        </div>
+        <div class="panel-body" id="container" style="height:287px;">
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
       <div class="panel panel-warning">
       <!-- Default panel contents -->
-      <div class="panel-heading">Some Manhours inputs are missing in the database.</div>
+      <div class="panel-heading"><h4>Some Manhours inputs are missing in the database.</h4></div>
         <div class="panel-body">
           <p>Please find the according team and date, and add a new input in the appropriate section. If the issue is validated as is, the productivity for this team will be counted as 0.</p>  
 
@@ -45,71 +54,72 @@
     </div>
   </div>
 
-  <div id="filters">
-    <div class="row">
-      <div id="1" class="col-md-12">
-        <h4>
-          <a id="" class="label label-primary">All</a>
-          <a id="Outbound4" class="label label-default">Outbound4</a>
-          <a id="Inbound4" class="label label-default">Inbound4</a>
-          <a id="Local" class="label label-default">Local</a>
-          <a id="Outbound3" class="label label-default">Outbound3</a>
-          <a id="Inbound3" class="label label-default">Inbound3</a>
-          <a id="Releasing" class="label label-default">Releasing</a>
-        </h4>
-      </div>
-    </div>
-    <div class="row">
-      <div id="2" class="col-md-12">
-        <h4>
-          <a id="" class="label label-primary">All</a>
-          <a id="1" class="label label-default">Shift 1</a>
-          <a id="2" class="label label-default">Shift 2</a>
-          <a id="3" class="label label-default">Shift 3</a>
-        </h4>
-      </div>
-    </div>
-  </div>
-
   <div class="row">
     <div class="col-md-12">
-      <!-- Table -->
-      <div class="table-responsive">
-          <table id="table" class="table table-hover table-striped display">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Team</th>
-                <th>Shift</th>
-                <th>Manhours</th>
-                <th>HC</th>
-                <th>TO</th>
-                <th>Productivity</th>
-                <th>Errors</th>
-                <th>Options</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for input in userInputs %}
-                <tr>
-                  <td>{{ input.dateInput|date('d-m-Y') }}</td>
-                  <td>{{ input.team.name }}</td>
-                  <td>{{ input.shift.id }}</td>
-                  <td>{{ input.totalHoursInput }}</td>
-                  <td>{{ input.inputEntries|length }}</td>
-                  <td>{{ input.totalToInput }}</td>
-                  <td>{{ input.totalProdInput }}</td>
-                  <td>{% if input.review == 0 %}
-                        <i class="glyphicon glyphicon-alert text-warning"></i>
-                      {% else %}
-                        <i class="glyphicon glyphicon-ok text-success"></i>
-                      {% endif %}
-                  </td>
-                  <td>options</td>  
-                </tr>
-              {% endfor %}                
-            </tbody>
-        </table>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="pull-left col-md-2" style="font-weight:bold;">Input History</div>
+          <div id="filters">
+            <div class="pull-left" id="1">
+                <a id="" class="label label-primary">All</a>
+                <a id="Outbound4" class="label label-default">Outbound4</a>
+                <a id="Inbound4" class="label label-default">Inbound4</a>
+                <a id="Local" class="label label-default">Local</a>
+                <a id="Outbound3" class="label label-default">Outbound3</a>
+                <a id="Inbound3" class="label label-default">Inbound3</a>
+                <a id="Releasing" class="label label-default">Releasing</a>
+            </div>
+            <div id="2">
+              | 
+                <a id="" class="label label-primary">All</a>
+                <a id="1" class="label label-default">Shift 1</a>
+                <a id="2" class="label label-default">Shift 2</a>
+                <a id="3" class="label label-default">Shift 3</a>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-12">
+            <!-- Table -->
+            <div class="table-responsive">
+                <table id="table" class="table table-hover table-striped display">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Team</th>
+                      <th>Shift</th>
+                      <th>Manhours</th>
+                      <th>HC</th>
+                      <th>TO</th>
+                      <th>Productivity</th>
+                      <th>Errors</th>
+                      <th>Options</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for input in userInputs %}
+                      <tr>
+                        <td>{{ input.dateInput|date('d-m-Y') }}</td>
+                        <td>{{ input.team.name }}</td>
+                        <td>{{ input.shift.id }}</td>
+                        <td>{{ input.totalHoursInput }}</td>
+                        <td>{{ input.inputEntries|length }}</td>
+                        <td>{{ input.totalToInput }}</td>
+                        <td>{{ input.totalProdInput }}</td>
+                        <td>{% if input.review == 0 %}
+                              <i class="glyphicon glyphicon-alert text-warning"></i>
+                            {% else %}
+                              <i class="glyphicon glyphicon-ok text-success"></i>
+                            {% endif %}
+                        </td>
+                        <td><i class="glyphicon glyphicon-edit"> </i> <i class="text-danger glyphicon glyphicon-remove-circle"> </i> <i class="glyphicon glyphicon-check text-success"> </i></td>  
+                      </tr>
+                    {% endfor %}                
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
