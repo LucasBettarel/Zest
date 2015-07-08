@@ -12,4 +12,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserInputRepository extends EntityRepository
 {
+	public function getLastMonth()
+	{
+		$now = date('Y-m-d H:i:s');
+		$lastmonth = date('Y-m-d H:i:s', strtotime($now . "-30 days"));
+
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+  		//	->where("a.dateInput BETWEEN :now AND :lastmonth")
+  		//	->setParameter('now',$now)
+  		//	->setParameter('lastmonth',$lastmonth)
+		    ->orderBy('a.dateInput', 'DESC')
+			->getQuery()
+			->getResult()
+  		;
+  
+		return $qb;
+	}
 }

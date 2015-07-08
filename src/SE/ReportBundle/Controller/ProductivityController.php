@@ -75,7 +75,7 @@ class ProductivityController extends Controller
 								if(count($missingTO) > 0){
 					         		$missingHour = new InputReview();
 					         		$missingHour->setDate($inputDate);
-					         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(4);
+					         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
 					         		$missingHour->setType($typeIssue);
 					         		$missingHour->setToerror("test");
 					         		$missingHour->setUser($inputUser);
@@ -138,21 +138,22 @@ class ProductivityController extends Controller
         ;
 
         if(!is_null($incompleteImports)){
+        	$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
         	//and if manque des inputs -> add to error review
         	foreach ($incompleteImports as $incomplete) {
-        		$missinginput = new InputReview();
-        		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
-         		$missinginput->setDate($incomplete->getDate());
-         		$missinginput->setType($typeIssue);
-         		$missinginput->setStatus(0);
-
-  		        $em->persist($missinginput);
-  		        $flusher = true;
-        	}
-        	if ($flusher){
-    			$em->flush();
-    			$flusher = false;
-    		}
+	    		if(!$em->getRepository('SEInputBundle:InputReview')->findBy(array('date' => $incomplete->getDate(), 'type' => $typeIssue))){
+		    		$missinginput = new InputReview();
+		     		$missinginput->setDate($incomplete->getDate());
+		     		$missinginput->setType($typeIssue);
+		     		$missinginput->setStatus(0);
+			        $em->persist($missinginput);
+			        $flusher = true;
+				}			       
+	    	}
+	    	if ($flusher){
+				$em->flush();
+				$flusher = false;
+			}
         }
 
         //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports

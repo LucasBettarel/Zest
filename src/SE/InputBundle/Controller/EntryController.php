@@ -55,15 +55,30 @@ class EntryController extends Controller
 
   public function reviewAction()
     {
-      //select input errors
-      $inputErrors = $this->getDoctrine()
-       ->getManager()
-       ->getRepository('SEInputBundle:InputReview')
-       ->findAll()
-      ;
+      $em = $this->getDoctrine()->getManager();
+
+      //select errors
+      $importErrors = $em->getRepository('SEInputBundle:InputReview')
+       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(1)));
+
+      $inputErrors = $em->getRepository('SEInputBundle:InputReview')
+       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(2)));
+
+      $toErrors = $em->getRepository('SEInputBundle:InputReview')
+       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(3)));
+
+      $hourErrors = $em->getRepository('SEInputBundle:InputReview')
+       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(4)));
+
+      $userInputs = $em->getRepository('SEInputBundle:UserInput')
+       ->getLastMonth();
 
       return $this->render('SEInputBundle:Entry:review.html.twig', array(
-        'inputErrors' => $inputErrors
+        'importErrors' => $importErrors,
+        'inputErrors' => $inputErrors,
+        'toErrors' => $toErrors,
+        'hourErrors' => $hourErrors,
+        'userInputs' => $userInputs
       ));
     }
 }
