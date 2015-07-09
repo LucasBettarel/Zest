@@ -26,6 +26,11 @@ class ProductivityController extends Controller
          ->findBy(array('process' => 0))
         ;
 
+        //tous les inputs du dernier mois
+        $userInputs = $em->getRepository('SEInputBundle:UserInput')
+         ->getLastMonth();
+
+
         //for each inputToProcess(not processed)
         foreach ($inputToProcess as $inputToProcessDay) {
         	$inputUser = $inputToProcessDay->getUser();
@@ -134,36 +139,34 @@ class ProductivityController extends Controller
 
         }//foreach input
 
-		//check inputs nb in sapImports (last 62 = 2 month-> need to change maybe), 
+		//check inputs nb in sapImports (since beginning of the month), 
         $incompleteImports = $em->getRepository('SEInputBundle:SapImports')
          ->getIncompleteImports();
         ;
 
         if(!is_null($incompleteImports)){
-        	$lastMonth = new \DateTime();
-        	$now = $lastMonth;
-        	$lastMonth->modify( '-'.(date('j')-1).' day' );
-			$daydiff = $now->diff($lastMonth);
-			$daydiff = $daydiff->days;
+
+        	$now = new \DateTime();
+        	$now->setTime(00, 00, 00);
+			$lastMonth = new \DateTime();
+        	$lastMonth->setTime(00, 00, 00)->modify( '-'.(date('j')-1).' day' );
+			$daydiff = $now->diff($lastMonth)->days;
 			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
 			$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
 			$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 			$date = array();
-
-	/*to delete		$now = new \DateTime();
-			$lastMonth = new \DateTime();
-			$lastMonth->modify( '-'.(date('j')-1).' day' );
-			$daydiff = abs($now - $lastMonth);
-			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
-*/
+			$lateam = array();
+			$lashift = array();
+			$toutdesuite = $now->format("Y-m-d");
 
         	for ($i=0; $i < $daydiff; $i++) { 
+    			$now->modify("-1 day");
         		foreach ($teams as $team) {
         			$shiftCount = $team->getShiftnb();
         			for ($k=0; $k < $shiftCount; $k++) {
-        				foreach ($incompleteImports as $incomplete) {
-        					if(!(($incomplete->getDate() == $now) and ($incomplete->getTeam() == $team) and ($incomplete->getShift()->getId() == $k))){
-        						if(!$em->getRepository('SEInputBundle:InputReview')->findBy(array('date' => $incomplete->getDate(), 'type' => $typeIssue))){
+        				foreach ($userInputs as $userInput) {
+        					if(($userInput->getDateInput()->format("Y-m-d") != $toutdesuite) and ($userInput->getTeam() != $team) and ($userInput->getShift()->getId() != $k+1)){
+        						if(!$em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $userInput->getDate(), 'type' => $typeIssue))){
 						    		$missinginput = new InputReview();
 						     		$missinginput->setDate($now);
 						     		$missinginput->setType($typeIssue);
@@ -172,11 +175,12 @@ class ProductivityController extends Controller
 									$missinginput->setShift($shifts[$k]);
 							        $em->persist($missinginput);
 							        $flusher = true;
-							        $date[] = $now;
+							        $date[] = $now->format('Y-m-d');
+							        $lateam[] = $team->getName();
+							        $lashift[] = $shifts[$k]->getIdentifier();
 								}			       
         					}
         				}
-        				$now->modify("-1 day");
         			}
         		}
         	}
@@ -208,7 +212,7 @@ class ProductivityController extends Controller
         // on verra plus tard pour celui la
 
         //select userinput to display (=all basically -> do better with ajax or something)
-		$UserInputDisplay = $em->getRepository('SEInputBundle:UserInput')
+		$userInputDisplay = $em->getRepository('SEInputBundle:UserInput')
          ->findBy(array('process' => 1));
 
 		/*	
@@ -243,7 +247,10 @@ class ProductivityController extends Controller
     		'inputToProcess' => $inputToProcess,
     		'daydiff' => $daydiff,
     		'date' => $date,
-    		'lastMonth' => $lastMonth
+    		'toutdesuite' => $toutdesuite,
+    		'lastMonth' => $lastMonth,
+    		'lashift' => $lashift,
+    		'lateam' => $lateam
     		));
 	}
 

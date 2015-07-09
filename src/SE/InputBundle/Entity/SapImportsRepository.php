@@ -21,7 +21,8 @@ class SapImportsRepository extends EntityRepository
 		$qb = $this
 		->createQueryBuilder('a')
 		->select("a")
-		->where('a.inputs BETWEEN 0 AND 15')
+		//to adapt with number of team * team.shiftnb
+		->where('a.inputs BETWEEN 0 AND 10')
 		->where("a.date< '".$now->format("Y-m-d H:i:s")."'")
         ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
 	    ->orderBy('a.date', 'DESC')

@@ -28,14 +28,31 @@
   		<br>
     {% endfor %}
   </div>
+<div class="col-md-12">
+<div class="col-md-2">
 
   day diff : {{daydiff}}
-    last month : {{lastMonth|date("m/d/Y")}}
-
+    toutdesuite : {{toutdesuite|date("m/d/Y H:i:s")}}
+    lastmonth : {{lastMonth|date("m/d/Y H:i:s")}}
+</div>
+<div class="col-md-2">
 {% for dat in date %}
-      {{ dat|date("m/d/Y") }}
+     {{ dat }}
       <br>
     {% endfor %}
-
+</div>
+<div class="col-md-2">
+{% for te in lateam %}
+      {{ te }}
+      <br>
+    {% endfor %}
+</div>
+<div class="col-md-2">
+{% for se in lashift %}
+      {{ se }}
+      <br>
+    {% endfor %}
+</div>
+</div>
 
 {% endblock %}
