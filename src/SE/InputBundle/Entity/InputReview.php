@@ -41,6 +41,18 @@ class InputReview
     private $user;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Team")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $team;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Shift")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $shift;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="status", type="boolean", nullable=true)
@@ -246,5 +258,52 @@ class InputReview
     public function getStatus()
     {
         return $this->status;
+    }
+
+
+    /**
+     * Set team
+     *
+     * @param \SE\InputBundle\Entity\Team $team
+     * @return InputReview
+     */
+    public function setTeam(\SE\InputBundle\Entity\Team $team = null)
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    /**
+     * Get team
+     *
+     * @return \SE\InputBundle\Entity\Team 
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
+
+    /**
+     * Set shift
+     *
+     * @param \SE\InputBundle\Entity\Shift $shift
+     * @return InputReview
+     */
+    public function setShift(\SE\InputBundle\Entity\Shift $shift = null)
+    {
+        $this->shift = $shift;
+
+        return $this;
+    }
+
+    /**
+     * Get shift
+     *
+     * @return \SE\InputBundle\Entity\Shift 
+     */
+    public function getShift()
+    {
+        return $this->shift;
     }
 }

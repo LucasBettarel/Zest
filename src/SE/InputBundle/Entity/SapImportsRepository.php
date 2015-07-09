@@ -12,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class SapImportsRepository extends EntityRepository
 {
+	public function getIncompleteImports()
+	{
+		$now = new \DateTime();
+		$lastMonth = new \DateTime();
+		$lastMonth->modify( '-'.(date('j')-1).' day' );
+
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->where('a.inputs BETWEEN 0 AND 15')
+		->where("a.date< '".$now->format("Y-m-d H:i:s")."'")
+        ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
+	    ->orderBy('a.date', 'DESC')
+		->getQuery()
+		->getResult()
+		;
+
+  
+		return $qb;
+	}
 }

@@ -96,14 +96,14 @@ class UserInput
      *
      * @ORM\Column(name="process", type="boolean", nullable=true)
      */
-    private $process;
+    private $process = 0;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="review", type="boolean", nullable=true)
      */
-    private $review;
+    private $review = 0;
 
     /**
      * Get id

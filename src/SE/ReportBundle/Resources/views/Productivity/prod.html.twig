@@ -14,7 +14,7 @@
 
   <div class="col-md-3 well">
   	{% for input in inputToProcess %}
-  		{{ input.dateInput|date("m/d/Y") }}  - {{ input.team }} - {{ input.shift }}
+  		{{ input.dateInput|date("m/d/Y") }}  - {{ input.team.name }} - {{ input.shift.identifier }}
   		<br>
     {% endfor %}
   </div>	
@@ -25,6 +25,14 @@
   		<br>
     {% endfor %}
   </div>
+
+  day diff : {{daydiff}}
+    last month : {{lastMonth|date("m/d/Y")}}
+
+{% for dat in date %}
+      {{ dat|date("m/d/Y") }}
+      <br>
+    {% endfor %}
 
 
 {% endblock %}
