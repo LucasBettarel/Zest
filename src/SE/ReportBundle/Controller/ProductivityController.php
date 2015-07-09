@@ -88,11 +88,11 @@ class ProductivityController extends Controller
 	        			}
 	        		}
 
-	        		if ($flusher){
+	        	/*	if ($flusher){
 	        			$em->flush();
 	        			$flusher = false;
 	        		}
-
+*/
 	        		//process finished -> +1 input done in sapImport
 	        		//faire un check error avant
 	        		$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
@@ -104,42 +104,90 @@ class ProductivityController extends Controller
 	        		$inputToProcessDay->setProcess(1);
 	        	}
 	        	else{
-	        		//sapImport not done->add to error review (process = 0)
-	         		$missingimport = new InputReview();
+	        		//check if sap import not already record in errors review
 	         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
-	         		$missingimport->setDate($inputDate);
-	         		$missingimport->setType($typeIssue);
-	         		$missingimport->setStatus(0);
+	        		$already = $this->getDoctrine()
+			               ->getRepository('SEInputBundle:InputReview')
+			               ->findOneBy(array(
+			                   'date' => $inputDate,
+			                   'type' => $typeIssue
+			                ));
+			        if(!$already){
+			        	//sapImport not done and not recorded yet->add to error review (process = 0)
+			        	$missingimport = new InputReview();
+		         		$missingimport->setDate($inputDate);
+		         		$missingimport->setType($typeIssue);
+		         		$missingimport->setStatus(0);
 
-	  		        $em->persist($missingimport);
-	  		        $flusher = true;
+		  		        $em->persist($missingimport);
+		  		        $flusher = true;
+			        }
 	        	}
         	}//foreach sap
-		    if ($flusher){
+/*		    if ($flusher){
     			$em->flush();
     			$flusher = false;
     		}
-	
+*/	
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
 
         }//foreach input
 
 		//check inputs nb in sapImports (last 62 = 2 month-> need to change maybe), 
-        $incompleteImports = $this->getDoctrine()
-		 ->getManager()
-         ->getRepository('SEInputBundle:SapImports')
-         ->createQueryBuilder('s')
-		 ->where('s.inputs BETWEEN 0 AND 15')
-		 ->orderBy('s.date', 'DESC')
-		 ->setMaxResults( 62 )
-		 ->getQuery()
-		 ->getResult();
+        $incompleteImports = $em->getRepository('SEInputBundle:SapImports')
+         ->getIncompleteImports();
         ;
 
         if(!is_null($incompleteImports)){
-        	$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
-        	//and if manque des inputs -> add to error review
+        	$lastMonth = new \DateTime();
+        	$now = $lastMonth;
+        	$lastMonth->modify( '-'.(date('j')-1).' day' );
+			$daydiff = $now->diff($lastMonth);
+			$daydiff = $daydiff->days;
+			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
+			$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
+			$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
+			$date = array();
+
+	/*to delete		$now = new \DateTime();
+			$lastMonth = new \DateTime();
+			$lastMonth->modify( '-'.(date('j')-1).' day' );
+			$daydiff = abs($now - $lastMonth);
+			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
+*/
+
+        	for ($i=0; $i < $daydiff; $i++) { 
+        		foreach ($teams as $team) {
+        			$shiftCount = $team->getShiftnb();
+        			for ($k=0; $k < $shiftCount; $k++) {
+        				foreach ($incompleteImports as $incomplete) {
+        					if(!(($incomplete->getDate() == $now) and ($incomplete->getTeam() == $team) and ($incomplete->getShift()->getId() == $k))){
+        						if(!$em->getRepository('SEInputBundle:InputReview')->findBy(array('date' => $incomplete->getDate(), 'type' => $typeIssue))){
+						    		$missinginput = new InputReview();
+						     		$missinginput->setDate($now);
+						     		$missinginput->setType($typeIssue);
+						     		$missinginput->setStatus(0);
+									$missinginput->setTeam($team);
+									$missinginput->setShift($shifts[$k]);
+							        $em->persist($missinginput);
+							        $flusher = true;
+							        $date[] = $now;
+								}			       
+        					}
+        				}
+        				$now->modify("-1 day");
+        			}
+        		}
+        	}
+
+		    if ($flusher){
+				$em->flush();
+				$em->clear();
+				$flusher = false;
+			}
+
+        	/*and if manque des inputs -> trouver lesquels add to error review
         	foreach ($incompleteImports as $incomplete) {
 	    		if(!$em->getRepository('SEInputBundle:InputReview')->findBy(array('date' => $incomplete->getDate(), 'type' => $typeIssue))){
 		    		$missinginput = new InputReview();
@@ -154,7 +202,7 @@ class ProductivityController extends Controller
 				$em->flush();
 				$flusher = false;
 			}
-        }
+ */       }
 
         //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
         // on verra plus tard pour celui la
@@ -192,7 +240,10 @@ class ProductivityController extends Controller
     	return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
     		'incompleteImports' => $incompleteImports,
     		'sapToProcess' => $sapToProcess,
-    		'inputToProcess' => $inputToProcess
+    		'inputToProcess' => $inputToProcess,
+    		'daydiff' => $daydiff,
+    		'date' => $date,
+    		'lastMonth' => $lastMonth
     		));
 	}
 

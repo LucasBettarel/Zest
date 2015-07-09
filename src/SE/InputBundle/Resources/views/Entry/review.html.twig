@@ -41,8 +41,14 @@
                 {% for error in inputErrors %}
                   <tr>
                     <td>{{ error.date|date('d-m-Y') }}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{% if error.team is not null %}
+                          {{ error.team.name }} 
+                        {% endif %}
+                    </td>
+                    <td>{% if error.shift is not null %}
+                          {{ error.shift.identifier }} 
+                        {% endif %}
+                    </td>
                     <td>options</td>  
                   </tr>
                 {% endfor %}                

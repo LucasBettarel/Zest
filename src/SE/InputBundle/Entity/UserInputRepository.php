@@ -14,15 +14,15 @@ class UserInputRepository extends EntityRepository
 {
 	public function getLastMonth()
 	{
-		$now = date('Y-m-d H:i:s');
-		$lastmonth = date('Y-m-d H:i:s', strtotime($now . "-30 days"));
+		$now = new \DateTime();
+		$lastMonth = new \DateTime();
+		$lastMonth->modify( '-'.(date('j')-1).' day' );
 
 		$qb = $this
 			->createQueryBuilder('a')
 			->select("a")
-  		//	->where("a.dateInput BETWEEN :now AND :lastmonth")
-  		//	->setParameter('now',$now)
-  		//	->setParameter('lastmonth',$lastmonth)
+			->where("a.date< '".$now->format("Y-m-d H:i:s")."'")
+            ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
 		    ->orderBy('a.dateInput', 'DESC')
 			->getQuery()
 			->getResult()
