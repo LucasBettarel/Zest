@@ -128,12 +128,8 @@ class ProductivityController extends Controller
 		  		        $flusher = true;
 			        }
 	        	}
-        	}//foreach sap
-/*		    if ($flusher){
-    			$em->flush();
-    			$flusher = false;
-    		}
-*/	
+        	}
+        	
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
 
@@ -145,68 +141,50 @@ class ProductivityController extends Controller
         ;
 
         if(!is_null($incompleteImports)){
-
-        	$now = new \DateTime();
-        	$now->setTime(00, 00, 00);
-			$lastMonth = new \DateTime();
+        	$today = new \DateTime();
+       		$today->setTime(00, 00, 00);
+        	$lastMonth = new \DateTime();
         	$lastMonth->setTime(00, 00, 00)->modify( '-'.(date('j')-1).' day' );
-			$daydiff = $now->diff($lastMonth)->days;
+			$daydiff = $today->diff($lastMonth)->days;
 			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
+			$teamCount = count($teams);
 			$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
 			$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
-			$date = array();
-			$lateam = array();
-			$lashift = array();
-			$toutdesuite = $now->format("Y-m-d");
+			$found = false;
 
         	for ($i=0; $i < $daydiff; $i++) { 
-    			$now->modify("-1 day");
-        		foreach ($teams as $team) {
-        			$shiftCount = $team->getShiftnb();
+        		$dateCheck = new \DateTime();
+        		$dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
+    			$toutdesuite = $dateCheck->format("Y-m-d");
+        		for ($j=0; $j < $teamCount; $j++) {
+        			$shiftCount = $teams[$j]->getShiftnb();
         			for ($k=0; $k < $shiftCount; $k++) {
         				foreach ($userInputs as $userInput) {
-        					if(($userInput->getDateInput()->format("Y-m-d") != $toutdesuite) and ($userInput->getTeam() != $team) and ($userInput->getShift()->getId() != $k+1)){
-        						if(!$em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $userInput->getDate(), 'type' => $typeIssue))){
-						    		$missinginput = new InputReview();
-						     		$missinginput->setDate($now);
-						     		$missinginput->setType($typeIssue);
-						     		$missinginput->setStatus(0);
-									$missinginput->setTeam($team);
-									$missinginput->setShift($shifts[$k]);
-							        $em->persist($missinginput);
-							        $flusher = true;
-							        $date[] = $now->format('Y-m-d');
-							        $lateam[] = $team->getName();
-							        $lashift[] = $shifts[$k]->getIdentifier();
-								}			       
+        					if(($userInput->getDateInput()->format("Y-m-d") == $toutdesuite) and ($userInput->getTeam() == $teams[$j]) and ($userInput->getShift()->getId() == $k+1)){
+        						$found = true;		       
         					}
         				}
+        				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
+        				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $typeIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
+				    		$missinginput = new InputReview();
+				     		$missinginput->setDate($dateCheck);
+				     		$missinginput->setType($typeIssue);
+				     		$missinginput->setStatus(0);
+							$missinginput->setTeam($teams[$j]);
+							$missinginput->setShift($shifts[$k]);
+					        $em->persist($missinginput);
+					        $flusher = true;
+					    }
+						$found = false;	
         			}
         		}
         	}
-
 		    if ($flusher){
 				$em->flush();
 				$em->clear();
 				$flusher = false;
 			}
-
-        	/*and if manque des inputs -> trouver lesquels add to error review
-        	foreach ($incompleteImports as $incomplete) {
-	    		if(!$em->getRepository('SEInputBundle:InputReview')->findBy(array('date' => $incomplete->getDate(), 'type' => $typeIssue))){
-		    		$missinginput = new InputReview();
-		     		$missinginput->setDate($incomplete->getDate());
-		     		$missinginput->setType($typeIssue);
-		     		$missinginput->setStatus(0);
-			        $em->persist($missinginput);
-			        $flusher = true;
-				}			       
-	    	}
-	    	if ($flusher){
-				$em->flush();
-				$flusher = false;
-			}
- */       }
+ 		}
 
         //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
         // on verra plus tard pour celui la
@@ -245,12 +223,6 @@ class ProductivityController extends Controller
     		'incompleteImports' => $incompleteImports,
     		'sapToProcess' => $sapToProcess,
     		'inputToProcess' => $inputToProcess,
-    		'daydiff' => $daydiff,
-    		'date' => $date,
-    		'toutdesuite' => $toutdesuite,
-    		'lastMonth' => $lastMonth,
-    		'lashift' => $lashift,
-    		'lateam' => $lateam
     		));
 	}
 
