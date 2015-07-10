@@ -93,16 +93,11 @@ class ProductivityController extends Controller
 	        			}
 	        		}
 
-	        	/*	if ($flusher){
-	        			$em->flush();
-	        			$flusher = false;
-	        		}
-*/
 	        		//process finished -> +1 input done in sapImport
 	        		//faire un check error avant
 	        		$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
 
-	        		if($sapToProcessDay->getInputs() == 15){ //5 teams*3shifts -> should be changed to team.count*team.shift.count
+	        		if($sapToProcessDay->getInputs() == 10){ //team.count*team.shift.count
 	        			$sapToProcessDay->setProcess(1);
 	        		}
 
@@ -129,10 +124,8 @@ class ProductivityController extends Controller
 			        }
 	        	}
         	}
-        	
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
-
         }//foreach input
 
 		//check inputs nb in sapImports (since beginning of the month), 
