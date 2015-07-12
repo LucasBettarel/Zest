@@ -9,6 +9,7 @@
   </header>
 
   <div class="col-md-3 well">
+    sap  to process<br>
   	{% for sap in sapToProcess %}
   		{{ sap.date|date("m/d/Y") }}  - {{ sap.inputs }} - {{ sap.process }}
   		<br>
@@ -16,6 +17,7 @@
   </div>	
 
   <div class="col-md-3 well">
+    inputs to process <br>
   	{% for input in inputToProcess %}
   		{{ input.dateInput|date("m/d/Y") }}  - {{ input.team.name }} - {{ input.shift.identifier }}
   		<br>
@@ -23,13 +25,24 @@
   </div>	
 
    <div class="col-md-3 well">
-  	{% for incomplete in incompleteImports %}
-  		{{ incomplete.date|date("m/d/Y") }}  - {{ incomplete.inputs }} - {{ incomplete.process }}
-  		<br>
+    missing TO<br>
+  	{{ missingTO }}<br>
+    {% for to in toto %}
+      {{ to }}
+      <br>
     {% endfor %}
   </div>
-<div class="col-md-12">
 
+  <div class="col-md-3 well">
+  {{ lala }}
+    {% for lol in lolo %}
+      {{ lol.dateConfirmation|date("m/d/Y") }}
+      <br>
+    {% endfor %}
+  
+  </div>
+
+<div class="col-md-12">
 </div>
 
 {% endblock %}

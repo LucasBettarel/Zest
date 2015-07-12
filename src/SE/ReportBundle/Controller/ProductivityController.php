@@ -30,19 +30,22 @@ class ProductivityController extends Controller
         $userInputs = $em->getRepository('SEInputBundle:UserInput')
          ->getLastMonth();
 
+         //test
+         $lolo = array();
+         $toto = array();
 
         //for each inputToProcess(not processed)
         foreach ($inputToProcess as $inputToProcessDay) {
         	$inputUser = $inputToProcessDay->getUser();
-        	$inputDate = $inputToProcessDay->getDate();
+        	$inputDate = $inputToProcessDay->getDateInput();
     		$inputTeam = $inputToProcessDay->getTeam();
     		$inputShift = $inputToProcessDay->getShift();
-
+    		$toIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
+					         		
         	foreach ($sapToProcess as $sapToProcessDay) {
       
-	        	if($inputDate == $sapToProcessDay->getDate()){
+	        	if($inputDate->format("Y-m-d") == $sapToProcessDay->getDate()->format("Y-m-d")){
 	        		//match: input.date present in sap.date
-
 	        		foreach ($inputToProcessDay->getInputEntries() as $inputEntry) {
 	        			foreach ($inputEntry->getActivityHours() as $activity) {
 	        				//picking or binning
@@ -53,37 +56,36 @@ class ProductivityController extends Controller
 	        					$otStart = $activity->getOtStartTime();
 	        					$otEnd = $activity->getOtEndTime();
 	        					$to = $inputEntry->getTotalTo();
-	        					$missingTO = array();
+	        					$missingTO = 0;
 
 	        					//go in saprf and do the shit.
-        					    $TOlines = $this->getDoctrine()
-								 ->getManager()
-								 ->getRepository('SEInputBundle:SAPRF')
-								 ->findBy(array('recorded' => null, 'user' => $sesa, 'dateConfirmation' => $inputDate))
-								;
-
+        					    $TOlines = $em->getRepository('SEInputBundle:SAPRF')->getTo($inputDate, $sesa);
+								$lala = 'relousss!';
 								//restrict by hours
 								foreach ($TOlines as $line) {
 									if(($line->getTimeConfirmation() >= $start and $line->getTimeConfirmation() <= $end) or ($line->getTimeConfirmation() >= $otStart and $line->getTimeConfirmation() <= $otEnd)){
 										$to += 1; //ok
 										$line->setRecorded(1);
+									$lala = 'affected!';
 									}
 									else{
-										$missingTO[] = $line; //pas ok
+										$missingTO += 1; //pas ok
 									}
 								}
 
 								//update in inputentry the to lines
 								$inputEntry->setTotalTo($to);
+								$toto[] = $to;
 
 								//add not affected tolines (those in shift time for now, by team/area later) to review input error
-								if(count($missingTO) > 0){
+								if(count($missingTO) > 0 and !($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $inputDate, 'type' => $toIssue, 'team' => $inputTeam, 'shift' =>  $inputShift))) ){
 					         		$missingHour = new InputReview();
 					         		$missingHour->setDate($inputDate);
-					         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
-					         		$missingHour->setType($typeIssue);
-					         		$missingHour->setToerror("test");
+					         		$missingHour->setType($toIssue);
+					         		$missingHour->setToerror($missingTO);
 					         		$missingHour->setUser($inputUser);
+					         		$missingHour->setTeam($inputTeam);
+					         		$missingHour->setShift($inputShift);
 					         		$missingHour->setStatus(0);
 
 					  		        $em->persist($missingHour);
@@ -95,7 +97,7 @@ class ProductivityController extends Controller
 
 	        		//process finished -> +1 input done in sapImport
 	        		//faire un check error avant
-	        		$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
+					$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
 
 	        		if($sapToProcessDay->getInputs() == 10){ //team.count*team.shift.count
 	        			$sapToProcessDay->setProcess(1);
@@ -103,27 +105,7 @@ class ProductivityController extends Controller
 
 	        		$inputToProcessDay->setProcess(1);
 	        	}
-	        	else{
-	        		//check if sap import not already record in errors review
-	         		$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
-	        		$already = $this->getDoctrine()
-			               ->getRepository('SEInputBundle:InputReview')
-			               ->findOneBy(array(
-			                   'date' => $inputDate,
-			                   'type' => $typeIssue
-			                ));
-			        if(!$already){
-			        	//sapImport not done and not recorded yet->add to error review (process = 0)
-			        	$missingimport = new InputReview();
-		         		$missingimport->setDate($inputDate);
-		         		$missingimport->setType($typeIssue);
-		         		$missingimport->setStatus(0);
-
-		  		        $em->persist($missingimport);
-		  		        $flusher = true;
-			        }
-	        	}
-        	}
+	       	}
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
         }//foreach input
@@ -142,7 +124,8 @@ class ProductivityController extends Controller
 			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
 			$teamCount = count($teams);
 			$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
-			$typeIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
+			$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
+			$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 			$found = false;
 
         	for ($i=0; $i < $daydiff; $i++) { 
@@ -158,10 +141,10 @@ class ProductivityController extends Controller
         					}
         				}
         				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
-        				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $typeIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
+        				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $inputIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
 				    		$missinginput = new InputReview();
 				     		$missinginput->setDate($dateCheck);
-				     		$missinginput->setType($typeIssue);
+				     		$missinginput->setType($inputIssue);
 				     		$missinginput->setStatus(0);
 							$missinginput->setTeam($teams[$j]);
 							$missinginput->setShift($shifts[$k]);
@@ -171,6 +154,22 @@ class ProductivityController extends Controller
 						$found = false;	
         			}
         		}
+
+        		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
+        		$already = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array(
+			                   'date' => $dateCheck,
+			                   'type' => $importIssue
+			                ));
+        		if(!$already){
+			        	//sapImport not done and not recorded yet->add to error review (process = 0)
+			        	$missingimport = new InputReview();
+		         		$missingimport->setDate($dateCheck);
+		         		$missingimport->setType($importIssue);
+		         		$missingimport->setStatus(0);
+		  		        $em->persist($missingimport);
+		  		        $flusher = true;
+			        }
+
         	}
 		    if ($flusher){
 				$em->flush();
@@ -216,6 +215,10 @@ class ProductivityController extends Controller
     		'incompleteImports' => $incompleteImports,
     		'sapToProcess' => $sapToProcess,
     		'inputToProcess' => $inputToProcess,
+    		'missingTO' => $missingTO,
+    		'lala' => $lala, 
+    		'lolo' => $lolo,
+    		'toto' => $toto
     		));
 	}
 

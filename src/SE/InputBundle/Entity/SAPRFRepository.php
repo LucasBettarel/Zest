@@ -12,4 +12,31 @@ use Doctrine\ORM\EntityRepository;
  */
 class SAPRFRepository extends EntityRepository
 {
+
+	public function getTo($date, $user){
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			//->where("a.dateConfirmation = '".$date->format("Y-m-d")."'")
+            ->andWhere("a.recorded is NULL")
+            ->andWhere("a.user = '".$user."'")
+			->getQuery()
+			->getResult()
+  		;
+
+  		/*$qb->select('p')
+		   ->where('YEAR(p.postDate) = :year')
+		   ->andWhere('MONTH(p.postDate) = :month')
+		   ->andWhere('DAY(p.postDate) = :day');
+
+		$qb->setParameter('year', $year)
+		   ->setParameter('month', $month)
+		   ->setParameter('day', $day);
+  */
+		return $qb;
+
+
+		//indBy(array('recorded' => null, 'user' => $sesa, 'dateConfirmation' => $inputDate))
+								;
+	}
 }
