@@ -73,7 +73,7 @@ class SAPRF
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_import", type="date", nullable=true)
+     * @ORM\Column(name="date_import", type="datetime", nullable=true)
      */
     private $dateImport;
 

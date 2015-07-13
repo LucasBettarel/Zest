@@ -18,7 +18,7 @@ class SAPRFRepository extends EntityRepository
 		$qb = $this
 			->createQueryBuilder('a')
 			->select("a")
-			->where("a.date_import = :date")
+			->where("a.dateImport = :date")
             ->andWhere("a.recorded is NULL")
             ->andWhere("a.user = :user");
 
