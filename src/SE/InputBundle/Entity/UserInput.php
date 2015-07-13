@@ -67,17 +67,17 @@ class UserInput
     private $user;
 
     /**
-     * @ORM\Column(name="total_hours_input", type="integer", nullable=false)
+     * @ORM\Column(name="total_hours_input", type="decimal", nullable=false, precision=11, scale=2)
      */
     private $totalHoursInput = 0;
 
     /**
-     * @ORM\Column(name="total_working_hours_input", type="integer", nullable=false)
+     * @ORM\Column(name="total_working_hours_input", type="decimal", nullable=false, precision=11, scale=2)
      */
     private $totalWorkingHoursInput = 0;
 
     /**
-     * @ORM\Column(name="total_overtime_input", type="decimal", nullable=false)
+     * @ORM\Column(name="total_overtime_input", type="decimal", nullable=false, precision=11, scale=2)
      */
     private $totalOvertimeInput = 0;
 
@@ -87,7 +87,7 @@ class UserInput
     private $totalToInput = 0;
 
     /**
-     * @ORM\Column(name="total_prod_input", type="decimal", nullable=true)
+     * @ORM\Column(name="total_prod_input", type="decimal", nullable=true, precision=11, scale=2)
      */
     private $totalProdInput = 0;
 

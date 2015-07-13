@@ -32,7 +32,9 @@ class ProductivityController extends Controller
 
          //test
          $lolo = array();
-         $toto = array();
+         $toto = array(); 
+         $lala = 'rate!';
+         $missingTO = 0;
 
         //for each inputToProcess(not processed)
         foreach ($inputToProcess as $inputToProcessDay) {
@@ -48,7 +50,7 @@ class ProductivityController extends Controller
 	        		//match: input.date present in sap.date
 	        		foreach ($inputToProcessDay->getInputEntries() as $inputEntry) {
 	        			foreach ($inputEntry->getActivityHours() as $activity) {
-	        				//picking or binning
+	        				//picking or putaway
 	        				if ($activity->getActivity()->getTrackable() == true){
 	        					$sesa = $inputEntry->getSesa();
 	        					$start = $inputShift->getStartTime();
@@ -56,14 +58,17 @@ class ProductivityController extends Controller
 	        					$otStart = $activity->getOtStartTime();
 	        					$otEnd = $activity->getOtEndTime();
 	        					$to = $inputEntry->getTotalTo();
-	        					$missingTO = 0;
-
-	        					//go in saprf and do the shit.
+	        					$regularReverse = ($start > $end ? true : false);
+	        					$otReverse = ($otStart > $otEnd ? true : false);
+	
+						 		//go in saprf and do the shit.
         					    $TOlines = $em->getRepository('SEInputBundle:SAPRF')->getTo($inputDate, $sesa);
 								$lala = 'relousss!';
 								//restrict by hours
 								foreach ($TOlines as $line) {
-									if(($line->getTimeConfirmation() >= $start and $line->getTimeConfirmation() <= $end) or ($line->getTimeConfirmation() >= $otStart and $line->getTimeConfirmation() <= $otEnd)){
+									$timeConf = $line->getTimeConfirmation(); 
+									$lala = 'somethng!';
+								if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
 										$to += 1; //ok
 										$line->setRecorded(1);
 									$lala = 'affected!';

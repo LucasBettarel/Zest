@@ -21,8 +21,8 @@ class ActivityHoursType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => true))
-            ->add('regularHours', 'integer')
-            ->add('otHours', 'integer')
+            ->add('regularHours', 'number')
+            ->add('otHours', 'number')
             ->add('otStartTime', 'time', array(
                   'widget' => 'single_text',
                   'required' => false))

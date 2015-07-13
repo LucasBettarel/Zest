@@ -71,6 +71,13 @@ class SAPRF
     private $sourceStorageBin;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_import", type="date", nullable=true)
+     */
+    private $dateImport;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="recorded", type="boolean", nullable=true)
@@ -271,5 +278,28 @@ class SAPRF
     public function getRecorded()
     {
         return $this->recorded;
+    }
+
+    /**
+     * Set dateImport
+     *
+     * @param \DateTime $dateImport
+     * @return SAPRF
+     */
+    public function setDateImport($dateImport)
+    {
+        $this->dateImport = $dateImport;
+
+        return $this;
+    }
+
+    /**
+     * Get dateImport
+     *
+     * @return \DateTime 
+     */
+    public function getDateImport()
+    {
+        return $this->dateImport;
     }
 }

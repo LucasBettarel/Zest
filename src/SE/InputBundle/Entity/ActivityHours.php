@@ -36,14 +36,14 @@ class ActivityHours
     /**
      * @var string
      *
-     * @ORM\Column(name="regular_hours", type="decimal")
+     * @ORM\Column(name="regular_hours", type="decimal", precision=11, scale=2)
      */
     private $regularHours;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ot_hours", type="decimal")
+     * @ORM\Column(name="ot_hours", type="decimal", precision=11, scale=2)
      */
     private $otHours;
 
