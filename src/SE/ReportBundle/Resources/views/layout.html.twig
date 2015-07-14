@@ -4,6 +4,13 @@
   Reports - {{ parent() }}
 {% endblock %}
 
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets 'bundles/seinput/css/report/*' %}
+    <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+{% endblock %}
+
 {% block menu %}
 	{{ render(controller("SEReportBundle:Productivity:menu")) }}
 {% endblock %}
@@ -13,4 +20,16 @@
   {% block sereport_body %}
   {% endblock %}
 
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  <script src="http://code.highcharts.com/highcharts-more.js"></script>
+  <script src="http://code.highcharts.com/modules/solid-gauge.js"></script>
+
+  {% javascripts '@SEInputBundle/Resources/public/js/report/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 {% endblock %}

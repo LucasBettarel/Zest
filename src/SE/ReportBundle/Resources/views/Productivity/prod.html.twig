@@ -5,8 +5,45 @@
 {% block sereport_body %}
   <header class="h-sap">
     <div class="line"></div>
-    <h2><i class="glyphicon glyphicon-stats"> </i> Productivity report</h2>
+    <div class="pull-left">
+      <h2><i class="glyphicon glyphicon-stats"> </i> Productivity report</h2>
+    </div>
+    <div id="filters">
+      <div class="pull-left">
+        <a id="" class="label label-primary">Hub</a>
+        <a id="Outbound4" class="label label-default">Outbound4</a>
+        <a id="Inbound4" class="label label-default">Inbound4</a>
+        <a id="Local" class="label label-default">Local</a>
+        <a id="Outbound3" class="label label-default">Outbound3</a>
+        <a id="Inbound3" class="label label-default">Inbound3</a>
+        <a id="Releasing" class="label label-default">Releasing</a>
+      </div>
+    </div>
   </header>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h4>YESTERDAY</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+        <div id="container-prod" style="height: 300px; margin:auto auto;"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h4>MONTHLY</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+        <div id="container-daily" style="height: 300px; margin:auto auto;"></div>
+    </div>
+  </div>
 
   <div class="col-md-3 well">
     sap  to process<br>
@@ -25,7 +62,7 @@
   </div>	
 
    <div class="col-md-3 well">
-    missing TO<br>
+    missing TO
   	{{ missingTO }}<br>
     {% for to in toto %}
       {{ to }}
@@ -45,4 +82,11 @@
 <div class="col-md-12">
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script type="text/javascript">
+  </script>
 {% endblock %}

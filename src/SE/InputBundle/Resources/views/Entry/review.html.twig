@@ -49,7 +49,7 @@
                           {{ error.shift.identifier }} 
                         {% endif %}
                     </td>
-                    <td><i class="glyphicon glyphicon-edit"> </i> <i class="glyphicon glyphicon-check text-success"> </i></td>  
+                    <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Create this missing input"> </i> <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Ignore this input"> </i></td>  
                   </tr>
                 {% endfor %}                
               </tbody>
@@ -113,12 +113,12 @@
                         <td>{{ input.totalToInput }}</td>
                         <td>{{ input.totalProdInput }}</td>
                         <td>{% if input.review == 0 %}
-                              <i class="glyphicon glyphicon-alert text-warning"></i>
+                              <i class="glyphicon glyphicon-alert text-warning" data-toggle="tooltip" title="Review errors for this input"></i>
                             {% else %}
-                              <i class="glyphicon glyphicon-ok text-success"></i>
+                              <i class="glyphicon glyphicon-ok text-success" data-toggle="tooltip" title="Nothing to review, all clear."></i>
                             {% endif %}
                         </td>
-                        <td><i class="glyphicon glyphicon-edit"> </i> <i class="text-danger glyphicon glyphicon-remove-circle"> </i> <i class="glyphicon glyphicon-check text-success"> </i></td>  
+                        <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit input"> </i> <i class="text-danger glyphicon glyphicon-remove-circle" data-toggle="tooltip" title="Delete input (all data will be lost)"> </i> <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Validate review of errors for this innput"> </i></td>  
                       </tr>
                     {% endfor %}                
                   </tbody>
@@ -131,7 +131,7 @@
   </div>
 
 <!-- panel to show when hover error -->
-  <div class="col-md-5">
+  <div class="col-md-5 hide">
   	<div class="panel panel-hour">
 	  <!-- Default panel contents -->
 	  <div class="panel-heading">Missing hours</div>
@@ -148,7 +148,7 @@
   {{ parent() }}
 
   <script type="text/javascript">
-    //global variable containing details of all employees
+    //global variable containing details of all errors
     var importErrors = {{ importErrors|length }};
     var inputErrors = {{ inputErrors|length }};
     var toErrors = {{ toErrors|length }};

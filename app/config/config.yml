@@ -34,7 +34,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ SEInputBundle ]
+    bundles:        [ SEInputBundle, SEReportBundle ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~

@@ -18,6 +18,9 @@ $(document).ready(function() {
                 text: 'error percentage'
             }
         },
+        credits: {
+            enabled: false
+        },
         plotOptions: {
             pie: {
                 shadow: false
@@ -25,7 +28,7 @@ $(document).ready(function() {
         },
         tooltip: {
             formatter: function() {
-                return '<b>'+ this.point.name +'</b>: '+ this.y +' %';
+                return '<b>'+ this.point.name +'</b>: '+ this.y +' ';
             }
         },
         series: [{
@@ -58,6 +61,8 @@ $(document).ready(function() {
 	  	$(this).siblings().removeClass('label-primary').addClass('label-default');
 	  	$(this).removeClass('label-default').addClass('label-primary');
 	});
+
+    $("*[data-toggle='tooltip']").tooltip();
 
 });
 
