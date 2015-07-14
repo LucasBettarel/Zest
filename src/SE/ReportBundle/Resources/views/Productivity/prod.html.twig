@@ -10,26 +10,62 @@
     </div>
     <div id="filters">
       <div class="pull-left">
-        <a id="" class="label label-primary">Hub</a>
+        <a id="" class="label label-primary">HubAsia</a>
         <a id="Outbound4" class="label label-default">Outbound4</a>
         <a id="Inbound4" class="label label-default">Inbound4</a>
         <a id="Local" class="label label-default">Local</a>
         <a id="Outbound3" class="label label-default">Outbound3</a>
         <a id="Inbound3" class="label label-default">Inbound3</a>
-        <a id="Releasing" class="label label-default">Releasing</a>
       </div>
     </div>
   </header>
 
   <div class="row">
     <div class="col-md-12">
-      <h4>YESTERDAY</h4>
+      <h4>YESTERDAY : {{ yesterday|date('F d Y') }}</h4>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-4">
-        <div id="container-prod" style="height: 300px; margin:auto auto;"></div>
+    <div class="col-md-5">
+        <div id="container-prod" style="height: 400px; margin:auto auto;"></div>
+    </div>
+    <div class="col-md-4 col-md-offset-1">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+          <div id="filters">
+            <div>
+              <a id="" class="label label-primary">All</a>
+              <a id="Shift1" class="label label-default">Shift1</a>
+              <a id="Shift2" class="label label-default">Shift2</a>
+              <a id="Shift3" class="label label-default">Shift3</a>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <h4>Transfer order lines : 
+            {% if yesterdayInput is not null %}
+              {{ yesterdayInput.totalToInput }}
+            {% else %}
+              0 <i class="glyphicon glyphicon-alert text-danger"> </i>
+            {% endif %}
+          </h4>
+          <h4>Manhours : 
+            {% if yesterdayInput is not null %}
+              {{ yesterdayInput.totalHoursInput }}
+            {% else %}
+              0 <i class="glyphicon glyphicon-alert text-danger"> </i>
+            {% endif %}
+          </h4>
+          <h4>Headcount :
+            {% if yesterdayInput is not null %}
+              {{ yesterdayInput.input_entries|length }}
+            {% else %}
+              0 <i class="glyphicon glyphicon-alert text-danger"> </i>
+            {% endif %}
+          </h4>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -40,8 +76,40 @@
   </div>
 
   <div class="row">
+    <div class="col-md-9">
+        <div id="container-daily" style="height: 500px; margin:auto auto;"></div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+          <ul>
+            <li>Total Transfer order lines : #0000</li>
+            <li>Total Manhours : #0000</li>
+            <li>Total Headcount : #0000</li>
+            <li>Total Training : #0000</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-md-12">
-        <div id="container-daily" style="height: 300px; margin:auto auto;"></div>
+      <h4>PICKING</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-9">
+        <div id="container-daily" style="height: 500px; margin:auto auto;"></div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+          <ul>
+            <li>Total Transfer order lines : #0000</li>
+            <li>Total Manhours : #0000</li>
+            <li>Total Headcount : #0000</li>
+            <li>Total Training : #0000</li>
+          </ul>
+        </div>
     </div>
   </div>
 
@@ -88,5 +156,6 @@
   {{ parent() }}
 
   <script type="text/javascript">
+   var globalYesterdayProd = {% if yesterdayInput is not null %}{{ yesterdayInput.totalProdInput }}{% else %}0{% endif %};
   </script>
 {% endblock %}

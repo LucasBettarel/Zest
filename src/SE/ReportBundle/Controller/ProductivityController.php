@@ -115,115 +115,92 @@ class ProductivityController extends Controller
 			$inputToProcessDay->computeHours();
         }//foreach input
 
-		//check inputs nb in sapImports (since beginning of the month), 
-        $incompleteImports = $em->getRepository('SEInputBundle:SapImports')
-         ->getIncompleteImports();
-        ;
+	 	$today = new \DateTime();
+   		$today->setTime(00, 00, 00);
+    	$lastMonth = new \DateTime();
+    	$lastMonth->setTime(00, 00, 00)->modify( '-'.(date('j')-1).' day' );
+		$daydiff = $today->diff($lastMonth)->days;
+		$teams = $em->getRepository('SEInputBundle:Team')->findAll();
+		$teamCount = count($teams);
+		$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
+		$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
+		$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
+		$found = false;
 
-        if(!is_null($incompleteImports)){
-        	$today = new \DateTime();
-       		$today->setTime(00, 00, 00);
-        	$lastMonth = new \DateTime();
-        	$lastMonth->setTime(00, 00, 00)->modify( '-'.(date('j')-1).' day' );
-			$daydiff = $today->diff($lastMonth)->days;
-			$teams = $em->getRepository('SEInputBundle:Team')->findAll();
-			$teamCount = count($teams);
-			$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
-			$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
-			$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
-			$found = false;
+		$displayData = array();
 
-        	for ($i=0; $i < $daydiff; $i++) { 
-        		$dateCheck = new \DateTime();
-        		$dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
-    			$toutdesuite = $dateCheck->format("Y-m-d");
-        		for ($j=0; $j < $teamCount; $j++) {
-        			$shiftCount = $teams[$j]->getShiftnb();
-        			for ($k=0; $k < $shiftCount; $k++) {
-        				foreach ($userInputs as $userInput) {
-        					if(($userInput->getDateInput()->format("Y-m-d") == $toutdesuite) and ($userInput->getTeam() == $teams[$j]) and ($userInput->getShift()->getId() == $k+1)){
-        						$found = true;		       
-        					}
-        				}
-        				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
-        				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $inputIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
-				    		$missinginput = new InputReview();
-				     		$missinginput->setDate($dateCheck);
-				     		$missinginput->setType($inputIssue);
-				     		$missinginput->setStatus(0);
-							$missinginput->setTeam($teams[$j]);
-							$missinginput->setShift($shifts[$k]);
-					        $em->persist($missinginput);
-					        $flusher = true;
-					    }
-						$found = false;	
-        			}
-        		}
+    	for ($i=0; $i < $daydiff; $i++) { 
+    		$dateCheck = new \DateTime();
+    		$dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
+			$toutdesuite = $dateCheck->format("Y-m-d");
+    		for ($j=0; $j < $teamCount; $j++) {
+    			$shiftCount = $teams[$j]->getShiftnb();
+    			for ($k=0; $k < $shiftCount; $k++) {
+    				foreach ($userInputs as $userInput) {
+    					if(($userInput->getDateInput()->format("Y-m-d") == $toutdesuite) and ($userInput->getTeam() == $teams[$j]) and ($userInput->getShift()->getId() == $k+1)){
+    						$found = true;		       
+    					}
 
-        		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
-        		$already = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array(
-			                   'date' => $dateCheck,
-			                   'type' => $importIssue
-			                ));
-        		if(!$already){
-			        	//sapImport not done and not recorded yet->add to error review (process = 0)
-			        	$missingimport = new InputReview();
-		         		$missingimport->setDate($dateCheck);
-		         		$missingimport->setType($importIssue);
-		         		$missingimport->setStatus(0);
-		  		        $em->persist($missingimport);
-		  		        $flusher = true;
-			        }
+    					//save data to display
 
-        	}
-		    if ($flusher){
-				$em->flush();
-				$em->clear();
-				$flusher = false;
-			}
- 		}
 
-        //ni l'un ni l'autre : special error -> check if all date until today exist in sapImports
-        // on verra plus tard pour celui la
+    				}
+    				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
+    				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $inputIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
+			    		$missinginput = new InputReview();
+			     		$missinginput->setDate($dateCheck);
+			     		$missinginput->setType($inputIssue);
+			     		$missinginput->setStatus(0);
+						$missinginput->setTeam($teams[$j]);
+						$missinginput->setShift($shifts[$k]);
+				        $em->persist($missinginput);
+				        $flusher = true;
+				    }
+					$found = false;	
+    			}
+    		}
 
-        //select userinput to display (=all basically -> do better with ajax or something)
-		$userInputDisplay = $em->getRepository('SEInputBundle:UserInput')
-         ->findBy(array('process' => 1));
+    		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
+    		$already = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array(
+		                   'date' => $dateCheck,
+		                   'type' => $importIssue
+		                ));
+    		if(!$already){
+		        	//sapImport not done and not recorded yet->add to error review (process = 0)
+		        	$missingimport = new InputReview();
+	         		$missingimport->setDate($dateCheck);
+	         		$missingimport->setType($importIssue);
+	         		$missingimport->setStatus(0);
+	  		        $em->persist($missingimport);
+	  		        $flusher = true;
+		        }
 
-		/*	
-		for every couples sap/user :
-		get shift+team+date
+    	}
+	    if ($flusher){
+			$em->flush();
+			$em->clear();
+			$flusher = false;
+		}
+ 	
+ 		//to remove
+ 		$yesterday = new \DateTime();
+       	$yesterday->setTime(00, 00, 00);
+		$yesterday->modify( '- 1 day' );
 
-			for each input entry :
-				if activity : picking/putaway
-					get employee sesa or input entry sesa if different
-					get trackable activities (picking/putaway) regular+OT hours
+        //select userinput to display (=all basically -> do better with ajax or something) //to remove
+		$yesterdayInput = $em->getRepository('SEInputBundle:UserInput')
+         ->findOneBy(array('dateInput' => $yesterday ));
 
-					in saprf.getdate.getteam.getshift.getsesa :
-						TOlines = countrows in regular hours (between shift.start and shift.end)
-						TOlines += countrows in OT hours (between ot.start and ot.end)
-
-						for each saprf.row selected -> bool recorded = true
-						update (add) TOlines to userinput (daily team) table
-						update (add) TOlines to input_entry (daily employee) table
-						//-> check if prod is well calculated on update
-					--
-				--
-			--
-		eof : remaining to lines.count(->recorded=0) -> go to input error table (//define table structure)
-		//??? what else???
-
-		->display data calculated (highchart and data tables)
-		-> take apero
-		*/
     	return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
-    		'incompleteImports' => $incompleteImports,
     		'sapToProcess' => $sapToProcess,
     		'inputToProcess' => $inputToProcess,
     		'missingTO' => $missingTO,
     		'lala' => $lala, 
     		'lolo' => $lolo,
-    		'toto' => $toto
+    		'toto' => $toto,
+    		'lastMonthInputs' => $userInputs,
+    		'yesterdayInput' => $yesterdayInput,
+    		'yesterday' => $yesterday
     		));
 	}
 

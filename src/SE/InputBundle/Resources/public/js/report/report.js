@@ -107,7 +107,7 @@ Highcharts.setOptions(Highcharts.theme);
             tickPixelInterval: 400,
             tickWidth: 0,
             title: {
-                y: 180
+                y: 140
             },
             labels: {
                 y: 16
@@ -131,7 +131,7 @@ Highcharts.setOptions(Highcharts.theme);
             min: 0,
             max: 10,
             title: {
-                text: 'Productivity'
+                text: ''
             }
         },
 
@@ -141,9 +141,9 @@ Highcharts.setOptions(Highcharts.theme);
 
         series: [{
             name: 'Productivity',
-            data: [8],
+            data: [globalYesterdayProd],
             dataLabels: {
-                format: '<div style="text-align:center; margin-top:-90px;"><span style="font-size:110px;color:' +
+                format: '<div style="text-align:center; margin-top:-70px;"><span style="font-size:90px;color:' +
                     ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
                        '<span style="font-size:12px;color:silver">to line/h</span></div>'
             },
@@ -154,26 +154,51 @@ Highcharts.setOptions(Highcharts.theme);
 
     }));
 
-    // Bring life to the dials
-    setInterval(function () {
-        // Productivity
-        var chart = $('#container-prod').highcharts(),
-            point,
-            newVal,
-            inc;
-
-        if (chart) {
-            point = chart.series[0].points[0];
-            inc = Math.round((Math.random() - 0.5) * 10);
-            newVal = point.y + inc;
-
-            if (newVal < 0 || newVal > 10) {
-                newVal = point.y - inc;
-            }
-
-            point.update(newVal);
-        }
-    }, 2000);
+   $('#container-daily').highcharts({
+        title: {
+            text: 'Daily-to-date',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: ['01/07', '02/07', '03/07', '04/07', '05/07', '06/07',
+                '07/07', '08/07', '09/07', '10/07', '11/07', '12/07']
+        },
+        yAxis: {
+            title: {
+                text: ''
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: 'to line/h'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'HubAsia',
+            data: [7.5, 3.9, 4.5, 4.5, 8.2, 31.5, 25.2, 22.5, 22.3, 14.3, 10.9, 2.6]
+        }, {
+            name: 'Outbound 4',
+            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+        }, {
+            name: 'Inbound 4',
+            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+        }, {
+            name: 'Outbound 3',
+            data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+        }, {
+            name: 'Inbound 3',
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        }]
+    });
     
    
 	$('#filters a').click(function(){
