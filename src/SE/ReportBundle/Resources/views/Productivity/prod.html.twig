@@ -157,5 +157,11 @@
 
   <script type="text/javascript">
    var globalYesterdayProd = {% if yesterdayInput is not null %}{{ yesterdayInput.totalProdInput }}{% else %}0{% endif %};
+   var inputData = [];
+   var singleData = [];
+    {% for input in lastMonthInputs %}
+    singleData = [{{input.id|json_encode|raw}}, {{input.dateInput|date("d-m")|json_encode|raw}}, {{input.team.id|json_encode|raw}},{{input.shift.id|json_encode|raw}},{{input.inputEntries|length|json_encode|raw}},{{input.totalHoursInput|json_encode|raw}},{{input.totalWorkingHoursInput|json_encode|raw}},{{input.totalOvertimeInput|json_encode|raw}},{{input.totalToInput|json_encode|raw}},{{input.totalProdInput|json_encode|raw}}];
+    inputData.push(singleData);
+    {% endfor %}
   </script>
 {% endblock %}

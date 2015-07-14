@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+//prepare data
+
+
 // Load the fonts
 Highcharts.createElement('link', {
    href: '//fonts.googleapis.com/css?family=Dosis:400,600',
@@ -202,11 +205,8 @@ Highcharts.setOptions(Highcharts.theme);
     
    
 	$('#filters a').click(function(){
-//	  	filterColumn( $(this).parents('div').attr('id'), $(this).attr('id') );
 	  	$(this).siblings().removeClass('label-primary').addClass('label-default');
 	  	$(this).removeClass('label-default').addClass('label-primary');
 	});
-
-//    $("*[data-toggle='tooltip']").tooltip();
 
 });

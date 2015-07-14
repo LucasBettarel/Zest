@@ -127,22 +127,17 @@ class ProductivityController extends Controller
 		$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 		$found = false;
 
-		$displayData = array();
-
-    	for ($i=0; $i < $daydiff; $i++) { 
+		for ($i=0; $i < $daydiff; $i++) { 
     		$dateCheck = new \DateTime();
     		$dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
 			$toutdesuite = $dateCheck->format("Y-m-d");
-    		for ($j=0; $j < $teamCount; $j++) {
+			for ($j=0; $j < $teamCount; $j++) {
     			$shiftCount = $teams[$j]->getShiftnb();
     			for ($k=0; $k < $shiftCount; $k++) {
     				foreach ($userInputs as $userInput) {
     					if(($userInput->getDateInput()->format("Y-m-d") == $toutdesuite) and ($userInput->getTeam() == $teams[$j]) and ($userInput->getShift()->getId() == $k+1)){
     						$found = true;		       
     					}
-
-    					//save data to display
-
 
     				}
     				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
