@@ -126,6 +126,7 @@ class ProductivityController extends Controller
 		$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 		$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 		$found = false;
+		$jsonTest = array();
 
 		for ($i=0; $i < $daydiff; $i++) { 
     		$dateCheck = new \DateTime();
@@ -139,7 +140,11 @@ class ProductivityController extends Controller
     						$found = true;		       
     					}
 
+    					//a adapter avec des donnees utiles
+    					$jsonTest[] = array("date" => $i, 'team' => $j, 'shift' => $k);
+
     				}
+    				//faire la query en amont et faire in array... ou autre
     				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
     				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $inputIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
 			    		$missinginput = new InputReview();
@@ -195,7 +200,8 @@ class ProductivityController extends Controller
     		'toto' => $toto,
     		'lastMonthInputs' => $userInputs,
     		'yesterdayInput' => $yesterdayInput,
-    		'yesterday' => $yesterday
+    		'yesterday' => $yesterday,
+    		'jsonTest' => json_encode($jsonTest, JSON_PRETTY_PRINT)
     		));
 	}
 
