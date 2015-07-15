@@ -9,11 +9,6 @@ $(document).ready(function() {
 		$(this).siblings('.input-manual').toggleClass('hide');
 	});
 
-	/*$(document).on('click', '.input-overtime', function(e) {
-		$(this).next('.toggling').toggleClass('hide');
-		$(this).next('.toggling').find('input').val('00:00');
-	});	
-*/
 	$(document).on('click', '.transfer', function(e){
 		$activitiesHolder = $("#"+$(this).attr('data-sub-target'));
 		$rowHolder = $('*[data-content="'+$(this).attr('data-target')+'"]');
@@ -45,6 +40,5 @@ $(document).ready(function() {
 		}
 	});
 
-	$('form').children('div').last().hide();
 });
 

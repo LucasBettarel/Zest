@@ -29,20 +29,22 @@
       </div>
     </td>
     <td>
+      <a href=# id="add" class="btn btn-success" data-target="activities-prototype" data-toggle="tooltip" title="Add an activity">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
       <a href=# id="comment" class="btn btn-primary" data-toggle="tooltip" title="Add a comment">
         <i class="glyphicon glyphicon-comment"></i>
       </a>
       <a href=# id="manual" class="btn btn-warning" data-toggle="tooltip" title="Add manual TO lines">
         <i class="glyphicon glyphicon-link"></i>
       </a>
-      <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype" data-toggle="tooltip" title="Delete employee from input">
-        <i class="glyphicon glyphicon-trash"></i>
-      </a>
+      {#
       <a href=# id="info" class="btn btn-info" data-toggle="tooltip" title="Go to employee details (not functionnal yet)">
         <i class="glyphicon glyphicon-info-sign"></i>
       </a>
-      <a href=# id="add" class="btn btn-success" data-target="activities-prototype" data-toggle="tooltip" title="Add an activity">
-        <i class="glyphicon glyphicon-plus"></i>
+      #}
+      <a href=# id="rmv" class="btn btn-danger" data-target="entries-prototype" data-toggle="tooltip" title="Delete employee from input">
+        <i class="glyphicon glyphicon-trash"></i>
       </a>
       <div class="hide toggling txtarea-sm">
         {{ form_widget(entry.comments, {'attr': {'class': 'form-control'}}) }}
@@ -87,7 +89,7 @@
 
      <div class="form-group">
         {{ form_errors(form.user) }}
-        <div class="col-md-3" id="input-user">
+        <div class="col-md-3" id="input-user" data-toggle="tooltip" title="Please select your name">
           <div class="input-group">
             <span class="input-group-addon">
               <span id="user" class="glyphicon glyphicon-user">
@@ -96,7 +98,7 @@
             {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" data-toggle="tooltip" title="Team">
           <div class="input-group">
           <span class="input-group-addon">
               <span id="team" class="glyphicon glyphicon-retweet">
@@ -105,7 +107,7 @@
             {{ form_widget(form.team, {'attr': {'class': 'input-team form-control'}}) }}
           </div>
         </div>
-        <div class="col-md-2" id="input-shift">
+        <div class="col-md-2" id="input-shift" data-toggle="tooltip" title="Shift">
           <div class="input-group">
             <span class="input-group-addon">
               <span id="shift" class="glyphicon glyphicon-time">
@@ -114,7 +116,7 @@
             {{ form_widget(form.shift, {'attr': {'class': 'form-control input-shift'}}) }}
           </div>
         </div>
-        <div class="col-md-2" id="input-date">
+        <div class="col-md-2" id="input-date" data-toggle="tooltip" title="Date of input">
           <div class="input-group">
             <span class="input-group-addon">
               <span id="date-input" class="glyphicon glyphicon-calendar">
@@ -125,13 +127,13 @@
         </div>
         <div class="pull-right">
           <div class='input-ot-time'>
-            <div class="pull-left input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+            <div class="pull-left input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true" data-toggle="tooltip" title="Start overtime">
               <span class="input-group-addon">
                   <span class="glyphicon glyphicon-time"></span>
               </span>
               {{ form_widget(form.otStartTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
             </div>
-            <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+            <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true" data-toggle="tooltip" title="End overtime">
               {{ form_widget(form.otEndTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
               <span class="input-group-addon">
                   <span class="glyphicon glyphicon-time"></span>

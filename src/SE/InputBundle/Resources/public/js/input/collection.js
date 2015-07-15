@@ -147,7 +147,9 @@ $(document).ready(function() {
             addElement($('#entries-prototype'), employeesData[i]);
           }
       }
-      $('.clockpicker').clockpicker();
+      $('.clockpicker').clockpicker();  
+      $('form').children('div').last().hide();
+      $("*[data-toggle='tooltip']").tooltip();
     }
 
     function displayOvertime(start, end, $overt){
