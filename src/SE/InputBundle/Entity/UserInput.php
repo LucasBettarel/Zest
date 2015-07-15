@@ -67,6 +67,20 @@ class UserInput
     private $user;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="ot_start_time", type="datetime")
+     */
+    private $otStartTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="ot_end_time", type="datetime")
+     */
+    private $otEndTime;
+
+    /**
      * @ORM\Column(name="total_hours_input", type="decimal", nullable=false, precision=11, scale=2)
      */
     private $totalHoursInput = 0;
@@ -520,5 +534,51 @@ class UserInput
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set otStartTime
+     *
+     * @param \DateTime $otStartTime
+     * @return UserInput
+     */
+    public function setOtStartTime($otStartTime)
+    {
+        $this->otStartTime = $otStartTime;
+
+        return $this;
+    }
+
+    /**
+     * Get otStartTime
+     *
+     * @return \DateTime 
+     */
+    public function getOtStartTime()
+    {
+        return $this->otStartTime;
+    }
+
+    /**
+     * Set otEndTime
+     *
+     * @param \DateTime $otEndTime
+     * @return UserInput
+     */
+    public function setOtEndTime($otEndTime)
+    {
+        $this->otEndTime = $otEndTime;
+
+        return $this;
+    }
+
+    /**
+     * Get otEndTime
+     *
+     * @return \DateTime 
+     */
+    public function getOtEndTime()
+    {
+        return $this->otEndTime;
     }
 }

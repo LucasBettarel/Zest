@@ -62,28 +62,13 @@
       <div class="pull-left input-regular-hours">
         {{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
       </div>
-      <div class="pull-left input-overtime" title="Enter overtime timings">
-        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control', 'readonly':""}}) }}
-      </div>
-      <div class='pull-left toggling input-ot-time hide'>
-        <div class="pull-left">
-          <div data-toggle="tooltip" title="Start time">
-            {{ form_widget(activity.otStartTime, {'attr': {'class': 'form-control'}}) }}
-          </div>
-        </div>
-        <div>
-          <div data-toggle="tooltip" title="End time">
-            {{ form_widget(activity.otEndTime, {'attr': {'class': 'form-control'}}) }}
-          </div>
-        </div>
+      <div class="pull-left input-overtime">
+        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
       </div>
     </div>
     <div class="pull-left" data-toggle="tooltip" title="Transfer out">
       <input class="transfer" type="checkbox" value="0">
     </div>
-    {#<div class="pull-left input-zone">
-      {{ form_widget(activity.zone, {'attr': {'class': 'form-control'}}) }}
-    </div>#}
     <div class="pull-left" data-toggle="tooltip" title="Remove activity">
       <a href=# id="rmv" class="text-danger input-rmv" data-target="activities-prototype">
         <i class="glyphicon glyphicon-remove"></i>
@@ -102,13 +87,13 @@
 
      <div class="form-group">
         {{ form_errors(form.user) }}
-        <div class="col-md-3">
+        <div class="col-md-3" id="input-user">
           <div class="input-group">
             <span class="input-group-addon">
               <span id="user" class="glyphicon glyphicon-user">
               </span>
             </span>
-            {{ form_widget(form.user, {'attr': {'class': 'form-control', 'placeholder' : 'Please insert your name'}}) }}
+            {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
           </div>
         </div>
         <div class="col-md-2">
@@ -120,7 +105,7 @@
             {{ form_widget(form.team, {'attr': {'class': 'input-team form-control'}}) }}
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" id="input-shift">
           <div class="input-group">
             <span class="input-group-addon">
               <span id="shift" class="glyphicon glyphicon-time">
@@ -129,7 +114,7 @@
             {{ form_widget(form.shift, {'attr': {'class': 'form-control input-shift'}}) }}
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-2" id="input-date">
           <div class="input-group">
             <span class="input-group-addon">
               <span id="date-input" class="glyphicon glyphicon-calendar">
@@ -139,15 +124,27 @@
           </div>
         </div>
         <div class="pull-right">
-          <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
-            <i class="glyphicon glyphicon-plus"></i> Add Employee (Transfer IN)
-          </a>
-        </div> 
+          <div class='input-ot-time'>
+            <div class="pull-left input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-time"></span>
+              </span>
+              {{ form_widget(form.otStartTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
+            </div>
+            <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true">
+              {{ form_widget(form.otEndTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-time"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        
     </div>
     
     <div class="form-group">
      
-     <div class="table-responsive">
+     <div class="table-responsive"> 
         <table class="table table-hover table-striped">
           <thead>
             <tr>
@@ -173,7 +170,11 @@
         </table>
       </div>
     </div>
- 
+    <div class="pull-left">
+      <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
+        <i class="glyphicon glyphicon-plus"></i> Add Employee (Transfer IN)
+      </a>
+    </div> 
     <div class="form-group">
       {{ form_widget(form.save, {'attr': {'class': 'btn btn-success pull-right'}}) }}
     </div>
@@ -181,6 +182,7 @@
     {{ form_rest(form) }}
     {{ form_end(form) }}
   </div>
+
 {% endblock %}
 
 {% block javascripts %}

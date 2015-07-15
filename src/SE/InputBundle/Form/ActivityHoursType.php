@@ -23,12 +23,6 @@ class ActivityHoursType extends AbstractType
                 ), array('required' => true))
             ->add('regularHours', 'number')
             ->add('otHours', 'number')
-            ->add('otStartTime', 'time', array(
-                  'widget' => 'single_text',
-                  'required' => false))
-            ->add('otEndTime', 'time', array(
-                  'widget' => 'single_text',
-                  'required' => false))
             /*->add('zone', 'entity', array(
                 'class'    => 'SEInputBundle:Zone',
                 'property' => 'name', 

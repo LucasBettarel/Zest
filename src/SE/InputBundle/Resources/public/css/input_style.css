@@ -42,11 +42,11 @@
 	width: 80px;
 }
 
-.input-ot-time input{
-	width: 120px; 
+.input-ot-time>.input-group{
+	width: 105px; 
 }
 
-.input-ot-time>div, #presence>div{
+#presence>div{
 	display: inline-block; 
 }
 
@@ -109,3 +109,6 @@
   border-color: #EB7260;
 }
 
+#input-shift{
+	max-width: 14%;
+}

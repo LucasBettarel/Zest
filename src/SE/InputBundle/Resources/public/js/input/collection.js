@@ -108,7 +108,6 @@ $(document).ready(function() {
         'data-sub-target': $prototypeHolder.attr('id'),
         'data-target': parentContent,
         'data-disabled': 0});
-      $sub.find('.input-ot-time input').val('00:00');
       $sub.find('.input-regular-hours input').val(8);
       $sub.find('.input-overtime input').val(0);
       //$sub.find('.input-zone select').val(0);
@@ -140,6 +139,7 @@ $(document).ready(function() {
     }
 
     function initCollection(){
+      $('.input-ot-time input').val('00:00');
       $('.input-shift').val(1);
       $(".input-shift input[value=1]").attr('checked', 'checked');
       for(var i = 0; i < employeesData.length; ++i){
@@ -147,6 +147,7 @@ $(document).ready(function() {
             addElement($('#entries-prototype'), employeesData[i]);
           }
       }
+      $('.clockpicker').clockpicker();
     }
 
     function displayOvertime(start, end, $overt){

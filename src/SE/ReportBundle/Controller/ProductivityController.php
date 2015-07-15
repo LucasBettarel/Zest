@@ -42,6 +42,8 @@ class ProductivityController extends Controller
         	$inputDate = $inputToProcessDay->getDateInput();
     		$inputTeam = $inputToProcessDay->getTeam();
     		$inputShift = $inputToProcessDay->getShift();
+    		$otStart = $inputToProcessDay->getOtStartTime();
+			$otEnd = $inputToProcessDay->getOtEndTime();					
     		$toIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
 					         		
         	foreach ($sapToProcess as $sapToProcessDay) {
@@ -55,8 +57,6 @@ class ProductivityController extends Controller
 	        					$sesa = $inputEntry->getSesa();
 	        					$start = $inputShift->getStartTime();
 	        					$end = $inputShift->getEndTime();
-	        					$otStart = $activity->getOtStartTime();
-	        					$otEnd = $activity->getOtEndTime();
 	        					$to = $inputEntry->getTotalTo();
 	        					$regularReverse = ($start > $end ? true : false);
 	        					$otReverse = ($otStart > $otEnd ? true : false);

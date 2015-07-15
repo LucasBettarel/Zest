@@ -19,14 +19,14 @@ class EntryController extends Controller
       ->findAll()
     ;
 
-    //foreach list employee-> if activity=null -> id = 0 
-
     $EmployeeCount = sizeof($listEmployees);
   
     $userInput = new UserInput();
     $form = $this->createForm(new UserInputType(), $userInput);
 
     if ($form->handleRequest($request)->isValid()) {
+      //TODO :check if exist
+
       $em = $this->getDoctrine()->getManager();
       $em->persist($userInput);
       $em->flush();

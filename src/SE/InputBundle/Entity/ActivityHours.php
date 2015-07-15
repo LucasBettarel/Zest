@@ -48,20 +48,6 @@ class ActivityHours
     private $otHours;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="ot_start_time", type="datetime")
-     */
-    private $otStartTime;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="ot_end_time", type="datetime")
-     */
-    private $otEndTime;
-
-    /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Zone")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -214,52 +200,6 @@ class ActivityHours
     public function getRegularHours()
     {
         return $this->regularHours;
-    }
-
-    /**
-     * Set otStartTime
-     *
-     * @param \DateTime $otStartTime
-     * @return ActivityHours
-     */
-    public function setOtStartTime($otStartTime)
-    {
-        $this->otStartTime = $otStartTime;
-
-        return $this;
-    }
-
-    /**
-     * Get otStartTime
-     *
-     * @return \DateTime 
-     */
-    public function getOtStartTime()
-    {
-        return $this->otStartTime;
-    }
-
-    /**
-     * Set otEndTime
-     *
-     * @param \DateTime $otEndTime
-     * @return ActivityHours
-     */
-    public function setOtEndTime($otEndTime)
-    {
-        $this->otEndTime = $otEndTime;
-
-        return $this;
-    }
-
-    /**
-     * Get otEndTime
-     *
-     * @return \DateTime 
-     */
-    public function getOtEndTime()
-    {
-        return $this->otEndTime;
     }
 
     /**
