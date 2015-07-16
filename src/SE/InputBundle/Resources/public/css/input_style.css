@@ -112,3 +112,8 @@
 #input-shift{
 	max-width: 14%;
 }
+
+#input-date input{
+	max-width: 86%;
+}
+

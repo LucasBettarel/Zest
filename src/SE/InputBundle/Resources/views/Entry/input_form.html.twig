@@ -125,22 +125,20 @@
             {{ form_widget(form.dateInput, {'attr': {'class': 'form-control input-date'}}) }}
           </div>
         </div>
-        <div class="pull-right">
-          <div class='input-ot-time'>
-            <div class="pull-left input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true" data-toggle="tooltip" title="Start overtime">
-              <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-time"></span>
-              </span>
-              {{ form_widget(form.otStartTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
-            </div>
-            <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true" data-toggle="tooltip" title="End overtime">
-              {{ form_widget(form.otEndTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
-              <span class="input-group-addon">
-                  <span class="glyphicon glyphicon-time"></span>
-              </span>
-            </div>
-          </div>
+      <div class="pull-right input-ot-time">
+        <div class="pull-left input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true" data-toggle="tooltip" title="Start overtime">
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+          </span>
+          {{ form_widget(form.otStartTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
         </div>
+        <div class="input-group clockpicker" data-placement="left" data-align="top" data-autoclose="true" data-toggle="tooltip" title="End overtime">
+          {{ form_widget(form.otEndTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+          </span>
+        </div>
+      </div>
         
     </div>
     
