@@ -147,7 +147,7 @@
   
   </div>
 
-<div class="col-md-12">
+<div class="col-md-12 appendix">
 </div>
 
 {% endblock %}
@@ -158,8 +158,11 @@
   <script type="text/javascript">
     var globalYesterdayProd = {% if yesterdayInput is not null %}{{ yesterdayInput.totalProdInput }}{% else %}0{% endif %};
     {% autoescape false %}
-      var jsonTest = {{ jsonTest }};
+      var jsonData = {{ jsonData }};
+      var jsonCategories = {{ jsonCategories }};
+      var jsonHub = {{ jsonHub }};
     {% endautoescape %}
-    console.log(jsonTest);
+
+    console.log(jsonData);
   </script>
 {% endblock %}

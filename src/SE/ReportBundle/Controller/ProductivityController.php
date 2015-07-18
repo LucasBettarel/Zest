@@ -126,24 +126,49 @@ class ProductivityController extends Controller
 		$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 		$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 		$found = false;
-		$jsonTest = array();
+		$jsonData = array();
+		$jsonCategories = array();
+		$jsonHub = array();
 
 		for ($i=0; $i < $daydiff; $i++) { 
     		$dateCheck = new \DateTime();
     		$dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
 			$toutdesuite = $dateCheck->format("Y-m-d");
+			array_unshift($jsonCategories, $dateCheck->format("d-m"));
+			$hubWorking = 0;
+			$hubTo = 0;
 			for ($j=0; $j < $teamCount; $j++) {
     			$shiftCount = $teams[$j]->getShiftnb();
     			for ($k=0; $k < $shiftCount; $k++) {
     				foreach ($userInputs as $userInput) {
     					if(($userInput->getDateInput()->format("Y-m-d") == $toutdesuite) and ($userInput->getTeam() == $teams[$j]) and ($userInput->getShift()->getId() == $k+1)){
-    						$found = true;		       
+    						$found = true;
+
+    						$hubWorking += $userInput->getTotalWorkingHoursInput();
+    						$hubTo += $userInput->getTotalToInput();
+
+    						//to delete?
+    						$jsonData[$dateCheck->format("d-m")][$j+1][$k+1] = array('to' => $userInput->getTotalToInput(), 
+													 							   'hours' => $userInput->getTotalHoursInput(), 
+													 							   'working' => $userInput->getTotalWorkingHoursInput(),
+													 							   'overtime' => $userInput->getTotalOvertimeInput(),
+													 							   'headcount' => sizeof($userInput->getInputEntries()),
+													 							   'prod' => $userInput->getTotalProdInput(),
+													 							   );		       
     					}
-
-    					//a adapter avec des donnees utiles
-    					$jsonTest[] = array("date" => $i, 'team' => $j, 'shift' => $k);
-
     				}
+
+    				if(!$found){
+    					//array nul pour les donnees non remplies
+	    				$jsonData[$dateCheck->format("d-m")][$j+1][$k+1] = array('to' => 0, 
+												 							   'hours' => 0, 
+												 							   'working' => 0,
+												 							   'overtime' => 0,
+												 							   'headcount' => 0,
+												 							   'prod' => 0,
+												 							   );
+	    			}
+
     				//faire la query en amont et faire in array... ou autre
     				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
     				if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $inputIssue, 'team' => $teams[$j], 'shift' =>  $shifts[$k]))) and !$found){
@@ -156,9 +181,13 @@ class ProductivityController extends Controller
 				        $em->persist($missinginput);
 				        $flusher = true;
 				    }
-					$found = false;	
+					$found = false;		
     			}
     		}
+
+    		//on calcule la prod quotidienne du hub
+    		$hubProd = ($hubWorking != 0 ? $hubTo/$hubWorking : 0);
+    		$jsonHub[] = $hubProd;
 
     		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
     		$already = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array(
@@ -201,7 +230,10 @@ class ProductivityController extends Controller
     		'lastMonthInputs' => $userInputs,
     		'yesterdayInput' => $yesterdayInput,
     		'yesterday' => $yesterday,
-    		'jsonTest' => json_encode($jsonTest, JSON_PRETTY_PRINT)
+    		'jsonData' => json_encode($jsonData, JSON_PRETTY_PRINT),
+    		'jsonCategories' => json_encode($jsonCategories, JSON_PRETTY_PRINT),
+    		'jsonHub' => json_encode($jsonHub, JSON_PRETTY_PRINT),
+    		
     		));
 	}
 
