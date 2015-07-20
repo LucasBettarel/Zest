@@ -33,3 +33,15 @@ se_input_welcome:
 se_input_review:
     path:     /review
     defaults: { _controller: SEInputBundle:Entry:review }
+
+se_input_ignore:
+    pattern:  /review/input/ignore
+    defaults: { _controller: SEInputBundle:Entry:ignore }
+    requirements:
+        _method:  POST
+
+se_input_ignore:
+    pattern:  /review/input/delete
+    defaults: { _controller: SEInputBundle:Entry:delete }
+    requirements:
+        _method:  POST

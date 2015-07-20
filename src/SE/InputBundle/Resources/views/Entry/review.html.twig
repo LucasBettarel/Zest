@@ -39,7 +39,7 @@
               </thead>
               <tbody>
                 {% for error in inputErrors %}
-                  <tr>
+                  <tr id="{{ error.id }}">
                     <td>{{ error.date|date('d-m-Y') }}</td>
                     <td>{% if error.team is not null %}
                           {{ error.team.name }} 
@@ -49,7 +49,8 @@
                           {{ error.shift.identifier }} 
                         {% endif %}
                     </td>
-                    <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Create this missing input"> </i> <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Ignore this input"> </i></td>  
+                    <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Create this missing input"> </i>
+                        <a id="ignore" href=# data-id="{{ error.id }}"><i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Ignore this input"> </i></a>
                   </tr>
                 {% endfor %}                
               </tbody>
@@ -104,7 +105,7 @@
                   </thead>
                   <tbody>
                     {% for input in userInputs %}
-                      <tr>
+                      <tr id="{{ input.id }}">
                         <td>{{ input.dateInput|date('d-m-Y') }}</td>
                         <td>{{ input.team.name }}</td>
                         <td>{{ input.shift.id }}</td>
@@ -118,7 +119,11 @@
                               <i class="glyphicon glyphicon-ok text-success" data-toggle="tooltip" title="Nothing to review, all clear."></i>
                             {% endif %}
                         </td>
-                        <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit input"> </i> <i class="text-danger glyphicon glyphicon-remove-circle" data-toggle="tooltip" title="Delete input (all data will be lost)"> </i> <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Validate review of errors for this innput"> </i></td>  
+                        <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit input"> </i> 
+                            <a id="delete" href=# data-id="{{ input.id }}">
+                              <i class="text-danger glyphicon glyphicon-remove-circle" data-toggle="tooltip" title="Delete input (all data will be lost)"> </i>
+                            </a>
+                            <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Validate review of errors for this innput"> </i></td>  
                       </tr>
                     {% endfor %}                
                   </tbody>
@@ -148,11 +153,12 @@
   {{ parent() }}
 
   <script type="text/javascript">
-    //global variable containing details of all errors
     var importErrors = {{ importErrors|length }};
     var inputErrors = {{ inputErrors|length }};
     var toErrors = {{ toErrors|length }};
     var hourErrors = {{ hourErrors|length }};
+  
+    var ajaxIgnore = '{{path('se_input_ignore')}}';
   </script>
   <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
   <script src="http://code.highcharts.com/highcharts.js"></script>
