@@ -8,6 +8,9 @@ use SE\InputBundle\Form\UserInputType;
 use SE\InputBundle\Entity\InputReview;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Response;
 
 class EntryController extends Controller
 {
@@ -62,7 +65,15 @@ class EntryController extends Controller
        ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(1)));
 
       $inputErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(2)));
+       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(2), 'status' => 0));
+
+       //check if input has been filled in the meantime, remove the error if so
+      foreach ($inputErrors as $errorToCheck) {
+        if($em->getRepository('SEInputBundle:UserInput')->findOneBy(array('dateInput' => $errorToCheck->getDate(), 'team' => $errorToCheck->getTeam(), 'shift' =>  $errorToCheck->getShift()))){
+          $em->remove($errorToCheck);
+          $em->flush();
+        }
+      }
 
       $toErrors = $em->getRepository('SEInputBundle:InputReview')
        ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(3)));
@@ -73,6 +84,7 @@ class EntryController extends Controller
       $userInputs = $em->getRepository('SEInputBundle:UserInput')
        ->getLastMonth();
 
+
       return $this->render('SEInputBundle:Entry:review.html.twig', array(
         'importErrors' => $importErrors,
         'inputErrors' => $inputErrors,
@@ -81,4 +93,65 @@ class EntryController extends Controller
         'userInputs' => $userInputs
       ));
     }
+
+  public function ignoreAction()
+  { 
+    $em = $this->getDoctrine()->getManager();
+    $request = $this->get('request');        
+    $idInput = $request->get('idInput');
+    
+    $ignoreInput = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array('id' => $idInput));
+
+    if ($ignoreInput){
+    
+      $ignoreInput->setStatus(1);
+      $em->persist($ignoreInput);
+      $em->flush();
+
+      $response = array("code" => 100, "success" => true);
+    }else{
+      $response = array("code" => 400, "success" => false);
+    }
+    return new Response(json_encode($response)); 
+  }
+
+  public function deleteAction()
+  { 
+    $em = $this->getDoctrine()->getManager();
+    $request = $this->get('request');        
+    $idInput = $request->get('idInput');
+    
+    $deleteInput = $em->getRepository('SEInputBundle:UserInput')->findOneBy(array('id' => $idInput));
+    if($deleteInput){
+      $deleteEntries = $em->getRepository('SEInputBundle:InputEntry')->findBy(array('user_input' => $idInput));
+      if($deleteEntries){
+        foreach ($deleteEntries as $deleteEntry) {
+          $deleteActivityHours = $em->getRepository('SEInputBundle:ActivityHours')->findBy(array('input' => $deleteEntry));
+          if ($deleteActivityHours) {
+            foreach ($deleteActivityHours as $deleteActivityHour) {
+              $em->remove($deleteActivityHour);
+            }
+          }
+          $em->remove($deleteEntry);
+        }
+      }
+      $em->remove($deleteInput);
+    }
+
+    $em->flush();
+
+      $trouve = 'pas trouve';
+    if ($ignoreInput){
+      $trouve = 'trouve';
+    
+      $ignoreInput->setStatus(1);
+      $em->persist($ignoreInput);
+      $em->flush();
+}
+      $response = array("code" => 100, "success" => true, "trou" => $trouve);
+ /*else{
+      $response = array("code" => 400, "success" => false);
+    }
+*/    return new Response(json_encode($response)); 
+  }
 }

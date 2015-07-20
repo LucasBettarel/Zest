@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
     initCollection();
+    $('form').preventDoubleSubmission();
 
     $('.input-team, .input-shift input[type=radio]').change(function(e) {
       var valueSelected = $('.input-shift input[type=radio]:checked').val();
@@ -161,4 +162,22 @@ $(document).ready(function() {
       }
       $overt.val(diff);
     }
+
 });
+
+jQuery.fn.preventDoubleSubmission = function() {
+  $(this).on('submit',function(e){
+    var $form = $(this);
+
+    if ($form.data('submitted') === true) {
+      // Previously submitted - don't submit again
+      e.preventDefault();
+    } else {
+      // Mark it so that the next submit can be ignored
+      $form.data('submitted', true);
+    }
+  });
+
+  // Keep chainability
+  return this;
+};

@@ -64,8 +64,57 @@ $(document).ready(function() {
 
     $("*[data-toggle='tooltip']").tooltip();
 
+    $(document).on('click', '#ignore', function(e){
+      e && e.preventDefault();
+      if (confirm("Warning ! If you choose to ignore this missing input, the productivity for this date/team/shift will be 0. Do you want to continue? ") == true) {
+        var id = $(this).attr('data-id') 
+        ignoreClick(id);
+      }
+    });
+    
+
+    $(document).on('click', '#delete', function(e){
+      e && e.preventDefault();
+      if (confirm("Warning ! If you delete this input, the productivity for this date/team/shift will be 0. Are you sure to continue? ") == true) {
+        var id = $(this).attr('data-id') 
+        deleteClick(id);
+      }
+    });
+    
 });
 
 function filterColumn ( i , val) {
     $('#table').DataTable().column( i ).search(val).draw();
+}
+
+function ignoreClick(id){
+    $.post(
+      ajaxIgnore,               
+      {idInput: id}, 
+      function(response){
+        if(response.code == 100 && response.success){
+         $('#errors').find('#'+id).remove();
+        }
+        else{
+            alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
+        }
+      },
+      "json");    
+}
+
+function deleteClick(id){
+    console.log(id);
+    $.post(
+      ajaxDelete,               
+      {idInput: id}, 
+      function(response){
+        if(response.code == 100 && response.success){
+          console.log('input trouve, deleted', $('#table').find('#'+id), response.trou);
+         $('#table').find('#'+id).remove();
+        }
+        else{
+            alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
+        }
+      },
+      "json");    
 }
