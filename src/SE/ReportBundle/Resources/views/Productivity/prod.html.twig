@@ -91,28 +91,6 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <h4>PICKING</h4>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-9">
-        <div id="container-daily" style="height: 500px; margin:auto auto;"></div>
-    </div>
-    <div class="col-md-3">
-        <div class="panel panel-default">
-          <ul>
-            <li>Total Transfer order lines : #0000</li>
-            <li>Total Manhours : #0000</li>
-            <li>Total Headcount : #0000</li>
-            <li>Total Training : #0000</li>
-          </ul>
-        </div>
-    </div>
-  </div>
-
   <div class="col-md-3 well">
     sap  to process<br>
   	{% for sap in sapToProcess %}
@@ -147,7 +125,7 @@
   
   </div>
 
-<div class="col-md-12 appendix">
+<div class="col-md-12">
 </div>
 
 {% endblock %}
@@ -158,11 +136,12 @@
   <script type="text/javascript">
     var globalYesterdayProd = {% if yesterdayInput is not null %}{{ yesterdayInput.totalProdInput }}{% else %}0{% endif %};
     {% autoescape false %}
-      var jsonData = {{ jsonData }};
       var jsonCategories = {{ jsonCategories }};
       var jsonHub = {{ jsonHub }};
+      var jsonOut4 = {{ jsonOut4 }};
+      var jsonOut3 = {{ jsonOut3 }};
+      var jsonIn4 = {{ jsonIn4 }};
+      var jsonIn3 = {{ jsonIn3 }};
     {% endautoescape %}
-
-    console.log(jsonData);
   </script>
 {% endblock %}

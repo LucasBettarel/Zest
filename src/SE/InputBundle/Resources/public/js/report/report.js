@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-  console.log(jsonHub);
-
 // Load the fonts
 Highcharts.createElement('link', {
    href: '//fonts.googleapis.com/css?family=Dosis:400,600',
@@ -143,7 +141,7 @@ Highcharts.setOptions(Highcharts.theme);
 
         series: [{
             name: 'Productivity',
-            data: [globalYesterdayProd],
+            data: [jsonHub[jsonHub.length-1]],
             dataLabels: {
                 format: '<div style="text-align:center; margin-top:-70px;"><span style="font-size:90px;color:' +
                     ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
@@ -177,6 +175,9 @@ Highcharts.setOptions(Highcharts.theme);
                 color: '#808080'
             }]
         },
+        credits: {
+            enabled: false
+        },
         tooltip: {
             valueSuffix: 'to line/h'
         },
@@ -191,16 +192,16 @@ Highcharts.setOptions(Highcharts.theme);
             data: jsonHub
         }, {
             name: 'Outbound 4',
-            data: [2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+            data: jsonOut4
         }, {
             name: 'Inbound 4',
-            data: [7,8.9, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+            data: jsonIn4
         }, {
             name: 'Outbound 3',
-            data: [8, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+            data: jsonOut3
         }, {
             name: 'Inbound 3',
-            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            data: jsonIn3
         }]
     });
     

@@ -129,6 +129,10 @@ class ProductivityController extends Controller
 		$jsonData = array();
 		$jsonCategories = array();
 		$jsonHub = array();
+		$jsonOut4 = array();
+		$jsonOut3 = array();
+		$jsonIn4 = array();
+		$jsonIn3 = array();
 
 		for ($i=0; $i < $daydiff; $i++) { 
     		$dateCheck = new \DateTime();
@@ -137,6 +141,14 @@ class ProductivityController extends Controller
 			array_unshift($jsonCategories, $dateCheck->format("d-m"));
 			$hubWorking = 0;
 			$hubTo = 0;
+			$Out4Working = 0;
+			$Out4To = 0;
+			$Out3Working = 0;
+			$Out3To = 0;
+			$In4Working = 0;
+			$In4To = 0;
+			$In3Working = 0;
+			$In3To = 0;
 			for ($j=0; $j < $teamCount; $j++) {
     			$shiftCount = $teams[$j]->getShiftnb();
     			for ($k=0; $k < $shiftCount; $k++) {
@@ -146,6 +158,22 @@ class ProductivityController extends Controller
 
     						$hubWorking += $userInput->getTotalWorkingHoursInput();
     						$hubTo += $userInput->getTotalToInput();
+
+    						if($j == 0 || $j == 2){
+    							$Out4Working += $userInput->getTotalWorkingHoursInput();
+    							$Out4To += $userInput->getTotalToInput();
+    						}elseif ($j == 1) {
+    							$In4Working += $userInput->getTotalWorkingHoursInput();
+    							$In4To += $userInput->getTotalToInput();
+    						}elseif ($j == 3) {
+    							$Out3Working += $userInput->getTotalWorkingHoursInput();
+    							$Out3To += $userInput->getTotalToInput();
+    						}elseif ($j == 1) {
+    							$In3Working += $userInput->getTotalWorkingHoursInput();
+    							$In3To += $userInput->getTotalToInput();
+    						}
+
+
 
     						//to delete?
     						$jsonData[$dateCheck->format("d-m")][$j+1][$k+1] = array('to' => $userInput->getTotalToInput(), 
@@ -187,7 +215,15 @@ class ProductivityController extends Controller
 
     		//on calcule la prod quotidienne du hub
     		$hubProd = ($hubWorking != 0 ? $hubTo/$hubWorking : 0);
-    		$jsonHub[] = $hubProd;
+    		$Out4Prod = ($Out4Working != 0 ? $Out4To/$Out4Working : 0);
+    		$Out3Prod = ($Out3Working != 0 ? $Out3To/$Out3Working : 0);
+    		$In4Prod = ($In4Working != 0 ? $In4To/$In4Working : 0);
+    		$In3Prod = ($In3Working != 0 ? $In3To/$In3Working : 0);
+    		array_unshift($jsonHub, round($hubProd, 1));
+    		array_unshift($jsonOut4, round($Out4Prod,1));
+    		array_unshift($jsonOut3, round($Out3Prod,1));
+    		array_unshift($jsonIn4, round($In4Prod,1));
+    		array_unshift($jsonIn3, round($In3Prod,1));
 
     		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
     		$already = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array(
@@ -230,10 +266,12 @@ class ProductivityController extends Controller
     		'lastMonthInputs' => $userInputs,
     		'yesterdayInput' => $yesterdayInput,
     		'yesterday' => $yesterday,
-    		'jsonData' => json_encode($jsonData, JSON_PRETTY_PRINT),
     		'jsonCategories' => json_encode($jsonCategories, JSON_PRETTY_PRINT),
     		'jsonHub' => json_encode($jsonHub, JSON_PRETTY_PRINT),
-    		
+    		'jsonOut4' => json_encode($jsonOut4, JSON_PRETTY_PRINT),
+    		'jsonOut3' => json_encode($jsonOut3, JSON_PRETTY_PRINT),
+    		'jsonIn4' => json_encode($jsonIn4, JSON_PRETTY_PRINT),
+    		'jsonIn3' => json_encode($jsonIn3, JSON_PRETTY_PRINT),
     		));
 	}
 

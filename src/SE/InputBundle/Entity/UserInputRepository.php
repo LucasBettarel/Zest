@@ -21,8 +21,8 @@ class UserInputRepository extends EntityRepository
 		$qb = $this
 			->createQueryBuilder('a')
 			->select("a")
-			->where("a.date< '".$now->format("Y-m-d H:i:s")."'")
-            ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
+			->where("a.dateInput< '".$now->format("Y-m-d H:i:s")."'")
+            ->andWhere("a.dateInput > '".$lastMonth->format("Y-m-d H:i:s")."'")
 		    ->orderBy('a.dateInput', 'DESC')
 			->getQuery()
 			->getResult()

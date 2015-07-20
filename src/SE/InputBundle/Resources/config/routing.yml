@@ -40,7 +40,7 @@ se_input_ignore:
     requirements:
         _method:  POST
 
-se_input_ignore:
+se_input_delete:
     pattern:  /review/input/delete
     defaults: { _controller: SEInputBundle:Entry:delete }
     requirements:
