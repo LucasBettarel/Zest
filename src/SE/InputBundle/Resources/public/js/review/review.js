@@ -109,7 +109,7 @@ function deleteClick(id){
       {idInput: id}, 
       function(response){
         if(response.code == 100 && response.success){
-          console.log('input trouve, deleted', $('#table').find('#'+id), response.trou);
+          console.log('input trouve, deleted', $('#table').find('#'+id));
          $('#table').find('#'+id).remove();
         }
         else{

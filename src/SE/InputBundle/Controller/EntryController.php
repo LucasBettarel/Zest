@@ -136,22 +136,14 @@ class EntryController extends Controller
         }
       }
       $em->remove($deleteInput);
-    }
-
-    $em->flush();
-
-      $trouve = 'pas trouve';
-    if ($ignoreInput){
-      $trouve = 'trouve';
-    
-      $ignoreInput->setStatus(1);
-      $em->persist($ignoreInput);
       $em->flush();
-}
-      $response = array("code" => 100, "success" => true, "trou" => $trouve);
- /*else{
+
+      $response = array("code" => 100, "success" => true);
+
+    }else{
       $response = array("code" => 400, "success" => false);
     }
-*/    return new Response(json_encode($response)); 
+
+    return new Response(json_encode($response)); 
   }
 }
