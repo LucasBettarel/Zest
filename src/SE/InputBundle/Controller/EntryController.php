@@ -22,14 +22,10 @@ class EntryController extends Controller
       ->findAll()
     ;
 
-    $EmployeeCount = sizeof($listEmployees);
-  
     $userInput = new UserInput();
     $form = $this->createForm(new UserInputType(), $userInput);
 
     if ($form->handleRequest($request)->isValid()) {
-      //TODO :check if exist
-
       $em = $this->getDoctrine()->getManager();
       $em->persist($userInput);
       $em->flush();
@@ -41,7 +37,6 @@ class EntryController extends Controller
 
     return $this->render('SEInputBundle:Entry:input_form.html.twig', array(
     'form' => $form->createView(),
-    'EmployeeCount' => $EmployeeCount,
     'listEmployees' => $listEmployees
     ));
 	}

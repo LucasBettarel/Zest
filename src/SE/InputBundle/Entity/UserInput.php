@@ -4,6 +4,7 @@ namespace SE\InputBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * UserInput
@@ -11,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="userinput")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\UserInputRepository")
  * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity(fields={"dateInput", "team", "shift"}, message="This manhour input has already been created, Please check your dashboard.")
  */
 class UserInput
 {
@@ -26,6 +28,7 @@ class UserInput
     /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\InputEntry", mappedBy="user_input", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid()
      */
     private $input_entries;
 
@@ -70,6 +73,7 @@ class UserInput
      * @var \DateTime
      *
      * @ORM\Column(name="ot_start_time", type="datetime")
+     * @Assert\DateTime()
      */
     private $otStartTime;
 
@@ -77,6 +81,7 @@ class UserInput
      * @var \DateTime
      *
      * @ORM\Column(name="ot_end_time", type="datetime")
+     * @Assert\DateTime()
      */
     private $otEndTime;
 

@@ -3,6 +3,7 @@
 namespace SE\InputBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * InputEntry
@@ -29,6 +30,7 @@ class InputEntry
     private $employee;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(name="sesa", type="string", length=255, nullable=true)
      */
     private $sesa;
@@ -37,6 +39,7 @@ class InputEntry
      * @var boolean
      *
      * @ORM\Column(name="present", type="boolean")
+     * @Assert\NotNull()
      */
     private $present;
 
@@ -49,6 +52,7 @@ class InputEntry
     /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityHours", mappedBy="input", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid()
      */
     private $activity_hours;
 

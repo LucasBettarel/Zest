@@ -85,10 +85,15 @@
   <div class="well">
    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
-    {{ form_errors(form) }}
+    <div class="col-md-12 hide">
+      <div id="errors" class="alert alert-danger">
+        {{ form_errors(form) }}
+        {{ form_errors(form.dateInput) }}
+        {{ form_errors(form.user) }}
+      </div>
+    </div>
 
      <div class="form-group">
-        {{ form_errors(form.user) }}
         <div class="col-md-3" id="input-user" data-toggle="tooltip" title="Please select your name">
           <div class="input-group">
             <span class="input-group-addon">
@@ -196,6 +201,7 @@
     singleData = [{{employee.id|json_encode|raw}}, {{employee.name|json_encode|raw}}, {{employee.sesa|json_encode|raw}},{{employee.defaultTeam.id|json_encode|raw}},{{employee.defaultShift.id|json_encode|raw}},{{employee.defaultActivity.id|json_encode|raw}}];
     employeesData.push(singleData);
     {% endfor %}
+
   </script>
   {% javascripts '@SEInputBundle/Resources/public/js/input/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

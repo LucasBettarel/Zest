@@ -140,16 +140,22 @@ $(document).ready(function() {
     }
 
     function initCollection(){
-      $('.input-ot-time input').val('00:00');
-      $('.input-shift').val(1);
-      $(".input-shift input[value=1]").attr('checked', 'checked');
-      for(var i = 0; i < employeesData.length; ++i){
+      if($.trim( $('#errors').html() ).length ) {
+        $('#errors').parent().toggleClass('hide');
+        alert('There are errors in this input, please check.');
+        }
+      else{
+        $('.input-ot-time input').val('00:00');
+        $('.input-shift').val(1);
+        $(".input-shift input[value=1]").attr('checked', 'checked');
+        for(var i = 0; i < employeesData.length; ++i){
           if(employeesData[i][3] == $('.input-team').val() && employeesData[i][4] == $('.input-shift').val()){
             addElement($('#entries-prototype'), employeesData[i]);
           }
+        } 
+        $('form').children('div').last().hide();
       }
-      $('.clockpicker').clockpicker();  
-      $('form').children('div').last().hide();
+      $('.clockpicker').clockpicker(); 
       $("*[data-toggle='tooltip']").tooltip();
     }
 
