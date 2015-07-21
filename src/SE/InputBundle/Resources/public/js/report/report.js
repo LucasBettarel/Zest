@@ -209,6 +209,15 @@ Highcharts.setOptions(Highcharts.theme);
 	$('#filters a').click(function(){
 	  	$(this).siblings().removeClass('label-primary').addClass('label-default');
 	  	$(this).removeClass('label-default').addClass('label-primary');
+      console.log($(this).parent().hasClass('teams'));
+      if ($(this).parent().hasClass('teams')){
+        if($(this).attr('id') == ""){
+          $('#filters .shifts').toggleClass('hide');
+        }
+        else if ($('#filters .shifts').hasClass('hide')){
+          $('#filters .shifts').toggleClass('hide');
+        }
+      }
 	});
 
 });
