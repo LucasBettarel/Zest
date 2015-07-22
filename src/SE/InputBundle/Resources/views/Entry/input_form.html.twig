@@ -177,7 +177,7 @@
     </div>
     <div class="pull-left">
       <a href=# id="add" class="btn btn-success" data-target="entries-prototype">
-        <i class="glyphicon glyphicon-plus"></i> Add Employee (Transfer IN)
+        <i class="glyphicon glyphicon-plus"></i> Add Employee (Transfer IN or VTeam)
       </a>
     </div> 
     <div class="form-group">
@@ -202,6 +202,7 @@
     employeesData.push(singleData);
     {% endfor %}
 
+    var ajaxPopulate = '{{path('se_input_populate')}}';
   </script>
   {% javascripts '@SEInputBundle/Resources/public/js/input/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

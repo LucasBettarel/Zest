@@ -141,4 +141,23 @@ class EntryController extends Controller
 
     return new Response(json_encode($response)); 
   }
+
+  public function populateAction()
+  { 
+    $em = $this->getDoctrine()->getManager();
+    $request = $this->get('request');        
+    $idEmployee = $request->get('idEmployee');
+    
+    $addEmployee = $em->getRepository('SEInputBundle:Employee')->findOneBy(array('id' => $idEmployee));
+    if($addEmployee){
+      $sesa = $addEmployee->getSesa();
+      $activity = $addEmployee->getDefaultActivity()->getId();
+      $response = array("code" => 100, "success" => true, "sesa" => $sesa, "activity" => $activity);
+
+    }else{
+      $response = array("code" => 400, "success" => false);
+    }
+
+    return new Response(json_encode($response)); 
+  }
 }

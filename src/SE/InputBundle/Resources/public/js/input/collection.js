@@ -8,11 +8,28 @@ $(document).ready(function() {
       dynamicList(valueSelected);
     });
 
-    $('.input-ot-time input').change(function(e) {
+  /*  $('.input-ot-time input').change(function(e) {
       var startTime = $(this).closest('.input-ot-time').find('input:first').val();
       var endTime = $(this).closest('.input-ot-time').find('input:last').val();
       var $overTime = $(this).closest('.row').find('.input-overtime input');
       displayOvertime(startTime, endTime, $overTime);
+    });
+*/
+    $('.saver').prepend( "<i class='glyphicon glyphicon-send'> </i> " );
+
+    $(document).on('change', '.input-employee select', function(e){
+     //input sesa automatic...
+     var $this =$(this)
+     var id = $this.val(); 
+     $.get(
+      ajaxPopulate,               
+      {idEmployee: id}, 
+      function(response){
+        if(response.code == 100 && response.success){
+         $this.parent().siblings('.input-sesa').find('input').val(response.sesa);
+        }
+      },
+      "json");    
     });
 
 

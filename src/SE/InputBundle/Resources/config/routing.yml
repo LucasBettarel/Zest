@@ -45,3 +45,9 @@ se_input_delete:
     defaults: { _controller: SEInputBundle:Entry:delete }
     requirements:
         _method:  POST
+
+se_input_populate:
+    pattern:  /input/populate
+    defaults: { _controller: SEInputBundle:Entry:populate }
+    requirements:
+        _method:  GET

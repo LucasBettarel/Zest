@@ -103,7 +103,6 @@ function ignoreClick(id){
 }
 
 function deleteClick(id){
-    console.log(id);
     $.post(
       ajaxDelete,               
       {idInput: id}, 
