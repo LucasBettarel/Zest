@@ -27,6 +27,8 @@ $(document).ready(function() {
       function(response){
         if(response.code == 100 && response.success){
          $this.parent().siblings('.input-sesa').find('input').val(response.sesa);
+         $this.closest('td').siblings('#activities').find('.input-activity select').val(response.activity);
+
         }
       },
       "json");    
