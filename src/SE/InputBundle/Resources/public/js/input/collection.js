@@ -64,6 +64,14 @@ $(document).ready(function() {
       }
     });
 
+  $(document).on('click', '#comment', function(e) {
+    $(this).siblings('.txtarea-sm').toggleClass('hide');
+  });
+
+  $(document).on('click', '#manual', function(e) {
+    $(this).siblings('.input-manual').toggleClass('hide');
+  });
+
     function addElement($prototypeHolder, values){
       if($prototypeHolder.is("#entries-prototype")){
         var $element = definePrototype($prototypeHolder, true);

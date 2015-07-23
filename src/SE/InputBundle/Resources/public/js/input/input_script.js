@@ -1,14 +1,6 @@
 $(document).ready(function() {
 	//incorporate all that shit in creation of collection -> event listener take ressources!
-
-	$(document).on('click', '#comment', function(e) {
-		$(this).siblings('.txtarea-sm').toggleClass('hide');
-	});
-
-	$(document).on('click', '#manual', function(e) {
-		$(this).siblings('.input-manual').toggleClass('hide');
-	});
-
+/*
 	$(document).on('click', '.transfer', function(e){
 		$activitiesHolder = $("#"+$(this).attr('data-sub-target'));
 		$rowHolder = $('*[data-content="'+$(this).attr('data-target')+'"]');
@@ -39,6 +31,7 @@ $(document).ready(function() {
 			}
 		}
 	});
+*/
 
 });
 
