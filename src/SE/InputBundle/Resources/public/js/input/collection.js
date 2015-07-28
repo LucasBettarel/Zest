@@ -16,6 +16,21 @@ $(document).ready(function() {
     });
 */
     $('.saver').prepend( "<i class='glyphicon glyphicon-send'> </i> " );
+    $('.saver').hide();
+    $('.saver').prop('disabled', true);
+    $(document).on('click', '.confirmation',  function(e){
+      if (confirm("Please review carefully your manhours input, then click save")){
+        $('.confirmation').hide();
+        $('.saver').show();
+        $('.saver').prop('disabled', false);
+      }
+    });
+
+    $(document).on('change', 'form',  function(e){
+        $('.saver').hide();
+        $('.saver').prop('disabled', true);
+        $('.confirmation').show();
+    });
 
     $(document).on('change', '.input-employee select', function(e){
      //input sesa automatic...

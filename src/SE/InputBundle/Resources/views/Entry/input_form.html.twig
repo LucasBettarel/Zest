@@ -184,11 +184,15 @@
     </div> 
     <div class="form-group">
       {{ form_widget(form.save, {'attr': {'class': 'saver btn btn-success pull-right'}}) }}
-    </div>
+      <div class="confirmation btn btn-success pull-right"><i class="glyphicon glyphicon-ok"> </i> Confirm input</div>
+    </div>  
+
     
     {{ form_rest(form) }}
     {{ form_end(form) }}
-  </div>
+
+</div>
+
 
 {% endblock %}
 
