@@ -130,8 +130,14 @@ class ProductivityController extends Controller
 		$jsonCategories = array();
 		$jsonHub = array();
 		$jsonOut4 = array();
-		$jsonOut3 = array();
+		$jsonOut4s1 = array();
+		$jsonOut4s2 = array();
+		$jsonOut4s3 = array();
 		$jsonIn4 = array();
+		$jsonIn4s1 = array();
+		$jsonIn4s2 = array();
+		$jsonIn4s3 = array();
+		$jsonOut3 = array();
 		$jsonIn3 = array();
 
 		for ($i=0; $i < $daydiff; $i++) { 
@@ -141,14 +147,37 @@ class ProductivityController extends Controller
 			array_unshift($jsonCategories, $dateCheck->format("d-m"));
 			$hubWorking = 0;
 			$hubTo = 0;
+
 			$Out4Working = 0;
 			$Out4To = 0;
-			$Out3Working = 0;
-			$Out3To = 0;
+
+			$Out4s1Working = 0;
+			$Out4s1To = 0;
+
+			$Out4s2Working = 0;
+			$Out4s2To = 0;
+
+			$Out4s3Working = 0;
+			$Out4s3To = 0;
+
 			$In4Working = 0;
 			$In4To = 0;
+
+			$In4s1Working = 0;
+			$In4s1To = 0;
+
+			$In4s2Working = 0;
+			$In4s2To = 0;
+
+			$In4s3Working = 0;
+			$In4s3To = 0;
+
+			$Out3Working = 0;
+			$Out3To = 0;
+
 			$In3Working = 0;
 			$In3To = 0;
+
 			for ($j=0; $j < $teamCount; $j++) {
     			$shiftCount = $teams[$j]->getShiftnb();
     			for ($k=0; $k < $shiftCount; $k++) {
@@ -162,9 +191,29 @@ class ProductivityController extends Controller
     						if($j == 0 || $j == 2){
     							$Out4Working += $userInput->getTotalWorkingHoursInput();
     							$Out4To += $userInput->getTotalToInput();
+    							if($k == 0){
+    								$Out4s1Working += $userInput->getTotalWorkingHoursInput();
+    								$Out4s1To += $userInput->getTotalToInput();
+    							}elseif($k == 1){
+    								$Out4s2Working += $userInput->getTotalWorkingHoursInput();
+    								$Out4s2To += $userInput->getTotalToInput();
+    							}elseif($k == 2){
+    								$Out4s3Working += $userInput->getTotalWorkingHoursInput();
+    								$Out4s3To += $userInput->getTotalToInput();
+    							}
     						}elseif ($j == 1) {
     							$In4Working += $userInput->getTotalWorkingHoursInput();
     							$In4To += $userInput->getTotalToInput();
+    							if($k == 0){
+    								$In4s1Working += $userInput->getTotalWorkingHoursInput();
+    								$In4s1To += $userInput->getTotalToInput();
+    							}elseif($k == 1){
+    								$In4s2Working += $userInput->getTotalWorkingHoursInput();
+    								$In4s2To += $userInput->getTotalToInput();
+    							}elseif($k == 2){
+    								$In4s3Working += $userInput->getTotalWorkingHoursInput();
+    								$In4s3To += $userInput->getTotalToInput();
+    							}
     						}elseif ($j == 3) {
     							$Out3Working += $userInput->getTotalWorkingHoursInput();
     							$Out3To += $userInput->getTotalToInput();
@@ -216,13 +265,25 @@ class ProductivityController extends Controller
     		//on calcule la prod quotidienne du hub
     		$hubProd = ($hubWorking != 0 ? $hubTo/$hubWorking : 0);
     		$Out4Prod = ($Out4Working != 0 ? $Out4To/$Out4Working : 0);
+    		$Out4s1Prod = ($Out4s1Working != 0 ? $Out4s1To/$Out4s1Working : 0);
+    		$Out4s2Prod = ($Out4s2Working != 0 ? $Out4s2To/$Out4s2Working : 0);
+    		$Out4s3Prod = ($Out4s3Working != 0 ? $Out4s3To/$Out4s3Working : 0);   		
     		$Out3Prod = ($Out3Working != 0 ? $Out3To/$Out3Working : 0);
     		$In4Prod = ($In4Working != 0 ? $In4To/$In4Working : 0);
+    		$In4s1Prod = ($In4s1Working != 0 ? $In4s1To/$In4s1Working : 0);
+    		$In4s2Prod = ($In4s2Working != 0 ? $In4s2To/$In4s2Working : 0);
+    		$In4s3Prod = ($In4s3Working != 0 ? $In4s3To/$In4s3Working : 0);
     		$In3Prod = ($In3Working != 0 ? $In3To/$In3Working : 0);
     		array_unshift($jsonHub, round($hubProd, 1));
     		array_unshift($jsonOut4, round($Out4Prod,1));
+    		array_unshift($jsonOut4s1, round($Out4s1Prod,1));
+    		array_unshift($jsonOut4s2, round($Out4s2Prod,1));
+    		array_unshift($jsonOut4s3, round($Out4s3Prod,1));
     		array_unshift($jsonOut3, round($Out3Prod,1));
     		array_unshift($jsonIn4, round($In4Prod,1));
+    		array_unshift($jsonIn4s1, round($In4s1Prod,1));
+    		array_unshift($jsonIn4s2, round($In4s2Prod,1));
+    		array_unshift($jsonIn4s3, round($In4s3Prod,1));
     		array_unshift($jsonIn3, round($In3Prod,1));
 
     		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
@@ -266,12 +327,18 @@ class ProductivityController extends Controller
     		'lastMonthInputs' => $userInputs,
     		'yesterdayInput' => $yesterdayInput,
     		'yesterday' => $yesterday,
-    		'jsonCategories' => json_encode($jsonCategories, JSON_PRETTY_PRINT),
-    		'jsonHub' => json_encode($jsonHub, JSON_PRETTY_PRINT),
-    		'jsonOut4' => json_encode($jsonOut4, JSON_PRETTY_PRINT),
-    		'jsonOut3' => json_encode($jsonOut3, JSON_PRETTY_PRINT),
-    		'jsonIn4' => json_encode($jsonIn4, JSON_PRETTY_PRINT),
-    		'jsonIn3' => json_encode($jsonIn3, JSON_PRETTY_PRINT),
+    		'jsonCategories' => json_encode($jsonCategories),
+    		'jsonHub' => json_encode($jsonHub),
+    		'jsonOut4' => json_encode($jsonOut4),
+    		'jsonOut4s1' => json_encode($jsonOut4s1),
+    		'jsonOut4s2' => json_encode($jsonOut4s2),
+    		'jsonOut4s3' => json_encode($jsonOut4s3),
+    		'jsonOut3' => json_encode($jsonOut3),
+    		'jsonIn4' => json_encode($jsonIn4),
+    		'jsonIn4s1' => json_encode($jsonIn4s1),
+    		'jsonIn4s2' => json_encode($jsonIn4s2),
+    		'jsonIn4s3' => json_encode($jsonIn4s3),
+    		'jsonIn3' => json_encode($jsonIn3),
     		));
 	}
 

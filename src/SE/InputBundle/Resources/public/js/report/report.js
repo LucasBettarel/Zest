@@ -154,7 +154,7 @@ Highcharts.setOptions(Highcharts.theme);
 
     }));
 
-   $('#container-daily').highcharts({
+   var optionsDaily = {
         title: {
             text: 'Daily-to-date',
             x: -20 //center
@@ -203,21 +203,108 @@ Highcharts.setOptions(Highcharts.theme);
             name: 'Inbound 3',
             data: jsonIn3
         }]
-    });
-    
+    };
+
+  $('#container-daily').highcharts(optionsDaily);   
    
 	$('#filters a').click(function(){
-	  	$(this).siblings().removeClass('label-primary').addClass('label-default');
-	  	$(this).removeClass('label-default').addClass('label-primary');
-      console.log($(this).parent().hasClass('teams'));
-      if ($(this).parent().hasClass('teams')){
-        if($(this).attr('id') == ""){
-          $('#filters .shifts').toggleClass('hide');
-        }
-        else if ($('#filters .shifts').hasClass('hide')){
-          $('#filters .shifts').toggleClass('hide');
+  	$(this).siblings().removeClass('label-primary').addClass('label-default');
+  	$(this).removeClass('label-default').addClass('label-primary');
+    if ($(this).parent().hasClass('teams')){
+      if($(this).attr('id') == "" || $(this).attr('id') == "Outbound3" || $(this).attr('id') == "Inbound3"){
+        if(!$('#filters .shifts').hasClass('hide')){
+          $('#filters .shifts').addClass('hide');
         }
       }
-	});
+      else if ($('#filters .shifts').hasClass('hide')){
+        $('#filters .shifts').removeClass('hide');
+      }
+    }
 
+    //update charts data
+    if($(this).attr('id') == ""){
+      optionsDaily.series = [{
+            name: 'HubAsia',
+            data: jsonHub
+        }, {
+            name: 'Outbound 4',
+            data: jsonOut4
+        }, {
+            name: 'Inbound 4',
+            data: jsonIn4
+        }, {
+            name: 'Outbound 3',
+            data: jsonOut3
+        }, {
+            name: 'Inbound 3',
+            data: jsonIn3
+        }]
+    }else if($(this).attr('id') == "Outbound4"){
+      optionsDaily.series = [{
+            name: 'Outbound4',
+            data: jsonOut4
+        }, {
+            name: 'Shift 1',
+            data: jsonOut4s1
+        }, {
+            name: 'Shift 1',
+            data: jsonOut4s2
+        }, {
+            name: 'Shift 3',
+            data: jsonOut4s3
+        }]
+    }else if($(this).attr('id') == "Inbound4"){
+      optionsDaily.series = [{
+            name: 'HubAsia',
+            data: jsonHub
+        }, {
+            name: 'Outbound 4',
+            data: jsonOut4
+        }, {
+            name: 'Inbound 4',
+            data: jsonIn4
+        }, {
+            name: 'Outbound 3',
+            data: jsonOut3
+        }, {
+            name: 'Inbound 3',
+            data: jsonIn3
+        }]
+    }else if($(this).attr('id') == "Outbound3"){
+      optionsDaily.series = [{
+            name: 'HubAsia',
+            data: jsonHub
+        }, {
+            name: 'Outbound 4',
+            data: jsonOut4
+        }, {
+            name: 'Inbound 4',
+            data: jsonIn4
+        }, {
+            name: 'Outbound 3',
+            data: jsonOut3
+        }, {
+            name: 'Inbound 3',
+            data: jsonIn3
+        }]
+    }else if($(this).attr('id') == "Inbound3"){
+      optionsDaily.series = [{
+            name: 'HubAsia',
+            data: jsonHub
+        }, {
+            name: 'Outbound 4',
+            data: jsonOut4
+        }, {
+            name: 'Inbound 4',
+            data: jsonIn4
+        }, {
+            name: 'Outbound 3',
+            data: jsonOut3
+        }, {
+            name: 'Inbound 3',
+            data: jsonIn3
+        }]
+    }
+
+  });
 });
