@@ -210,6 +210,11 @@ Highcharts.setOptions(Highcharts.theme);
 	$('#filters a').click(function(){
   	$(this).siblings().removeClass('label-primary').addClass('label-default');
   	$(this).removeClass('label-default').addClass('label-primary');
+
+    //update charts data
+    var containerDaily = $('#container-daily').highcharts();
+    var containerProd = $('#container-prod').highcharts();
+
     if ($(this).parent().hasClass('teams')){
       if($(this).attr('id') == "allT" || $(this).attr('id') == "Outbound3" || $(this).attr('id') == "Inbound3"){
         if(!$('#filters .shifts').hasClass('hide')){
@@ -221,107 +226,132 @@ Highcharts.setOptions(Highcharts.theme);
       }
       $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
       $('#filters .shifts').find('#allS ').removeClass('label-default').addClass('label-primary');
+
+      
+      if($(this).attr('id') == "allT"){
+        while (containerDaily.series.length > 0) {
+              containerDaily.series[0].remove();
+        }
+
+        containerDaily.addSeries({
+            name: 'HubAsia',
+            data: jsonHub
+        });
+        containerDaily.addSeries({
+            name : 'Outbound 4',
+            data: jsonOut4
+        });
+        containerDaily.addSeries({
+            name : 'Inbound 4',
+            data: jsonIn4
+        });
+        containerDaily.addSeries({
+            name : 'Outbound 3',
+            data: jsonOut3
+        });
+        containerDaily.addSeries({
+            name : 'Inbound 3',
+            data: jsonIn3
+        });
+
+        containerProd.series[0].setData([jsonHub[jsonHub.length-1]]);
+
+      }else if($(this).attr('id') == "Outbound4"){
+        while (containerDaily.series.length > 0) {
+              containerDaily.series[0].remove();
+        }
+
+        containerDaily.addSeries({
+            name : 'Outbound 4',
+            data: jsonOut4
+        });
+        containerDaily.addSeries({
+            name : 'Shift 1',
+            data: jsonOut4s1
+        });
+        containerDaily.addSeries({
+            name : 'Shift 2',
+            data: jsonOut4s2
+        });
+        containerDaily.addSeries({
+            name : 'Shift 3',
+            data: jsonOut4s3
+        });
+
+      containerProd.series[0].setData([jsonOut4[jsonOut4.length-1]]);
+
+      }else if($(this).attr('id') == "Inbound4"){
+        while (containerDaily.series.length > 0) {
+              containerDaily.series[0].remove();
+        }
+
+        containerDaily.addSeries({
+            name : 'Inbound 4',
+            data: jsonIn4
+        });
+        containerDaily.addSeries({
+            name : 'Shift 1',
+            data: jsonIn4s1
+        });
+        containerDaily.addSeries({
+            name : 'Shift 2',
+            data: jsonIn4s2
+        });
+        containerDaily.addSeries({
+            name : 'Shift 3',
+            data: jsonIn4s3
+        });
+
+        containerProd.series[0].setData([jsonIn4[jsonIn4.length-1]]);
+
+      }else if($(this).attr('id') == "Outbound3"){
+        while (containerDaily.series.length > 0) {
+              containerDaily.series[0].remove();
+        }
+
+        containerDaily.addSeries({
+            name : 'Outbound 3',
+            data: jsonOut3
+        });
+      }else if($(this).attr('id') == "Inbound3"){
+        while (containerDaily.series.length > 0) {
+              containerDaily.series[0].remove();
+        }
+
+        containerDaily.addSeries({
+            name : 'Inbound 3',
+            data: jsonIn3
+        });
+      }
+
+    }
+    else{
+      //shift filters
+      if($('#filters a#Outbound4').hasClass('label-primary')){
+        if($(this).attr('id') == "Shift1"){
+          containerProd.series[0].setData([jsonOut4s1[jsonOut4s1.length-1]]);
+        }else if($(this).attr('id') == "Shift2"){
+          containerProd.series[0].setData([jsonOut4s2[jsonOut4s2.length-1]]);
+        }else if($(this).attr('id') == "Shift3"){
+          containerProd.series[0].setData([jsonOut4s3[jsonOut4s3.length-1]]);
+        }else{
+          containerProd.series[0].setData([jsonOut4[jsonOut4.length-1]]);
+        }
+      }
+      else{
+        if($(this).attr('id') == "Shift1"){
+          containerProd.series[0].setData([jsonIn4s1[jsonIn4s1.length-1]]);
+        }else if($(this).attr('id') == "Shift2"){
+          containerProd.series[0].setData([jsonIn4s2[jsonIn4s2.length-1]]);
+        }else if($(this).attr('id') == "Shift3"){
+          containerProd.series[0].setData([jsonIn4s3[jsonIn4s3.length-1]]);
+        }else{
+          containerProd.series[0].setData([jsonIn4[jsonIn4.length-1]]);
+        }
+      }
     }
 
-    //update charts data
-    var containerDaily = $('#container-daily').highcharts();
-    var containerProd = $('#container-prod').highcharts();
-
-    if($(this).attr('id') == "allT"){
-      while (containerDaily.series.length > 0) {
-            containerDaily.series[0].remove();
-      }
-
-      containerDaily.addSeries({
-          name: 'HubAsia',
-          data: jsonHub
-      });
-      containerDaily.addSeries({
-          name : 'Outbound 4',
-          data: jsonOut4
-      });
-      containerDaily.addSeries({
-          name : 'Inbound 4',
-          data: jsonIn4
-      });
-      containerDaily.addSeries({
-          name : 'Outbound 3',
-          data: jsonOut3
-      });
-      containerDaily.addSeries({
-          name : 'Inbound 3',
-          data: jsonIn3
-      });
-
-      containerProd.series[0].setData([jsonHub[jsonHub.length-1]]);
-
-    }else if($(this).attr('id') == "Outbound4"){
-      while (containerDaily.series.length > 0) {
-            containerDaily.series[0].remove();
-      }
-
-      containerDaily.addSeries({
-          name : 'Outbound 4',
-          data: jsonOut4
-      });
-      containerDaily.addSeries({
-          name : 'Shift 1',
-          data: jsonOut4s1
-      });
-      containerDaily.addSeries({
-          name : 'Shift 2',
-          data: jsonOut4s2
-      });
-      containerDaily.addSeries({
-          name : 'Shift 3',
-          data: jsonOut4s3
-      });
-
-    containerProd.series[0].setData([jsonOut4[jsonOut4.length-1]]);
-
-    }else if($(this).attr('id') == "Inbound4"){
-      while (containerDaily.series.length > 0) {
-            containerDaily.series[0].remove();
-      }
-
-      containerDaily.addSeries({
-          name : 'Inbound 4',
-          data: jsonIn4
-      });
-      containerDaily.addSeries({
-          name : 'Shift 1',
-          data: jsonIn4s1
-      });
-      containerDaily.addSeries({
-          name : 'Shift 2',
-          data: jsonIn4s2
-      });
-      containerDaily.addSeries({
-          name : 'Shift 3',
-          data: jsonIn4s3
-      });
-
-      containerProd.series[0].setData([jsonIn4[jsonIn4.length-1]]);
-
-    }else if($(this).attr('id') == "Outbound3"){
-      while (containerDaily.series.length > 0) {
-            containerDaily.series[0].remove();
-      }
-
-      containerDaily.addSeries({
-          name : 'Outbound 3',
-          data: jsonOut3
-      });
-    }else if($(this).attr('id') == "Inbound3"){
-      while (containerDaily.series.length > 0) {
-            containerDaily.series[0].remove();
-      }
-
-      containerDaily.addSeries({
-          name : 'Inbound 3',
-          data: jsonIn3
-      });
-    }
+    
 
   });
 });
