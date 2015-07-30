@@ -51,3 +51,15 @@ se_input_populate:
     defaults: { _controller: SEInputBundle:Entry:populate }
     requirements:
         _method:  GET
+
+se_input_review_details:
+    path:     /review/{id}
+    defaults: { _controller: SEInputBundle:Entry:reviewDetails }
+    requirements:
+        id:   \d+
+
+se_input_review_activities:
+    pattern:  /review/activities
+    defaults: { _controller: SEInputBundle:Entry:activities }
+    requirements:
+        _method:  GET

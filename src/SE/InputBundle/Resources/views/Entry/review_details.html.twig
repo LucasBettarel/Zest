@@ -1,0 +1,127 @@
+{% extends "SEInputBundle::layout.html.twig" %}
+
+{% block title %}Review input details - {{ parent() }}{% endblock %}
+
+{% block seinput_body %}
+  <header class="h-review">
+    <div class="line"></div>
+    <h2><i class="glyphicon glyphicon-dashboard"> </i> Input details : {{ input.team.name }} - shift {{ input.shift.id }}, on {{ input.dateInput|date('d-m-Y') }}</h2>
+  </header>
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="alert alert-warning lead">
+        The edit function is not available ... yet! Please inform Lucas or Stephen if you want to edit this input.</br>
+        Also, if you find any bug or discrepancies in the following data, please notice us.</br>
+        Thank you.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-hour">
+      <!-- Default panel contents -->
+      <div class="panel-heading"> Informations</div>
+        <div class="panel-body">
+          <p>Input processed by : <strong>{{ input.user.name }}</strong></p>
+          <p>Headcount : <strong>{{ input.inputEntries|length }}</strong></p> 
+          <p>TO lines : <strong>{{ input.totalToInput }}</strong></p>
+          <p>Total Hours : <strong>{{ input.totalHoursInput }}</strong></p>
+          <p>Total Working Hours : <strong>{{ input.totalWorkingHoursInput }}</strong></p>
+          <p>Overtime hours : <strong>{{ input.totalOvertimeInput }}
+          {% if input.totalOvertimeInput != 0 %}
+            </strong></p>
+            <p>Overtime timing : starts at <strong>{{ input.otStartTime|date('H:i') }}</strong> to <strong>{{ input.otEndTime|date('H:i') }}</strong></p>
+          {% else %}
+            (no overtime recorded)</strong></p>
+          {% endif %}
+          <p>Training hours : ...</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 round-container">
+      <div class="round">
+        <p class="lead">Productivity</p>
+        <h1>{{ input.totalProdInput }}</h1>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div id="container-activities" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <!-- Table -->
+      <div class="table-responsive">
+          <table id="table" class="table table-hover table-striped display">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>SESA</th>
+                <th>Present</th>
+                <th>Activities</th>
+                <th>Regular Hours</th>
+                <th>Overtime</th>
+                <th>Comments</th>
+                <th>TO lines</th>
+                <th>Total Hours</th>
+                <th>Productivity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in input.inputEntries %}
+                <tr>
+                  <td>{{ entry.employee.name }}</td>
+                  <td>{{ entry.sesa }}</td>
+                  <td>{% if entry.present == 1 %}
+                        <i class="glyphicon glyphicon-ok text-success"></i></td>
+                      {% else %}
+                        <i class="glyphicon glyphicon-remove text-warning"> </i> {{ entry.absenseReason.name }}</td>
+                      {% endif %}
+                  <td>
+                    {% for a in entry.activityHours %}
+                      {{ a.activity.name }} </br>
+                    {% endfor %}
+                  </td>
+                  <td>
+                    {% for a in entry.activityHours %}
+                      {{ a.regularHours }} </br>
+                    {% endfor %}
+                  </td>
+                  <td>
+                    {% for a in entry.activityHours %}
+                      {{ a.otHours }} </br>
+                    {% endfor %}
+                  </td>
+                  <td>{{ entry.comments }}</td>
+                  <td>{{ entry.totalTo }}</td> 
+                  <td>{{ entry.totalHours }}</td>
+                  <td>
+                    {% if entry.totalProd != 0 %}
+                      {{ entry.totalProd }}
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}               
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script type="text/javascript">
+    var id = {{ input.id }};
+    var ajaxActivities = '{{path('se_input_review_activities')}}';
+  </script>
+  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+  <script src="http://code.highcharts.com/highcharts.js"></script>
+  {% javascripts '@SEInputBundle/Resources/public/js/review/review_details.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+{% endblock %}

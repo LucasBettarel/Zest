@@ -119,11 +119,15 @@
                               <i class="glyphicon glyphicon-ok text-success" data-toggle="tooltip" title="Nothing to review, all clear."></i>
                             {% endif %}
                         </td>
-                        <td><i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit input"> </i> 
+                        <td>
+                            <a id="view" href="{{ path('se_input_review_details', {'id': input.id}) }}">
+                              <i class="text-info glyphicon glyphicon-eye-open" data-toggle="tooltip" title="View input details"> </i>
+                            </a>
+                            <i class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Edit input"> </i> 
                             <a id="delete" href=# data-id="{{ input.id }}">
                               <i class="text-danger glyphicon glyphicon-remove-circle" data-toggle="tooltip" title="Delete input (all data will be lost)"> </i>
                             </a>
-                            <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Validate review of errors for this innput"> </i></td>  
+                            <i class="glyphicon glyphicon-check text-success" data-toggle="tooltip" title="Validate review of errors for this input"> </i></td>  
                       </tr>
                     {% endfor %}                
                   </tbody>
@@ -164,7 +168,7 @@
   </script>
   <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
   <script src="http://code.highcharts.com/highcharts.js"></script>
-  {% javascripts '@SEInputBundle/Resources/public/js/review/*' %}
+  {% javascripts '@SEInputBundle/Resources/public/js/review/review.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 {% endblock %}

@@ -117,3 +117,19 @@
 	max-width: 86%;
 }
 
+.round{
+	border-radius: 50% 50%;
+	background-color: #FAC51C;
+	height: 150px;
+	width: 150px;
+	text-align: center;
+    display: table-cell;
+    overflow: hidden;
+    vertical-align:middle;
+}
+
+.round-container{
+	margin-top: 4%;
+	min-width: 180px;
+}
+

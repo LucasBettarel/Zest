@@ -160,4 +160,64 @@ class EntryController extends Controller
 
     return new Response(json_encode($response)); 
   }
+
+  public function reviewDetailsAction($id)
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $userInput = $em
+      ->getRepository('SEInputBundle:UserInput')
+      ->find($id)
+    ;
+
+    if (null === $userInput) {
+      throw new NotFoundHttpException("The manhours input ".$id." was not found. Sorry lah.");
+    }
+
+    return $this->render('SEInputBundle:Entry:review_details.html.twig', array(
+      'input' => $userInput
+    ));
+  }
+
+  public function activitiesAction()
+  { 
+    $em = $this->getDoctrine()->getManager();
+    $request = $this->get('request');        
+    $id = $request->get('id');
+    
+    $input = $em
+      ->getRepository('SEInputBundle:UserInput')
+      ->find($id)
+    ;
+
+    $jsonActivities = array(
+      'cat' => array(),
+      'data' => array()
+      );
+
+    if($input){
+      foreach ($input->getInputEntries() as $entry) {
+        foreach ($entry->getActivityHours() as $a) {
+         $key = array_search($a->getActivity()->getName(), $jsonActivities['cat']);
+         if($key === false){
+            $jsonActivities['cat'][] = $a->getActivity()->getName();
+            $key = array_search($a->getActivity()->getName(), $jsonActivities['cat']);
+          }
+          if(array_key_exists($key, $jsonActivities['data'])){
+            $jsonActivities['data'][$key] += $a->getRegularHours() + $a->getOtHours();
+          }else{
+            $jsonActivities['data'][$key] = $a->getRegularHours() + $a->getOtHours();
+          }       
+        }
+      }
+      $response = array("code" => 100, "success" => true, "jsonActivities" => $jsonActivities);
+
+    }else{
+      $response = array("code" => 400, "success" => false, "jsonActivities" => $jsonActivities);
+    }
+
+    return new Response(json_encode($response)); 
+  }
+
+
 }
