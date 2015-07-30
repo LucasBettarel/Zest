@@ -205,7 +205,11 @@ Highcharts.setOptions(Highcharts.theme);
         }]
     };
 
-  $('#container-daily').highcharts(optionsDaily);   
+  $('#container-daily').highcharts(optionsDaily);  
+  replaceTotalData('hub'); 
+  var yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  $('#yesterday').append(yesterdayDate.toDateString());
    
 	$('#filters a').click(function(){
   	$(this).siblings().removeClass('label-primary').addClass('label-default');
@@ -255,6 +259,7 @@ Highcharts.setOptions(Highcharts.theme);
         });
 
         containerProd.series[0].setData([jsonHub[jsonHub.length-1]]);
+        replaceTotalData('hub');
 
       }else if($(this).attr('id') == "Outbound4"){
         while (containerDaily.series.length > 0) {
@@ -278,7 +283,8 @@ Highcharts.setOptions(Highcharts.theme);
             data: jsonOut4s3
         });
 
-      containerProd.series[0].setData([jsonOut4[jsonOut4.length-1]]);
+        containerProd.series[0].setData([jsonOut4[jsonOut4.length-1]]);
+        replaceTotalData('out4');
 
       }else if($(this).attr('id') == "Inbound4"){
         while (containerDaily.series.length > 0) {
@@ -303,6 +309,7 @@ Highcharts.setOptions(Highcharts.theme);
         });
 
         containerProd.series[0].setData([jsonIn4[jsonIn4.length-1]]);
+        replaceTotalData('in4');
 
       }else if($(this).attr('id') == "Outbound3"){
         while (containerDaily.series.length > 0) {
@@ -313,6 +320,9 @@ Highcharts.setOptions(Highcharts.theme);
             name : 'Outbound 3',
             data: jsonOut3
         });
+        containerProd.series[0].setData([jsonOut3[jsonOut3.length-1]]);
+        replaceTotalData('out3');
+
       }else if($(this).attr('id') == "Inbound3"){
         while (containerDaily.series.length > 0) {
               containerDaily.series[0].remove();
@@ -322,36 +332,60 @@ Highcharts.setOptions(Highcharts.theme);
             name : 'Inbound 3',
             data: jsonIn3
         });
-      }
+        containerProd.series[0].setData([jsonIn3[jsonIn3.length-1]]);
+        replaceTotalData('in3');
 
+      }
     }
     else{
       //shift filters
       if($('#filters a#Outbound4').hasClass('label-primary')){
         if($(this).attr('id') == "Shift1"){
           containerProd.series[0].setData([jsonOut4s1[jsonOut4s1.length-1]]);
+          replaceTotalData('out4s1');
         }else if($(this).attr('id') == "Shift2"){
           containerProd.series[0].setData([jsonOut4s2[jsonOut4s2.length-1]]);
+          replaceTotalData('out4s2');
         }else if($(this).attr('id') == "Shift3"){
           containerProd.series[0].setData([jsonOut4s3[jsonOut4s3.length-1]]);
+          replaceTotalData('out4s3');
         }else{
           containerProd.series[0].setData([jsonOut4[jsonOut4.length-1]]);
+          replaceTotalData('out4');
         }
       }
       else{
         if($(this).attr('id') == "Shift1"){
           containerProd.series[0].setData([jsonIn4s1[jsonIn4s1.length-1]]);
+          replaceTotalData('in4s1');
         }else if($(this).attr('id') == "Shift2"){
           containerProd.series[0].setData([jsonIn4s2[jsonIn4s2.length-1]]);
+          replaceTotalData('in4s2');
         }else if($(this).attr('id') == "Shift3"){
           containerProd.series[0].setData([jsonIn4s3[jsonIn4s3.length-1]]);
+          replaceTotalData('in4s3');
         }else{
           containerProd.series[0].setData([jsonIn4[jsonIn4.length-1]]);
+          replaceTotalData('in4');
         }
       }
     }
+  }); 
 
-    
-
-  });
 });
+
+function replaceTotalData(team){
+    $('#daily-panel #m-to').html(jsonTotalData[team][1]['to']);
+    $('#daily-panel #m-ma').html(jsonTotalData[team][1]['mh']);
+    $('#daily-panel #m-hc').html(jsonTotalData[team][1]['hc']);
+    $('#daily-panel #m-ot').html(jsonTotalData[team][1]['ot']);
+    $('#daily-panel #m-tr').html(jsonTotalData[team][1]['tr']);
+    $('#daily-panel #m-ab').html(jsonTotalData[team][1]['ab']);
+
+    $('#yesterday-panel #y-to').html(jsonTotalData[team][0]['to']);
+    $('#yesterday-panel #y-ma').html(jsonTotalData[team][0]['mh']);
+    $('#yesterday-panel #y-hc').html(jsonTotalData[team][0]['hc']);
+    $('#yesterday-panel #y-ot').html(jsonTotalData[team][0]['ot']);
+    $('#yesterday-panel #y-tr').html(jsonTotalData[team][0]['tr']);
+    $('#yesterday-panel #y-ab').html(jsonTotalData[team][0]['ab']);
+  }

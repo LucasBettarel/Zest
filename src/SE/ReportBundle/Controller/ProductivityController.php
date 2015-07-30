@@ -126,7 +126,6 @@ class ProductivityController extends Controller
 		$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 		$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 		$found = false;
-		$jsonData = array();
 		$jsonCategories = array();
 		$jsonHub = array();
 		$jsonOut4 = array();
@@ -139,6 +138,206 @@ class ProductivityController extends Controller
 		$jsonIn4s3 = array();
 		$jsonOut3 = array();
 		$jsonIn3 = array();
+		$jsonTotalData = array(
+			'hub' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'out4' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'out4s1' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'out4s2' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'out4s3' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'in4' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'in4s1' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'in4s2' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'in4s3' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'out3' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			),
+			'in3' => array(
+				0 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				),
+				1 => array(
+					'to' => 0,
+					'mh' => 0,
+					'hc' => 0,
+					'tr' => 0,
+					'ab' => 0,
+					'ot' => 0
+				)
+			)
+		);
 
 		for ($i=0; $i < $daydiff; $i++) { 
     		$dateCheck = new \DateTime();
@@ -189,62 +388,63 @@ class ProductivityController extends Controller
     						$hubTo += $userInput->getTotalToInput();
 
     						if($j == 0 || $j == 2){
-    							$Out4Working += $userInput->getTotalWorkingHoursInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'out4', $i, $userInput);
+	    						$Out4Working += $userInput->getTotalWorkingHoursInput();
     							$Out4To += $userInput->getTotalToInput();
+
     							if($k == 0){
     								$Out4s1Working += $userInput->getTotalWorkingHoursInput();
     								$Out4s1To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'out4s1', $i, $userInput);
+	    						
     							}elseif($k == 1){
     								$Out4s2Working += $userInput->getTotalWorkingHoursInput();
     								$Out4s2To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'out4s2', $i, $userInput);
+	    						
     							}elseif($k == 2){
     								$Out4s3Working += $userInput->getTotalWorkingHoursInput();
     								$Out4s3To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'out4s3', $i, $userInput);
+	    						
     							}
     						}elseif ($j == 1) {
     							$In4Working += $userInput->getTotalWorkingHoursInput();
     							$In4To += $userInput->getTotalToInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in4', $i, $userInput);
+
     							if($k == 0){
     								$In4s1Working += $userInput->getTotalWorkingHoursInput();
     								$In4s1To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in4s1', $i, $userInput);
+	    						
     							}elseif($k == 1){
     								$In4s2Working += $userInput->getTotalWorkingHoursInput();
     								$In4s2To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in4s2', $i, $userInput);
+	    						
     							}elseif($k == 2){
     								$In4s3Working += $userInput->getTotalWorkingHoursInput();
     								$In4s3To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in4s3', $i, $userInput);
+	    						
     							}
     						}elseif ($j == 3) {
     							$Out3Working += $userInput->getTotalWorkingHoursInput();
     							$Out3To += $userInput->getTotalToInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'out3', $i, $userInput);
+	    						
     						}elseif ($j == 1) {
     							$In3Working += $userInput->getTotalWorkingHoursInput();
     							$In3To += $userInput->getTotalToInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in3', $i, $userInput);
+	    						
     						}
 
-
-
-    						//to delete?
-    						$jsonData[$dateCheck->format("d-m")][$j+1][$k+1] = array('to' => $userInput->getTotalToInput(), 
-													 							   'hours' => $userInput->getTotalHoursInput(), 
-													 							   'working' => $userInput->getTotalWorkingHoursInput(),
-													 							   'overtime' => $userInput->getTotalOvertimeInput(),
-													 							   'headcount' => sizeof($userInput->getInputEntries()),
-													 							   'prod' => $userInput->getTotalProdInput(),
-													 							   );		       
+    						//total data implement
+    						$jsonTotalData = $this->loadTotalData($jsonTotalData, 'hub', $i, $userInput);	
     					}
     				}
-
-    				if(!$found){
-    					//array nul pour les donnees non remplies
-	    				$jsonData[$dateCheck->format("d-m")][$j+1][$k+1] = array('to' => 0, 
-												 							   'hours' => 0, 
-												 							   'working' => 0,
-												 							   'overtime' => 0,
-												 							   'headcount' => 0,
-												 							   'prod' => 0,
-												 							   );
-	    			}
 
     				//faire la query en amont et faire in array... ou autre
     				//dans tous les inputs qu'on a, aucun correspond a celui qui devrait etre, donc on persist l'erreur si c'est pas deja fait
@@ -308,16 +508,7 @@ class ProductivityController extends Controller
 			$flusher = false;
 		}
  	
- 		//to remove
- 		$yesterday = new \DateTime();
-       	$yesterday->setTime(00, 00, 00);
-		$yesterday->modify( '- 1 day' );
-
-        //select userinput to display (=all basically -> do better with ajax or something) //to remove
-		$yesterdayInput = $em->getRepository('SEInputBundle:UserInput')
-         ->findOneBy(array('dateInput' => $yesterday ));
-
-    	return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
+ 		return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
     		'sapToProcess' => $sapToProcess,
     		'inputToProcess' => $inputToProcess,
     		'missingTO' => $missingTO,
@@ -325,8 +516,6 @@ class ProductivityController extends Controller
     		'lolo' => $lolo,
     		'toto' => $toto,
     		'lastMonthInputs' => $userInputs,
-    		'yesterdayInput' => $yesterdayInput,
-    		'yesterday' => $yesterday,
     		'jsonCategories' => json_encode($jsonCategories),
     		'jsonHub' => json_encode($jsonHub),
     		'jsonOut4' => json_encode($jsonOut4),
@@ -339,12 +528,55 @@ class ProductivityController extends Controller
     		'jsonIn4s2' => json_encode($jsonIn4s2),
     		'jsonIn4s3' => json_encode($jsonIn4s3),
     		'jsonIn3' => json_encode($jsonIn3),
+    		'jsonTotalData' => json_encode($jsonTotalData),
     		));
 	}
 
 	public function menuAction()
 	{
 		return $this->render('SEReportBundle:Productivity:menu.html.twig');
+	}
+
+	public function loadTotalData($TotalData, $team, $i, $userInput)
+	{
+		//total data implement
+		if($i == 0){
+			//yesterday
+			$TotalData[$team][0]['to'] += $userInput->getTotalToInput(); 
+			$TotalData[$team][0]['mh'] += $userInput->getTotalHoursInput();
+			foreach ($userInput->getInputEntries() as $input) {
+			    foreach ($input->getActivityHours() as $a) {
+	                if ($a->getActivity()->getId() == 7){
+    					$TotalData[$team][0]['tr'] += $a->getRegularHours() + $a->getOtHours();
+	                }
+				}
+				if(!$input->getPresent()){
+					$TotalData[$team][0]['ab'] += 1;
+				}else{
+					$TotalData[$team][0]['hc'] += 1;
+				}
+			}
+			$TotalData[$team][0]['ot'] += $userInput->getTotalOvertimeInput();
+		}
+
+		//monthly 
+		$TotalData[$team][1]['to'] += $userInput->getTotalToInput(); 
+		$TotalData[$team][1]['mh'] += $userInput->getTotalHoursInput();
+		foreach ($userInput->getInputEntries() as $input) {
+		    foreach ($input->getActivityHours() as $a) {
+                if ($a->getActivity()->getId() == 7){
+					$TotalData[$team][1]['tr'] += $a->getRegularHours() + $a->getOtHours();
+                }
+			}
+			if(!$input->getPresent()){
+				$TotalData[$team][1]['ab'] += 1;
+			}else{
+				$TotalData[$team][1]['hc'] += 1;
+			}
+		}
+		$TotalData[$team][1]['ot'] += $userInput->getTotalOvertimeInput();
+
+		return $TotalData;
 	}
 
 }
