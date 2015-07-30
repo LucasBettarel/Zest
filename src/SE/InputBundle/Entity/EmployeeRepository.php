@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class EmployeeRepository extends EntityRepository
 {
+	public function getAlphaEmployees()
+	{
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->orderBy('a.sesa', 'ASC')
+		->getQuery()
+		->getResult()
+		;
+
+  
+		return $qb;
+	}
 }

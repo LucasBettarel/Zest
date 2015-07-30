@@ -19,7 +19,7 @@ class EntryController extends Controller
     $listEmployees = $this->getDoctrine()
       ->getManager()
       ->getRepository('SEInputBundle:Employee')
-      ->findAll()
+      ->getAlphaEmployees()
     ;
 
     $userInput = new UserInput();

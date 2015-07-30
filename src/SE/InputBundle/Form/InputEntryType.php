@@ -5,6 +5,7 @@ namespace SE\InputBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class InputEntryType extends AbstractType
 {
@@ -20,7 +21,11 @@ class InputEntryType extends AbstractType
                 'class'    => 'SEInputBundle:Employee',
                 'property' => 'name', 
                 'multiple' => false,
-                'expanded' => false
+                'expanded' => false,
+                'query_builder' => function(EntityRepository $er) {
+                  return $er->createQueryBuilder('u')
+                            ->orderBy('u.name', 'ASC');
+                  }
                 ), array('required' => true))
             ->add('sesa', 'text', array('required' => false))
             ->add('present', 'checkbox', 

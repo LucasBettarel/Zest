@@ -19,11 +19,10 @@ $(document).ready(function() {
     $('.saver').hide();
     $('.saver').prop('disabled', true);
     $(document).on('click', '.confirmation',  function(e){
-      if (confirm("Please review carefully your manhours input, then click save")){
-        $('.confirmation').hide();
-        $('.saver').show();
-        $('.saver').prop('disabled', false);
-      }
+      alert("Please review carefully your manhours input, then click save");
+      $('.confirmation').hide();
+      $('.saver').show();
+      $('.saver').prop('disabled', false);
     });
 
     $(document).on('change', 'form',  function(e){

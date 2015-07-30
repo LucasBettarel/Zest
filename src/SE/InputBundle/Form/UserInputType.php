@@ -5,6 +5,7 @@ namespace SE\InputBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class UserInputType extends AbstractType
 {
@@ -36,7 +37,12 @@ class UserInputType extends AbstractType
                 'class'    => 'SEInputBundle:Team',
                 'property' => 'name', 
                 'multiple' => false,
-                'expanded' => false
+                'expanded' => false,
+                'query_builder' => function(EntityRepository $er) {
+                  return $er->createQueryBuilder('u')
+                            ->select('u')
+                            ->where("u.name <> 'VTeam'");
+                  }
                 ), array('required' => true))
             ->add('shift', 'entity', array(
                 'class'    => 'SEInputBundle:Shift',
