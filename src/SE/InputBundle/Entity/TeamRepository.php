@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class TeamRepository extends EntityRepository
 {
+	public function getReportingTeams()
+	{
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->where("a.name <> 'VTeam'")
+		->getQuery()
+		->getResult()
+		;
+		return $qb;
+	}
 }

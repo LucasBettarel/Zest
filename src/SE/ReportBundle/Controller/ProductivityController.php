@@ -120,7 +120,7 @@ class ProductivityController extends Controller
     	$lastMonth = new \DateTime();
     	$lastMonth->setTime(00, 00, 00)->modify( '-'.(date('j')-1).' day' );
 		$daydiff = $today->diff($lastMonth)->days;
-		$teams = $em->getRepository('SEInputBundle:Team')->findAll();
+		$teams = $em->getRepository('SEInputBundle:Team')->getReportingTeams();
 		$teamCount = count($teams);
 		$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
 		$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);

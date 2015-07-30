@@ -21,8 +21,6 @@ class EmployeeRepository extends EntityRepository
 		->getQuery()
 		->getResult()
 		;
-
-  
 		return $qb;
 	}
 }
