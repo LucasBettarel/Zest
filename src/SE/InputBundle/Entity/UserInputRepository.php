@@ -16,12 +16,12 @@ class UserInputRepository extends EntityRepository
 	{
 		$now = new \DateTime();
 		$lastMonth = new \DateTime();
-		$lastMonth->modify( '-'.(date('j')-1).' day' );
+		$lastMonth->modify( '-'.(date('j')).' day' );
 
 		$qb = $this
 			->createQueryBuilder('a')
 			->select("a")
-			->where("a.dateInput< '".$now->format("Y-m-d H:i:s")."'")
+			->where("a.dateInput <= '".$now->format("Y-m-d H:i:s")."'")
             ->andWhere("a.dateInput > '".$lastMonth->format("Y-m-d H:i:s")."'")
 		    ->orderBy('a.dateInput', 'DESC')
 			->getQuery()

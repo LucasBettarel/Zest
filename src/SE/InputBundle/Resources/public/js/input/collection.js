@@ -66,15 +66,16 @@ $(document).ready(function() {
     $(document).on('click', '#presence :checkbox', function(e) {
       $(this).closest('#presence').find('.toggling').toggleClass('hide');
       $(this).closest('td').toggleClass('expand-cell');
-      $(this).closest('#presence').find('.input-reason').val(0);
       var $actProto = $(this).closest('td').siblings('#activities').find('div:first');
       if ($(this).closest('#presence').find('.toggling').hasClass('hide')){
         //add 1st activity
         addSubElement($actProto);
+        $(this).closest('#presence').find('.input-reason').val(0);
       }
       else{
         //rmv activities
         $actProto.children().remove();
+        $(this).closest('#presence').find('.input-reason').val(1);
       }
     });
 
