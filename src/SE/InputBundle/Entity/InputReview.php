@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * InputReview
  *
  * @ORM\Table(name="inputreview")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\InputReviewRepository")
  */
 class InputReview
 {

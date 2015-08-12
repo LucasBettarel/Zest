@@ -57,10 +57,11 @@ class EntryController extends Controller
 
       //select errors
       $importErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(1)));
+       ->getLastMonthImportErrors();
+
 
       $inputErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(2), 'status' => 0));
+       ->getLastMonthMissingInputErrors();
 
        //check if input has been filled in the meantime, remove the error if so
       foreach ($inputErrors as $errorToCheck) {
@@ -71,10 +72,10 @@ class EntryController extends Controller
       }
 
       $toErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(3)));
+       ->getLastMonthToErrors();
 
       $hourErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->findBy(array('type' => $em->getRepository('SEInputBundle:TypeIssue')->find(4)));
+       ->getLastMonthHoursErrors();
 
       $userInputs = $em->getRepository('SEInputBundle:UserInput')
        ->getLastMonth();
