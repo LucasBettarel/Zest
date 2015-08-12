@@ -126,9 +126,16 @@
   </div>
 
   <div class="col-md-3 well">
-  {{ lala }}
     {% for lol in lolo %}
       {{ lol.dateConfirmation|date("m/d/Y") }}
+      <br>
+    {% endfor %}
+  
+  </div>
+
+    <div class="col-md-3 well">
+   {% for sss in shift3 %}
+      {{ sss }}
       <br>
     {% endfor %}
   

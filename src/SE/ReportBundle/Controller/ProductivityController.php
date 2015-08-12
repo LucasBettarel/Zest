@@ -33,7 +33,8 @@ class ProductivityController extends Controller
          //test
          $lolo = array();
          $toto = array(); 
-         $lala = 'rate!';
+         $shift3 = array();
+         $shift3[] = 'init';
          $missingTO = 0;
 
         //for each inputToProcess(not processed)
@@ -58,20 +59,26 @@ class ProductivityController extends Controller
 	        					$start = $inputShift->getStartTime();
 	        					$end = $inputShift->getEndTime();
 	        					$to = $inputEntry->getTotalTo();
-	        					$regularReverse = ($start > $end ? true : false);
+	        					$regularReverse = ($start < $end ? true : false);
 	        					$otReverse = ($otStart > $otEnd ? true : false);
 	
 						 		//go in saprf and do the shit.
         					    $TOlines = $em->getRepository('SEInputBundle:SAPRF')->getTo($inputDate, $sesa);
-								$lala = 'relousss!';
+								if ($TOlines){
+									$shift3[] = 'TO recognized';
+									$shift3[] = $regularReverse;
+									$shift3[] = $otReverse;
+									$shift3[] = $start->format('H:i:s');
+									$shift3[] = $end->format('H:i:s');
+								}
+
 								//restrict by hours
 								foreach ($TOlines as $line) {
 									$timeConf = $line->getTimeConfirmation(); 
-									$lala = 'somethng!';
 								if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
 										$to += 1; //ok
 										$line->setRecorded(1);
-									$lala = 'affected!';
+										$shift3[] = 'youpi';
 									}
 									else{
 										$missingTO += 1; //pas ok
@@ -513,9 +520,9 @@ class ProductivityController extends Controller
     		'sapToProcess' => $sapToProcess,
     		'inputToProcess' => $inputToProcess,
     		'missingTO' => $missingTO,
-    		'lala' => $lala, 
     		'lolo' => $lolo,
     		'toto' => $toto,
+    		'shift3' => $shift3,
     		'lastMonthInputs' => $userInputs,
     		'jsonCategories' => json_encode($jsonCategories),
     		'jsonHub' => json_encode($jsonHub),
