@@ -502,11 +502,12 @@ class ProductivityController extends Controller
 		        }
 
     	}
-	    if ($flusher){
+    //flush changes everytime, see if it is the best solution
+	   // if ($flusher){
 			$em->flush();
 			$em->clear();
 			$flusher = false;
-		}
+		//}
  	
  		return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
     		'sapToProcess' => $sapToProcess,

@@ -415,7 +415,6 @@ class UserInput
     }
 
     /**
-     * @ORM\PreUpdate
      * @ORM\PrePersist
      */
     public function computeHours(){
