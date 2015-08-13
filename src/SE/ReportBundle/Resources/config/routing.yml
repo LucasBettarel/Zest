@@ -1,3 +1,13 @@
 se_report_home:
     path:     /
     defaults: { _controller: SEReportBundle:Productivity:index }
+
+se_report_refresh:
+    path:  /refresh
+    defaults: { _controller: SEReportBundle:Productivity:refresh }
+
+se_report_process:
+    pattern:  /process
+    defaults: { _controller: SEReportBundle:Productivity:process }
+    requirements:
+        _method:  GET

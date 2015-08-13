@@ -16,111 +16,9 @@ class ProductivityController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$flusher = false;
 
-		//select sapimports not processed (one...)
-		$sapToProcess = $em->getRepository('SEInputBundle:SapImports')
-         ->findBy(array('process' => 0))
-        ;
-
-        //select userinput not processed (...toMany)
-		$inputToProcess = $em->getRepository('SEInputBundle:UserInput')
-         ->findBy(array('process' => 0))
-        ;
-
         //tous les inputs du dernier mois
         $userInputs = $em->getRepository('SEInputBundle:UserInput')
          ->getLastMonth();
-
-         //test
-         $lolo = array();
-         $toto = array(); 
-         $shift3 = array();
-         $shift3[] = 'init';
-         $missingTO = 0;
-
-        //for each inputToProcess(not processed)
-        foreach ($inputToProcess as $inputToProcessDay) {
-        	$inputUser = $inputToProcessDay->getUser();
-        	$inputDate = $inputToProcessDay->getDateInput();
-    		$inputTeam = $inputToProcessDay->getTeam();
-    		$inputShift = $inputToProcessDay->getShift();
-    		$otStart = $inputToProcessDay->getOtStartTime();
-			$otEnd = $inputToProcessDay->getOtEndTime();					
-    		$toIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
-					         		
-        	foreach ($sapToProcess as $sapToProcessDay) {
-      
-	        	if($inputDate->format("Y-m-d") == $sapToProcessDay->getDate()->format("Y-m-d")){
-	        		//match: input.date present in sap.date
-	        		foreach ($inputToProcessDay->getInputEntries() as $inputEntry) {
-	        			foreach ($inputEntry->getActivityHours() as $activity) {
-	        				//picking or putaway
-	        				if ($activity->getActivity()->getTrackable() == true){
-	        					$sesa = $inputEntry->getSesa();
-	        					$start = $inputShift->getStartTime();
-	        					$end = $inputShift->getEndTime();
-	        					$to = $inputEntry->getTotalTo();
-	        					$regularReverse = ($start < $end ? true : false);
-	        					$otReverse = ($otStart > $otEnd ? true : false);
-	
-						 		//go in saprf and do the shit.
-        					    $TOlines = $em->getRepository('SEInputBundle:SAPRF')->getTo($inputDate, $sesa);
-								if ($TOlines){
-									$shift3[] = 'TO recognized';
-									$shift3[] = $regularReverse;
-									$shift3[] = $otReverse;
-									$shift3[] = $start->format('H:i:s');
-									$shift3[] = $end->format('H:i:s');
-								}
-
-								//restrict by hours
-								foreach ($TOlines as $line) {
-									$timeConf = $line->getTimeConfirmation(); 
-								if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
-										$to += 1; //ok
-										$line->setRecorded(1);
-										$shift3[] = 'youpi';
-									}
-									else{
-										$missingTO += 1; //pas ok
-									}
-								}
-
-								//update in inputentry the to lines
-								$inputEntry->setTotalTo($to);
-								$toto[] = $to;
-
-								//add not affected tolines (those in shift time for now, by team/area later) to review input error
-								if(count($missingTO) > 0 and !($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $inputDate, 'type' => $toIssue, 'team' => $inputTeam, 'shift' =>  $inputShift))) ){
-					         		$missingHour = new InputReview();
-					         		$missingHour->setDate($inputDate);
-					         		$missingHour->setType($toIssue);
-					         		$missingHour->setToerror($missingTO);
-					         		$missingHour->setUser($inputUser);
-					         		$missingHour->setTeam($inputTeam);
-					         		$missingHour->setShift($inputShift);
-					         		$missingHour->setStatus(0);
-
-					  		        $em->persist($missingHour);
-					  		        $flusher = true;
-								}
-	        				}
-	        			}
-	        		}
-
-	        		//process finished -> +1 input done in sapImport
-	        		//faire un check error avant
-					$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
-
-	        		if($sapToProcessDay->getInputs() == 10){ //team.count*team.shift.count
-	        			$sapToProcessDay->setProcess(1);
-	        		}
-
-	        		$inputToProcessDay->setProcess(1);
-	        	}
-	       	}
-	        //calculate new to number + new prod ah ah
-			$inputToProcessDay->computeHours();
-        }//foreach input
 
 	 	$today = new \DateTime();
    		$today->setTime(00, 00, 00);
@@ -509,21 +407,15 @@ class ProductivityController extends Controller
 		        }
 
     	}
-    //flush changes everytime, see if it is the best solution
-	   // if ($flusher){
+
+	    if ($flusher){
 			$em->flush();
 			$em->clear();
 			$flusher = false;
-		//}
+		}
  	
  		return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
-    		'sapToProcess' => $sapToProcess,
-    		'inputToProcess' => $inputToProcess,
-    		'missingTO' => $missingTO,
-    		'lolo' => $lolo,
-    		'toto' => $toto,
-    		'shift3' => $shift3,
-    		'lastMonthInputs' => $userInputs,
+    		//'lastMonthInputs' => $userInputs, not used
     		'jsonCategories' => json_encode($jsonCategories),
     		'jsonHub' => json_encode($jsonHub),
     		'jsonOut4' => json_encode($jsonOut4),
@@ -538,6 +430,104 @@ class ProductivityController extends Controller
     		'jsonIn3' => json_encode($jsonIn3),
     		'jsonTotalData' => json_encode($jsonTotalData),
     		));
+	}
+
+	public function refreshAction()
+	{
+		$em = $this->getDoctrine()->getManager();
+
+		//select sapimports not processed
+		$sapToProcess = $em->getRepository('SEInputBundle:SapImports')
+         ->findBy(array('process' => 0))
+        ;
+
+        //select userinput not processed (...toMany)
+		$inputToProcess = $em->getRepository('SEInputBundle:UserInput')
+         ->findBy(array('process' => 0))
+        ;
+
+        //var for error recording
+   		$toIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
+        $missingTO = 0;
+
+
+        //for each inputToProcess(not processed)
+        foreach ($inputToProcess as $inputToProcessDay) {
+        	$inputUser = $inputToProcessDay->getUser();
+        	$inputDate = $inputToProcessDay->getDateInput();
+    		$inputTeam = $inputToProcessDay->getTeam();
+    		$inputShift = $inputToProcessDay->getShift();
+    		$otStart = $inputToProcessDay->getOtStartTime();
+			$otEnd = $inputToProcessDay->getOtEndTime();					
+					         		
+        	foreach ($sapToProcess as $sapToProcessDay) {
+      
+	        	if($inputDate->format("Y-m-d") == $sapToProcessDay->getDate()->format("Y-m-d")){
+	        		//match: input.date present in sap.date
+	        		foreach ($inputToProcessDay->getInputEntries() as $inputEntry) {
+	        			foreach ($inputEntry->getActivityHours() as $activity) {
+	        				//picking or putaway
+	        				if ($activity->getActivity()->getTrackable() == true){
+	        					$sesa = $inputEntry->getSesa();
+	        					$start = $inputShift->getStartTime();
+	        					$end = $inputShift->getEndTime();
+	        					$to = $inputEntry->getTotalTo();
+	        					$regularReverse = ($start < $end ? true : false);
+	        					$otReverse = ($otStart > $otEnd ? true : false);
+	
+						 		//go in saprf and do the shit.
+        					    $TOlines = $em->getRepository('SEInputBundle:SAPRF')->getTo($inputDate, $sesa);
+							
+								//restrict by hours
+								foreach ($TOlines as $line) {
+									$timeConf = $line->getTimeConfirmation(); 
+									if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
+										$to += 1; //ok
+										$line->setRecorded(1);
+									}
+									else{
+										$missingTO += 1; //pas ok
+									}
+								}
+
+								//update in inputentry the to lines
+								$inputEntry->setTotalTo($to);
+
+								//add not affected tolines (those in shift time for now, by team/area later) to review input error
+								if(count($missingTO) > 0 and !($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $inputDate, 'type' => $toIssue, 'team' => $inputTeam, 'shift' =>  $inputShift))) ){
+					         		$missingHour = new InputReview();
+					         		$missingHour->setDate($inputDate);
+					         		$missingHour->setType($toIssue);
+					         		$missingHour->setToerror($missingTO);
+					         		$missingHour->setUser($inputUser);
+					         		$missingHour->setTeam($inputTeam);
+					         		$missingHour->setShift($inputShift);
+					         		$missingHour->setStatus(0);
+
+					  		        $em->persist($missingHour);
+								}
+	        				}
+	        			}
+	        		}
+
+	        		//process finished -> +1 input done in sapImport
+	        		//faire un check error avant
+					$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
+
+	        		if($sapToProcessDay->getInputs() == 10){ //team.count*team.shift.count
+	        			$sapToProcessDay->setProcess(1);
+	        		}
+
+	        		$inputToProcessDay->setProcess(1);
+	        	}
+	       	}
+	        //calculate new to number + new prod ah ah
+			$inputToProcessDay->computeHours();
+        }//foreach input
+
+		$em->flush();
+
+		return $this->redirect($this->generateUrl('se_report_home'));
 	}
 
 	public function menuAction()
@@ -585,6 +575,27 @@ class ProductivityController extends Controller
 		$TotalData[$team][1]['ot'] += $userInput->getTotalOvertimeInput();
 
 		return $TotalData;
+	}
+
+	public function processAction()
+	{ 
+	    $em = $this->getDoctrine()->getManager();
+	    $request = $this->get('request');        
+	    $idInput = $request->get('idInput');
+	    
+	    $ignoreInput = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array('id' => $idInput));
+
+	    if ($ignoreInput){
+	    
+	      $ignoreInput->setStatus(1);
+	      $em->persist($ignoreInput);
+	      $em->flush();
+
+	      $response = array("code" => 100, "success" => true);
+	    }else{
+	      $response = array("code" => 400, "success" => false);
+	    }
+	    return new Response(json_encode($response)); 
 	}
 
 }
