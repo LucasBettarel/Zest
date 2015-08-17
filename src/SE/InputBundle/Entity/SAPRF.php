@@ -24,7 +24,7 @@ class SAPRF
     /**
      * @var integer
      *
-     * @ORM\Column(name="transfer_order", type="integer", nullable=true)
+     * @ORM\Column(name="transfer_order", type="bigint", nullable=true)
      */
     private $transferOrder;
 

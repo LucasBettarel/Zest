@@ -11,3 +11,7 @@ se_report_process:
     defaults: { _controller: SEReportBundle:Productivity:process }
     requirements:
         _method:  GET
+
+se_report_hr:
+    path:  /hr
+    defaults: { _controller: SEReportBundle:Productivity:hr }

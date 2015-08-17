@@ -1,0 +1,81 @@
+{% extends "SEReportBundle::layout.html.twig" %}
+
+{% block title %}Productivity - {{ parent() }}{% endblock %}
+
+{% block sereport_body %}
+  <header class="h-employee">
+    <div class="line"></div>
+    <div class="pull-left">
+      <h2><i class="glyphicon glyphicon-user"> </i> Attendance report</h2>
+    </div>
+  </header>
+
+  <div class="row">
+    <div id="filters">
+      <div class="teams pull-left">
+        <a id="allT" class="label label-primary">HubAsia</a>
+        <a id="Outbound4" class="label label-default">Outbound4</a>
+        <a id="Inbound4" class="label label-default">Inbound4</a>
+        <a id="Outbound3" class="label label-default">Outbound3</a>
+        <a id="Inbound3" class="label label-default">Inbound3</a>
+      </div>
+      <div class="shifts hide">
+        | 
+        <a id="allS" class="label label-primary">All</a>
+        <a id="Shift1" class="label label-default">Shift1</a>
+        <a id="Shift2" class="label label-default">Shift2</a>
+        <a id="Shift3" class="label label-default">Shift3</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" id="data-panel">
+     <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4>Data Summary</h4>
+      </div>
+      <div class="panel-body">
+        <div class="col-md-5">
+          <div id="container-attendance" style="height: 400px; margin:auto auto;"></div>
+        </div>
+      </div>
+      <div id="yesterday-panel" class="col-md-4 col-md-offset-1">
+         <div class="panel panel-default">
+          <div class="panel-body">
+            <h4>Transfer order lines : 
+              <span id="y-to"></span>
+            </h4>
+            <h4>Total Manhours : 
+              <span id="y-ma"></span>
+            </h4>
+            <h4>Total Headcount : 
+              <span id="y-hc"></span>
+            </h4>
+            <h4>Overtime hours :
+              <span id="y-ot"></span>
+            </h4>
+            <h4>Training hours :
+              <span id="y-tr"></span>
+            </h4>
+            <h4>Absent employees :
+              <span id="y-ab"></span>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script type="text/javascript">
+   {% autoescape false %}
+   {% endautoescape %}
+  </script>
+  {% javascripts '@SEReportBundle/Resources/public/js/hr.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+{% endblock %}

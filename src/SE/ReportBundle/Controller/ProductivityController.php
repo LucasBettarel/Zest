@@ -339,7 +339,7 @@ class ProductivityController extends Controller
     							$Out3To += $userInput->getTotalToInput();
     							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'out3', $i, $userInput);
 	    						
-    						}elseif ($j == 1) {
+    						}elseif ($j == 4) {
     							$In3Working += $userInput->getTotalWorkingHoursInput();
     							$In3To += $userInput->getTotalToInput();
     							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in3', $i, $userInput);
@@ -481,12 +481,15 @@ class ProductivityController extends Controller
 								//restrict by hours
 								foreach ($TOlines as $line) {
 									$timeConf = $line->getTimeConfirmation(); 
-									if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
-										$to += 1; //ok
-										$line->setRecorded(1);
-									}
-									else{
-										$missingTO += 1; //pas ok
+									//if inside right time interval + to line not already affected
+									if($line->getRecorded() == 0){ 
+										if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
+											$to += 1; //ok
+											$line->setRecorded(1);
+										}
+										else{
+											$missingTO += 1; //pas ok
+										}
 									}
 								}
 
@@ -514,7 +517,7 @@ class ProductivityController extends Controller
 	        		//faire un check error avant
 					$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
 
-	        		if($sapToProcessDay->getInputs() == 10){ //team.count*team.shift.count
+	        		if($sapToProcessDay->getInputs() == 12){ //team.count*team.shift.count
 	        			$sapToProcessDay->setProcess(1);
 	        		}
 
@@ -596,6 +599,13 @@ class ProductivityController extends Controller
 	      $response = array("code" => 400, "success" => false);
 	    }
 	    return new Response(json_encode($response)); 
+	}
+
+	public function hrAction()
+	{ 
+	    $em = $this->getDoctrine()->getManager();
+
+	    return $this->render('SEReportBundle:Productivity:hr.html.twig'); 
 	}
 
 }
