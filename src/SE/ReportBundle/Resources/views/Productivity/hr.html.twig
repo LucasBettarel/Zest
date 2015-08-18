@@ -1,6 +1,13 @@
 {% extends "SEReportBundle::layout.html.twig" %}
 
-{% block title %}Productivity - {{ parent() }}{% endblock %}
+{% block title %}Attendance - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% stylesheets '@SEReportBundle/Resources/public/css/hr.css' %}
+    <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+{% endblock %}
 
 {% block sereport_body %}
   <header class="h-employee">
@@ -12,6 +19,11 @@
 
   <div class="row">
     <div id="filters">
+      <div class="month pull-left">
+        <form name="test">
+          <input type="text" id="monthpicker">
+        </form>
+      </div>
       <div class="teams pull-left">
         <a id="allT" class="label label-primary">HubAsia</a>
         <a id="Outbound4" class="label label-default">Outbound4</a>
@@ -30,36 +42,57 @@
   </div>
 
   <div class="row" id="data-panel">
-     <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4>Data Summary</h4>
-      </div>
-      <div class="panel-body">
-        <div class="col-md-5">
-          <div id="container-attendance" style="height: 400px; margin:auto auto;"></div>
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Data Summary</h4>
         </div>
-      </div>
-      <div id="yesterday-panel" class="col-md-4 col-md-offset-1">
-         <div class="panel panel-default">
-          <div class="panel-body">
-            <h4>Transfer order lines : 
-              <span id="y-to"></span>
-            </h4>
-            <h4>Total Manhours : 
-              <span id="y-ma"></span>
-            </h4>
-            <h4>Total Headcount : 
-              <span id="y-hc"></span>
-            </h4>
-            <h4>Overtime hours :
-              <span id="y-ot"></span>
-            </h4>
-            <h4>Training hours :
-              <span id="y-tr"></span>
-            </h4>
-            <h4>Absent employees :
-              <span id="y-ab"></span>
-            </h4>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div id="container-attendance" style="height: 300px; margin:auto auto;"></div>
+            </div>
+            <div id="summary-panel" class="col-md-4 col-md-offset-1">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4>Monthly rate : 
+                    <span id="d-mr"></span>
+                  </h4>
+                  <h4>Total headcount : 
+                   <span id="d-hc"></span>
+                  </h4>
+                  <h4>Total Hours : 
+                    <span id="d-hr"></span>
+                  </h4>
+                  <h4>Total Overtime hours :
+                    <span id="d-ot"></span>
+                  </h4>
+                  <h4>Total Normal Overtime hours :
+                    <span id="d-otn"></span>
+                  </h4>
+                  <h4>Total Public Holidays Overtime Hours :
+                   <span id="d-phot"></span>
+                  </h4>
+                  <h4>Number of > 12 consecutive workdays :
+                   <span id="d-12"></span>
+                  </h4>
+                  <h4>Theoric Missing Regular Hours :
+                   <span id="d-mhr"></span>
+                  </h4>
+                  <h4>Theoric Missing Employee input :
+                   <span id="d-mhc"></span>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div id="container-ot" style="height: 300px; margin:auto auto;"></div>
+            </div>
+            <div class="col-md-6">
+              <div id="container-top-ot" style="height: 300px; margin:auto auto;"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -70,12 +103,13 @@
 
 {% block javascripts %}
   {{ parent() }}
-
+  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
   <script type="text/javascript">
    {% autoescape false %}
+      var ajaxAttendance = '{{path('se_report_attendance')}}';
    {% endautoescape %}
   </script>
-  {% javascripts '@SEReportBundle/Resources/public/js/hr.js' %}
+  {% javascripts '@SEReportBundle/Resources/public/js/hr/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 {% endblock %}

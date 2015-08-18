@@ -8,6 +8,9 @@ use SE\InputBundle\Entity\SapImports;
 use SE\InputBundle\Entity\UserInput;
 use SE\InputBundle\Entity\SAPRF;
 use SE\InputBundle\Entity\InputReview;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductivityController extends Controller
 {
@@ -580,32 +583,52 @@ class ProductivityController extends Controller
 		return $TotalData;
 	}
 
-	public function processAction()
-	{ 
-	    $em = $this->getDoctrine()->getManager();
-	    $request = $this->get('request');        
-	    $idInput = $request->get('idInput');
-	    
-	    $ignoreInput = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array('id' => $idInput));
-
-	    if ($ignoreInput){
-	    
-	      $ignoreInput->setStatus(1);
-	      $em->persist($ignoreInput);
-	      $em->flush();
-
-	      $response = array("code" => 100, "success" => true);
-	    }else{
-	      $response = array("code" => 400, "success" => false);
-	    }
-	    return new Response(json_encode($response)); 
-	}
-
 	public function hrAction()
 	{ 
 	    $em = $this->getDoctrine()->getManager();
-
+	   
 	    return $this->render('SEReportBundle:Productivity:hr.html.twig'); 
+	}
+
+	public function attendanceAction()
+	{ 
+	    $em = $this->getDoctrine()->getManager();
+	    $request = $this->get('request');        
+	    $year = $request->get('year');
+	    $month = $request->get('month');
+	    $daysNb = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+	    $jsonAttendance = array('days' => array(), 'hub' => array());
+	    $structure = array('rate' => 0, 'hc' => 0, 'hr' => 0, 'ot' => 0, 'not' => 0, 'phot' => 0, 'cons' => 0,	'mh' => 0, 'me' => 0);
+	    $jsonAttendance['hub'] = $structure;
+	    for ($i=0; $i < $daysNb; $i++) {$jsonAttendance['days'][] = $i+1;}
+	    
+	    $teams = $em->getRepository('SEInputBundle:Team')->findAll();
+		$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
+		$userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
+
+		//create array structure
+		foreach ($teams as $team) {
+			$name = $team->getName();
+			$jsonAttendance[$name] = $structure;
+			if($team->getShiftnb() > 1) {
+				for ($i=0; $i < $team->getShiftnb(); $i++) { 
+					$sname = $name."s".($i+1);
+					$jsonAttendance[$sname] = $structure;
+				}
+			}
+		}
+
+		//fill data
+		foreach ($userInputs as $userInput) {
+			foreach ($userInput->getInputEntries() as $inputEntry) {
+				
+			}
+		}
+		
+
+		$response = array("code" => 100, "success" => true, "jsonAttendance" => $jsonAttendance);
+	    
+	    return new Response(json_encode($response)); 
 	}
 
 }

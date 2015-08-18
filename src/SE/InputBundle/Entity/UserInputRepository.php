@@ -30,4 +30,24 @@ class UserInputRepository extends EntityRepository
   
 		return $qb;
 	}
+
+	public function getMonthInputs($month, $year)
+	{
+		$start = new \DateTime();
+		$end = new \DateTime();
+		$start->setDate($year, $month, 1);
+		$end = $start->format( 'Y-m-t H:i:s' );
+
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			->where("a.dateInput <= '".$end."'")
+            ->andWhere("a.dateInput > '".$start->format("Y-m-d H:i:s")."'")
+		    ->orderBy('a.dateInput', 'DESC')
+			->getQuery()
+			->getResult()
+  		;
+  
+		return $qb;
+	}
 }
