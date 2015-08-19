@@ -12,4 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class CalendarRepository extends EntityRepository
 {
+	public function getMonth($month, $year)
+	{
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			->where("a.m = '".$month."' AND a.y = '".$year."'")
+            ->orderBy('a.dt', 'ASC')
+			->getQuery()
+			->getResult()
+  		;
+  
+		return $qb;
+	}
 }

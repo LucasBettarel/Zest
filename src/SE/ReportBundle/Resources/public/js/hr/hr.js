@@ -10,6 +10,8 @@ $.get(
     }, 
     function(response){
         console.log(response.jsonAttendance);
+        console.log(response.dAttendance);
+        console.log(response.teamShift);
       createCharts(response.jsonAttendance);
     },
     "json"); 

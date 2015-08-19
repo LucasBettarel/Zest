@@ -5,3 +5,11 @@
 .month{
 	margin-right: 5px;
 }
+
+.holiday{
+	background-color: #EB6B56;
+}
+
+.weekend{
+	background-color: #F7DA64;
+}
