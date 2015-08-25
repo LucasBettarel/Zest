@@ -377,13 +377,22 @@ Highcharts.setOptions(Highcharts.theme);
 function replaceTotalData(team){
     $('#daily-panel #m-to').html(jsonTotalData[team][1]['to']);
     $('#daily-panel #m-ma').html(jsonTotalData[team][1]['mh']);
+    $('#daily-panel #m-wh').html(jsonTotalData[team][1]['wh']);
     $('#daily-panel #m-hc').html(jsonTotalData[team][1]['hc']);
     $('#daily-panel #m-ot').html(jsonTotalData[team][1]['ot']);
     $('#daily-panel #m-tr').html(jsonTotalData[team][1]['tr']);
     $('#daily-panel #m-ab').html(jsonTotalData[team][1]['ab']);
 
+    if(jsonTotalData[team][1]['wh'] > 0){
+      var prod = Math.round( (jsonTotalData[team][1]['to'] / jsonTotalData[team][1]['wh'] ) * 100) / 100;
+      $('#daily-panel #m-prod').html(prod+" to lines/h");
+    } else {
+      $('#daily-panel #m-prod').html('0 to lines/h');
+    }
+
     $('#yesterday-panel #y-to').html(jsonTotalData[team][0]['to']);
     $('#yesterday-panel #y-ma').html(jsonTotalData[team][0]['mh']);
+    $('#yesterday-panel #y-wh').html(jsonTotalData[team][0]['wh']);
     $('#yesterday-panel #y-hc').html(jsonTotalData[team][0]['hc']);
     $('#yesterday-panel #y-ot').html(jsonTotalData[team][0]['ot']);
     $('#yesterday-panel #y-tr').html(jsonTotalData[team][0]['tr']);

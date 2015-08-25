@@ -125,6 +125,10 @@ class EntryController extends Controller
           $deleteActivityHours = $em->getRepository('SEInputBundle:ActivityHours')->findBy(array('input' => $deleteEntry));
           if ($deleteActivityHours) {
             foreach ($deleteActivityHours as $deleteActivityHour) {
+              // un-record to lines too
+              foreach ($em->getRepository('SEInputBundle:SAPRF')->getRecordedTo() as $recordedTo) {
+                $recordedTo->setRecorded(0);
+              }
               $em->remove($deleteActivityHour);
             }
           }

@@ -47,8 +47,7 @@ class InputReviewRepository extends EntityRepository
 			->where("a.date <= '".$now->format("Y-m-d H:i:s")."'")
             ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
             ->andWhere('t.id = 1')
-            // to update eventually
-            //->andWhere('a.status = 0')
+            ->andWhere('a.status = 0')
 		    ->orderBy('a.date', 'DESC')
 			->getQuery()
 			->getResult()
@@ -71,8 +70,7 @@ class InputReviewRepository extends EntityRepository
 			->where("a.date <= '".$now->format("Y-m-d H:i:s")."'")
             ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
             ->andWhere('t.id = 3')
-            // to update eventually
-            //->andWhere('a.status = 0')
+            ->andWhere('a.status = 0')
 		    ->orderBy('a.date', 'DESC')
 			->getQuery()
 			->getResult()
@@ -95,8 +93,7 @@ class InputReviewRepository extends EntityRepository
 			->where("a.date <= '".$now->format("Y-m-d H:i:s")."'")
             ->andWhere("a.date > '".$lastMonth->format("Y-m-d H:i:s")."'")
             ->andWhere('t.id = 4')
-            // to update eventually
-            //->andWhere('a.status = 0')
+            ->andWhere('a.status = 0')
 		    ->orderBy('a.date', 'DESC')
 			->getQuery()
 			->getResult()

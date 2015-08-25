@@ -54,7 +54,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -62,7 +63,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'out4' => array(
@@ -72,7 +74,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -80,7 +83,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'out4s1' => array(
@@ -90,7 +94,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -98,7 +103,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'out4s2' => array(
@@ -108,7 +114,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -116,7 +123,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'out4s3' => array(
@@ -126,7 +134,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -134,7 +143,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'in4' => array(
@@ -144,7 +154,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -152,7 +163,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'in4s1' => array(
@@ -162,7 +174,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -170,7 +183,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'in4s2' => array(
@@ -180,7 +194,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -188,7 +203,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'in4s3' => array(
@@ -198,7 +214,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -206,7 +223,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'out3' => array(
@@ -216,7 +234,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -224,7 +243,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			),
 			'in3' => array(
@@ -234,7 +254,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				),
 				1 => array(
 					'to' => 0,
@@ -242,7 +263,8 @@ class ProductivityController extends Controller
 					'hc' => 0,
 					'tr' => 0,
 					'ab' => 0,
-					'ot' => 0
+					'ot' => 0,
+					'wh' => 0
 				)
 			)
 		);
@@ -486,9 +508,27 @@ class ProductivityController extends Controller
 									$timeConf = $line->getTimeConfirmation(); 
 									//if inside right time interval + to line not already affected
 									if($line->getRecorded() == 0){ 
-										if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) or ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) {
-											$to += 1; //ok
-											$line->setRecorded(1);
+										if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) ) { //regular hours
+											if( $line->getSourceStorageType() == '902' and $activity->getActivity()->getId() == 3){ //putaway
+												$to += 1; //ok
+												$line->setRecorded(1);
+											}elseif( $line->getSourceStorageType() != '902' and $activity->getActivity()->getId() == 2 ){//picking
+												$to += 1; //ok
+												$line->setRecorded(1);
+											}else{
+												$missingTO += 1; //pas ok
+											}	
+										}
+										elseif ( ( ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) and $activity->getOtHours() > 0 ) { //overtime 
+											if( $line->getSourceStorageType() == '902' and $activity->getActivity()->getId() == 3){ //putaway
+												$to += 1; //ok
+												$line->setRecorded(1);
+											}elseif( $line->getSourceStorageType() != '902' and $activity->getActivity()->getId() == 2 ){//picking
+												$to += 1; //ok
+												$line->setRecorded(1);
+											}else{
+												$missingTO += 1; //pas ok
+											}
 										}
 										else{
 											$missingTO += 1; //pas ok
@@ -548,6 +588,7 @@ class ProductivityController extends Controller
 			//yesterday
 			$TotalData[$team][0]['to'] += $userInput->getTotalToInput(); 
 			$TotalData[$team][0]['mh'] += $userInput->getTotalHoursInput();
+			$TotalData[$team][0]['wh'] += $userInput->getTotalWorkingHoursInput();
 			foreach ($userInput->getInputEntries() as $input) {
 			    foreach ($input->getActivityHours() as $a) {
 	                if ($a->getActivity()->getId() == 7){
@@ -566,6 +607,7 @@ class ProductivityController extends Controller
 		//monthly 
 		$TotalData[$team][1]['to'] += $userInput->getTotalToInput(); 
 		$TotalData[$team][1]['mh'] += $userInput->getTotalHoursInput();
+		$TotalData[$team][1]['wh'] += $userInput->getTotalWorkingHoursInput();
 		foreach ($userInput->getInputEntries() as $input) {
 		    foreach ($input->getActivityHours() as $a) {
                 if ($a->getActivity()->getId() == 7){
@@ -582,97 +624,4 @@ class ProductivityController extends Controller
 
 		return $TotalData;
 	}
-
-	public function hrAction()
-	{ 
-	    $em = $this->getDoctrine()->getManager();
-   		$employees = $em->getRepository('SEInputBundle:Employee')->getAlphaEmployees();
-   		$year = date('Y');
-   		$month = date('n');
-   		$calendar = $em->getRepository('SEReportBundle:Calendar')->getMonth($month, $year);
-	   
-	    return $this->render('SEReportBundle:Productivity:hr.html.twig', array(
-    		'calendar' => $calendar,
-    		'employees' => $employees
-    	)); 
-	}
-
-	public function attendanceAction()
-	{ 
-	    $em = $this->getDoctrine()->getManager();
-	    $request = $this->get('request');        
-	    $year = $request->get('year');
-	    $month = $request->get('month');
-	    $daysNb = cal_days_in_month(CAL_GREGORIAN, $month, $year);
-	    $jsonAttendance = array('days' => array(), 'hub' => array());
-	    $dAttendance = array();
-	    $structure = array('rate' => 0, 'hc' => 0, 'hr' => 0, 'ot' => 0, 'not' => 0, 'phot' => 0, 'cons' => 0,	'mh' => 0, 'me' => 0);
-	    $structure2 = array('presence' => 0, 'absence' => 0, 'tothr' => 0, 'reghr' => 0, 'othr' => 0);
-	    $jsonAttendance['hub'] = $structure;
-	    for ($i=0; $i < $daysNb; $i++) {$jsonAttendance['days'][] = $i+1;}
-	    
-	    $teams = $em->getRepository('SEInputBundle:Team')->findAll();
-		//$shifts = $em->getRepository('SEInputBundle:Shift')->findAll();
-		$userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
-   		$employees = $em->getRepository('SEInputBundle:Employee')->getAlphaEmployees();
-
-
-		//create employee-array structure
-		foreach ($employees as $employee) {
-			$dAttendance[$employee->getId()] = array('name' => $employee->getName(), 'sesa' => $employee->getSesa());
-			for ($i=0; $i < $daysNb; $i++) { 
-				$dAttendance[$employee->getId()][($i+1)] = $structure2;
-			}
-		}
-
-		//create filter-array structure
-		//works only if number of teams < 10
-		foreach ($teams as $team) {
-			$name = $team->getId();
-			$jsonAttendance[$name] = $structure;
-			if($team->getShiftnb() > 1) {
-				for ($i=0; $i < $team->getShiftnb(); $i++) { 
-					$sname = $name.($i+1);
-					$jsonAttendance[$sname] = $structure;
-				}
-			}
-		}
-
-		//fill data
-		foreach ($userInputs as $userInput) {
-			$teamShift = $userInput->getTeam()->getId().$userInput->getShift()->getId();
-			foreach ($userInput->getInputEntries() as $inputEntry) {
-				//$jsonAttendance = loadjAttData($teamShift, $inputEntry, $jsonAttendance);
-				//$dAttendance = loaddAttData($teamShift, $inputEntry, $dAttendance);
-			}
-		}
-		
-
-		$response = array("code" => 100, "success" => true, "jsonAttendance" => $jsonAttendance, "dAttendance" => $dAttendance, "teamShift" => $teamShift);
-	    
-	    return new Response(json_encode($response)); 
-	}
-
-	public function loadjAttData($ts, $i, $j){
-
-		
-
-		$key = array_search($a->getActivity()->getName(), $jsonActivities['cat']);
-         if($key === false){
-            $jsonActivities['cat'][] = $a->getActivity()->getName();
-            $key = array_search($a->getActivity()->getName(), $jsonActivities['cat']);
-          }
-          if(array_key_exists($key, $jsonActivities['data'])){
-            $jsonActivities['data'][$key] += $a->getRegularHours() + $a->getOtHours();
-          }else{
-            $jsonActivities['data'][$key] = $a->getRegularHours() + $a->getOtHours();
-          }            
-
-        return $j;
-	}
-
-	public function loaddAttData($ts, $i, $d){
-		return $d;
-	}
-
 }

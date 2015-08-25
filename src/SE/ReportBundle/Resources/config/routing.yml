@@ -8,10 +8,10 @@ se_report_refresh:
 
 se_report_hr:
     path:  /hr
-    defaults: { _controller: SEReportBundle:Productivity:hr }
+    defaults: { _controller: SEReportBundle:Attendance:hr }
 
 se_report_attendance:
     pattern:  /hr/data
-    defaults: { _controller: SEReportBundle:Productivity:attendance }
+    defaults: { _controller: SEReportBundle:Attendance:attendance }
     requirements:
         _method:  GET
