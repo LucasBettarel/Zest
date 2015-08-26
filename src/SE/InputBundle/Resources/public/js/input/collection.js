@@ -173,6 +173,21 @@ $(document).ready(function() {
     //reset data counter
     $('#entries-prototype').attr('data-counter', 0);
 
+    //set new overtime default
+    switch(valueSelect){
+      case '2':
+        $('.input-ot-time input:first').val("13:00");
+        $('.input-ot-time input:last').val("01:00");
+        break;
+      case '3':
+        $('.input-ot-time input:first').val("19:30");
+        $('.input-ot-time input:last').val("07:00");
+        break;
+      default:
+        $('.input-ot-time input:first').val("07:30");
+        $('.input-ot-time input:last').val("19:00");
+    }
+
     //add good nb fields
     for(var i = 0; i < employeesData.length; ++i){
           if(employeesData[i][3] == $('.input-team').val() && employeesData[i][4] == valueSelect){
@@ -187,7 +202,8 @@ $(document).ready(function() {
         alert('There are errors in this input, please check.');
         }
       else{
-        $('.input-ot-time input').val('00:00');
+        $('.input-ot-time input:first').val('07:30');
+        $('.input-ot-time input:last').val('19:00');
         $('.input-shift').val(1);
         $(".input-shift input[value=1]").attr('checked', 'checked');
         for(var i = 0; i < employeesData.length; ++i){
