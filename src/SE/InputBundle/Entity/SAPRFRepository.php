@@ -19,7 +19,7 @@ class SAPRFRepository extends EntityRepository
 			->createQueryBuilder('a')
 			->select("a")
 			->where("a.dateImport = :date")
-            ->andWhere("a.recorded is NULL")
+            ->andWhere("a.recorded is NULL OR a.recorded = 0")
             ->andWhere("a.user = :user");
 
   		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
