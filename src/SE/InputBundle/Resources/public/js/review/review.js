@@ -43,23 +43,44 @@ $(document).ready(function() {
         }]
     });
 
-	$('#table').DataTable( {
+	$('#history').DataTable( {
 		paging: false,
 	  	"dom": 'lrtip',
 	  	"info": false
 	});
 
 	$('#errors').DataTable( {
-		"scrollY":        "150px",
+		"scrollY":        "173px",
 		paging: false,
 	  	"dom": 'lrtip',
 	  	"info": false
 	});
 
+  $('.panel-warning .dataTables_scrollHeadInner').css('padding-left','0px');
+  $('.panel-warning .table').css('margin-bottom','0px');
+
 	$('#filters a').click(function(){
 	  	filterColumn( $(this).parents('div').attr('id'), $(this).attr('id') );
 	  	$(this).siblings().removeClass('label-primary').addClass('label-default');
-	  	$(this).removeClass('label-default').addClass('label-primary');
+      $(this).removeClass('label-default').addClass('label-primary');
+
+      if ($(this).parent().attr('id') == 1){
+        if($(this).hasClass('allT') || $(this).attr('id') == "Outbound3" || $(this).attr('id') == "Inbound3"){
+          if(!$('#filters .shifts').hasClass('hide')){
+            $('#filters .shifts').addClass('hide');
+          }
+        }
+        else if ($('#filters .shifts').hasClass('hide')){
+          $('#filters .shifts').removeClass('hide');
+        }
+        $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
+        $('#filters .shifts .allS').removeClass('label-default').addClass('label-primary');
+
+        //if filter by team, reset filter shift to all
+        filterColumn( 2, "" );
+
+      }
+
 	});
 
     $("*[data-toggle='tooltip']").tooltip();
@@ -84,7 +105,8 @@ $(document).ready(function() {
 });
 
 function filterColumn ( i , val) {
-    $('#table').DataTable().column( i ).search(val).draw();
+    $('#history').DataTable().column( i ).search(val).draw();
+    $('#errors').DataTable().column( i ).search(val).draw();
 }
 
 function ignoreClick(id){
@@ -108,8 +130,8 @@ function deleteClick(id){
       {idInput: id}, 
       function(response){
         if(response.code == 100 && response.success){
-          console.log('input trouve, deleted', $('#table').find('#'+id));
-         $('#table').find('#'+id).remove();
+          console.log('input trouve, deleted', $('#history').find('#'+id));
+         $('#history').find('#'+id).remove();
         }
         else{
             alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
