@@ -34,278 +34,136 @@ class ProductivityController extends Controller
 		$inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 		$importIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(1);
 		$found = false;
-		$jsonCategories = array();
-		$jsonHub = array();
-		$jsonOut4 = array();
-		$jsonOut4s1 = array();
-		$jsonOut4s2 = array();
-		$jsonOut4s3 = array();
-		$jsonIn4 = array();
-		$jsonIn4s1 = array();
-		$jsonIn4s2 = array();
-		$jsonIn4s3 = array();
-		$jsonOut3 = array();
-		$jsonIn3 = array();
 		$jsonTotalData = array(
+			'dates' => array(),
 			'hub' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'out4' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'out4s1' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'out4s2' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'out4s3' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'in4' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'in4s1' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'in4s2' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'in4s3' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'out3' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 			'in3' => array(
-				0 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				),
-				1 => array(
-					'to' => 0,
-					'mh' => 0,
-					'hc' => 0,
-					'tr' => 0,
-					'ab' => 0,
-					'ot' => 0,
-					'wh' => 0
-				)
-			)
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'rel' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'rels1' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'rels2' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'ada' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'adas1' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'adas2' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'tas' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'tass1' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
+			'tass2' => array(
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				2 => array()),
 		);
 
 		for ($i=0; $i < $daydiff; $i++) { 
     		$dateCheck = new \DateTime();
     		$dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
 			$toutdesuite = $dateCheck->format("Y-m-d");
-			array_unshift($jsonCategories, $dateCheck->format("d-m"));
+			array_unshift($jsonTotalData['dates'], $dateCheck->format("d-m"));
 			$hubWorking = 0;
 			$hubTo = 0;
-
 			$Out4Working = 0;
 			$Out4To = 0;
-
 			$Out4s1Working = 0;
 			$Out4s1To = 0;
-
 			$Out4s2Working = 0;
 			$Out4s2To = 0;
-
 			$Out4s3Working = 0;
 			$Out4s3To = 0;
-
 			$In4Working = 0;
 			$In4To = 0;
-
 			$In4s1Working = 0;
 			$In4s1To = 0;
-
 			$In4s2Working = 0;
 			$In4s2To = 0;
-
 			$In4s3Working = 0;
 			$In4s3To = 0;
-
 			$Out3Working = 0;
 			$Out3To = 0;
-
 			$In3Working = 0;
 			$In3To = 0;
+
+			$RelWorking = 0;
+			$RelTo = 0;
+			$Rels1Working = 0;
+			$Rels1To = 0;
+			$Rels2Working = 0;
+			$Rels2To = 0;
+			$AdaWorking = 0;
+			$AdaTo = 0;
+			$Adas1Working = 0;
+			$Adas1To = 0;
+			$Adas2Working = 0;
+			$Adas2To = 0;
+			$TasWorking = 0;
+			$TasTo = 0;
+			$Tass1Working = 0;
+			$Tass1To = 0;
+			$Tass2Working = 0;
+			$Tass2To = 0;
 
 			for ($j=0; $j < $teamCount; $j++) {
     			$shiftCount = $teams[$j]->getShiftnb();
@@ -369,6 +227,54 @@ class ProductivityController extends Controller
     							$In3To += $userInput->getTotalToInput();
     							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'in3', $i, $userInput);
 	    						
+    						}elseif ($j == 6) {
+    							$RelWorking += $userInput->getTotalWorkingHoursInput();
+    							$RelTo += $userInput->getTotalToInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'rel', $i, $userInput);
+
+    							if($k == 0){
+    								$Rels1Working += $userInput->getTotalWorkingHoursInput();
+    								$Rels1To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'rels1', $i, $userInput);
+	    						
+    							}elseif($k == 1){
+    								$Rels2Working += $userInput->getTotalWorkingHoursInput();
+    								$Rels2To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'rels2', $i, $userInput);
+	    					
+    							}
+    						}elseif ($j == 8) {
+    							$AdaWorking += $userInput->getTotalWorkingHoursInput();
+    							$AdaTo += $userInput->getTotalToInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'ada', $i, $userInput);
+
+    							if($k == 0){
+    								$Adas1Working += $userInput->getTotalWorkingHoursInput();
+    								$Adas1To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'adas1', $i, $userInput);
+	    						
+    							}elseif($k == 1){
+    								$Adas2Working += $userInput->getTotalWorkingHoursInput();
+    								$Adas2To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'adas2', $i, $userInput);
+	    					
+    							}
+    						}elseif ($j == 9) {
+    							$TasWorking += $userInput->getTotalWorkingHoursInput();
+    							$TasTo += $userInput->getTotalToInput();
+    							$jsonTotalData = $this->loadTotalData($jsonTotalData, 'tas', $i, $userInput);
+
+    							if($k == 0){
+    								$Tass1Working += $userInput->getTotalWorkingHoursInput();
+    								$Tass1To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'tass1', $i, $userInput);
+	    						
+    							}elseif($k == 1){
+    								$Tass2Working += $userInput->getTotalWorkingHoursInput();
+    								$Tass2To += $userInput->getTotalToInput();
+    								$jsonTotalData = $this->loadTotalData($jsonTotalData, 'tass2', $i, $userInput);
+	    					
+    							}
     						}
 
     						//total data implement
@@ -404,17 +310,38 @@ class ProductivityController extends Controller
     		$In4s2Prod = ($In4s2Working != 0 ? $In4s2To/$In4s2Working : 0);
     		$In4s3Prod = ($In4s3Working != 0 ? $In4s3To/$In4s3Working : 0);
     		$In3Prod = ($In3Working != 0 ? $In3To/$In3Working : 0);
-    		array_unshift($jsonHub, round($hubProd, 1));
-    		array_unshift($jsonOut4, round($Out4Prod,1));
-    		array_unshift($jsonOut4s1, round($Out4s1Prod,1));
-    		array_unshift($jsonOut4s2, round($Out4s2Prod,1));
-    		array_unshift($jsonOut4s3, round($Out4s3Prod,1));
-    		array_unshift($jsonOut3, round($Out3Prod,1));
-    		array_unshift($jsonIn4, round($In4Prod,1));
-    		array_unshift($jsonIn4s1, round($In4s1Prod,1));
-    		array_unshift($jsonIn4s2, round($In4s2Prod,1));
-    		array_unshift($jsonIn4s3, round($In4s3Prod,1));
-    		array_unshift($jsonIn3, round($In3Prod,1));
+
+    		$RelProd = ($RelWorking != 0 ? $RelTo/$RelWorking : 0);
+    		$Rels1Prod = ($Rels1Working != 0 ? $Rels1To/$Rels1Working : 0);
+    		$Rels2Prod = ($Rels2Working != 0 ? $Rels2To/$Rels2Working : 0);
+    		$AdaProd = ($AdaWorking != 0 ? $AdaTo/$AdaWorking : 0);
+    		$Adas1Prod = ($Adas1Working != 0 ? $Adas1To/$Adas1Working : 0);
+    		$Adas2Prod = ($Adas2Working != 0 ? $Adas2To/$Adas2Working : 0);
+    		$TasProd = ($TasWorking != 0 ? $TasTo/$TasWorking : 0);
+    		$Tass1Prod = ($Tass1Working != 0 ? $Tass1To/$Tass1Working : 0);
+    		$Tass2Prod = ($Tass2Working != 0 ? $Tass2To/$Tass2Working : 0);
+    		
+    		array_unshift($jsonTotalData['hub'][2], round($hubProd, 1));
+    		array_unshift($jsonTotalData['out4'][2], round($Out4Prod,1));
+    		array_unshift($jsonTotalData['out4s1'][2], round($Out4s1Prod,1));
+    		array_unshift($jsonTotalData['out4s2'][2], round($Out4s2Prod,1));
+    		array_unshift($jsonTotalData['out4s3'][2], round($Out4s3Prod,1));
+    		array_unshift($jsonTotalData['out3'][2], round($Out3Prod,1));
+    		array_unshift($jsonTotalData['in4'][2], round($In4Prod,1));
+    		array_unshift($jsonTotalData['in4s1'][2], round($In4s1Prod,1));
+    		array_unshift($jsonTotalData['in4s2'][2], round($In4s2Prod,1));
+    		array_unshift($jsonTotalData['in4s3'][2], round($In4s3Prod,1));
+    		array_unshift($jsonTotalData['in3'][2], round($In3Prod,1));
+
+    		array_unshift($jsonTotalData['rel'][2], round($RelProd,1));
+    		array_unshift($jsonTotalData['rels1'][2], round($Rels1Prod,1));
+    		array_unshift($jsonTotalData['rels2'][2], round($Rels2Prod,1));
+    		array_unshift($jsonTotalData['ada'][2], round($AdaProd,1));
+    		array_unshift($jsonTotalData['adas1'][2], round($Adas1Prod,1));
+    		array_unshift($jsonTotalData['adas2'][2], round($Adas2Prod,1));
+    		array_unshift($jsonTotalData['tas'][2], round($TasProd,1));
+    		array_unshift($jsonTotalData['tass1'][2], round($Tass1Prod,1));
+    		array_unshift($jsonTotalData['tass2'][2], round($Tass2Prod,1));
 
     		//pour chaque jour depuis le debut du mois, ajouter les sap imports manquants.
     		$already = $em->getRepository('SEInputBundle:InputReview')->findOneBy(array(
@@ -440,19 +367,6 @@ class ProductivityController extends Controller
 		}
  	
  		return $this->render('SEReportBundle:Productivity:prod.html.twig', array(
-    		//'lastMonthInputs' => $userInputs, not used
-    		'jsonCategories' => json_encode($jsonCategories),
-    		'jsonHub' => json_encode($jsonHub),
-    		'jsonOut4' => json_encode($jsonOut4),
-    		'jsonOut4s1' => json_encode($jsonOut4s1),
-    		'jsonOut4s2' => json_encode($jsonOut4s2),
-    		'jsonOut4s3' => json_encode($jsonOut4s3),
-    		'jsonOut3' => json_encode($jsonOut3),
-    		'jsonIn4' => json_encode($jsonIn4),
-    		'jsonIn4s1' => json_encode($jsonIn4s1),
-    		'jsonIn4s2' => json_encode($jsonIn4s2),
-    		'jsonIn4s3' => json_encode($jsonIn4s3),
-    		'jsonIn3' => json_encode($jsonIn3),
     		'jsonTotalData' => json_encode($jsonTotalData),
     		));
 	}

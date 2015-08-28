@@ -69,16 +69,20 @@ $(document).ready(function() {
           if(!$('#filters .shifts').hasClass('hide')){
             $('#filters .shifts').addClass('hide');
           }
-        }
-        else if ($('#filters .shifts').hasClass('hide')){
+        }else if ($(this).attr('id') == "Adaptation" || $(this).attr('id') == "Taskforce" || $(this).attr('id') == "Releasing"){
+         $('#filters .shifts').removeClass('hide');
+         if(!$('#filters .shifts #3').hasClass('hide')){
+            $('#filters .shifts #3').addClass('hide');
+          } 
+        }else{
           $('#filters .shifts').removeClass('hide');
+          $('#filters .shifts #3').removeClass('hide');
         }
         $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
         $('#filters .shifts .allS').removeClass('label-default').addClass('label-primary');
 
         //if filter by team, reset filter shift to all
         filterColumn( 2, "" );
-
       }
 
 	});
