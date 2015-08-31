@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class SAPRFRepository extends EntityRepository
 {
 
-	public function getTo($date, $user){
+	public function getTo($date, $user, $team){
 
 		$qb = $this
 			->createQueryBuilder('a')
@@ -21,6 +21,16 @@ class SAPRFRepository extends EntityRepository
 			->where("a.dateImport = :date")
             ->andWhere("a.recorded is NULL OR a.recorded = 0")
             ->andWhere("a.user = :user");
+
+        /*  later if it is judged good
+            if($team == 1 OR $team == 3 OR $team == 4){	
+		        $qb->andWhere("a.sourceStorageType <> :sType");
+				$qb->setParameter('sType', '902');
+            }elseif ($team == 2 OR $team == 5) {
+             	$qb->andWhere("a.sourceStorageType = :sType");
+				$qb->setParameter('sType', '902');
+            }
+		*/
 
   		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
   		$qb->setParameter('user', $user);
@@ -40,6 +50,72 @@ class SAPRFRepository extends EntityRepository
   		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
   		$qb->setParameter('user', $user);
 
+  		return $qb->getQuery()->getResult();
+	}
+
+	public function getManualTo($date, $team){
+
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			->where("a.dateImport = :date")
+            ->andWhere("a.recorded is NULL OR a.recorded = 0")
+            ->andWhere("a.storageLocation = :sLoc");
+
+            if($team == 1){	
+		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC")
+            	   ->andWhere("a.sourceStorageType = :sType");
+
+				$qb->setParameter('userA', 'SESI000005');
+				$qb->setParameter('userB', 'SESI000006');
+				$qb->setParameter('userC', 'SESI000008');
+				$qb->setParameter('sType', 'O14');
+				$qb->setParameter('sLoc', '4000');
+            }elseif ($team == 2) {
+            	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE")
+            	   ->andWhere("a.sourceStorageType = :sType");
+
+				$qb->setParameter('userA', 'SESI000012');
+				$qb->setParameter('userB', 'SESI000013');
+				$qb->setParameter('userC', 'SESI000014');
+				$qb->setParameter('userC', 'SESI000015');
+				$qb->setParameter('userC', 'SESI000030');
+				$qb->setParameter('sType', '902');
+				$qb->setParameter('sLoc', '4000');
+            }elseif ($team == 3) {
+            	$qb->andWhere("a.user = :userA OR a.user = :userB")
+            	   ->andWhere("a.sourceStorageType = :sType");
+
+				$qb->setParameter('userA', 'SESI000016');
+				$qb->setParameter('userB', 'SESI000017');
+				$qb->setParameter('sType', 'O14');
+				$qb->setParameter('sLoc', '4000');
+            }elseif ($team == 4) {
+            	$qb->andWhere("a.user = :userA")
+            	   ->andWhere("a.sourceStorageType <> :sType");
+            	//to set user SESI
+				$qb->setParameter('userA', 'to set');
+				$qb->setParameter('sType', '902');
+				$qb->setParameter('sLoc', '4001');
+            }elseif ($team == 5) {
+            	$qb->andWhere("a.user = :userA")
+            	   ->andWhere("a.sourceStorageType = :sType");
+            	   //to set
+				$qb->setParameter('userA', 'to set');
+				$qb->setParameter('sType', '902');
+				$qb->setParameter('sLoc', '4001');
+            }elseif ($team == 8) {
+            	$qb->andWhere("a.user = :userA");
+            	//to set
+				$qb->setParameter('userA', 'to set');
+				$qb->setParameter('sLoc', '4000');
+            }else{
+            	//send nothing
+            	$qb->setParameter('sLoc', '0');
+            }
+
+  		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
+  		
   		return $qb->getQuery()->getResult();
 	}
 }

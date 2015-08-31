@@ -71,6 +71,13 @@ class SAPRF
     private $sourceStorageBin;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="storage_location", type="string", length=255, nullable=true)
+     */
+    private $storageLocation;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date_import", type="datetime", nullable=true)
@@ -301,5 +308,28 @@ class SAPRF
     public function getDateImport()
     {
         return $this->dateImport;
+    }
+
+    /**
+     * Set storageLocation
+     *
+     * @param string $storageLocation
+     * @return SAPRF
+     */
+    public function setStorageLocation($storageLocation)
+    {
+        $this->storageLocation = $storageLocation;
+
+        return $this;
+    }
+
+    /**
+     * Get storageLocation
+     *
+     * @return string 
+     */
+    public function getStorageLocation()
+    {
+        return $this->storageLocation;
     }
 }

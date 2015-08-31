@@ -104,6 +104,16 @@ class UserInput
      * @ORM\Column(name="total_to_input", type="integer", nullable=true)
      */
     private $totalToInput = 0;
+    
+    /**
+     * @ORM\Column(name="manual_to", type="integer", nullable=true)
+     */
+    private $manualTo = 0;
+
+    /**
+     * @ORM\Column(name="auto_to", type="integer", nullable=true)
+     */
+    private $autoTo = 0;
 
     /**
      * @ORM\Column(name="total_prod_input", type="decimal", nullable=true, precision=11, scale=2)
@@ -423,6 +433,7 @@ class UserInput
         $totWHI = 0;
         $totOI = 0;
         $totTO = 0;
+        $totMTO = 0;
 
         foreach ($this->getInputEntries() as $i) {
             
@@ -464,9 +475,10 @@ class UserInput
         $this->totalWorkingHoursInput = $totWHI;
         $this->totalOvertimeInput = $totOI;
         $this->totalToInput = $totTO;
+        $this->manualTo += $totMTO + $this->getManualTo();
     
         if( $this->totalToInput > 0 and $this->totalWorkingHoursInput > 0){
-            $this->totalProdInput = $this->totalToInput / $this->totalWorkingHoursInput;
+            $this->totalProdInput = ( $this->totalToInput + $this->manualTo ) / $this->totalWorkingHoursInput;
         }
     }
 
@@ -584,5 +596,51 @@ class UserInput
     public function getOtEndTime()
     {
         return $this->otEndTime;
+    }
+
+    /**
+     * Set manualTo
+     *
+     * @param integer $manualTo
+     * @return UserInput
+     */
+    public function setManualTo($manualTo)
+    {
+        $this->manualTo = $manualTo;
+
+        return $this;
+    }
+
+    /**
+     * Get manualTo
+     *
+     * @return integer 
+     */
+    public function getManualTo()
+    {
+        return $this->manualTo;
+    }
+
+    /**
+     * Set autoTo
+     *
+     * @param integer $autoTo
+     * @return UserInput
+     */
+    public function setAutoTo($autoTo)
+    {
+        $this->autoTo = $autoTo;
+
+        return $this;
+    }
+
+    /**
+     * Get autoTo
+     *
+     * @return integer 
+     */
+    public function getAutoTo()
+    {
+        return $this->autoTo;
     }
 }

@@ -470,6 +470,24 @@ class ProductivityController extends Controller
 	        			}
 	        		}
 
+	        		//add manual TO Lines
+	        		$manualTo = $inputToProcessDay->getManualTo();
+	        		$manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->getManualTo($inputDate, $inputTeam->getId());
+
+	        		if($manualTOlines){
+	        			foreach ($manualTOlines as $manualToLine) {
+	        				$timeConf = $manualToLine->getTimeConfirmation(); 
+							//if inside right time interval + to line not already affected
+							if($manualToLine->getRecorded() == 0){ 
+								if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) ) { //regular hours
+									$manualTo += 1; //ok
+									$manualToLine->setRecorded(1);	
+								}
+							}
+	        			}
+	        			$inputToProcessDay->setManualTo($manualTo);
+	        		}
+							
 	        		//process finished -> +1 input done in sapImport
 	        		//faire un check error avant
 					$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
@@ -479,8 +497,9 @@ class ProductivityController extends Controller
 	        		}
 
 	        		$inputToProcessDay->setProcess(1);
-	        	}
+	        	}        	
 	       	}
+
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
         }//foreach input

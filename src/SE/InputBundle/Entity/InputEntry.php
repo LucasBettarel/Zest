@@ -401,4 +401,5 @@ class InputEntry
     {
         return $this->totalOvertime;
     }
+
 }
