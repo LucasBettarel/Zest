@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class SAPRFRepository extends EntityRepository
 {
 
-	public function getTo($date, $user, $team){
+	public function getTo($date, $user){
 
 		$qb = $this
 			->createQueryBuilder('a')
@@ -65,7 +65,6 @@ class SAPRFRepository extends EntityRepository
             if($team == 1){	
 		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC")
             	   ->andWhere("a.sourceStorageType = :sType");
-
 				$qb->setParameter('userA', 'SESI000005');
 				$qb->setParameter('userB', 'SESI000006');
 				$qb->setParameter('userC', 'SESI000008');
@@ -74,18 +73,16 @@ class SAPRFRepository extends EntityRepository
             }elseif ($team == 2) {
             	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE")
             	   ->andWhere("a.sourceStorageType = :sType");
-
 				$qb->setParameter('userA', 'SESI000012');
 				$qb->setParameter('userB', 'SESI000013');
 				$qb->setParameter('userC', 'SESI000014');
-				$qb->setParameter('userC', 'SESI000015');
-				$qb->setParameter('userC', 'SESI000030');
+				$qb->setParameter('userD', 'SESI000015');
+				$qb->setParameter('userE', 'SESI000030');
 				$qb->setParameter('sType', '902');
 				$qb->setParameter('sLoc', '4000');
             }elseif ($team == 3) {
             	$qb->andWhere("a.user = :userA OR a.user = :userB")
             	   ->andWhere("a.sourceStorageType = :sType");
-
 				$qb->setParameter('userA', 'SESI000016');
 				$qb->setParameter('userB', 'SESI000017');
 				$qb->setParameter('sType', 'O14');
@@ -93,21 +90,20 @@ class SAPRFRepository extends EntityRepository
             }elseif ($team == 4) {
             	$qb->andWhere("a.user = :userA")
             	   ->andWhere("a.sourceStorageType <> :sType");
-            	//to set user SESI
-				$qb->setParameter('userA', 'to set');
+				$qb->setParameter('userA', 'SESI000019');
 				$qb->setParameter('sType', '902');
 				$qb->setParameter('sLoc', '4001');
             }elseif ($team == 5) {
-            	$qb->andWhere("a.user = :userA")
+            	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC")
             	   ->andWhere("a.sourceStorageType = :sType");
-            	   //to set
-				$qb->setParameter('userA', 'to set');
+				$qb->setParameter('userA', 'SESI000021');
+				$qb->setParameter('userB', 'SESI000022');
+				$qb->setParameter('userC', 'SESI000023');
 				$qb->setParameter('sType', '902');
 				$qb->setParameter('sLoc', '4001');
             }elseif ($team == 8) {
             	$qb->andWhere("a.user = :userA");
-            	//to set
-				$qb->setParameter('userA', 'to set');
+				$qb->setParameter('userA', 'SESI000018');
 				$qb->setParameter('sLoc', '4000');
             }else{
             	//send nothing

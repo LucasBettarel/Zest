@@ -134,6 +134,9 @@ $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
       }, {
           name: 'Inbound 3',
           data: jsonTotalData['in3'][2]
+      }, {
+          name : 'Adaptation',
+          data: jsonTotalData['ada'][2]
       }]
   };
 
@@ -193,6 +196,10 @@ $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
         containerDaily.addSeries({
             name : 'Inbound 3',
             data: jsonTotalData['in3'][2]
+        });
+        containerDaily.addSeries({
+            name : 'Adaptation',
+            data: jsonTotalData['ada'][2]
         });
 
         containerProd.series[0].setData([jsonTotalData['hub'][2][jsonTotalData['hub'][2].length-1]]);
@@ -412,6 +419,7 @@ function replaceTotalData(team){
     $('#daily-panel #m-wh').html(jsonTotalData[team][1]['wh']);
     $('#daily-panel #m-hc').html(jsonTotalData[team][1]['hc']);
     $('#daily-panel #m-ot').html(jsonTotalData[team][1]['ot']);
+    $('#daily-panel #m-mto').html(jsonTotalData[team][1]['mto']);
     $('#daily-panel #m-tr').html(jsonTotalData[team][1]['tr']);
     $('#daily-panel #m-ab').html(jsonTotalData[team][1]['ab']);
 
@@ -427,6 +435,7 @@ function replaceTotalData(team){
     $('#yesterday-panel #y-wh').html(jsonTotalData[team][0]['wh']);
     $('#yesterday-panel #y-hc').html(jsonTotalData[team][0]['hc']);
     $('#yesterday-panel #y-ot').html(jsonTotalData[team][0]['ot']);
+    $('#yesterday-panel #y-mto').html(jsonTotalData[team][0]['mto']);
     $('#yesterday-panel #y-tr').html(jsonTotalData[team][0]['tr']);
     $('#yesterday-panel #y-ab').html(jsonTotalData[team][0]['ab']);
   }

@@ -37,84 +37,84 @@ class ProductivityController extends Controller
 		$jsonTotalData = array(
 			'dates' => array(),
 			'hub' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'out4' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'out4s1' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'out4s2' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'out4s3' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'in4' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'in4s1' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'in4s2' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'in4s3' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'out3' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'in3' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'rel' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'rels1' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'rels2' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'ada' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'adas1' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'adas2' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'tas' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'tass1' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 			'tass2' => array(
-				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
-				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0),
+				0 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+				1 => array('to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
 				2 => array()),
 		);
 
@@ -522,37 +522,20 @@ class ProductivityController extends Controller
 			$TotalData[$team][0]['to'] += $userInput->getTotalToInput(); 
 			$TotalData[$team][0]['mh'] += $userInput->getTotalHoursInput();
 			$TotalData[$team][0]['wh'] += $userInput->getTotalWorkingHoursInput();
-			foreach ($userInput->getInputEntries() as $input) {
-			    foreach ($input->getActivityHours() as $a) {
-	                if ($a->getActivity()->getId() == 7){
-    					$TotalData[$team][0]['tr'] += $a->getRegularHours() + $a->getOtHours();
-	                }
-				}
-				if(!$input->getPresent()){
-					$TotalData[$team][0]['ab'] += 1;
-				}else{
-					$TotalData[$team][0]['hc'] += 1;
-				}
-			}
+			$TotalData[$team][0]['mto'] += $userInput->getManualTo();
+			$TotalData[$team][0]['tr'] += $userInput->getTotalTrainingHours();
+			$TotalData[$team][0]['ab'] += $userInput->getTotalAbsence();
+			$TotalData[$team][0]['hc'] += $userInput->getTotalHeadcount();
 			$TotalData[$team][0]['ot'] += $userInput->getTotalOvertimeInput();
 		}
-
 		//monthly 
 		$TotalData[$team][1]['to'] += $userInput->getTotalToInput(); 
 		$TotalData[$team][1]['mh'] += $userInput->getTotalHoursInput();
 		$TotalData[$team][1]['wh'] += $userInput->getTotalWorkingHoursInput();
-		foreach ($userInput->getInputEntries() as $input) {
-		    foreach ($input->getActivityHours() as $a) {
-                if ($a->getActivity()->getId() == 7){
-					$TotalData[$team][1]['tr'] += $a->getRegularHours() + $a->getOtHours();
-                }
-			}
-			if(!$input->getPresent()){
-				$TotalData[$team][1]['ab'] += 1;
-			}else{
-				$TotalData[$team][1]['hc'] += 1;
-			}
-		}
+		$TotalData[$team][1]['mto'] += $userInput->getManualTo();
+		$TotalData[$team][1]['tr'] += $userInput->getTotalTrainingHours();
+		$TotalData[$team][1]['ab'] += $userInput->getTotalAbsence();
+		$TotalData[$team][1]['hc'] += $userInput->getTotalHeadcount();
 		$TotalData[$team][1]['ot'] += $userInput->getTotalOvertimeInput();
 
 		return $TotalData;

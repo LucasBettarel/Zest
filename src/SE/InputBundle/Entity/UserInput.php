@@ -121,6 +121,21 @@ class UserInput
     private $totalProdInput = 0;
 
     /**
+     * @ORM\Column(name="total_training_hours", type="decimal", nullable=true, precision=11, scale=2)
+     */
+    private $totalTrainingHours = 0;
+
+    /**
+     * @ORM\Column(name="total_absence", type="integer", nullable=true)
+     */
+    private $totalAbsence = 0;
+
+    /**
+     * @ORM\Column(name="total_headcount", type="integer", nullable=true)
+     */
+    private $totalHeadcount = 0;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="process", type="boolean", nullable=true)
@@ -433,7 +448,11 @@ class UserInput
         $totWHI = 0;
         $totOI = 0;
         $totTO = 0;
-        $totMTO = 0;
+        $totMTO = 0 + $this->getManualTo();
+        $totATO = 0;
+        $totHC = 0;
+        $totTH = 0;
+        $totABS = 0;
 
         foreach ($this->getInputEntries() as $i) {
             
@@ -453,6 +472,15 @@ class UserInput
                 if ($a->getActivity()->getTrackable() and $a->getActivity()->getProductive()){
                     $prodH += $a->getRegularHours() + $a->getOtHours();
                 }
+                if($a->getActivity()->getId() == 7){
+                    $totTH += $a->getRegularHours() + $a->getOtHours();
+                }
+            }
+
+            if(!$i->getPresent()){
+                $totABS += 1;
+            }else{
+                $totHC += 1;
             }
 
             //pour input entry
@@ -468,17 +496,21 @@ class UserInput
             $totHI += $totH + $totO;
             $totWHI += $totWH;
             $totOI += $totO;
-            $totTO += $i->getTotalTo();
+            $totATO += $i->getTotalTo();
         }
 
         $this->totalHoursInput = $totHI;
         $this->totalWorkingHoursInput = $totWHI;
         $this->totalOvertimeInput = $totOI;
-        $this->totalToInput = $totTO;
-        $this->manualTo += $totMTO + $this->getManualTo();
+        $this->autoTo = $totATO;
+        $this->totalToInput = $totATO + $totMTO;
+
+        $this->totalTrainingHours = $totTH;
+        $this->totalHeadcount = $totHC;
+        $this->totalAbsence = $totABS;
     
         if( $this->totalToInput > 0 and $this->totalWorkingHoursInput > 0){
-            $this->totalProdInput = ( $this->totalToInput + $this->manualTo ) / $this->totalWorkingHoursInput;
+            $this->totalProdInput = $this->totalToInput / $this->totalWorkingHoursInput;
         }
     }
 
@@ -642,5 +674,74 @@ class UserInput
     public function getAutoTo()
     {
         return $this->autoTo;
+    }
+
+    /**
+     * Set totalTrainingHours
+     *
+     * @param string $totalTrainingHours
+     * @return UserInput
+     */
+    public function setTotalTrainingHours($totalTrainingHours)
+    {
+        $this->totalTrainingHours = $totalTrainingHours;
+
+        return $this;
+    }
+
+    /**
+     * Get totalTrainingHours
+     *
+     * @return string 
+     */
+    public function getTotalTrainingHours()
+    {
+        return $this->totalTrainingHours;
+    }
+
+    /**
+     * Set totalAbsence
+     *
+     * @param integer $totalAbsence
+     * @return UserInput
+     */
+    public function setTotalAbsence($totalAbsence)
+    {
+        $this->totalAbsence = $totalAbsence;
+
+        return $this;
+    }
+
+    /**
+     * Get totalAbsence
+     *
+     * @return integer 
+     */
+    public function getTotalAbsence()
+    {
+        return $this->totalAbsence;
+    }
+
+    /**
+     * Set totalHeadcount
+     *
+     * @param integer $totalHeadcount
+     * @return UserInput
+     */
+    public function setTotalHeadcount($totalHeadcount)
+    {
+        $this->totalHeadcount = $totalHeadcount;
+
+        return $this;
+    }
+
+    /**
+     * Get totalHeadcount
+     *
+     * @return integer 
+     */
+    public function getTotalHeadcount()
+    {
+        return $this->totalHeadcount;
     }
 }

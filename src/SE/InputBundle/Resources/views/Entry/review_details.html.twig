@@ -27,6 +27,7 @@
           <p>Input processed by : <strong>{{ input.user.name }}</strong></p>
           <p>Headcount : <strong>{{ input.inputEntries|length }}</strong></p> 
           <p>TO lines : <strong>{{ input.totalToInput }}</strong></p>
+          <p>Manual TO lines : <strong>{{ input.manualTo }}</strong></p>
           <p>Total Hours : <strong>{{ input.totalHoursInput }}</strong></p>
           <p>Total Working Hours : <strong>{{ input.totalWorkingHoursInput }}</strong></p>
           <p>Overtime hours : <strong>{{ input.totalOvertimeInput }}
@@ -36,7 +37,8 @@
           {% else %}
             (no overtime recorded)</strong></p>
           {% endif %}
-          <p>Training hours : ...</p>
+          <p>Training hours : <strong>{{ input.totalTrainingHours }}</strong></p>
+          <p>Total Absent : <strong>{{ input.totalAbsence }}</strong></p>
         </div>
       </div>
     </div>
