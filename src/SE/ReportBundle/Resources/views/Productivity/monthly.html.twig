@@ -1,0 +1,98 @@
+{% extends "SEReportBundle::layout.html.twig" %}
+
+{% block title %}Productivity - {{ parent() }}{% endblock %}
+
+{% block sereport_body %}
+  <header class="h-sap">
+    <div class="line"></div>
+    <div class="pull-left">
+      <h2><i class="glyphicon glyphicon-stats"> </i> Monthly Productivity report</h2>
+    </div>
+  </header>
+
+  <div class="row">
+    <div id="filters">
+      <div class="month pull-left">
+        <form name="test">
+          <input type="text" id="monthpicker">
+        </form>
+      </div>
+        <div id="1" class="teams pull-left">
+          <a id="0" class="label label-primary">HubAsia</a>
+          <a id="1" class="label label-default">Outbound4</a>
+          <a id="2" class="label label-default">Inbound4</a>
+          <a id="4" class="label label-default">Outbound3</a>
+          <a id="5" class="label label-default">Inbound3</a>
+          <a id="6" class="label label-default">Releasing</a>
+          <a id="8" class="label label-default">Adaptation</a>
+          <a id="9" class="label label-default">Taskforce</a>
+        </div>
+        <div id="2" class="shifts hide">
+          | 
+          <a id="0" class="label label-primary">All</a>
+          <a id="1" class="label label-default">Shift1</a>
+          <a id="2" class="label label-default">Shift2</a>
+          <a id="3" class="label label-default">Shift3</a>
+        </div>
+      </div>
+    </div>
+
+  <div id="data-panel" class="row">
+    <div class="col-md-8">
+        <div id="container-prod" style="height: 300px; margin:auto auto;"></div>
+    </div>
+    <div id="report-panel" class="col-md-4">
+       <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Monthly report</h4>
+        </div>
+        <div class="panel-body">
+          <h5>Transfer order lines : 
+            <span id="to"></span>
+          </h5>
+          <h5>Total Included Manhours : 
+            <span id="wh"></span>
+          </h5>
+          <h5>Total Manhours : 
+            <span id="ma"></span>
+          </h5>
+          <h5>Total Headcount : 
+            <span id="hc"></span>
+          </h5>
+          <h5>Overtime hours :
+            <span id="ot"></span>
+          </h5>
+          <h5>Manual TO Lines :
+            <span id="mto"></span>
+          </h5>
+          <h5>Training hours :
+            <span id="tr"></span>
+          </h5>
+          <h5>Absent employees :
+            <span id="ab"></span>
+          </h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+        <div id="container-monthly" style="height: 500px; margin:auto auto;"></div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+
+  <script type="text/javascript">
+    var ajaxMonthly = '{{path('se_report_monthly')}}';
+  </script>
+
+  {% javascripts '@SEReportBundle/Resources/public/js/monthly/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+
+{% endblock %}

@@ -37,13 +37,14 @@ class UserInputRepository extends EntityRepository
 		$end = new \DateTime();
 		$start->setDate($year, $month, 1);
 		$end = $start->format( 'Y-m-t H:i:s' );
+		$start->modify( '-1 day' );
 
 		$qb = $this
 			->createQueryBuilder('a')
 			->select("a")
 			->where("a.dateInput <= '".$end."'")
             ->andWhere("a.dateInput > '".$start->format("Y-m-d H:i:s")."'")
-		    ->orderBy('a.dateInput', 'DESC')
+		    ->orderBy('a.dateInput', 'ASC')
 			->getQuery()
 			->getResult()
   		;

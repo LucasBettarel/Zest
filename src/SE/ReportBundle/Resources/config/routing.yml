@@ -15,3 +15,9 @@ se_report_attendance:
     defaults: { _controller: SEReportBundle:Attendance:attendance }
     requirements:
         _method:  GET
+
+se_report_monthly:
+    pattern:  /monthly/data
+    defaults: { _controller: SEReportBundle:Productivity:monthly }
+    requirements:
+        _method:  GET

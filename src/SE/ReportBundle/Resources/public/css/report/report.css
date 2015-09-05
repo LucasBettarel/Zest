@@ -1,0 +1,18 @@
+/* ********************** REPORT STYLES **********************/
+
+#filters {
+	margin: -15px auto auto;
+	font-size:1.2em;
+	background-color: #eee;
+	padding: 10px;
+	box-shadow: 0px 2px 8px #888;
+	height: 44px;
+}
+
+#data-panel{
+	margin-top: 10px;
+}
+
+.month{
+	margin-right: 5px;
+}
