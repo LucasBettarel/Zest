@@ -63,3 +63,9 @@ se_input_review_activities:
     defaults: { _controller: SEInputBundle:Entry:activities }
     requirements:
         _method:  GET
+
+se_input_review_mi:
+    pattern:  /review/mi
+    defaults: { _controller: SEInputBundle:Entry:missingInput }
+    requirements:
+        _method:  GET

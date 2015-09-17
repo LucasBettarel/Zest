@@ -29,7 +29,7 @@
 	<div class="well col-md-10">
 		<h3>Last SAP Imports</h3>
 		<div class="table-responsive">
-			<table class="table table-hover table-striped">
+			<table id="imports" class="table table-hover table-striped">
 				<thead>
 					<tr>
 						<th>#</th>
@@ -73,4 +73,18 @@
 		</div>
 	</div>
 
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+  <script type="text/javascript">
+  	$('#imports').DataTable( {
+		"paging": true,
+	  	"dom": 'lrtip',
+	  	"info": false
+	});
+
+  </script>
+  
 {% endblock %}

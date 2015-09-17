@@ -80,7 +80,6 @@ class EntryController extends Controller
       $userInputs = $em->getRepository('SEInputBundle:UserInput')
        ->getLastMonth();
 
-
       return $this->render('SEInputBundle:Entry:review.html.twig', array(
         'importErrors' => $importErrors,
         'inputErrors' => $inputErrors,
@@ -224,5 +223,51 @@ class EntryController extends Controller
     return new Response(json_encode($response)); 
   }
 
+  public function missingInputAction()
+  {
+    $em = $this->getDoctrine()->getManager();
+    $teams = $em->getRepository('SEInputBundle:Team')->getReportingTeams();
+    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getLastMonth();
+    $inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 
+    $today = new \DateTime();
+    $today->setTime(00, 00, 00);
+    $lastMonth = new \DateTime();
+    $lastMonth->setTime(00, 00, 00)->modify( '-'.(date('j')-1).' day' );
+    $daydiff = $today->diff($lastMonth)->days;
+    $found = false;
+
+    for ($i=0; $i < $daydiff; $i++) { //pour chaque jour
+        $dateCheck = new \DateTime();
+        $dateCheck->setTime(00, 00, 00)->modify( '-'.($i+1).' day' );
+      $d = $dateCheck->format("Y-m-d");
+      foreach ($teams as $team) { //pour chaque team
+        $t = $team->getId();
+        for ($s=1; $s <= $team->getShiftnb(); $s++) { //pour chaque shift 
+          $shift = $em->getRepository('SEInputBundle:Shift')->findOneBy(array('id' => $s));
+          foreach ($userInputs as $u){  // pour chaque userinput 
+            if(($u->getDateInput()->format("Y-m-d") == $d) and ($u->getTeam() == $team) and ($u->getShift() == $shift)){$found = true;}
+          }
+          if(!$found){
+            if(!($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $dateCheck, 'type' => $inputIssue, 'team' => $team, 'shift' =>  $shift)))){
+                $m = new InputReview();
+                $m->setDate($dateCheck);
+                $m->setType($inputIssue);
+                $m->setStatus(0);
+                $m->setTeam($team);
+                $m->setShift($shift);
+                $em->persist($m);
+
+                $em->flush();
+              }
+          }else{
+            $found = false;
+          }
+        }
+      }
+    }
+    $response = array("code" => 100, "success" => true);
+
+    return new Response(json_encode($response)); 
+  }
 }

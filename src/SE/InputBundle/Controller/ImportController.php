@@ -35,11 +35,19 @@ class ImportController extends Controller
 
     public function setAction()
     {
-        $listSapImport = $this->getDoctrine()
-        ->getManager()
-        ->getRepository('SEInputBundle:SapImports')
-        ->findAll()
-      ;
+        $em = $this->getDoctrine()->getManager();
+
+        $listSapImport = $em->getRepository('SEInputBundle:SapImports')->getAll();
+        $importErrors = $em->getRepository('SEInputBundle:InputReview')->getLastMonthImportErrors();
+
+        foreach ($listSapImport as $import) {
+            foreach ($importErrors as $error) {
+                if ( $import->getDate()->format("Y-m-d") == $error->getDate()->format("Y-m-d")){
+                    $error->setStatus(1);
+                }
+            }
+        }
+        $em->flush();
 
         return $this->render('SEInputBundle:Import:set_import.html.twig', array(
             'listSapImport' => $listSapImport

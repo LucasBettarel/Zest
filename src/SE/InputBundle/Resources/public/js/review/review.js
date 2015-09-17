@@ -44,16 +44,17 @@ $(document).ready(function() {
     });
 
 	$('#history').DataTable( {
-		paging: false,
-	  	"dom": 'lrtip',
-	  	"info": false
+		"paging": false,
+	  "dom": 'lrtip',
+	  "info": false,
+    "order": [[ 0, "desc" ]]
 	});
 
 	$('#errors').DataTable( {
-		"scrollY":        "173px",
-		paging: false,
-	  	"dom": 'lrtip',
-	  	"info": false
+		"scrollY": "173px",
+		"paging": false,
+	  "dom": 'lrtip',
+	  "info": false
 	});
 
   $('.panel-warning .dataTables_scrollHeadInner').css('padding-left','0px');
@@ -96,7 +97,13 @@ $(document).ready(function() {
         ignoreClick(id);
       }
     });
-    
+
+    $(document).on('click', '#refresh', function(e){
+      e && e.preventDefault();
+      if (confirm("Refresh the missing inputs?") == true) {
+        refreshClick();
+      }
+    });
 
     $(document).on('click', '#delete', function(e){
       e && e.preventDefault();
@@ -136,6 +143,21 @@ function deleteClick(id){
         if(response.code == 100 && response.success){
           console.log('input trouve, deleted', $('#history').find('#'+id));
          $('#history').find('#'+id).remove();
+        }
+        else{
+            alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
+        }
+      },
+      "json");    
+}
+
+function refreshClick(){
+    $.get(
+      ajaxMi,               
+      {}, 
+      function(response){
+        if(response.code == 100 && response.success){
+          console.log('inputs refreshed');
         }
         else{
             alert('Sorry, a strange error occurred... Please try again or contact Lucas !');

@@ -1,43 +1,43 @@
 {% extends "SEReportBundle::layout.html.twig" %}
 
-{% block title %}Monthly Productivity - {{ parent() }}{% endblock %}
+{% block title %}Daily Productivity - {{ parent() }}{% endblock %}
 
 {% block sereport_body %}
-  <header class="h-sap">
+  <header class="h-input">
     <div class="line"></div>
     <div class="pull-left">
-      <h2><i class="glyphicon glyphicon-stats"> </i> Monthly Productivity report</h2>
+      <h2><i class="glyphicon glyphicon-stats"> </i> Daily Productivity report</h2>
     </div>
   </header>
 
   <div class="row">
     <div id="filters">
-      <div class="month pull-left date-filter">
-        <form name="test">
+      <div class="month pull-left">
+        <form name="test" class="form-inline"> 
           <div class="form-group">
-            <input type="text" id="monthpicker">
+            <input type="date" class="form-control date-filter" id="dailyDate" value="{{ 'now'|date('Y-m-d') }}" name="date">
           </div>
         </form>
       </div>
-        <div id="1" class="teams pull-left">
-          <a id="0" class="label label-primary">HubAsia</a>
-          <a id="1" class="label label-default">Outbound4</a>
-          <a id="2" class="label label-default">Inbound4</a>
-          <a id="4" class="label label-default">Outbound3</a>
-          <a id="5" class="label label-default">Inbound3</a>
-          <a id="6" class="label label-default">Releasing</a>
-          <a id="8" class="label label-default">Adaptation</a>
-          <a id="9" class="label label-default">Taskforce</a>
-        </div>
-        <div id="2" class="shifts hide">
-          | 
-          <a id="0" class="label label-primary">All</a>
-          <a id="1" class="label label-default">Shift1</a>
-          <a id="2" class="label label-default">Shift2</a>
-          <a id="3" class="label label-default">Shift3</a>
-        </div>
+      <div id="1" class="teams pull-left">
+        <a id="0" class="label label-primary">HubAsia</a>
+        <a id="1" class="label label-default">Outbound4</a>
+        <a id="2" class="label label-default">Inbound4</a>
+        <a id="4" class="label label-default">Outbound3</a>
+        <a id="5" class="label label-default">Inbound3</a>
+        <a id="6" class="label label-default">Releasing</a>
+        <a id="8" class="label label-default">Adaptation</a>
+        <a id="9" class="label label-default">Taskforce</a>
+      </div>
+      <div id="2" class="shifts hide">
+        | 
+        <a id="0" class="label label-primary">All</a>
+        <a id="1" class="label label-default">Shift1</a>
+        <a id="2" class="label label-default">Shift2</a>
+        <a id="3" class="label label-default">Shift3</a>
       </div>
     </div>
+  </div>
 
   <div id="data-panel" class="row">
     <div class="col-md-8">
@@ -46,7 +46,7 @@
     <div id="report-panel" class="col-md-4">
        <div class="panel panel-default">
         <div class="panel-heading">
-          <h4>Monthly report</h4>
+          <h4>Daily report</h4>
         </div>
         <div class="panel-body">
           <h5>Transfer order lines : 
@@ -79,8 +79,8 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12">
-        <div id="container-monthly" style="height: 500px; margin:auto auto;"></div>
+     <div class="col-md-12">
+      <div id="container-activities" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
     </div>
   </div>
 
@@ -90,10 +90,10 @@
   {{ parent() }}
 
   <script type="text/javascript">
-    var ajaxMonthly = '{{path('se_report_monthly')}}';
+    var ajaxDaily = '{{path('se_report_day')}}';
   </script>
 
-  {% javascripts '@SEReportBundle/Resources/public/js/monthly/*' %}
+  {% javascripts '@SEReportBundle/Resources/public/js/daily/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}
 

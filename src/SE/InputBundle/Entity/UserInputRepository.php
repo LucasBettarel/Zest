@@ -23,7 +23,7 @@ class UserInputRepository extends EntityRepository
 			->select("a")
 			->where("a.dateInput <= '".$now->format("Y-m-d H:i:s")."'")
             ->andWhere("a.dateInput > '".$lastMonth->format("Y-m-d H:i:s")."'")
-		    ->orderBy('a.dateInput', 'DESC')
+		    ->orderBy('a.dateInput', 'ASC')
 			->getQuery()
 			->getResult()
   		;
@@ -44,6 +44,20 @@ class UserInputRepository extends EntityRepository
 			->select("a")
 			->where("a.dateInput <= '".$end."'")
             ->andWhere("a.dateInput > '".$start->format("Y-m-d H:i:s")."'")
+		    ->orderBy('a.dateInput', 'ASC')
+			->getQuery()
+			->getResult()
+  		;
+  
+		return $qb;
+	}
+
+	public function getDayInputs($date)
+	{
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			->where("a.dateInput = '".$date."'")
 		    ->orderBy('a.dateInput', 'ASC')
 			->getQuery()
 			->getResult()

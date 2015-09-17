@@ -48,7 +48,9 @@
     <div class="col-md-6">
       <div class="panel panel-warning">
       <!-- Default panel contents -->
-      <div class="panel-heading"><h4>Some Manhours inputs are missing in the database.</h4></div>
+      <div class="panel-heading">
+        <a id="refresh" class="btn btn-default pull-left free-me"><i class="glyphicon glyphicon-refresh" data-toggle="tooltip" title="resfresh missing inputs"> </i></a>
+        <h4>Some Manhours inputs are missing in the database.</h4></div>
         <div class="panel-body">
           <!--<p>Please find the according team and date, and add a new input in the appropriate section. If the issue is validated as is, the productivity for this team will be counted as 0.</p>-->  
 
@@ -171,6 +173,7 @@
   
     var ajaxIgnore = '{{path('se_input_ignore')}}';
     var ajaxDelete = '{{path('se_input_delete')}}';
+    var ajaxMi = '{{path('se_input_review_mi')}}';
 
   </script>
   <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>

@@ -21,3 +21,13 @@ se_report_monthly:
     defaults: { _controller: SEReportBundle:Productivity:monthly }
     requirements:
         _method:  GET
+
+se_report_daily:
+    path:  /daily
+    defaults: { _controller: SEReportBundle:Productivity:daily }
+
+se_report_day:
+    pattern:  /daily/data
+    defaults: { _controller: SEReportBundle:Productivity:day }
+    requirements:
+        _method:  GET

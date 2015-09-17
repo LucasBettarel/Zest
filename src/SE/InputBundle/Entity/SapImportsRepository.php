@@ -29,8 +29,19 @@ class SapImportsRepository extends EntityRepository
 		->getQuery()
 		->getResult()
 		;
-
   
+		return $qb;
+	}
+
+	public function getAll()
+	{
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->orderBy('a.date', 'DESC')
+		->getQuery()
+		->getResult()
+		;
 		return $qb;
 	}
 }

@@ -19,6 +19,11 @@ class ProductivityController extends Controller
  		return $this->render('SEReportBundle:Productivity:monthly.html.twig');
 	}
 
+	public function dailyAction()
+	{
+ 		return $this->render('SEReportBundle:Productivity:daily.html.twig');
+	}
+
 	public function refreshAction()
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -45,7 +50,7 @@ class ProductivityController extends Controller
     		$inputTeam = $inputToProcessDay->getTeam();
     		$inputShift = $inputToProcessDay->getShift();
     		$otStart = $inputToProcessDay->getOtStartTime();
-			$otEnd = $inputToProcessDay->getOtEndTime();					
+			$otEnd = $inputToProcessDay->getOtEndTime();
 					         		
         	foreach ($sapToProcess as $sapToProcessDay) {
       
@@ -102,7 +107,7 @@ class ProductivityController extends Controller
 								$inputEntry->setTotalTo($to);
 
 								//add not affected tolines (those in shift time for now, by team/area later) to review input error
-								if(count($missingTO) > 0 and !($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $inputDate, 'type' => $toIssue, 'team' => $inputTeam, 'shift' =>  $inputShift))) ){
+								/*if(count($missingTO) > 0 and !($em->getRepository('SEInputBundle:InputReview')->findOneBy(array('date' => $inputDate, 'type' => $toIssue, 'team' => $inputTeam, 'shift' =>  $inputShift))) ){
 					         		$missingHour = new InputReview();
 					         		$missingHour->setDate($inputDate);
 					         		$missingHour->setType($toIssue);
@@ -113,7 +118,7 @@ class ProductivityController extends Controller
 					         		$missingHour->setStatus(0);
 
 					  		        $em->persist($missingHour);
-								}
+								}*/
 	        				}
 	        			}
 	        		}
@@ -143,11 +148,9 @@ class ProductivityController extends Controller
 	        		if($sapToProcessDay->getInputs() == 12){ //team.count*team.shift.count
 	        			$sapToProcessDay->setProcess(1);
 	        		}
-
 	        		$inputToProcessDay->setProcess(1);
 	        	}        	
 	       	}
-
 	        //calculate new to number + new prod ah ah
 			$inputToProcessDay->computeHours();
         }//foreach input
@@ -206,6 +209,32 @@ class ProductivityController extends Controller
 	    return new Response(json_encode($response)); 
 	}
 
+	public function dayAction()
+	{ 
+	    $em = $this->getDoctrine()->getManager();
+	    $request = $this->get('request');        
+	    $date = $request->get('date');
+	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getDayInputs($date);
+	    $dailyStructure = array(
+							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
+							'activities' => array()
+						);	    
+	    $dailyJson = $this->createJson($dailyStructure);
+
+		//fill data
+		foreach ($userInputs as $userInput) {
+			$team = $userInput->getTeam()->getId();
+			if ($team == 3) {$team = 1;}//include local into outbound4
+			$shift = $userInput->getShift()->getId();
+			$dailyJson = $this->loadDailyData($dailyJson, $team, $shift, $userInput);
+			$dailyJson = $this->loadDailyData($dailyJson, 0, 0, $userInput);
+			$dailyJson = $this->loadDailyData($dailyJson, $team, 0, $userInput);
+		}
+		$response = array("code" => 100, "success" => true, "dailyJson" => $dailyJson);
+	    
+	    return new Response(json_encode($response)); 
+	}
+
 	public function loadMonthlyData($data, $t, $s, $d, $u)
 	{
 		$data[$t][$s]['report']['to'] += $u->getTotalToInput();
@@ -231,16 +260,32 @@ class ProductivityController extends Controller
 		return $data;
 	}
 
+	public function loadDailyData($data, $t, $s, $u)
+	{
+		$data[$t][$s]['report']['to'] += $u->getTotalToInput();
+		$data[$t][$s]['report']['mh'] += $u->getTotalHoursInput(); 
+		$data[$t][$s]['report']['wh'] += $u->getTotalWorkingHoursInput(); 
+		$data[$t][$s]['report']['mto'] += $u->getManualTo(); 
+		$data[$t][$s]['report']['tr'] += $u->getTotalTrainingHours(); 
+		$data[$t][$s]['report']['ab'] += $u->getTotalAbsence(); 
+		$data[$t][$s]['report']['hc'] += $u->getTotalHeadcount();
+		$data[$t][$s]['report']['ot'] += $u->getTotalOvertimeInput();
+		if($data[$t][$s]['report']['wh'] != 0){
+			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
+		}
+		return $data;
+	}
+
 	public function createJson($structure)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$teams = $em->getRepository('SEInputBundle:Team')->findAll();
+		$teams = $em->getRepository('SEInputBundle:Team')->getReportingTeams();
 		$json = array();
 		$json[0][0] = $structure;
 
 		foreach ($teams as $team) {
 			$teamId = $team->getId();
-			if ($teamId != 3 and $teamId != 7){//ignore local and vteam structure
+			if ($teamId != 3){//ignore local structure
 				$json[$teamId][0] = $structure;
 				for ($i=0; $i < $team->getShiftnb(); $i++) { 
 					$shiftId = $i+1;
@@ -266,12 +311,3 @@ class ProductivityController extends Controller
 		return $data;
 	}
 }
-
-
-	
-/*	for daily
-	$structure = array(
-						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
-						'activities' => array()
-						);
-*/	

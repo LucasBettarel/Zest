@@ -17,7 +17,7 @@ class TeamRepository extends EntityRepository
 		$qb = $this
 		->createQueryBuilder('a')
 		->select("a")
-		->where("a.name <> 'VTeam'")
+		->where("a.id <> 7")
 		->getQuery()
 		->getResult()
 		;
