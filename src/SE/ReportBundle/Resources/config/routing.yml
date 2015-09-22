@@ -31,3 +31,9 @@ se_report_day:
     defaults: { _controller: SEReportBundle:Productivity:day }
     requirements:
         _method:  GET
+
+se_report_monthly_activities:
+    pattern:  /monthly/activities
+    defaults: { _controller: SEReportBundle:Productivity:monthlyActivities }
+    requirements:
+        _method:  GET

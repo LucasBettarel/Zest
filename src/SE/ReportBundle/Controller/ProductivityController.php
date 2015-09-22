@@ -145,9 +145,10 @@ class ProductivityController extends Controller
 	        		//faire un check error avant
 					$sapToProcessDay->setInputs($sapToProcessDay->getInputs() + 1);
 
+	        		/* Function to improve
 	        		if($sapToProcessDay->getInputs() == 12){ //team.count*team.shift.count
 	        			$sapToProcessDay->setProcess(1);
-	        		}
+	        		}*/
 	        		$inputToProcessDay->setProcess(1);
 	        	}        	
 	       	}
@@ -175,7 +176,7 @@ class ProductivityController extends Controller
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
 	    $monthlyStructure = array(
 						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
-						'activities' => array(),
+						'activities' => array('cat' => array(), 'data' => array()),
 						'prod' => array(),
 						'to' => array(),
 						'h' => array(),
@@ -217,7 +218,7 @@ class ProductivityController extends Controller
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getDayInputs($date);
 	    $dailyStructure = array(
 							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
-							'activities' => array()
+							'activities' => array('cat' => array(), 'data' => array())
 						);	    
 	    $dailyJson = $this->createJson($dailyStructure);
 
@@ -249,6 +250,21 @@ class ProductivityController extends Controller
 			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
 		} 
 
+		foreach ($u->getInputEntries() as $e) {
+	    	foreach ($e->getActivityHours() as $a) {
+	        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+	        	if($k === false){
+	            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+	            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+	          	}
+	          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+	            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+	          	}else{
+	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+	          	}       
+	        }
+	    }
+
 		$data[$t][$s]['to'][$d] += $u->getTotalToInput();
 		$data[$t][$s]['h'][$d] += $u->getTotalHoursInput();
 		$data[$t][$s]['wh'][$d] += $u->getTotalWorkingHoursInput();
@@ -273,6 +289,22 @@ class ProductivityController extends Controller
 		if($data[$t][$s]['report']['wh'] != 0){
 			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
 		}
+
+		foreach ($u->getInputEntries() as $e) {
+	    	foreach ($e->getActivityHours() as $a) {
+	        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+	        	if($k === false){
+	            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+	            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+	          	}
+	          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+	            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+	          	}else{
+	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+	          	}       
+	        }
+	    }
+	    
 		return $data;
 	}
 

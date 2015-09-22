@@ -8,8 +8,6 @@ var dateVal;
 
 dateVal = $('#dailyDate').val();
 
-console.log(dateVal);
-
 $.get(
   ajaxDaily,               
   {
@@ -131,6 +129,46 @@ $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
         }
     }]
 }));
+
+$('#container-activities').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Activities Usage'
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            categories: json[team][shift]['activities']['cat'],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'hours'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f} h</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Activities Manhours',
+            data: json[team][shift]['activities']['data']
+        }]
+    });
 }
 
 function replaceTotalData(j, t, s){
@@ -150,6 +188,7 @@ function filterData($this, json){
 
   //update charts data
   var containerProd = $('#container-prod').highcharts();
+  var containerAct = $('#container-activities').highcharts();
 
   if ($this.parent().attr('id') == 1){//team
     if($this.attr('id') == 0 || $this.attr('id') == 4 || $this.attr('id') == 5){
@@ -168,20 +207,17 @@ function filterData($this, json){
     $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
     $('#filters .shifts #0').removeClass('label-default').addClass('label-primary');
 
-    loadTeamCharts(json, $this.attr('id'), 0, containerProd);
+    loadCharts(json, $this.attr('id'), 0, containerProd, containerAct);
   }else{
    //shift
    var teamId = $('#filters #1').find('.label-primary').attr('id');
-   loadShiftCharts(json, teamId, $this.attr('id'), containerProd); 
+   loadCharts(json, teamId, $this.attr('id'), containerProd, containerAct); 
   }
 }
 
-function loadTeamCharts(j, t, s, p){
+function loadCharts(j, t, s, p, a){
   p.series[0].setData([j[t][s]['report']['prod']]);
-  replaceTotalData(j,t,s);
-}
-
-function loadShiftCharts(j, t, s, p){
-  p.series[0].setData([j[t][s]['report']['prod']]);
+  a.xAxis[0].setCategories(j[t][s]['activities']['cat']);
+  a.series[0].setData(j[t][s]['activities']['data']);
   replaceTotalData(j,t,s);
 }
