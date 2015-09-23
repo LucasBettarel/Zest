@@ -157,7 +157,8 @@ function refreshClick(){
       {}, 
       function(response){
         if(response.code == 100 && response.success){
-          console.log('inputs refreshed');
+          $('#refresh').addClass('btn-success').prop('disabled', true);
+          $('#refresh i').removeClass('glyphicon-refresh').addClass('glyphicon-ok');
         }
         else{
             alert('Sorry, a strange error occurred... Please try again or contact Lucas !');

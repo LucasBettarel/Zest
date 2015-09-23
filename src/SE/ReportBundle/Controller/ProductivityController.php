@@ -230,8 +230,10 @@ class ProductivityController extends Controller
 			$dailyJson = $this->loadDailyData($dailyJson, $team, $shift, $userInput);
 			$dailyJson = $this->loadDailyData($dailyJson, 0, 0, $userInput);
 			$dailyJson = $this->loadDailyData($dailyJson, $team, 0, $userInput);
+			$view = $this->render('SEReportBundle:Productivity:dailyTable.html.twig', array('input' => $userInput))->getContent();
+			$template[] = array($userInput->getTeam()->getName(),$shift,$userInput->getTotalHoursInput(),$userInput->getTotalToInput(),$view);
 		}
-		$response = array("code" => 100, "success" => true, "dailyJson" => $dailyJson);
+		$response = array("code" => 100, "success" => true, "dailyJson" => $dailyJson, "template" => $template);
 	    
 	    return new Response(json_encode($response)); 
 	}
@@ -304,7 +306,7 @@ class ProductivityController extends Controller
 	          	}       
 	        }
 	    }
-	    
+
 		return $data;
 	}
 

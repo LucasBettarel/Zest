@@ -40,7 +40,7 @@
   </div>
 
   <div id="data-panel" class="row">
-    <div class="col-md-8">
+    <div class="col-md-4">
         <div id="container-prod" style="height: 300px; margin:auto auto;"></div>
     </div>
     <div id="report-panel" class="col-md-4">
@@ -52,13 +52,13 @@
           <h5>Transfer order lines : 
             <span id="to"></span>
           </h5>
-          <h5>Total Included Manhours : 
+          <h5>Included Manhours : 
             <span id="wh"></span>
           </h5>
-          <h5>Total Manhours : 
+          <h5>Manhours : 
             <span id="ma"></span>
           </h5>
-          <h5>Total Headcount : 
+          <h5>Headcount : 
             <span id="hc"></span>
           </h5>
           <h5>Overtime hours :
@@ -73,6 +73,31 @@
           <h5>Absent employees :
             <span id="ab"></span>
           </h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Manhours inputs</h4>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table id="inputs" class="table table-hover table-striped display">
+              <thead>
+                <tr>
+                  <th>Team</th>
+                  <th>Shift</th>
+                  <th>Hours</th>
+                  <th>TO Lines</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="inject-inputs">
+                             
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -92,7 +117,7 @@
   <script type="text/javascript">
     var ajaxDaily = '{{path('se_report_day')}}';
   </script>
-
+  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
   {% javascripts '@SEReportBundle/Resources/public/js/daily/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}

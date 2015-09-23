@@ -1,50 +1,60 @@
 $(document).ready(function() {
 
-Highcharts.createElement('link',{href:'//fonts.googleapis.com/css?family=Dosis:400,600',rel:'stylesheet',type:'text/css'},null,document.getElementsByTagName('head')[0]);Highcharts.theme={colors:["#7cb5ec","#f7a35c","#90ee7e","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],chart:{backgroundColor:null,style:{fontFamily:"Dosis, sans-serif"}},title:{style:{fontSize:'16px',fontWeight:'bold',textTransform:'uppercase'}},tooltip:{borderWidth:0,backgroundColor:'rgba(219,219,216,0.8)',shadow:false},legend:{itemStyle:{fontWeight:'bold',fontSize:'13px'}},xAxis:{gridLineWidth:1,labels:{style:{fontSize:'12px'}}},yAxis:{minorTickInterval:'auto',title:{style:{textTransform:'uppercase'}},labels:{style:{fontSize:'12px'}}},plotOptions:{candlestick:{lineColor:'#404048'}},background2:'#F0F0EA'};Highcharts.setOptions(Highcharts.theme);
+  Highcharts.createElement('link',{href:'//fonts.googleapis.com/css?family=Dosis:400,600',rel:'stylesheet',type:'text/css'},null,document.getElementsByTagName('head')[0]);Highcharts.theme={colors:["#7cb5ec","#f7a35c","#90ee7e","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],chart:{backgroundColor:null,style:{fontFamily:"Dosis, sans-serif"}},title:{style:{fontSize:'16px',fontWeight:'bold',textTransform:'uppercase'}},tooltip:{borderWidth:0,backgroundColor:'rgba(219,219,216,0.8)',shadow:false},legend:{itemStyle:{fontWeight:'bold',fontSize:'13px'}},xAxis:{gridLineWidth:1,labels:{style:{fontSize:'12px'}}},yAxis:{minorTickInterval:'auto',title:{style:{textTransform:'uppercase'}},labels:{style:{fontSize:'12px'}}},plotOptions:{candlestick:{lineColor:'#404048'}},background2:'#F0F0EA'};Highcharts.setOptions(Highcharts.theme);
 
-var init = false;
-var dailyJson;
-var dateVal;
+  var init = false;
+  var dailyJson;
+  var dateVal = $('#dailyDate').val();
+  var inputTable;
 
-dateVal = $('#dailyDate').val();
-
-$.get(
-  ajaxDaily,               
-  {
-    date: dateVal,
-  }, 
-  function(response){
-    createGauge(response.dailyJson, 0, 0);
-    replaceTotalData(response.dailyJson, 0,0);
-    dailyJson = response.dailyJson;
-    init = true;
-  },
-  "json");
-
-$('#filters a').click(function(){
-  if (init == true){
-    $this = $(this);
-    filterData($this, dailyJson);
-  }
-});
-
-$(document).on('change', 'form input#dailyDate', function(e){
-  dateVal = $('#dailyDate').val();
-  init = false;
-  $.get(
+  $.post(
     ajaxDaily,               
-    {
-      date: dateVal,
-    }, 
+    {date: dateVal}, 
     function(response){
       createGauge(response.dailyJson, 0, 0);
       replaceTotalData(response.dailyJson, 0,0);
       dailyJson = response.dailyJson;
+      $('.panel-default .dataTables_scrollHeadInner').css('padding-left','0px');
+      $('.panel-default .table').css('margin-bottom','0px');
+      $("*[data-toggle='tooltip']").tooltip();
+      inputTable = $('#inputs').DataTable( {
+        retrieve: true,
+        "scrollY": "173px",
+        paging: false,
+        "dom": 'lrtip',
+        "info": false
+      });
+      inputTable.rows.add(response.template).draw();
+      someInit();
       init = true;
     },
     "json");
-});
 
+  $('#filters a').click(function(){
+    if (init == true){
+      $this = $(this);
+      filterData($this, dailyJson);
+    }
+  });
+
+  $(document).on('change', 'form input#dailyDate', function(e){
+    dateVal = $('#dailyDate').val();
+    init = false;
+    $.post(
+    ajaxDaily,               
+    {date: dateVal}, 
+    function(response){
+      createGauge(response.dailyJson, 0, 0);
+      replaceTotalData(response.dailyJson, 0,0);
+      dailyJson = response.dailyJson;
+      inputTable = $('#inputs').DataTable();
+      inputTable.clear();
+      inputTable.rows.add(response.template).draw();
+      inputTable.draw();
+      init = true;
+    },
+    "json");
+  });
 });
 
 function createGauge(json, team, shift){
@@ -101,7 +111,7 @@ function createGauge(json, team, shift){
             }
         }
     }
-};
+  };
   // The speed gauge
 $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
     yAxis: {
@@ -185,7 +195,7 @@ function replaceTotalData(j, t, s){
 function filterData($this, json){
   $this.siblings().removeClass('label-primary').addClass('label-default');
   $this.removeClass('label-default').addClass('label-primary');
-
+    
   //update charts data
   var containerProd = $('#container-prod').highcharts();
   var containerAct = $('#container-activities').highcharts();
@@ -208,10 +218,19 @@ function filterData($this, json){
     $('#filters .shifts #0').removeClass('label-default').addClass('label-primary');
 
     loadCharts(json, $this.attr('id'), 0, containerProd, containerAct);
+
+    if($this.attr('id') != 0){
+      $('#inputs').DataTable().column(0).search($this.text()).draw();  
+    }else{
+      $('#inputs').DataTable().column(0).search("").draw();  
+    }
+    //if filter by team, reset filter shift to all
+    $('#inputs').DataTable().column(1).search("").draw(); 
   }else{
    //shift
    var teamId = $('#filters #1').find('.label-primary').attr('id');
-   loadCharts(json, teamId, $this.attr('id'), containerProd, containerAct); 
+   loadCharts(json, teamId, $this.attr('id'), containerProd, containerAct);
+   $('#inputs').DataTable().column(1).search($this.attr('id')).draw();
   }
 }
 
