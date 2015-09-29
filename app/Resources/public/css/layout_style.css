@@ -20,10 +20,6 @@ header.h-review .line{background-color: #EB7260;}
 header.h-sap .line{background-color: #77C5F7;}
 header.h-activity .line{background-color: #9365B8;}
 header.h-employee .line{background-color: #A38F84;}
-header.h-input .line{background-color: #1ABC9C;}
-header.h-input .line{background-color: #1ABC9C;}
-header.h-input .line{background-color: #1ABC9C;}
-header.h-input .line{background-color: #1ABC9C;}
 
 header{
   height: 75px;
@@ -43,9 +39,6 @@ header.h-review{background-color: rgba(235, 114, 96, 0.1);}
 header.h-sap{background-color: rgba(119, 197, 247, 0.1);}
 header.h-activity{background-color: rgba(147, 101, 184, 0.1);}
 header.h-employee{background-color: rgba(163, 143, 132, 0.1);}
-header.h-input{background-color: rgba(26, 188, 156, 0.1);}
-header.h-input{background-color: rgba(26, 188, 156, 0.1);}
-header.h-input{background-color: rgba(26, 188, 156, 0.1);}
 
 
 #filters {

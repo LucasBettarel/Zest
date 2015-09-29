@@ -360,7 +360,7 @@ function replaceTotalData(j, t, s){
   $('#report-panel #to').html(j[t][s]['report']['to']);
   $('#report-panel #ma').html(j[t][s]['report']['mh']);
   $('#report-panel #wh').html(j[t][s]['report']['wh']);
-  $('#report-panel #hc').html(j[t][s]['report']['hc']);
+//  $('#report-panel #hc').html(j[t][s]['report']['hc']);
   $('#report-panel #ot').html(j[t][s]['report']['ot']);
   $('#report-panel #mto').html(j[t][s]['report']['mto']);
   $('#report-panel #tr').html(j[t][s]['report']['tr']);

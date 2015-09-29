@@ -25,7 +25,6 @@ $(document).ready(function() {
         "info": false
       });
       inputTable.rows.add(response.template).draw();
-      someInit();
       init = true;
     },
     "json");
