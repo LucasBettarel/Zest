@@ -40,39 +40,49 @@
     </div>
 
   <div id="data-panel" class="row">
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div id="container-prod" style="height: 300px; margin:auto auto;"></div>
     </div>
-    <div id="report-panel" class="col-md-4">
-       <div class="panel panel-default">
+    <div id="report-panel" class="col-md-5">
+       <div class="panel panel-default" style="height: 300px; margin:auto auto;">
         <div class="panel-heading">
           <h4>Monthly report</h4>
         </div>
         <div class="panel-body">
-          <h5>Transfer order lines : 
-            <span id="to"></span>
-          </h5>
-          <h5>Total Included Manhours : 
-            <span id="wh"></span>
-          </h5>
-          <h5>Total Manhours : 
-            <span id="ma"></span>
-          </h5>
-{#          <h5>Total Headcount : 
-            <span id="hc"></span>
-          </h5>
-#}          <h5>Overtime hours :
-            <span id="ot"></span>
-          </h5>
-          <h5>Manual TO Lines :
-            <span id="mto"></span>
-          </h5>
-          <h5>Training hours :
-            <span id="tr"></span>
-          </h5>
-          <h5>Absent employees :
-            <span id="ab"></span>
-          </h5>
+          <div class="table-responsive">
+            <table class="table table-hover table-striped">
+              <tbody>
+                <tr>
+                  <td><strong>Transfer order lines</strong></td>
+                  <td class="text-right divider"><span id="to"></span></td>
+                  <td><strong>Training hours</strong></td>
+                  <td class="text-right"><span id="tr"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Included Manhours</strong></td>
+                  <td class="text-right divider"><span id="wh"></span></td>
+                  <td><strong>Absent employees</strong></td>
+                  <td class="text-right"><span id="ab"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Manhours</strong></td>
+                  <td class="text-right divider"><span id="ma"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Logistic Efficiency</strong></td>
+                  <td class="text-right divider"><span id="le"></span> %</td>
+                </tr>
+                <tr>
+                  <td><strong>Overtime hours</strong></td>
+                  <td class="text-right divider"><span id="ot"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Manual TO Lines</strong></td>
+                  <td class="text-right"><span id="mto"></span></td>
+                </tr>           
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

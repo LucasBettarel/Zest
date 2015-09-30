@@ -8,6 +8,10 @@ body, html {
  	position: relative;
 }
 
+.panel-body{
+  padding: 0px;
+}
+
 .line{
   height: 5px;
   background-color: #1ABC9C;
@@ -57,4 +61,8 @@ header.h-employee{background-color: rgba(163, 143, 132, 0.1);}
 
 .free-me{
   margin-right: 8px;
+}
+
+.divider{
+  border-right: 1px solid #ddd;
 }

@@ -19,7 +19,7 @@ $(document).ready(function() {
       $("*[data-toggle='tooltip']").tooltip();
       inputTable = $('#inputs').DataTable( {
         retrieve: true,
-        "scrollY": "173px",
+        "scrollY": "200px",
         paging: false,
         "dom": 'lrtip',
         "info": false
@@ -63,7 +63,9 @@ function createGauge(json, team, shift){
         type: 'solidgauge'
     },
 
-    title: null,
+    title: {
+            text: 'Productivity'
+        },
 
     pane: {
         center: ['50%', '50%'],
@@ -131,7 +133,7 @@ $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
         dataLabels: {
             format: '<div style="text-align:center; margin-top:-70px;"><span style="font-size:90px;color:' +
                 ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y}</span><br/>' +
-                   '<span style="font-size:12px;color:silver">to line/h</span></div>'
+                   '<span style="font-size:12px;color:black">to line/h</span></div>'
         },
         tooltip: {
             valueSuffix: 'to line/h'
@@ -144,38 +146,58 @@ $('#container-activities').highcharts({
             type: 'column'
         },
         title: {
-            text: 'Activities Usage'
+            text: 'Activities Usage & Efficiency'
         },
         credits: {
             enabled: false
         },
         xAxis: {
-            categories: json[team][shift]['activities']['cat'],
-            crosshair: true
+            categories: json[team][shift]['activities']['cat']
         },
-        yAxis: {
+        yAxis: [{
             min: 0,
             title: {
-                text: 'hours'
+                text: 'Hours'
             }
+        }, {
+            min: 0,
+            title: {
+                text: 'Ke (%)'
+            },
+            opposite: true
+        }],
+        legend: {
+            shadow: false
         },
         tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} h</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
+            shared: true
         },
         plotOptions: {
             column: {
-                pointPadding: 0.2,
-                borderWidth: 0
+                grouping: false,
+                borderWidth: 0,
+                shadow: false
             }
         },
         series: [{
             name: 'Activities Manhours',
-            data: json[team][shift]['activities']['data']
+            color: 'rgba(165,170,217,1)',
+            data: json[team][shift]['activities']['data'],
+            tooltip: {
+                valueSuffix: ' h'
+            },
+            pointPadding: 0.3,
+            pointPlacement: -0.2
+        }, {
+            name: 'Ke',
+            color: 'rgba(248,161,63,1)',
+            data: json[team][shift]['activities']['ke'],
+            tooltip: {
+                valueSuffix: ' %'
+            },
+            pointPadding: 0.3,
+            pointPlacement: 0.2,
+            yAxis: 1
         }]
     });
 }
@@ -189,6 +211,7 @@ function replaceTotalData(j, t, s){
   $('#report-panel #mto').html(j[t][s]['report']['mto']);
   $('#report-panel #tr').html(j[t][s]['report']['tr']);
   $('#report-panel #ab').html(j[t][s]['report']['ab']);
+  $('#report-panel #le').html(j[t][s]['report']['le']);
 }
 
 function filterData($this, json){
@@ -237,5 +260,6 @@ function loadCharts(j, t, s, p, a){
   p.series[0].setData([j[t][s]['report']['prod']]);
   a.xAxis[0].setCategories(j[t][s]['activities']['cat']);
   a.series[0].setData(j[t][s]['activities']['data']);
+  a.series[1].setData(j[t][s]['activities']['ke']);
   replaceTotalData(j,t,s);
 }

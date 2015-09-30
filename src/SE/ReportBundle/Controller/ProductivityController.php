@@ -175,8 +175,8 @@ class ProductivityController extends Controller
 	    $daysNb = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
 	    $monthlyStructure = array(
-						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
-						'activities' => array('cat' => array(), 'data' => array()),
+						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0),
+						'activities' => array('cat' => array(), 'data' => array(), 'ke' => array()),
 						'prod' => array(),
 						'to' => array(),
 						'h' => array(),
@@ -217,8 +217,8 @@ class ProductivityController extends Controller
 	    $date = $request->get('date');
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getDayInputs($date);
 	    $dailyStructure = array(
-							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0),
-							'activities' => array('cat' => array(), 'data' => array())
+							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0),
+							'activities' => array('cat' => array(), 'data' => array(), 'ke' => array())
 						);	    
 	    $dailyJson = $this->createJson($dailyStructure);
 
@@ -228,8 +228,8 @@ class ProductivityController extends Controller
 			if ($team == 3) {$team = 1;}//include local into outbound4
 			$shift = $userInput->getShift()->getId();
 			$dailyJson = $this->loadDailyData($dailyJson, $team, $shift, $userInput);
-			$dailyJson = $this->loadDailyData($dailyJson, 0, 0, $userInput);
 			$dailyJson = $this->loadDailyData($dailyJson, $team, 0, $userInput);
+			$dailyJson = $this->loadDailyData($dailyJson, 0, 0, $userInput);
 			$view = $this->render('SEReportBundle:Productivity:dailyTable.html.twig', array('input' => $userInput))->getContent();
 			$template[] = array($userInput->getTeam()->getName(),$shift,$userInput->getTotalHoursInput(),$userInput->getTotalToInput(),$view);
 		}
@@ -250,7 +250,14 @@ class ProductivityController extends Controller
 		$data[$t][$s]['report']['ot'] += $u->getTotalOvertimeInput();
 		if($data[$t][$s]['report']['wh'] != 0){
 			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
-		} 
+		}
+
+		//logistic efficiency
+		if($t == 0 && $s == 0 && $data[$t][$s]['report']['prod'] != null){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
+		}elseif($t == 1 || $t == 4 && $data[$t][$s]['report']['prod'] != null){$ut = (109 / 36);  // Outbound UT = 109 s/to
+		}elseif($t == 2 || $t == 5 && $data[$t][$s]['report']['prod'] != null){$ut = (48 / 36);  // Inbound UT = 48 s/to
+		}else{$ut = 0;}  // No UT
+		$data[$t][$s]['report']['le'] = round($data[$t][$s]['report']['prod'] * $ut,1) ; 
 
 		foreach ($u->getInputEntries() as $e) {
 	    	foreach ($e->getActivityHours() as $a) {
@@ -265,6 +272,18 @@ class ProductivityController extends Controller
 	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
 	          	}       
 	        }
+	    }
+
+	    $em = $this->getDoctrine()->getManager();
+	    for ($i=0; $i < sizeof($data[$t][$s]['activities']['cat']); $i++) { 
+	    	//load/refresh ke
+	    	$tar = $em->getRepository('SEInputBundle:Activity')->findOneBy(array('name' => $data[$t][$s]['activities']['cat'][$i]));
+			$target = intval($tar->getDefaultTarget());
+          	if($target != null && $target != 0 && $data[$t][$s]['activities']['data'][$i] != null && $data[$t][$s]['activities']['data'][$i] != 0){
+          		$data[$t][$s]['activities']['ke'][$i] = round( $data[$t][$s]['report']['to'] / ( $target * $data[$t][$s]['activities']['data'][$i] ) * 100, 1 );
+          	}else{
+          		$data[$t][$s]['activities']['ke'][$i] = null;
+          	}
 	    }
 
 		$data[$t][$s]['to'][$d] += $u->getTotalToInput();
@@ -291,6 +310,12 @@ class ProductivityController extends Controller
 		if($data[$t][$s]['report']['wh'] != 0){
 			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
 		}
+		//logistic efficiency
+		if($t == 0 && $s == 0 && $data[$t][$s]['report']['prod'] != null){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
+		}elseif($t == 1 || $t == 4 && $data[$t][$s]['report']['prod'] != null){$ut = (109 / 36);  // Outbound UT = 109 s/to
+		}elseif($t == 2 || $t == 5 && $data[$t][$s]['report']['prod'] != null){$ut = (48 / 36);  // Inbound UT = 48 s/to
+		}else{$ut = 0;}  // No UT
+		$data[$t][$s]['report']['le'] = round($data[$t][$s]['report']['prod'] * $ut,1) ;
 
 		foreach ($u->getInputEntries() as $e) {
 	    	foreach ($e->getActivityHours() as $a) {
@@ -303,8 +328,20 @@ class ProductivityController extends Controller
 	            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
 	          	}else{
 	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-	          	}       
+	          	}   
 	        }
+	    }
+
+	    $em = $this->getDoctrine()->getManager();
+	    for ($i=0; $i < sizeof($data[$t][$s]['activities']['cat']); $i++) { 
+	    	//load/refresh ke
+	    	$tar = $em->getRepository('SEInputBundle:Activity')->findOneBy(array('name' => $data[$t][$s]['activities']['cat'][$i]));
+			$target = intval($tar->getDefaultTarget());
+          	if($target != null && $target != 0 && $data[$t][$s]['activities']['data'][$i] != null && $data[$t][$s]['activities']['data'][$i] != 0){
+          		$data[$t][$s]['activities']['ke'][$i] = round( $data[$t][$s]['report']['to'] / ( $target * $data[$t][$s]['activities']['data'][$i] ) * 100, 1 );
+          	}else{
+          		$data[$t][$s]['activities']['ke'][$i] = null;
+          	}
 	    }
 
 		return $data;

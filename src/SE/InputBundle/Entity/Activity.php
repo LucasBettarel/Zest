@@ -304,4 +304,5 @@ class Activity
     {
         return $this->trackable;
     }
+
 }

@@ -44,14 +44,14 @@ $(document).ready(function() {
     });
 
 	$('#history').DataTable( {
-		"paging": false,
+		"paging": true,
 	  "dom": 'lrtip',
 	  "info": false,
     "order": [[ 0, "desc" ]]
 	});
 
 	$('#errors').DataTable( {
-		"scrollY": "173px",
+		"scrollY": "203px",
 		"paging": false,
 	  "dom": 'lrtip',
 	  "info": false
