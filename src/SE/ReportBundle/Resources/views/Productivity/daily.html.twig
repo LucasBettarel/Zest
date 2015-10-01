@@ -46,6 +46,9 @@
     <div id="report-panel" class="col-md-5">
        <div class="panel panel-default" style="height: 300px; margin:auto auto;">
         <div class="panel-heading">
+          <a class="pull-right text-muted" data-toggle="modal" data-target="#infoModal">
+            <h4><i class="glyphicon glyphicon-info-sign"></i></h4>
+          </a>
           <h4>Daily report</h4>
         </div>
         <div class="panel-body">
@@ -118,6 +121,59 @@
   <div class="row">
      <div class="col-md-12">
       <div id="container-activities" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+    </div>
+  </div>
+
+  {# MODAL TO DETAIL FORMULAS #}
+
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="infoModalLabel">More informations on the calculation...</h4>
+        </div>
+        <div class="modal-body">
+          <h4>PRODUCTIVITY</h4>
+          <p>For each team & shift, it uses the following formula : <br>
+          <strong>PRODUCTIVITY = TRANSFER ORDER LINES / MANHOURS INCLUDED</strong><br><br>
+          The TO lines are recorded upon the SESA of each pickers (Outbound) and binners (Inbound). They are consolidated.<br>
+          The manhours included in the productivity are : Picking, Putaway, Weight Control, Overpacking, Receiving, Support and Customer Service.<br></p>
+          <h4>TARGET</h4>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Departement</th>
+                  <th>50%</th>
+                  <th>75%</th>
+                  <th>100%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Outbound</td>
+                  <td>7.5</td>
+                  <td>8.5</td>
+                  <td>9.5</td>
+                </tr>
+                <tr>
+                  <td>Inbound</td>
+                  <td>5.5</td>
+                  <td>6.5</td>
+                  <td>7.5</td>
+                </tr>      
+              </tbody>
+            </table>
+          </div>
+        <h4>EFFICIENCY</h4>
+        <p>The KE (efficiency coef) represents the efficiency between the designed and actual time for the activities.<br>
+        <strong>KE = TRANSFER ORDER LINES / ( DESIGN TIME PRODUCTIVITY * MANHOURS INCLUDED FOR THE ACTIVITY)</strong><br><br>  
+        The LE (Logistic Efficiency) is based on the total hours for the team/shift and compare it to the Useful Time. It gives assets on how much time is potentially wasted (non added-value).<br>
+        <strong>LE = PRODUCTIVITY * USEFUL TIME</strong><br>
+        </p>
+        </div>
+      </div>
     </div>
   </div>
 
