@@ -1,47 +1,14 @@
 $(document).ready(function() {
-	$('#container').highcharts({
-        chart: {
-            type: 'pie'
-        },
-        title: {
-            text: ''
-        },
-        legend: {
-            align: 'right',
-            verticalAlign: 'top',
-            layout: 'vertical',
-            x: 0,
-            y: 100
-        },
-        yAxis: {
-            title: {
-                text: 'error percentage'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                shadow: false
-            }
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.point.name +'</b>: '+ this.y +' ';
-            }
-        },
-        series: [{
-            name: 'error',
-            data: [["Missing SAP imports",importErrors],["Missing inputs",inputErrors],["TO line not affected",toErrors], ["Missing manhours", hourErrors]],
-            size: '100%',
-            innerSize: '60%',
-            showInLegend:true,
-            dataLabels: {
-                enabled: false
-            }
-        }]
-    });
+
+var d = new Date();
+$('#monthpicker').monthpicker({'minYear' : 2015, 'maxYear' : 2016});
+$('.monthpick').val(d.getMonth());
+$('.yearpick').val(d.getFullYear());
+var monthVal = parseInt($('.monthpick').val()) + 1;
+var yearVal = $('.yearpick').val();
+$('form select').addClass('form-control');
+
+	createPie(importErrors, inputErrors, toErrors, hourErrors);
 
 	$('#history').DataTable( {
 		"paging": true,
@@ -112,6 +79,29 @@ $(document).ready(function() {
         deleteClick(id);
       }
     });
+
+    $(document).on('change', '.month select', function(e){
+      monthVal = parseInt($('.monthpick').val()) + 1;
+      yearVal = $('.yearpick').val();
+      $.get(
+        ajaxDash,               
+        {month: monthVal, year: yearVal}, 
+        function(r){
+          console.log(r);
+          createPie(r.m, r.i, r.t, r.h);
+
+          historyTable = $('#history').DataTable();
+          historyTable.clear();
+          historyTable.rows.add(r.hTemplate).draw();
+          historyTable.draw();
+
+          errorTable = $('#errors').DataTable();
+          errorTable.clear();
+          errorTable.rows.add(r.eTemplate).draw();
+          errorTable.draw();
+        },
+      "json");
+    });
     
 });
 
@@ -126,7 +116,8 @@ function ignoreClick(id){
       {idInput: id}, 
       function(response){
         if(response.code == 100 && response.success){
-         $('#errors').find('#'+id).remove();
+        console.log('input trouve, ignored', $('#errors [data-id="'+id+'"]').closest('tr'));
+          $('#errors [data-id="'+id+'"]').closest('tr').remove();
         }
         else{
             alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
@@ -141,8 +132,8 @@ function deleteClick(id){
       {idInput: id}, 
       function(response){
         if(response.code == 100 && response.success){
-          console.log('input trouve, deleted', $('#history').find('#'+id));
-         $('#history').find('#'+id).remove();
+          console.log('input trouve, deleted', $('#history [data-id="'+id+'"]').closest('tr'));
+          $('#history [data-id="'+id+'"]').closest('tr').remove();
         }
         else{
             alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
@@ -157,7 +148,7 @@ function refreshClick(){
       {}, 
       function(response){
         if(response.code == 100 && response.success){
-          $('#refresh').addClass('btn-success').prop('disabled', true);
+          $('#refresh').removeClass('text-mute').addClass('text-success').prop('disabled', true);
           $('#refresh i').removeClass('glyphicon-refresh').addClass('glyphicon-ok');
         }
         else{
@@ -165,4 +156,56 @@ function refreshClick(){
         }
       },
       "json");    
+}
+
+function createPie(imports, inputs, tos, hours){
+  var sum = imports + inputs + tos + hours;
+  if (sum>0){
+    $('.panel:first .panel-heading h4').html("<i class='glyphicon glyphicon-alert text-danger'> </i> "+sum+" errors to review!");
+  }else{
+    $('.panel:first .panel-heading h4').html("<i class='glyphicon glyphicon-ok text-success'> </i> "+sum+" errors to review!");
+  }
+  $('#container').highcharts({
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: ''
+        },
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            layout: 'vertical',
+            x: 0,
+            y: 100
+        },
+        yAxis: {
+            title: {
+                text: 'error percentage'
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        plotOptions: {
+            pie: {
+                shadow: false
+            }
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.point.name +'</b>: '+ this.y +' ';
+            }
+        },
+        series: [{
+            name: 'error',
+            data: [["Missing SAP imports",imports],["Missing inputs",inputs],["TO line not affected",tos], ["Missing manhours", hours]],
+            size: '100%',
+            innerSize: '60%',
+            showInLegend:true,
+            dataLabels: {
+                enabled: false
+            }
+        }]
+    });
 }

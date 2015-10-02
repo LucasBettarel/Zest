@@ -58,32 +58,34 @@
                 <tr>
                   <td><strong>Transfer order lines</strong></td>
                   <td class="text-right divider"><span id="to"></span></td>
-                  <td><strong>Manual TO Lines</strong></td>
-                  <td class="text-right"><span id="mto"></span></td>
+                  <td><strong>Overtime hours</strong></td>
+                  <td class="text-right"><span id="ot"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Included Manhours</strong></td>
                   <td class="text-right divider"><span id="wh"></span></td>
-                  <td><strong>Training hours</strong></td>
-                  <td class="text-right"><span id="tr"></span></td>
+                  <td><strong>Manual TO Lines</strong></td>
+                  <td class="text-right"><span id="mto"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Manhours</strong></td>
                   <td class="text-right divider"><span id="ma"></span></td>
-                  <td><strong>Absent employees</strong></td>
-                  <td class="text-right"><span id="ab"></span></td>
+                  <td><strong>Training hours</strong></td>
+                  <td class="text-right"><span id="tr"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Logistic Efficiency</strong></td>
                   <td class="text-right divider"><span id="le"></span> %</td>
+                  <td><strong>Absent employees</strong></td>
+                  <td class="text-right"><span id="ab"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Support Function KSR</strong></td>
+                  <td class="text-right divider"><span id="ksr"></span> %</td>
                 </tr>
                 <tr>
                   <td><strong>Headcount</strong></td>
                   <td class="text-right divider"><span id="hc"></span></td>
-                </tr>
-                <tr>
-                  <td><strong>Overtime hours</strong></td>
-                  <td class="text-right divider"><span id="ot"></span></td>
                 </tr>           
               </tbody>
             </table>
@@ -169,6 +171,8 @@
         <h4>EFFICIENCY</h4>
         <p>The KE (efficiency coef) represents the efficiency between the designed and actual time for the activities.<br>
         <strong>KE = TRANSFER ORDER LINES / ( DESIGN TIME PRODUCTIVITY * MANHOURS INCLUDED FOR THE ACTIVITY)</strong><br><br>  
+        The KSR (Support Function Coefficient) represents the rate between the Operation Time Reference (added-value activities) and the Time Spent Reference (including Support activities)<br>
+        <strong>KSR = OPERATION TIME REFERENCE / TIME SPENT REFERENCE</strong><br><br>  
         The LE (Logistic Efficiency) is based on the total hours for the team/shift and compare it to the Useful Time. It gives assets on how much time is potentially wasted (non added-value).<br>
         <strong>LE = PRODUCTIVITY * USEFUL TIME</strong><br>
         </p>

@@ -387,6 +387,7 @@ function replaceTotalData(j, t, s){
   $('#report-panel #mto').html(j[t][s]['report']['mto']);
   $('#report-panel #tr').html(j[t][s]['report']['tr']);
   $('#report-panel #ab').html(j[t][s]['report']['ab']);
+  $('#report-panel #ksr').html(j[t][s]['report']['ksr']);
 }
 
 function filterData($this, json){

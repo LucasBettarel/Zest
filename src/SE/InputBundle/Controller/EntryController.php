@@ -146,6 +146,43 @@ class EntryController extends Controller
     return new Response(json_encode($response)); 
   }
 
+  public function timeReviewAction(){
+    $em = $this->getDoctrine()->getManager();
+    $request = $this->get('request');        
+    $year = $request->get('year');
+    $month = $request->get('month');
+  
+    //select errors
+    $importErrors = $em->getRepository('SEInputBundle:InputReview')->getMonthImportErrors($month, $year);
+    $inputErrors = $em->getRepository('SEInputBundle:InputReview')->getMonthMissingInputErrors($month, $year);
+    $toErrors = $em->getRepository('SEInputBundle:InputReview')->getMonthToErrors($month, $year);
+    $hourErrors = $em->getRepository('SEInputBundle:InputReview')->getMonthHoursErrors($month, $year);
+    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month, $year);
+
+    $hTemplate = array();
+    $eTemplate = array();
+    
+    foreach ($userInputs as $u) {
+      $hView = $this->render('SEInputBundle:Utilities:historyView.html.twig', array('input' => $u))->getContent();
+      $hTemplate[] = array($u->getDateInput()->format('d-m-Y'),
+                           $u->getTeam()->getName(),
+                           $u->getShift()->getId(),
+                           $u->getTotalHoursInput(),
+                           $u->getTotalHeadcount(),
+                           $u->getTotalToInput(),
+                           $u->getTotalProdInput(),
+                           $hView);
+    }
+
+    foreach ($inputErrors as $i) {
+      $eView = $this->render('SEInputBundle:Utilities:errorsView.html.twig', array('input' => $i))->getContent();
+      $eTemplate[] = array($i->getDate()->format('d-m-Y'),$i->getTeam()->getName(),$i->getShift()->getId(),$eView);
+    }
+
+    $response = array("code" => 100, "success" => true, "m" => sizeof($importErrors), "i" => sizeof($inputErrors), "t" => sizeof($toErrors), "h" => sizeof($hourErrors), "hTemplate" => $hTemplate, "eTemplate" => $eTemplate);
+    return new Response(json_encode($response)); 
+  }
+
   public function populateAction()
   { 
     $em = $this->getDoctrine()->getManager();

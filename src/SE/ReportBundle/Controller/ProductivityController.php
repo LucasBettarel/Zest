@@ -175,7 +175,7 @@ class ProductivityController extends Controller
 	    $daysNb = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
 	    $monthlyStructure = array(
-						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0),
+						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0, 'ksr' => 0),
 						'activities' => array('cat' => array(), 'data' => array(), 'ke' => array()),
 						'prod' => array(),
 						'to' => array(),
@@ -199,8 +199,8 @@ class ProductivityController extends Controller
 			if ($team == 3) {$team = 1;}//include local into outbound4
 			$shift = $userInput->getShift()->getId();
 			$monthlyJson = $this->loadMonthlyData($monthlyJson, $team, $shift, $day, $userInput);
-			$monthlyJson = $this->loadMonthlyData($monthlyJson, 0, 0, $day, $userInput);
 			$monthlyJson = $this->loadMonthlyData($monthlyJson, $team, 0, $day, $userInput);
+			$monthlyJson = $this->loadMonthlyData($monthlyJson, 0, 0, $day, $userInput);
 		}
 
 		$monthlyJson = $this->forgetKeys($monthlyJson);
@@ -217,10 +217,11 @@ class ProductivityController extends Controller
 	    $date = $request->get('date');
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getDayInputs($date);
 	    $dailyStructure = array(
-							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0),
+							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0, 'ksr' => 0),
 							'activities' => array('cat' => array(), 'data' => array(), 'ke' => array())
 						);	    
 	    $dailyJson = $this->createJson($dailyStructure);
+	    $template = array();
 
 		//fill data
 		foreach ($userInputs as $userInput) {
@@ -274,12 +275,17 @@ class ProductivityController extends Controller
 	        }
 	    }
 
+	    $support = array_search("Support (Admin, CCMP, WSpider, Labelling, ...)", $data[$t][$s]['activities']['cat']);
+	    if ($support !== false && $data[$t][$s]['report']['wh'] != 0){
+	    	$data[$t][$s]['report']['ksr'] = round( ( $data[$t][$s]['report']['wh'] - $data[$t][$s]['activities']['data'][$support] )*100 / $data[$t][$s]['report']['wh'] , 1);
+	    }
+
 	    $em = $this->getDoctrine()->getManager();
 	    for ($i=0; $i < sizeof($data[$t][$s]['activities']['cat']); $i++) { 
 	    	//load/refresh ke
 	    	$tar = $em->getRepository('SEInputBundle:Activity')->findOneBy(array('name' => $data[$t][$s]['activities']['cat'][$i]));
 			$target = intval($tar->getDefaultTarget());
-          	if($target != null && $target != 0 && $data[$t][$s]['activities']['data'][$i] != null && $data[$t][$s]['activities']['data'][$i] != 0){
+          	if($target != null && $target != 0 && $data[$t][$s]['activities']['data'][$i] != null && $data[$t][$s]['activities']['data'][$i] != 0 && $t != 0){
           		$data[$t][$s]['activities']['ke'][$i] = round( $data[$t][$s]['report']['to'] / ( $target * $data[$t][$s]['activities']['data'][$i] ) * 100, 1 );
           	}else{
           		$data[$t][$s]['activities']['ke'][$i] = null;
@@ -326,10 +332,15 @@ class ProductivityController extends Controller
 	          	}
 	          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
 	            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-	          	}else{
+	          	}else{	
 	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
 	          	}   
 	        }
+	    }
+
+	    $support = array_search("Support (Admin, CCMP, WSpider, Labelling, ...)", $data[$t][$s]['activities']['cat']);
+	    if ($support !== false && $data[$t][$s]['report']['wh'] > 0){
+	    	$data[$t][$s]['report']['ksr'] = round( ( $data[$t][$s]['report']['wh'] - $data[$t][$s]['activities']['data'][$support] )*100 / $data[$t][$s]['report']['wh'] , 1);
 	    }
 
 	    $em = $this->getDoctrine()->getManager();
@@ -337,7 +348,7 @@ class ProductivityController extends Controller
 	    	//load/refresh ke
 	    	$tar = $em->getRepository('SEInputBundle:Activity')->findOneBy(array('name' => $data[$t][$s]['activities']['cat'][$i]));
 			$target = intval($tar->getDefaultTarget());
-          	if($target != null && $target != 0 && $data[$t][$s]['activities']['data'][$i] != null && $data[$t][$s]['activities']['data'][$i] != 0){
+          	if($target != null && $target != 0 && $data[$t][$s]['activities']['data'][$i] != null && $data[$t][$s]['activities']['data'][$i] != 0  && $t != 0){
           		$data[$t][$s]['activities']['ke'][$i] = round( $data[$t][$s]['report']['to'] / ( $target * $data[$t][$s]['activities']['data'][$i] ) * 100, 1 );
           	}else{
           		$data[$t][$s]['activities']['ke'][$i] = null;

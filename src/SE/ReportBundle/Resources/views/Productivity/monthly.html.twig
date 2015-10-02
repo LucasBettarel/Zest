@@ -19,25 +19,25 @@
           </div>
         </form>
       </div>
-        <div id="1" class="teams pull-left">
-          <a id="0" class="label label-primary">HubAsia</a>
-          <a id="1" class="label label-default">Outbound4</a>
-          <a id="2" class="label label-default">Inbound4</a>
-          <a id="4" class="label label-default">Outbound3</a>
-          <a id="5" class="label label-default">Inbound3</a>
-          <a id="6" class="label label-default">Releasing</a>
-          <a id="8" class="label label-default">Adaptation</a>
-          <a id="9" class="label label-default">Taskforce</a>
-        </div>
-        <div id="2" class="shifts hide">
-          | 
-          <a id="0" class="label label-primary">All</a>
-          <a id="1" class="label label-default">Shift1</a>
-          <a id="2" class="label label-default">Shift2</a>
-          <a id="3" class="label label-default">Shift3</a>
-        </div>
+      <div id="1" class="teams pull-left">
+        <a id="0" class="label label-primary">HubAsia</a>
+        <a id="1" class="label label-default">Outbound4</a>
+        <a id="2" class="label label-default">Inbound4</a>
+        <a id="4" class="label label-default">Outbound3</a>
+        <a id="5" class="label label-default">Inbound3</a>
+        <a id="6" class="label label-default">Releasing</a>
+        <a id="8" class="label label-default">Adaptation</a>
+        <a id="9" class="label label-default">Taskforce</a>
+      </div>
+      <div id="2" class="shifts hide">
+        | 
+        <a id="0" class="label label-primary">All</a>
+        <a id="1" class="label label-default">Shift1</a>
+        <a id="2" class="label label-default">Shift2</a>
+        <a id="3" class="label label-default">Shift3</a>
       </div>
     </div>
+  </div>
 
   <div id="data-panel" class="row">
     <div class="col-md-7">
@@ -58,30 +58,32 @@
                 <tr>
                   <td><strong>Transfer order lines</strong></td>
                   <td class="text-right divider"><span id="to"></span></td>
-                  <td><strong>Training hours</strong></td>
-                  <td class="text-right"><span id="tr"></span></td>
+                  <td><strong>Manual TO Lines</strong></td>
+                  <td class="text-right"><span id="mto"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Included Manhours</strong></td>
                   <td class="text-right divider"><span id="wh"></span></td>
-                  <td><strong>Absent employees</strong></td>
-                  <td class="text-right"><span id="ab"></span></td>
+                  <td><strong>Training hours</strong></td>
+                  <td class="text-right"><span id="tr"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Manhours</strong></td>
                   <td class="text-right divider"><span id="ma"></span></td>
+                  <td><strong>Absent employees</strong></td>
+                  <td class="text-right"><span id="ab"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Logistic Efficiency</strong></td>
                   <td class="text-right divider"><span id="le"></span> %</td>
                 </tr>
                 <tr>
-                  <td><strong>Overtime hours</strong></td>
-                  <td class="text-right divider"><span id="ot"></span></td>
+                  <td><strong>Support Function KSR</strong></td>
+                  <td class="text-right divider"><span id="ksr"></span> %</td>
                 </tr>
                 <tr>
-                  <td><strong>Manual TO Lines</strong></td>
-                  <td class="text-right"><span id="mto"></span></td>
+                  <td><strong>Overtime hours</strong></td>
+                  <td class="text-right divider"><span id="ot"></span></td>
                 </tr>           
               </tbody>
             </table>
@@ -156,7 +158,9 @@
           </div>
         <h4>EFFICIENCY</h4>
         <p>The KE (efficiency coef) represents the efficiency between the designed and actual time for the activities.<br>
-        <strong>KE = TRANSFER ORDER LINES / ( DESIGN TIME PRODUCTIVITY * MANHOURS INCLUDED FOR THE ACTIVITY)</strong><br><br>  
+        <strong>KE = TRANSFER ORDER LINES / ( DESIGN TIME PRODUCTIVITY * MANHOURS INCLUDED FOR THE ACTIVITY)</strong><br><br>
+        The KSR (Support Function Coefficient) represents the rate between the Operation Time Reference (added-value activities) and the Time Spent Reference (including Support activities)<br>
+        <strong>KSR = OPERATION TIME REFERENCE / TIME SPENT REFERENCE</strong><br><br>  
         The LE (Logistic Efficiency) is based on the total hours for the team/shift and compare it to the Useful Time. It gives assets on how much time is potentially wasted (non added-value).<br>
         <strong>LE = PRODUCTIVITY * USEFUL TIME</strong><br>
         </p>
