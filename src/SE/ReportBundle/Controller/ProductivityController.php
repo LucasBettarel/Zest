@@ -177,16 +177,13 @@ class ProductivityController extends Controller
 	    $monthlyStructure = array(
 						'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0, 'ksr' => 0),
 						'activities' => array('cat' => array(), 'data' => array(), 'ke' => array()),
-						'prod' => array(),
-						'to' => array(),
-						'h' => array(),
-						'wh' => array()
+						'prod' => array()
 						);
 	    for ($i=1; $i <= $daysNb; $i++) {
-	    	$monthlyStructure['prod'][$i] = 0;
-	    	$monthlyStructure['to'][$i] = 0;
-	    	$monthlyStructure['h'][$i] = 0;
-	    	$monthlyStructure['wh'][$i] = 0;
+	    	$monthlyStructure['prod'][$i]['y'] = 0;
+	    	$monthlyStructure['prod'][$i]['tip'][1] = 0;
+	    	$monthlyStructure['prod'][$i]['tip'][2] = 0;
+	    	$monthlyStructure['prod'][$i]['tip'][3] = 0;
 	    }
 	    
 	    $monthlyJson = $this->createJson($monthlyStructure);
@@ -292,12 +289,12 @@ class ProductivityController extends Controller
           	}
 	    }
 
-		$data[$t][$s]['to'][$d] += $u->getTotalToInput();
-		$data[$t][$s]['h'][$d] += $u->getTotalHoursInput();
-		$data[$t][$s]['wh'][$d] += $u->getTotalWorkingHoursInput();
+	    $data[$t][$s]['prod'][$d]['tip'][1] += $u->getTotalHoursInput();
+    	$data[$t][$s]['prod'][$d]['tip'][2] += $u->getTotalWorkingHoursInput();
+    	$data[$t][$s]['prod'][$d]['tip'][3] += $u->getTotalToInput();
 
-		if($data[$t][$s]['wh'][$d] != 0){
-			$data[$t][$s]['prod'][$d] = round($data[$t][$s]['to'][$d] / $data[$t][$s]['wh'][$d] , 1);
+		if($data[$t][$s]['prod'][$d]['tip'][2] != 0){
+			$data[$t][$s]['prod'][$d]['y'] = round($data[$t][$s]['prod'][$d]['tip'][3] / $data[$t][$s]['prod'][$d]['tip'][2] , 1);
 		}
 
 		return $data;
@@ -383,10 +380,12 @@ class ProductivityController extends Controller
 		for ($t=0; $t < 10; $t++) { 
 			for ($s=0; $s < 4; $s++) { 
 				if(isset( $data[$t][$s] , $data )){
+					foreach ($data[$t][$s]['prod'] as $d) {
+						if(isset( $d['tip'])){
+							$d['tip'] = array_values( $d['tip'] );
+						}
+					}
 					$data[$t][$s]['prod'] = array_values( $data[$t][$s]['prod'] );
-					$data[$t][$s]['h'] = array_values( $data[$t][$s]['h'] );
-					$data[$t][$s]['wh'] = array_values( $data[$t][$s]['wh'] );
-					$data[$t][$s]['to'] = array_values( $data[$t][$s]['to'] );
 				}
 			}
 		}

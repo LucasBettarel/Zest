@@ -234,7 +234,12 @@ function createProd(json, team, shift){
           enabled: false
       },
       tooltip: {
-          valueSuffix: 'to line/h'
+        formatter: function() {
+          //$.each(this.points, function() {
+            result = '<span style="color:' + this.series.color + '">\u25CF</span><b> ' + this.series.name + ': ' + this.y + ' to line/h </b><br/> Manhours: <b>' + this.point.tip[1] + ' h</b><br/>Included Manhours: <b>' + this.point.tip[2] + ' h</b><br/>TO-Lines: <b>' + this.point.tip[3] + '</b>';
+          //});
+          return result;
+        }
       },
       legend: {
           layout: 'vertical',
@@ -265,7 +270,7 @@ function createProd(json, team, shift){
 
   $('#container-monthly').highcharts(optionsDaily);  
 
-  var optionsTo = {
+  /*var optionsTo = {
     title: {
         text: 'Daily-to-date TO-Lines',
         x: -20 //center
@@ -375,7 +380,7 @@ function createProd(json, team, shift){
     }]
   };
 
-  $('#container-hours').highcharts(optionsHours); 
+  $('#container-hours').highcharts(optionsHours); */
 }
 
 function replaceTotalData(j, t, s){
