@@ -134,6 +134,30 @@ class EntryController extends Controller
           $em->remove($deleteEntry);
         }
       }
+      
+      //reset manual TO Lines
+
+      $manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->resetManualTo($deleteInput->getDateInput(), $deleteInput->getTeam()->getId());
+      //time definition
+      $otStart = $deleteInput->getOtStartTime();
+      $otEnd = $deleteInput->getOtEndTime();
+      $start = $deleteInput->getShift()->getStartTime();
+      $end = $deleteInput->getShift()->getEndTime();
+      $regularReverse = ($start < $end ? true : false);
+      $otReverse = ($otStart > $otEnd ? true : false);
+
+      if($manualTOlines){
+        foreach ($manualTOlines as $manualToLine) {
+          $timeConf = $manualToLine->getTimeConfirmation(); 
+          //if inside right time interval + to line not already affected
+          if($manualToLine->getRecorded() == 1){ 
+            if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) ) { //regular hours
+              $manualToLine->setRecorded(null);  
+            }
+          }
+        }
+      }
+
       $em->remove($deleteInput);
       $em->flush();
 
