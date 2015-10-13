@@ -73,6 +73,20 @@ class SAPRF
     /**
      * @var string
      *
+     * @ORM\Column(name="destination_storage_type", type="string", length=255, nullable=true)
+     */
+    private $destinationStorageType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="destination_storage_bin", type="string", length=255, nullable=true)
+     */
+    private $destinationStorageBin;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="storage_location", type="string", length=255, nullable=true)
      */
     private $storageLocation;
@@ -331,5 +345,51 @@ class SAPRF
     public function getStorageLocation()
     {
         return $this->storageLocation;
+    }
+
+    /**
+     * Set destinationStorageType
+     *
+     * @param string $destinationStorageType
+     * @return SAPRF
+     */
+    public function setDestinationStorageType($destinationStorageType)
+    {
+        $this->destinationStorageType = $destinationStorageType;
+
+        return $this;
+    }
+
+    /**
+     * Get destinationStorageType
+     *
+     * @return string 
+     */
+    public function getDestinationStorageType()
+    {
+        return $this->destinationStorageType;
+    }
+
+    /**
+     * Set destinationStorageBin
+     *
+     * @param string $destinationStorageBin
+     * @return SAPRF
+     */
+    public function setDestinationStorageBin($destinationStorageBin)
+    {
+        $this->destinationStorageBin = $destinationStorageBin;
+
+        return $this;
+    }
+
+    /**
+     * Get destinationStorageBin
+     *
+     * @return string 
+     */
+    public function getDestinationStorageBin()
+    {
+        return $this->destinationStorageBin;
     }
 }

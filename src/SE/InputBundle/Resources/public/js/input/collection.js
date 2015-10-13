@@ -181,11 +181,11 @@ $(document).ready(function() {
         break;
       case '3':
         $('.input-ot-time input:first').val("19:30");
-        $('.input-ot-time input:last').val("07:00");
+        $('.input-ot-time input:last').val("07:30");
         break;
       default:
         $('.input-ot-time input:first').val("07:30");
-        $('.input-ot-time input:last').val("19:00");
+        $('.input-ot-time input:last').val("19:30");
     }
 
     //add good nb fields
