@@ -12,6 +12,14 @@ monthVal = parseInt($('.monthpick').val()) + 1;
 yearVal = $('.yearpick').val();
 $('form select').addClass('form-control');
 
+ $(document)
+  .ajaxStart(function () {
+    $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+  })
+  .ajaxStop(function () {
+    $('#loadingModal').modal('hide');
+  });
+
 $.get(
   ajaxMonthly,               
   {

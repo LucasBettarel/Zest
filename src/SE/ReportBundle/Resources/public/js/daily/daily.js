@@ -7,6 +7,14 @@ $(document).ready(function() {
   var dateVal = $('#dailyDate').val();
   var inputTable;
 
+ $(document)
+  .ajaxStart(function () {
+    $('#loadingModal').modal({backdrop: 'static', keyboard: false});
+  })
+  .ajaxStop(function () {
+    $('#loadingModal').modal('hide');
+  });
+
   $.post(
     ajaxDaily,               
     {date: dateVal}, 
@@ -54,6 +62,7 @@ $(document).ready(function() {
     },
     "json");
   });
+
 });
 
 function createGauge(json, team, shift){
