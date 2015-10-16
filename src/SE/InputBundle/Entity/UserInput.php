@@ -72,7 +72,7 @@ class UserInput
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="ot_start_time", type="datetime")
+     * @ORM\Column(name="ot_start_time", type="time")
      * @Assert\DateTime()
      */
     private $otStartTime;
@@ -80,7 +80,7 @@ class UserInput
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="ot_end_time", type="datetime")
+     * @ORM\Column(name="ot_end_time", type="time")
      * @Assert\DateTime()
      */
     private $otEndTime;

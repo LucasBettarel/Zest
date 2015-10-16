@@ -49,8 +49,12 @@ class ProductivityController extends Controller
         	$inputDate = $inputToProcessDay->getDateInput();
     		$inputTeam = $inputToProcessDay->getTeam();
     		$inputShift = $inputToProcessDay->getShift();
+    		$start = $inputShift->getStartTime();
+	        $end = $inputShift->getEndTime();
     		$otStart = $inputToProcessDay->getOtStartTime();
 			$otEnd = $inputToProcessDay->getOtEndTime();
+			$regularReverse = ($start < $end ? true : false);
+			$otReverse = ($otStart < $otEnd ? true : false);
 					         		
         	foreach ($sapToProcess as $sapToProcessDay) {
       
@@ -61,11 +65,7 @@ class ProductivityController extends Controller
 	        				//picking or putaway
 	        				if ($activity->getActivity()->getTrackable() == true){
 	        					$sesa = $inputEntry->getSesa();
-	        					$start = $inputShift->getStartTime();
-	        					$end = $inputShift->getEndTime();
 	        					$to = $inputEntry->getTotalTo();
-	        					$regularReverse = ($start < $end ? true : false);
-	        					$otReverse = ($otStart > $otEnd ? true : false);
 	
 						 		//go in saprf and do the shit.
         					    $TOlines = $em->getRepository('SEInputBundle:SAPRF')->getTo($inputDate, $sesa);
