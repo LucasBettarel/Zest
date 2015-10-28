@@ -137,7 +137,7 @@ class AttendanceController extends Controller
 				$regtohr = 0;
 				$ottohr = 0;
 				$employeeId = $inputEntry->getEmployee()->getId();
-				if($inputEntry->getPresent()){
+				if($inputEntry->getPresent() == 1 ){
 					//go into activities to remove this fucking transfer out mess...
 					//TODO : update when this transfer out fuck will be better
 					if($inputEntry->getActivityHours()){
@@ -163,50 +163,45 @@ class AttendanceController extends Controller
 			}
 		}
 
+		$template = array();
+		$templateRow = array();
+
 		//calcul monthly total and formate to html
-		for ($j=1; $j < sizeof($jsonAttendance); $j++) { 
+		$lastKey = $em->getRepository('SEInputBundle:Employee')->getMaxId();
+		for ($j=1; $j <= intval($lastKey[0][1]); $j++) { 
 		 	if(isset($jsonAttendance[$j])){
-			 		for ($i=1; $i <= $daysNb; $i++) { 
+		 		unset($templateRow);
+		 		$templateRow = array();  
+		 		$templateRow[] = $jsonAttendance[$j]['employee'];
+		 		$templateRow[] = $jsonAttendance[$j]['team'];
+		 		$templateRow[] = $jsonAttendance[$j]['shift'];
+			 	for ($i=1; $i <= $daysNb; $i++) { 
+			 		$day = $em->getRepository('SEReportBundle:Calendar')->findOneBy(array('y' => $year, 'm' => $month, 'd' => $i));
 					$jsonAttendance[$j]['total'] += $jsonAttendance[$j][$i]['tothr'];
 					//test to identify errors in hours reported
 					if($jsonAttendance[$j][$i]['presence'] == 0){
-						if($jsonAttendance[$j][$i]['absence'] != 0){//leave
-							$dCell = "<div id='".$i."' class='e-day-leave'><i class='glyphicon glyphicon-error'> </i> ".$jsonAttendance[$j][$i]['absence']."</div>";
+						if(isset($jsonAttendance[$j][$i]['absence']) && $jsonAttendance[$j][$i]['absence'] != "0"){//leave
+							$dCell = "<div id='".$i."' class='e-day-leave'><i class='glyphicon glyphicon-remove'> </i> <strong>".$jsonAttendance[$j][$i]['absence']."</strong></div>";
 						}else{//not working
 							$dCell = "<div id='".$i."' class='e-day-absent'></div>";	
 						}
 					}elseif($jsonAttendance[$j][$i]['tothr'] > 11 || $jsonAttendance[$j][$i]['othr'] > 8 || $jsonAttendance[$j][$i]['reghr'] > 8){//warning too much hour
 						$dCell = "<div id='".$i."' class='e-day-high'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$jsonAttendance[$j][$i]['tothr']."</div>";
-					}elseif( $jsonAttendance[$j][$i]['reghr'] < 7.5 ){//missing hour
+					}elseif( ( $jsonAttendance[$j][$i]['reghr'] < 8 && $day->getIsWeekday() ) || $jsonAttendance[$j][$i]['tothr'] == 0 ){//missing hour
 						$dCell = "<div id='".$i."' class='e-day-low'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$jsonAttendance[$j][$i]['tothr']."</div>";					
 					}else{//ok
 						$dCell = "<div id='".$i."' class='e-day-ok'><i class='glyphicon glyphicon-ok'> </i> ".$jsonAttendance[$j][$i]['tothr']."</div>";					
 					}
 					$jsonAttendance[$j][$i] = $dCell; 
+					$templateRow[] = $jsonAttendance[$j][$i];
 				}
+				$templateRow[] = $jsonAttendance[$j]['total'];
+				$template[] = $templateRow;
 			}
 		}
 		
-		$response = array("code" => 100, "success" => true, "jsonAttendance" => $jsonAttendance);
+		$response = array("code" => 100, "success" => true, "jsonAttendance" => $jsonAttendance, "template" => $template);
 	    
 	    return new Response(json_encode($response)); 
-	}
-
-	public function createJson($structure)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$teams = $em->getRepository('SEInputBundle:Team')->findAll();
-		$json = array();
-		$json[0][0] = $structure;
-
-		foreach ($teams as $team) {
-			$teamId = $team->getId();
-			$json[$teamId][0] = $structure;
-			for ($i=0; $i < $team->getShiftnb(); $i++) { 
-				$shiftId = $i+1;
-				$json[$teamId][$shiftId] = $structure;
-			}
-		}
-		return $json;
 	}
 }

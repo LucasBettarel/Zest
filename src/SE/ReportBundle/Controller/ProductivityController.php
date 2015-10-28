@@ -75,22 +75,22 @@ class ProductivityController extends Controller
 									$timeConf = $line->getTimeConfirmation(); 
 									//if inside right time interval + to line not already affected
 									if($line->getRecorded() == 0){ 
-										if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) ) { //regular hours
-											if( $line->getSourceStorageType() == '902' and $activity->getActivity()->getId() == 3){ //putaway
+										if( ( $regularReverse && ($timeConf <= $end) && ($timeConf >= $start) ) or ( !$regularReverse && ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) ) { //regular hours
+											if( ( $line->getSourceStorageType() == '902' || $line->getSourceStorageType() == '901' || $line->getSourceStorageType() == 'X04' ) && $activity->getActivity()->getId() == 3){ //putaway
 												$to += 1; //ok
 												$line->setRecorded(1);
-											}elseif( $line->getSourceStorageType() != '902' and $activity->getActivity()->getId() == 2 ){//picking
+											}elseif( $line->getSourceStorageType() != '902' && $line->getSourceStorageType() != '901' && $activity->getActivity()->getId() == 2 ){//picking
 												$to += 1; //ok
 												$line->setRecorded(1);
 											}else{
 												$missingTO += 1; //pas ok
 											}	
 										}
-										elseif ( ( ( $otReverse and ($timeConf <= $otEnd) and ($timeConf >= $otStart) ) or ( !$otReverse and ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) and $activity->getOtHours() > 0 ) { //overtime 
-											if( $line->getSourceStorageType() == '902' and $activity->getActivity()->getId() == 3){ //putaway
+										elseif ( ( ( $otReverse && ($timeConf <= $otEnd) && ($timeConf >= $otStart) ) or ( !$otReverse && ( ( $timeConf >= $otStart ) or ( $timeConf <= $otEnd ) ) ) ) && $activity->getOtHours() > 0 ) { //overtime 
+											if( ( $line->getSourceStorageType() == '902' || $line->getSourceStorageType() == '901' || $line->getSourceStorageType() == 'X04' ) && $activity->getActivity()->getId() == 3){ //putaway
 												$to += 1; //ok
 												$line->setRecorded(1);
-											}elseif( $line->getSourceStorageType() != '902' and $activity->getActivity()->getId() == 2 ){//picking
+											}elseif( $line->getSourceStorageType() != '902' && $line->getSourceStorageType() != '901' && $activity->getActivity()->getId() == 2 ){//picking
 												$to += 1; //ok
 												$line->setRecorded(1);
 											}else{

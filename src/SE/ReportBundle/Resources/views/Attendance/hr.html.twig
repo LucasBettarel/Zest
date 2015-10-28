@@ -6,6 +6,9 @@
   {{ parent() }}
   {% stylesheets '@SEReportBundle/Resources/public/css/hr.css' %}
     <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs/dt-1.10.9,fc-3.1.0/datatables.min.css"/>
+
+
   {% endstylesheets %}
 {% endblock %}
 
@@ -17,7 +20,7 @@
     </div>
   </header>
 
-  <div class="row">
+  <div class="row filters-row">
     <div id="filters">
       <div class="month pull-left date-filter">
         <form name="test" class="form-inline">
@@ -48,11 +51,8 @@
   </div>
 
   <div class="row">
-    <div class="col-md-6">
-      <div id="container-attendance" style="height: 300px; margin:auto auto;"></div>
-    </div>
-    <div id="summary-panel" class="col-md-6">
-      <div class="panel panel-default" style="height: 300px; margin:auto auto;">
+    <div id="summary-panel" class="col-md-3">
+      <div class="panel panel-default" style="margin:auto auto;">
         <div class="panel-heading">
           <h4>Monthly Attendance</h4>
         </div>
@@ -62,45 +62,60 @@
               <tbody>
                 <tr>
                   <td><strong>Monthly Attendance rate</strong></td>
-                  <td class="text-right divider"><span id="mar"></span></td>
+                  <td class="text-right"><span id="mar"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Hours</strong></td>
+                  <td class="text-right"><span id="hr"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Normal Overtime</strong></td>
+                  <td class="text-right"><span id="otn"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Theoric Missing Regular Hours</strong></td>
+                  <td class="text-right"><span id="mhr"></span></td>
+                </tr> 
+                <tr>
+                  <td><strong># of > 12 consecutive workdays</strong></td>
+                  <td class="text-right"><span id="12"></span></td>
+                </tr>
+                <tr>
                   <td><strong>Total Headcount</strong></td>
                   <td class="text-right"><span id="hc"></span></td>
                 </tr>
                 <tr>
-                  <td><strong>Total Hours</strong></td>
-                  <td class="text-right divider"><span id="hr"></span></td>
                   <td><strong>Total Overtime</strong></td>
                   <td class="text-right"><span id="ot"></span></td>
                 </tr>
                 <tr>
-                  <td><strong>Total Normal Overtime</strong></td>
-                  <td class="text-right divider"><span id="otn"></span></td>
                   <td><strong>Total Public Holidays Overtime</strong></td>
                   <td class="text-right"><span id="phot"></span></td>
                 </tr>
                 <tr>
-                  <td><strong>Theoric Missing Regular Hours</strong></td>
-                  <td class="text-right divider"><span id="mhr"></span></td>
                   <td><strong>Theoric Missing Employee input</strong></td>
                   <td class="text-right"><span id="mhc"></span></td>
-                </tr> 
-                <tr>
-                  <td><strong># of > 12 consecutive workdays</strong></td>
-                  <td class="text-right divider"><span id="12"></span></td>
-                </tr>          
+                </tr>         
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <div id="container-ot" style="height: 300px; margin:auto auto;"></div>
-    </div>
-    <div class="col-md-6">
-      <div id="container-top-ot" style="height: 300px; margin:auto auto;"></div>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="container-attendance" style="height: 200px; margin:auto auto;"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div id="container-ot" style="height: 200px; margin:auto auto;"></div>
+        </div>
+        <div class="col-md-6">
+          <div id="container-top-ot" style="height: 200px; margin:auto auto;"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -114,7 +129,7 @@
           <div class="col-md-12">
             <!-- Table -->
             <div class="table-responsive">
-              <table id="table" class="table table-hover table-striped display">
+              <table id="attendance" class="table table-hover table-striped display">
                 <thead>
                   <tr>
                     <th>Employees</th>
@@ -166,7 +181,7 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/r/bs/dt-1.10.9,fc-3.1.0/datatables.min.js"></script>
   <script type="text/javascript">
    {% autoescape false %}
       var ajaxAttendance = '{{path('se_report_employee_attendance')}}';

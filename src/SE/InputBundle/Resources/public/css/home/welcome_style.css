@@ -14,13 +14,13 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -282px 0 0 -250px;
-  background-color: rgba(245, 245, 245, 0.5);
+  margin: -282px 0 0 -300px;
+  background-color: rgba(245, 245, 245, 0.7);
   text-align: center;
 }
 
 .welcome img{
-  width: 40%;
+  width: 80%;
 }
 
 .credit{

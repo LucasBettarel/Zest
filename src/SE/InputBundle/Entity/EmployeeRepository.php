@@ -26,4 +26,17 @@ class EmployeeRepository extends EntityRepository
 		;
 		return $qb;
 	}
+
+	public function getMaxId()
+	{
+	    $qb = $this
+	    ->createQueryBuilder('s')
+	    ->select('MAX(s.id)')
+    	->setMaxResults(1)
+		->getQuery()
+		->getResult()
+		;
+
+    return $qb;
+	}
 }

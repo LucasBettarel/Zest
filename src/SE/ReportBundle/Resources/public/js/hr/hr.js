@@ -6,20 +6,12 @@ var init = false;
 var monthlyJson;
 var monthVal;
 var yearVal;
+var attendanceTable;
 initData();
 
 monthVal = parseInt($('.monthpick').val()) + 1;
 yearVal = $('.yearpick').val();
 $('form select').addClass('form-control');
-
- $(document)
-  .ajaxStart(function () {
-    $('#loadingModal').modal({backdrop: 'static', keyboard: false});
-  })
-  .ajaxStop(function () {
-    $('#loadingModal').modal('hide');
-  });
-
 
 $.get(
     ajaxAttendance,               
@@ -29,9 +21,10 @@ $.get(
     }, 
     function(response){
         console.log(response.jsonAttendance);
-      createCharts(response.jsonAttendance);
+        updateCharts(response.template);
     },
     "json"); 
+
 });
 
 function initData(){
@@ -39,6 +32,40 @@ function initData(){
     $('#monthpicker').monthpicker({'minYear' : 2015, 'maxYear' : 2016});
     $('.monthpick').val(d.getMonth());
     $('.yearpick').val(d.getFullYear());
+ //   $('.panel-default .dataTables_scrollHeadInner').css('padding-left','0px');
+ //   $('.panel-default .table').css('margin-bottom','0px');
+}
+
+function updateCharts(json){
+    attendanceTable = $('#attendance').DataTable( {
+        scrollY:        "480px",
+        scrollX:        true,
+        scrollCollapse: true,
+        paging:         false,
+        fixedColumns:   true,
+        retrieve: true,
+        "dom": 'lrtip',
+        "info": false,
+        "columnDefs": [
+            {
+                "targets": [ 1 ],
+                "visible": false,
+            },
+            {
+                "targets": [ 2 ],
+                "visible": false
+            }
+        ]
+    });
+    attendanceTable.rows.add(json).draw();
+   // $('.panel-default .dataTables_scrollHeadInner').css('padding-left','0px');
+   // $('.panel-default .table').css('margin-bottom','0px');
+    $("*[data-toggle='tooltip']").tooltip({html :'true',container: 'body'});
+    $('.e-day-ok').closest('td').addClass('green');
+    $('.e-day-low').closest('td').addClass('yellow');
+    $('.e-day-high').closest('td').addClass('orange');
+    $('.e-day-absent').closest('td').addClass('grey');
+    $('.e-day-leave').closest('td').addClass('blue');
 }
 
 function createCharts(json){
