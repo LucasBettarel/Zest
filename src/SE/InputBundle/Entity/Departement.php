@@ -229,4 +229,21 @@ class Departement
     {
         return $this->teams;
     }
+
+        /**
+     * @ORM\postPersist
+     */
+    public function updateLinkedEntities()
+    {
+        //NOT TESTED !
+        //will be used when new departement created in form (front-end action) -> admin page
+        //by default, all teams will be moved into the new team (based on same masterId)
+        $em = $this->getDoctrine()->getManager();
+        $teams = $em->getRepository('SEInputBundle:Team')->findBy(array('departement' => $this->masterId));
+        foreach ($teams as $t) {
+            $t->setDepartement($this);
+        }
+
+        $em->flush();
+    }
 }

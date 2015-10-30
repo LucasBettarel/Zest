@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="team")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\TeamRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Team
 {
@@ -41,6 +42,12 @@ class Team
      * @ORM\JoinColumn(nullable=true)
      */
     private $activities;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\Team", mappedBy="default_team", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $employees;
 
     /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Departement", inversedBy="teams", cascade={"persist"})
@@ -287,5 +294,70 @@ class Team
     public function getDepartement()
     {
         return $this->departement;
+    }
+
+    /**
+     * Add employees
+     *
+     * @param \SE\InputBundle\Entity\Team $employees
+     * @return Team
+     */
+    public function addEmployee(\SE\InputBundle\Entity\Team $employees)
+    {
+        $this->employees[] = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Remove employees
+     *
+     * @param \SE\InputBundle\Entity\Team $employees
+     */
+    public function removeEmployee(\SE\InputBundle\Entity\Team $employees)
+    {
+        $this->employees->removeElement($employees);
+    }
+
+    /**
+     * Get employees
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
+    }
+
+    /**
+     * @ORM\postPersist
+     */
+    public function updateLinkedEntities()
+    {
+        //NOT TESTED !
+        //will be used when new team created in form (front-end action) -> admin page
+        //by default, all employees,users,activities will be moved into the new team (based on same masterId)
+        $em = $this->getDoctrine()->getManager();
+        $employees = $em->getRepository('SEInputBundle:Employee')->findBy(array('default_team' => $this->masterId));
+        foreach ($employees as $e) {
+            $e->setDefaultTeam($this);
+        }
+
+        $users = $em->getRepository('SEInputBundle:User')->findBy(array('team' => $this->masterId));    
+        foreach ($users as $u) {
+            $u->setTeam($this);
+        }
+        
+        $activities = $em->getRepository('SEInputBundle:Activity')->getTeamsActivities($this->masterId);
+        foreach ($activities as $a) {
+            foreach ($a->getTeams() as $t) {
+                if($t->getId() == $this->masterId)
+                    $a->removeTeam($t);
+                    $a->addTeam($this);
+                }
+            }
+        }
+
+        $em->flush();
     }
 }

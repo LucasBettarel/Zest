@@ -12,4 +12,19 @@ use Doctrine\ORM\EntityRepository;
  */
 class ActivityRepository extends EntityRepository
 {
+
+	public function getTeamsActivities($id)
+	{
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->leftJoin('a.teams', 't')
+		->addSelect('t')
+		->where("t.id = :id")
+		->setParameter('id', $id);
+		->getQuery()
+		->getResult()
+		;
+		return $qb;
+	}
 }
