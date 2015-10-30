@@ -41,7 +41,7 @@ class UserInputType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                   return $er->createQueryBuilder('u')
                             ->select('u')
-                            ->where("u.name <> 'VTeam'");
+                            ->where("u.statusControl = 1");
                   }
                 ), array('required' => true))
             ->add('shift', 'entity', array(

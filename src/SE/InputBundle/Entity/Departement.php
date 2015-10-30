@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Team
+ * Departement
  *
- * @ORM\Table(name="team")
- * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\TeamRepository")
+ * @ORM\Table(name="departement")
+ * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\DepartementRepository")
  */
-class Team
+class Departement
 {
     /**
      * @var integer
@@ -30,23 +30,11 @@ class Team
     private $name;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="shiftnb", type="integer")
-     */
-    private $shiftnb;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="SE\InputBundle\Entity\Activity", mappedBy="teams", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\Team", mappedBy="departement", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
+     * @Assert\Valid()
      */
-    private $activities;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Departement", inversedBy="teams", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $departement;
+    private $teams;
 
     /**
      * @var integer
@@ -91,7 +79,7 @@ class Team
      * Set name
      *
      * @param string $name
-     * @return Team
+     * @return Departement
      */
     public function setName($name)
     {
@@ -111,74 +99,10 @@ class Team
     }
 
     /**
-     * Set shiftnb
-     *
-     * @param integer $shiftnb
-     * @return Team
-     */
-    public function setShiftnb($shiftnb)
-    {
-        $this->shiftnb = $shiftnb;
-
-        return $this;
-    }
-
-    /**
-     * Get shiftnb
-     *
-     * @return integer 
-     */
-    public function getShiftnb()
-    {
-        return $this->shiftnb;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add activities
-     *
-     * @param \SE\InputBundle\Entity\Activity $activities
-     * @return Team
-     */
-    public function addActivity(\SE\InputBundle\Entity\Activity $activities)
-    {
-        $this->activities[] = $activities;
-
-        return $this;
-    }
-
-    /**
-     * Remove activities
-     *
-     * @param \SE\InputBundle\Entity\Activity $activities
-     */
-    public function removeActivity(\SE\InputBundle\Entity\Activity $activities)
-    {
-        $this->activities->removeElement($activities);
-        $activities->removeTeam($this);
-    }
-
-    /**
-     * Get activities
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getActivities()
-    {
-        return $this->activities;
-    }
-
-    /**
      * Set masterId
      *
      * @param integer $masterId
-     * @return Team
+     * @return Departement
      */
     public function setMasterId($masterId)
     {
@@ -201,7 +125,7 @@ class Team
      * Set startDate
      *
      * @param \DateTime $startDate
-     * @return Team
+     * @return Departement
      */
     public function setStartDate($startDate)
     {
@@ -224,7 +148,7 @@ class Team
      * Set endDate
      *
      * @param \DateTime $endDate
-     * @return Team
+     * @return Departement
      */
     public function setEndDate($endDate)
     {
@@ -247,7 +171,7 @@ class Team
      * Set statusControl
      *
      * @param boolean $statusControl
-     * @return Team
+     * @return Departement
      */
     public function setStatusControl($statusControl)
     {
@@ -265,27 +189,44 @@ class Team
     {
         return $this->statusControl;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->teams = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * Set departement
+     * Add teams
      *
-     * @param \SE\InputBundle\Entity\Departement $departement
-     * @return Team
+     * @param \SE\InputBundle\Entity\Team $teams
+     * @return Departement
      */
-    public function setDepartement(\SE\InputBundle\Entity\Departement $departement)
+    public function addTeam(\SE\InputBundle\Entity\Team $teams)
     {
-        $this->departement = $departement;
+        $this->teams[] = $teams;
 
         return $this;
     }
 
     /**
-     * Get departement
+     * Remove teams
      *
-     * @return \SE\InputBundle\Entity\Departement 
+     * @param \SE\InputBundle\Entity\Team $teams
      */
-    public function getDepartement()
+    public function removeTeam(\SE\InputBundle\Entity\Team $teams)
     {
-        return $this->departement;
+        $this->teams->removeElement($teams);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTeams()
+    {
+        return $this->teams;
     }
 }

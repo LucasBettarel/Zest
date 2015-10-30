@@ -287,7 +287,7 @@ class EntryController extends Controller
   public function missingInputAction()
   {
     $em = $this->getDoctrine()->getManager();
-    $teams = $em->getRepository('SEInputBundle:Team')->getReportingTeams();
+    $teams = $em->getRepository('SEInputBundle:Team')->getCurrentTeams();
     $userInputs = $em->getRepository('SEInputBundle:UserInput')->getLastMonth();
     $inputIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(2);
 

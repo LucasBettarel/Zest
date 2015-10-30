@@ -262,7 +262,11 @@ function filterData($this, json){
    //shift
    var teamId = $('#filters #1').find('.label-primary').attr('id');
    loadCharts(json, teamId, $this.attr('id'), containerProd, containerAct);
-   $('#inputs').DataTable().column(1).search($this.attr('id')).draw();
+   if($this.attr('id') != 0){
+      $('#inputs').DataTable().column(1).search($this.attr('id')).draw();  
+    }else{
+      $('#inputs').DataTable().column(1).search("").draw();  
+    }
   }
 }
 

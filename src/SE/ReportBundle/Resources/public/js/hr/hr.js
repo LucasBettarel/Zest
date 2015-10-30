@@ -2,8 +2,7 @@ $(document).ready(function() {
 
 Highcharts.createElement('link',{href:'//fonts.googleapis.com/css?family=Dosis:400,600',rel:'stylesheet',type:'text/css'},null,document.getElementsByTagName('head')[0]);Highcharts.theme={colors:["#7cb5ec","#f7a35c","#90ee7e","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],chart:{backgroundColor:null,style:{fontFamily:"Dosis, sans-serif"}},title:{style:{fontSize:'16px',fontWeight:'bold',textTransform:'uppercase'}},tooltip:{borderWidth:0,backgroundColor:'rgba(219,219,216,0.8)',shadow:false},legend:{itemStyle:{fontWeight:'bold',fontSize:'13px'}},xAxis:{gridLineWidth:1,labels:{style:{fontSize:'12px'}}},yAxis:{minorTickInterval:'auto',title:{style:{textTransform:'uppercase'}},labels:{style:{fontSize:'12px'}}},plotOptions:{candlestick:{lineColor:'#404048'}},background2:'#F0F0EA'};Highcharts.setOptions(Highcharts.theme);
 
-var init = false;
-var monthlyJson;
+var attJson;
 var monthVal;
 var yearVal;
 var attendanceTable;
@@ -20,10 +19,15 @@ $.get(
         year: yearVal
     }, 
     function(response){
-        console.log(response.jsonAttendance);
-        updateCharts(response.template);
+        attJson = response.template;
+        updateCharts(attJson);
     },
     "json"); 
+
+$('#filters a').click(function(){
+  $this = $(this);
+  filterData($this, attJson);
+});
 
 });
 
@@ -32,8 +36,6 @@ function initData(){
     $('#monthpicker').monthpicker({'minYear' : 2015, 'maxYear' : 2016});
     $('.monthpick').val(d.getMonth());
     $('.yearpick').val(d.getFullYear());
- //   $('.panel-default .dataTables_scrollHeadInner').css('padding-left','0px');
- //   $('.panel-default .table').css('margin-bottom','0px');
 }
 
 function updateCharts(json){
@@ -58,8 +60,6 @@ function updateCharts(json){
         ]
     });
     attendanceTable.rows.add(json).draw();
-   // $('.panel-default .dataTables_scrollHeadInner').css('padding-left','0px');
-   // $('.panel-default .table').css('margin-bottom','0px');
     $("*[data-toggle='tooltip']").tooltip({html :'true',container: 'body'});
     $('.e-day-ok').closest('td').addClass('green');
     $('.e-day-low').closest('td').addClass('yellow');
@@ -121,4 +121,49 @@ function createCharts(json){
     */}]
   });
 
+}
+
+function filterData($this, json){
+  $this.siblings().removeClass('label-primary').addClass('label-default');
+  $this.removeClass('label-default').addClass('label-primary');
+    
+  //update charts data
+  //var containerProd = $('#container-prod').highcharts();
+  //var containerAct = $('#container-activities').highcharts();
+
+  if ($this.parent().attr('id') == 1){//team
+    if($this.attr('id') == 0 || $this.attr('id') == 4 || $this.attr('id') == 5){
+      if(!$('#filters .shifts').hasClass('hide')){
+        $('#filters .shifts').addClass('hide');
+      }
+    }else if ( $this.attr('id') == 3 || $this.attr('id') == 6 || $this.attr('id') == 8 || $this.attr('id') == 9){
+     $('#filters .shifts').removeClass('hide');
+     if(!$('#filters .shifts #3').hasClass('hide')){
+        $('#filters .shifts #3').addClass('hide');
+      } 
+    }else{
+      $('#filters .shifts, #filters .shifts #3').removeClass('hide');
+    }
+    $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
+    $('#filters .shifts #0').removeClass('label-default').addClass('label-primary');
+
+    //loadCharts(json, $this.attr('id'), 0, containerProd, containerAct);
+
+    if($this.attr('id') != 0){
+      $('#attendance').DataTable().column(1).search($this.text()).draw();  
+    }else{
+      $('#attendance').DataTable().column(1).search("").draw();  
+    }
+    //if filter by team, reset filter shift to all
+    $('#attendance').DataTable().column(2).search("").draw(); 
+  }else{
+   //shift
+   var teamId = $('#filters #1').find('.label-primary').attr('id');
+   //loadCharts(json, teamId, $this.attr('id'), containerProd, containerAct);
+   if($this.attr('id') != 0){
+      $('#attendance').DataTable().column(2).search($this.attr('id')).draw();  
+    }else{
+      $('#attendance').DataTable().column(2).search("").draw();  
+    }
+  }
 }

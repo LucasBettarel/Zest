@@ -32,6 +32,7 @@
       <div id="1" class="teams pull-left">
         <a id="0" class="label label-primary">HubAsia</a>
         <a id="1" class="label label-default">Outbound4</a>
+        <a id="3" class="label label-default">Local</a>
         <a id="2" class="label label-default">Inbound4</a>
         <a id="4" class="label label-default">Outbound3</a>
         <a id="5" class="label label-default">Inbound3</a>
@@ -69,33 +70,33 @@
                   <td class="text-right"><span id="hr"></span></td>
                 </tr>
                 <tr>
-                  <td><strong>Total Normal Overtime</strong></td>
+                  <td><strong>Total Overtime</strong></td>
+                  <td class="text-right"><span id="ot"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Weekday Overtime</strong></td>
                   <td class="text-right"><span id="otn"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Weekend/Holidays Overtime</strong></td>
+                  <td class="text-right"><span id="phot"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Overall Headcount</strong></td>
+                  <td class="text-right"><span id="hc"></span></td>
+                </tr>
+{#                <tr>
+                  <td><strong># of > 12 consecutive workdays</strong></td>
+                  <td class="text-right"><span id="12"></span></td>
                 </tr>
                 <tr>
                   <td><strong>Theoric Missing Regular Hours</strong></td>
                   <td class="text-right"><span id="mhr"></span></td>
                 </tr> 
                 <tr>
-                  <td><strong># of > 12 consecutive workdays</strong></td>
-                  <td class="text-right"><span id="12"></span></td>
-                </tr>
-                <tr>
-                  <td><strong>Total Headcount</strong></td>
-                  <td class="text-right"><span id="hc"></span></td>
-                </tr>
-                <tr>
-                  <td><strong>Total Overtime</strong></td>
-                  <td class="text-right"><span id="ot"></span></td>
-                </tr>
-                <tr>
-                  <td><strong>Total Public Holidays Overtime</strong></td>
-                  <td class="text-right"><span id="phot"></span></td>
-                </tr>
-                <tr>
                   <td><strong>Theoric Missing Employee input</strong></td>
                   <td class="text-right"><span id="mhc"></span></td>
-                </tr>         
+                </tr> #}        
               </tbody>
             </table>
           </div>
@@ -153,12 +154,7 @@
                     <th>Total</th>
                   </tr>
                 </thead>
-                <tbody id="inject-employee">
-                  {# for employee in employees %}
-                    <tr id="{{ employee.id }}">
-                      <td>{{ employee.name }} | {{ employee.sesa }}</td>
-                    </tr>
-                  {% endfor #}                
+                <tbody id="inject-employee"> 
                 </tbody>
               </table>
             </div>
