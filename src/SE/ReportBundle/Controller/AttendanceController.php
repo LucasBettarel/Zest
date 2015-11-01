@@ -35,16 +35,16 @@ class AttendanceController extends Controller
 	    $daysNb = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	    $hourStructure = array('presence' => 0, 'absence' => 0, 'tothr' => 0, 'reghr' => 0, 'othr' => 0);
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
-   		$employees = $em->getRepository('SEInputBundle:Employee')->findAll();
+   		$employees = $em->getRepository('SEInputBundle:Employee')->getHistoricalEmployees($year, $month);
    		$jsonAttendance = array();
 
 		//create employee-array structure
 		foreach ($employees as $employee) {
 			//create html name cell
-			$eCell = "<div id='".$employee->getId()."' class='e-name' data-toggle='tooltip' data-placement='right' title='<strong>".$employee->getDefaultTeam()->getName()." - Shift ".$employee->getDefaultShift()->getId()."</strong><br>".$employee->getSesa()."<br>".$employee->getDefaultActivity()->getName()."'>".$employee->getName()."</div>";
-			$jsonAttendance[$employee->getId()] = array('employee' => $eCell, 'team' => $employee->getDefaultTeam()->getName(), 'shift' => $employee->getDefaultShift()->getId(), 'total'=>0);
+			$eCell = "<div id='".$employee->getMasterId()."' class='e-name' data-toggle='tooltip' data-placement='right' title='<strong>".$employee->getDefaultTeam()->getName()." - Shift ".$employee->getDefaultShift()->getId()."</strong><br>".$employee->getSesa()."<br>".$employee->getDefaultActivity()->getName()."'>".$employee->getName()."</div>";
+			$jsonAttendance[$employee->getMasterId()] = array('employee' => $eCell, 'team' => $employee->getDefaultTeam()->getName(), 'shift' => $employee->getDefaultShift()->getId(), 'total'=>0);
 			for ($i=0; $i < $daysNb; $i++) { 
-				$jsonAttendance[$employee->getId()][($i+1)] = $hourStructure;
+				$jsonAttendance[$employee->getMasterId()][($i+1)] = $hourStructure;
 			}
 		}
 
@@ -55,7 +55,7 @@ class AttendanceController extends Controller
 			foreach ($userInput->getInputEntries() as $inputEntry) {
 				$regtohr = 0;
 				$ottohr = 0;
-				$employeeId = $inputEntry->getEmployee()->getId();
+				$employeeId = $inputEntry->getEmployee()->getMasterId();
 				if($inputEntry->getPresent() == 1 ){
 					//go into activities to remove this fucking transfer out mess...
 					//TODO : update when this transfer out fuck will be better

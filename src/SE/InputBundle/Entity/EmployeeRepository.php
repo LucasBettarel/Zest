@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class EmployeeRepository extends EntityRepository
 {
-	public function getAlphaEmployees()
+	public function getAlphaCurrentEmployees()
 	{
 		$qb = $this
 		->createQueryBuilder('a')
@@ -20,6 +20,7 @@ class EmployeeRepository extends EntityRepository
 		->leftJoin('a.status', 's')
 		->addSelect('s')
 		->where("s.id = 1")
+		->andWhere("a.statusControl = 1")
         ->orderBy('a.sesa', 'ASC')
 		->getQuery()
 		->getResult()
@@ -31,12 +32,42 @@ class EmployeeRepository extends EntityRepository
 	{
 	    $qb = $this
 	    ->createQueryBuilder('s')
-	    ->select('MAX(s.id)')
+	    ->select('MAX(s.masterId)')
     	->setMaxResults(1)
 		->getQuery()
 		->getResult()
 		;
+		return $qb;
+	}
 
-    return $qb;
+	public function getCurrentEmployees()
+	{
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->where("a.statusControl = 1")
+		->getQuery()
+		->getResult()
+		;
+		return $qb;
+	}
+
+	public function getHistoricalEmployees($year, $month)
+	{
+		$start = new \DateTime();
+		$end = new \DateTime();
+		$start->setDate($year, $month, 1);
+		$end = $start->format( 'Y-m-t' );
+
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->where("( a.endDate IS NOT NULL and a.endDate >= '".$end."' ) or ( a.endDate IS NULL and a.statusControl = 1 ) ")
+        ->andWhere("a.startDate <= '".$start->format("Y-m-d")."'")
+	    ->orderBy('a.masterId', 'ASC')
+		->getQuery()
+		->getResult()
+		;
+		return $qb;
 	}
 }

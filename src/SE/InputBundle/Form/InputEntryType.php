@@ -24,6 +24,10 @@ class InputEntryType extends AbstractType
                 'expanded' => false,
                 'query_builder' => function(EntityRepository $er) {
                   return $er->createQueryBuilder('u')
+                            ->leftJoin('u.status', 's')
+                            ->addSelect('s')
+                            ->where("s.id = 1")
+                            ->andWhere("u.statusControl = 1")
                             ->orderBy('u.name', 'ASC');
                   }
                 ), array('required' => true))

@@ -41,7 +41,8 @@ class UserInputType extends AbstractType
                 'query_builder' => function(EntityRepository $er) {
                   return $er->createQueryBuilder('u')
                             ->select('u')
-                            ->where("u.statusControl = 1");
+                            ->where("u.statusControl = 1")
+                            ->orderBy("u.masterId", "ASC");
                   }
                 ), array('required' => true))
             ->add('shift', 'entity', array(

@@ -330,7 +330,7 @@ class Team
     }
 
     /**
-     * @ORM\postPersist
+     * @ORM\PostPersist
      */
     public function updateLinkedEntities()
     {

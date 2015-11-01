@@ -19,7 +19,7 @@ class EntryController extends Controller
     $listEmployees = $this->getDoctrine()
       ->getManager()
       ->getRepository('SEInputBundle:Employee')
-      ->getAlphaEmployees()
+      ->getAlphaCurrentEmployees()
     ;
 
     $userInput = new UserInput();
@@ -213,7 +213,7 @@ class EntryController extends Controller
     $request = $this->get('request');        
     $idEmployee = $request->get('idEmployee');
     
-    $addEmployee = $em->getRepository('SEInputBundle:Employee')->findOneBy(array('id' => $idEmployee));
+    $addEmployee = $em->getRepository('SEInputBundle:Employee')->findOneBy(array('masterId' => $idEmployee));
     if($addEmployee){
       $sesa = $addEmployee->getSesa();
       $activity = $addEmployee->getDefaultActivity()->getId();
