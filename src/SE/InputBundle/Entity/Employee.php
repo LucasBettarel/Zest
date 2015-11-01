@@ -88,6 +88,20 @@ class Employee
     private $remarks;
 
     /**
+     * @var \DateTime
+     * @Assert\DateTime()
+     * @ORM\Column(name="job_start_date", type="date", nullable=false)
+     */
+    private $jobStartDate;
+
+    /**
+     * @var \DateTime
+     * @Assert\DateTime()
+     * @ORM\Column(name="job_end_date", type="date", nullable=true)
+     */
+    private $jobEndDate;
+
+    /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\InputEntry", mappedBy="employee", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -554,5 +568,51 @@ class Employee
     public function getStatusControl()
     {
         return $this->statusControl;
+    }
+
+    /**
+     * Set jobStartDate
+     *
+     * @param \DateTime $jobStartDate
+     * @return Employee
+     */
+    public function setJobStartDate($jobStartDate)
+    {
+        $this->jobStartDate = $jobStartDate;
+
+        return $this;
+    }
+
+    /**
+     * Get jobStartDate
+     *
+     * @return \DateTime 
+     */
+    public function getJobStartDate()
+    {
+        return $this->jobStartDate;
+    }
+
+    /**
+     * Set jobEndDate
+     *
+     * @param \DateTime $jobEndDate
+     * @return Employee
+     */
+    public function setJobEndDate($jobEndDate)
+    {
+        $this->jobEndDate = $jobEndDate;
+
+        return $this;
+    }
+
+    /**
+     * Get jobEndDate
+     *
+     * @return \DateTime 
+     */
+    public function getJobEndDate()
+    {
+        return $this->jobEndDate;
     }
 }
