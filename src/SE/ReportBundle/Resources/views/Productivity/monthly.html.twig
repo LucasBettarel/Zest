@@ -20,14 +20,10 @@
         </form>
       </div>
       <div id="1" class="teams pull-left">
-        <a id="0" class="label label-primary">HubAsia</a>
-        <a id="1" class="label label-default">Outbound4</a>
-        <a id="2" class="label label-default">Inbound4</a>
-        <a id="4" class="label label-default">Outbound3</a>
-        <a id="5" class="label label-default">Inbound3</a>
-        <a id="6" class="label label-default">Releasing</a>
-        <a id="8" class="label label-default">Adaptation</a>
-        <a id="9" class="label label-default">Taskforce</a>
+        <a id="0" data-max-shift="1" class="label label-primary">HubAsia</a>
+        {% for d in dp %}
+            <a id="{{d.masterId}}" data-max-shift="{{d.maxShiftNb}}" class="label label-default">{{d.name}}</a>
+        {% endfor %}
       </div>
       <div id="2" class="shifts hide">
         | 
@@ -104,16 +100,6 @@
       <div id="container-activities" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
     </div>
   </div>
-{#
-  <div class="row">
-    <div class="col-md-6">
-      <div id="container-to" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
-    </div>
-    <div class="col-md-6">
-      <div id="container-hours" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
-    </div>
-  </div>
-#}
   {# MODAL TO DETAIL FORMULAS #}
 
   <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel">

@@ -16,12 +16,18 @@ class ProductivityController extends Controller
 {
 	public function indexAction()
 	{
- 		return $this->render('SEReportBundle:Productivity:monthly.html.twig');
+		$em = $this->getDoctrine()->getManager();
+		$dp = $em->getRepository('SEInputBundle:Departement')->getCurrentDepartements();
+
+ 		return $this->render('SEReportBundle:Productivity:monthly.html.twig', array('dp' => $dp));
 	}
 
 	public function dailyAction()
 	{
- 		return $this->render('SEReportBundle:Productivity:daily.html.twig');
+		$em = $this->getDoctrine()->getManager();
+		$dp = $em->getRepository('SEInputBundle:Departement')->getCurrentDepartements();
+
+ 		return $this->render('SEReportBundle:Productivity:daily.html.twig', array('dp' => $dp));
 	}
 
 	public function refreshAction()
@@ -172,6 +178,8 @@ class ProductivityController extends Controller
 	    $request = $this->get('request');        
 	    $year = $request->get('year');
 	    $month = $request->get('month');
+	    $departements = $em->getRepository('SEInputBundle:Departement')->getHistoricalDepartements($year,$month);
+	    $filters = $this->render('SEReportBundle:Utilities:filters.html.twig', array('dp' => $departements))->getContent();
 	    $daysNb = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
 	    $monthlyStructure = array(
@@ -192,17 +200,16 @@ class ProductivityController extends Controller
 		//fill data
 		foreach ($userInputs as $userInput) {
 			$day = $userInput->getDateInput()->format('j');
-			$team = $userInput->getTeam()->getId();
-			if ($team == 3) {$team = 1;}//include local into outbound4
+			$dep = $userInput->getTeam()->getDepartement();
 			$shift = $userInput->getShift()->getId();
-			$monthlyJson = $this->loadMonthlyData($monthlyJson, $team, $shift, $day, $userInput);
-			$monthlyJson = $this->loadMonthlyData($monthlyJson, $team, 0, $day, $userInput);
+			$monthlyJson = $this->loadMonthlyData($monthlyJson, $dep, $shift, $day, $userInput);
+			$monthlyJson = $this->loadMonthlyData($monthlyJson, $dep, 0, $day, $userInput);
 			$monthlyJson = $this->loadMonthlyData($monthlyJson, 0, 0, $day, $userInput);
 		}
 
 		$monthlyJson = $this->forgetKeys($monthlyJson);
 
-		$response = array("code" => 100, "success" => true, "monthlyJson" => $monthlyJson);
+		$response = array("code" => 100, "success" => true, "monthlyJson" => $monthlyJson, "filters" => $filters);
 	    
 	    return new Response(json_encode($response)); 
 	}
@@ -213,6 +220,8 @@ class ProductivityController extends Controller
 	    $request = $this->get('request');        
 	    $date = $request->get('date');
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getDayInputs($date);
+	    $departements = $em->getRepository('SEInputBundle:Departement')->getHistoricalDepartements(substr($date, -10, 4), substr($date, -5, 2));
+	    $filters = $this->render('SEReportBundle:Utilities:filters.html.twig', array('dp' => $departements))->getContent();
 	    $dailyStructure = array(
 							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0, 'ksr' => 0),
 							'activities' => array('cat' => array(), 'data' => array(), 'ke' => array())
@@ -222,22 +231,23 @@ class ProductivityController extends Controller
 
 		//fill data
 		foreach ($userInputs as $userInput) {
-			$team = $userInput->getTeam()->getId();
-			if ($team == 3) {$team = 1;}//include local into outbound4
+			$dep = $userInput->getTeam()->getDepartement();
 			$shift = $userInput->getShift()->getId();
-			$dailyJson = $this->loadDailyData($dailyJson, $team, $shift, $userInput);
-			$dailyJson = $this->loadDailyData($dailyJson, $team, 0, $userInput);
+			$dailyJson = $this->loadDailyData($dailyJson, $dep, $shift, $userInput);
+			$dailyJson = $this->loadDailyData($dailyJson, $dep, 0, $userInput);
 			$dailyJson = $this->loadDailyData($dailyJson, 0, 0, $userInput);
 			$view = $this->render('SEReportBundle:Productivity:dailyTable.html.twig', array('input' => $userInput))->getContent();
-			$template[] = array($userInput->getTeam()->getName(),$shift,$userInput->getTotalHoursInput(),$userInput->getTotalToInput(),$view);
+			$template[] = array($dep->getName(),$shift,$userInput->getTotalHoursInput(),$userInput->getTotalToInput(),$view);
 		}
-		$response = array("code" => 100, "success" => true, "dailyJson" => $dailyJson, "template" => $template);
+		$response = array("code" => 100, "success" => true, "dailyJson" => $dailyJson, "template" => $template, "filters" => $filters);
 	    
 	    return new Response(json_encode($response)); 
 	}
 
-	public function loadMonthlyData($data, $t, $s, $d, $u)
+	public function loadMonthlyData($data, $dp, $s, $d, $u)
 	{
+		$t=is_int($dp)?0:$dp->getMasterId();
+
 		$data[$t][$s]['report']['to'] += $u->getTotalToInput();
 		$data[$t][$s]['report']['mh'] += $u->getTotalHoursInput(); 
 		$data[$t][$s]['report']['wh'] += $u->getTotalWorkingHoursInput(); 
@@ -246,15 +256,11 @@ class ProductivityController extends Controller
 		$data[$t][$s]['report']['ab'] += $u->getTotalAbsence(); 
 		$data[$t][$s]['report']['hc'] += $u->getTotalHeadcount();
 		$data[$t][$s]['report']['ot'] += $u->getTotalOvertimeInput();
-		if($data[$t][$s]['report']['wh'] != 0){
-			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
-		}
+		$data[$t][$s]['report']['prod'] = $data[$t][$s]['report']['wh'] != 0 ? round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1) : 0;
 
 		//logistic efficiency
-		if($t == 0 && $s == 0 && $data[$t][$s]['report']['prod'] != null){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
-		}elseif($t == 1 || $t == 4 && $data[$t][$s]['report']['prod'] != null){$ut = (109 / 36);  // Outbound UT = 109 s/to
-		}elseif($t == 2 || $t == 5 && $data[$t][$s]['report']['prod'] != null){$ut = (48 / 36);  // Inbound UT = 48 s/to
-		}else{$ut = 0;}  // No UT
+		if(is_int($dp)){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
+		}else{$ut = ( $dp->getLet() / 36 );}
 		$data[$t][$s]['report']['le'] = round($data[$t][$s]['report']['prod'] * $ut,1) ; 
 
 		foreach ($u->getInputEntries() as $e) {
@@ -300,8 +306,10 @@ class ProductivityController extends Controller
 		return $data;
 	}
 
-	public function loadDailyData($data, $t, $s, $u)
+	public function loadDailyData($data, $dp, $s, $u)
 	{
+		$t=is_int($dp)?0:$dp->getMasterId();
+
 		$data[$t][$s]['report']['to'] += $u->getTotalToInput();
 		$data[$t][$s]['report']['mh'] += $u->getTotalHoursInput(); 
 		$data[$t][$s]['report']['wh'] += $u->getTotalWorkingHoursInput(); 
@@ -310,14 +318,11 @@ class ProductivityController extends Controller
 		$data[$t][$s]['report']['ab'] += $u->getTotalAbsence(); 
 		$data[$t][$s]['report']['hc'] += $u->getTotalHeadcount();
 		$data[$t][$s]['report']['ot'] += $u->getTotalOvertimeInput();
-		if($data[$t][$s]['report']['wh'] != 0){
-			$data[$t][$s]['report']['prod'] = round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1);
-		}
+		$data[$t][$s]['report']['prod'] = $data[$t][$s]['report']['wh'] != 0 ? round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1) : 0;
+
 		//logistic efficiency
-		if($t == 0 && $s == 0 && $data[$t][$s]['report']['prod'] != null){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
-		}elseif($t == 1 || $t == 4 && $data[$t][$s]['report']['prod'] != null){$ut = (109 / 36);  // Outbound UT = 109 s/to
-		}elseif($t == 2 || $t == 5 && $data[$t][$s]['report']['prod'] != null){$ut = (48 / 36);  // Inbound UT = 48 s/to
-		}else{$ut = 0;}  // No UT
+		if(is_int($dp)){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
+		}else{$ut = ( $dp->getLet() / 36 );}
 		$data[$t][$s]['report']['le'] = round($data[$t][$s]['report']['prod'] * $ut,1) ;
 
 		foreach ($u->getInputEntries() as $e) {
@@ -358,18 +363,16 @@ class ProductivityController extends Controller
 	public function createJson($structure)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$teams = $em->getRepository('SEInputBundle:Team')->getReportingTeams();
+		$deps = $em->getRepository('SEInputBundle:Departement')->getCurrentDepartements();
 		$json = array();
 		$json[0][0] = $structure;
 
-		foreach ($teams as $team) {
-			$teamId = $team->getId();
-			if ($teamId != 3){//ignore local structure
-				$json[$teamId][0] = $structure;
-				for ($i=0; $i < $team->getShiftnb(); $i++) { 
-					$shiftId = $i+1;
-					$json[$teamId][$shiftId] = $structure;
-				}
+		foreach ($deps as $dep) {
+			$depId = $dep->getId();
+			$json[$depId][0] = 	$structure;
+			for ($i=0; $i < $dep->getMaxShiftNb(); $i++) { 
+				$shiftId = $i+1;
+				$json[$depId][$shiftId] = $structure;
 			}
 		}
 		return $json;

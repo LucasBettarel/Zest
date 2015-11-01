@@ -21,7 +21,7 @@ class ActivityRepository extends EntityRepository
 		->leftJoin('a.teams', 't')
 		->addSelect('t')
 		->where("t.id = :id")
-		->setParameter('id', $id);
+		->setParameter('id', $id)
 		->getQuery()
 		->getResult()
 		;

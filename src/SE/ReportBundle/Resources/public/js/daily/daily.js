@@ -2,20 +2,11 @@ $(document).ready(function() {
 
   Highcharts.createElement('link',{href:'//fonts.googleapis.com/css?family=Dosis:400,600',rel:'stylesheet',type:'text/css'},null,document.getElementsByTagName('head')[0]);Highcharts.theme={colors:["#7cb5ec","#f7a35c","#90ee7e","#7798BF","#aaeeee","#ff0066","#eeaaee","#55BF3B","#DF5353","#7798BF","#aaeeee"],chart:{backgroundColor:null,style:{fontFamily:"Dosis, sans-serif"}},title:{style:{fontSize:'16px',fontWeight:'bold',textTransform:'uppercase'}},tooltip:{borderWidth:0,backgroundColor:'rgba(219,219,216,0.8)',shadow:false},legend:{itemStyle:{fontWeight:'bold',fontSize:'13px'}},xAxis:{gridLineWidth:1,labels:{style:{fontSize:'12px'}}},yAxis:{minorTickInterval:'auto',title:{style:{textTransform:'uppercase'}},labels:{style:{fontSize:'12px'}}},plotOptions:{candlestick:{lineColor:'#404048'}},background2:'#F0F0EA'};Highcharts.setOptions(Highcharts.theme);
 
-  var init = false;
   var dailyJson;
   var dateVal = $('#dailyDate').val();
   var inputTable;
 
- $(document)
-  .ajaxStart(function () {
-    $('#loadingModal').modal({backdrop: 'static', keyboard: false});
-  })
-  .ajaxStop(function () {
-    $('#loadingModal').modal('hide');
-  });
-
-  $.post(
+  $.get(
     ajaxDaily,               
     {date: dateVal}, 
     function(response){
@@ -33,32 +24,32 @@ $(document).ready(function() {
         "info": false
       });
       inputTable.rows.add(response.template).draw();
-      init = true;
     },
     "json");
 
   $('#filters a').click(function(){
-    if (init == true){
-      $this = $(this);
-      filterData($this, dailyJson);
-    }
+    $this = $(this);
+    filterData($this, dailyJson);
   });
 
   $(document).on('change', 'form input#dailyDate', function(e){
     dateVal = $('#dailyDate').val();
-    init = false;
-    $.post(
+    $.get(
     ajaxDaily,               
     {date: dateVal}, 
     function(response){
       createGauge(response.dailyJson, 0, 0);
       replaceTotalData(response.dailyJson, 0,0);
+      $('#filters .teams').html(response.filters);//update filters
       dailyJson = response.dailyJson;
       inputTable = $('#inputs').DataTable();
       inputTable.clear();
       inputTable.rows.add(response.template).draw();
       inputTable.draw();
-      init = true;
+      $('#filters a').click(function(){
+        $this = $(this);
+        filterData($this, dailyJson);
+      });
     },
     "json");
   });
@@ -233,11 +224,11 @@ function filterData($this, json){
   var containerAct = $('#container-activities').highcharts();
 
   if ($this.parent().attr('id') == 1){//team
-    if($this.attr('id') == 0 || $this.attr('id') == 4 || $this.attr('id') == 5){
+    if($this.attr('data-max-shift') == 1){
       if(!$('#filters .shifts').hasClass('hide')){
         $('#filters .shifts').addClass('hide');
       }
-    }else if ($this.attr('id') == 8 || $this.attr('id') == 9 || $this.attr('id') == 6){
+    }else if ($this.attr('data-max-shift') == 2){
      $('#filters .shifts').removeClass('hide');
      if(!$('#filters .shifts #3').hasClass('hide')){
         $('#filters .shifts #3').addClass('hide');

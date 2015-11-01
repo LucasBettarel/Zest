@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="departement")
  * @ORM\Entity(repositoryClass="SE\InputBundle\Entity\DepartementRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Departement
 {
@@ -35,6 +36,20 @@ class Departement
      * @Assert\Valid()
      */
     private $teams;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="max_shift_nb", type="integer")
+     */
+    private $maxShiftNb;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="let", type="integer")
+     */
+    private $let;
 
     /**
      * @var integer
@@ -230,7 +245,7 @@ class Departement
         return $this->teams;
     }
 
-        /**
+    /**
      * @ORM\postPersist
      */
     public function updateLinkedEntities()
@@ -245,5 +260,70 @@ class Departement
         }
 
         $em->flush();
+    }
+
+    /**
+     * @ORM\prePersist
+     */
+    public function generateMaxShiftNb()
+    {
+        //NOT TESTED !
+        //will be used when new departement created in form (front-end action) -> admin page
+        $max = 1;
+        $em = $this->getDoctrine()->getManager();
+        $teams = $em->getRepository('SEInputBundle:Team')->findBy(array('departement' => $this->masterId));
+        foreach ($teams as $t) {
+            if($t->getShiftnb() > $max){
+                $max = $t->getShiftnb();
+            }
+        }
+
+        $this->maxShiftNb = $max;
+    }
+
+    /**
+     * Set maxShiftNb
+     *
+     * @param integer $maxShiftNb
+     * @return Departement
+     */
+    public function setMaxShiftNb($maxShiftNb)
+    {
+        $this->maxShiftNb = $maxShiftNb;
+
+        return $this;
+    }
+
+    /**
+     * Get maxShiftNb
+     *
+     * @return integer 
+     */
+    public function getMaxShiftNb()
+    {
+        return $this->maxShiftNb;
+    }
+
+    /**
+     * Set let
+     *
+     * @param integer $let
+     * @return Departement
+     */
+    public function setLet($let)
+    {
+        $this->let = $let;
+
+        return $this;
+    }
+
+    /**
+     * Get let
+     *
+     * @return integer 
+     */
+    public function getLet()
+    {
+        return $this->let;
     }
 }

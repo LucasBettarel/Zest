@@ -38,7 +38,7 @@ class Employee
     private $sesa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Team")
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Team", inversedBy="employees", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $default_team;

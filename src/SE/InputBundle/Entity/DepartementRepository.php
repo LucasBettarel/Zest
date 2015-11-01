@@ -30,14 +30,13 @@ class DepartementRepository extends EntityRepository
 		$end = new \DateTime();
 		$start->setDate($year, $month, 1);
 		$end = $start->format( 'Y-m-t' );
-		$start->modify( '-1 day' );
 
 		$qb = $this
 		->createQueryBuilder('a')
 		->select("a")
-		->where("( a.endDate <> null and a.endDate <= '".$end."' ) or ( a.endDate = null and a.statusControl = 1 ) ")
-        ->andWhere("a.startDate >= '".$start->format("Y-m-d")."'")
-	    ->orderBy('a.id', 'ASC')
+		->where("( a.endDate IS NOT NULL and a.endDate >= '".$end."' ) or ( a.endDate IS NULL and a.statusControl = 1 ) ")
+        ->andWhere("a.startDate <= '".$start->format("Y-m-d")."'")
+	    ->orderBy('a.masterId', 'ASC')
 		->getQuery()
 		->getResult()
 		;

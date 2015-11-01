@@ -1,0 +1,4 @@
+<a id="0" data-max-shift="1" class="label label-primary">HubAsia</a>
+{% for d in dp %}
+	<a id="{{d.masterId}}" data-max-shift="{{d.maxShiftNb}}" class="label label-default">{{d.name}}</a>
+{% endfor %}

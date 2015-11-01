@@ -30,4 +30,4 @@ se_report_day:
     pattern:  /daily/data
     defaults: { _controller: SEReportBundle:Productivity:day }
     requirements:
-        _method:  POST
+        _method:  GET

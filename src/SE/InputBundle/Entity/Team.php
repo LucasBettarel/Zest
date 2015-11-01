@@ -44,7 +44,7 @@ class Team
     private $activities;
 
     /**
-     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\Team", mappedBy="default_team", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\Employee", mappedBy="default_team", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $employees;
@@ -351,7 +351,7 @@ class Team
         $activities = $em->getRepository('SEInputBundle:Activity')->getTeamsActivities($this->masterId);
         foreach ($activities as $a) {
             foreach ($a->getTeams() as $t) {
-                if($t->getId() == $this->masterId)
+                if($t->getId() == $this->masterId){
                     $a->removeTeam($t);
                     $a->addTeam($this);
                 }
