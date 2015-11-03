@@ -18,6 +18,7 @@ class DepartementRepository extends EntityRepository
 		->createQueryBuilder('a')
 		->select("a")
 		->where("a.statusControl = 1")
+	    ->orderBy('a.masterId', 'ASC')
 		->getQuery()
 		->getResult()
 		;

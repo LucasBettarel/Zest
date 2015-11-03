@@ -55,16 +55,15 @@ class EntryController extends Controller
   public function reviewAction()
     {
       $em = $this->getDoctrine()->getManager();
-
       //select errors
-      $importErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->getLastMonthImportErrors();
+      $importErrors = $em->getRepository('SEInputBundle:InputReview')->getLastMonthImportErrors();
+      $inputErrors = $em->getRepository('SEInputBundle:InputReview')->getLastMonthMissingInputErrors();
+      $toErrors = $em->getRepository('SEInputBundle:InputReview')->getLastMonthToErrors();
+      $hourErrors = $em->getRepository('SEInputBundle:InputReview')->getLastMonthHoursErrors();
+      $userInputs = $em->getRepository('SEInputBundle:UserInput')->getLastMonth();
+      $tm = $em->getRepository('SEInputBundle:Team')->getCurrentTeams();
 
-
-      $inputErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->getLastMonthMissingInputErrors();
-
-       //check if input has been filled in the meantime, remove the error if so
+      //check if input has been filled in the meantime, remove the error if so
       foreach ($inputErrors as $errorToCheck) {
         if($em->getRepository('SEInputBundle:UserInput')->findOneBy(array('dateInput' => $errorToCheck->getDate(), 'team' => $errorToCheck->getTeam(), 'shift' =>  $errorToCheck->getShift()))){
           $em->remove($errorToCheck);
@@ -72,21 +71,13 @@ class EntryController extends Controller
         }
       }
 
-      $toErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->getLastMonthToErrors();
-
-      $hourErrors = $em->getRepository('SEInputBundle:InputReview')
-       ->getLastMonthHoursErrors();
-
-      $userInputs = $em->getRepository('SEInputBundle:UserInput')
-       ->getLastMonth();
-
       return $this->render('SEInputBundle:Entry:review.html.twig', array(
         'importErrors' => $importErrors,
         'inputErrors' => $inputErrors,
         'toErrors' => $toErrors,
         'hourErrors' => $hourErrors,
-        'userInputs' => $userInputs
+        'userInputs' => $userInputs,
+        'tm' => $tm
       ));
     }
 
@@ -183,6 +174,8 @@ class EntryController extends Controller
     $toErrors = $em->getRepository('SEInputBundle:InputReview')->getMonthToErrors($month, $year);
     $hourErrors = $em->getRepository('SEInputBundle:InputReview')->getMonthHoursErrors($month, $year);
     $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month, $year);
+    $tm = $em->getRepository('SEInputBundle:Team')->getHistoricalTeams($year,$month);
+    $filters = $this->render('SEReportBundle:Utilities:filters.html.twig', array('tm' => $tm))->getContent();
 
     $hTemplate = array();
     $eTemplate = array();
@@ -193,6 +186,7 @@ class EntryController extends Controller
                            $u->getTeam()->getName(),
                            $u->getShift()->getId(),
                            $u->getTotalHoursInput(),
+                           $u->getTotalWorkingHoursInput(),
                            $u->getTotalHeadcount(),
                            $u->getTotalToInput(),
                            $u->getTotalProdInput(),
@@ -204,7 +198,7 @@ class EntryController extends Controller
       $eTemplate[] = array($i->getDate()->format('d-m-Y'),$i->getTeam()->getName(),$i->getShift()->getId(),$eView);
     }
 
-    $response = array("code" => 100, "success" => true, "m" => sizeof($importErrors), "i" => sizeof($inputErrors), "t" => sizeof($toErrors), "h" => sizeof($hourErrors), "hTemplate" => $hTemplate, "eTemplate" => $eTemplate);
+    $response = array("code" => 100, "success" => true, "m" => sizeof($importErrors), "i" => sizeof($inputErrors), "t" => sizeof($toErrors), "h" => sizeof($hourErrors), "hTemplate" => $hTemplate, "eTemplate" => $eTemplate, "filters" => $filters);
     return new Response(json_encode($response)); 
   }
 

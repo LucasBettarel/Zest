@@ -194,7 +194,7 @@ class ProductivityController extends Controller
 	    	$monthlyStructure['prod'][$i]['tip'][3] = 0;
 	    }
 	    
-	    $monthlyJson = $this->createJson($monthlyStructure);
+	    $monthlyJson = $this->createJson($monthlyStructure, $departements);
 	    for ($i=1; $i <= $daysNb; $i++) {$monthlyJson['days'][] = $i;}
 
 		//fill data
@@ -226,7 +226,7 @@ class ProductivityController extends Controller
 							'report' => array('prod' => 0, 'to' => 0,'mh' => 0,'hc' => 0,'tr' => 0,'ab' => 0,'ot' => 0,'wh' => 0, 'mto' => 0, 'le' => 0, 'ksr' => 0),
 							'activities' => array('cat' => array(), 'data' => array(), 'ke' => array())
 						);	    
-	    $dailyJson = $this->createJson($dailyStructure);
+	    $dailyJson = $this->createJson($dailyStructure, $departements);
 	    $template = array();
 
 		//fill data
@@ -237,7 +237,7 @@ class ProductivityController extends Controller
 			$dailyJson = $this->loadDailyData($dailyJson, $dep, 0, $userInput);
 			$dailyJson = $this->loadDailyData($dailyJson, 0, 0, $userInput);
 			$view = $this->render('SEReportBundle:Productivity:dailyTable.html.twig', array('input' => $userInput))->getContent();
-			$template[] = array($dep->getName(),$shift,$userInput->getTotalHoursInput(),$userInput->getTotalToInput(),$view);
+			$template[] = array($userInput->getTeam()->getName(),$shift,$userInput->getTotalHoursInput(),$userInput->getTotalToInput(),$view);
 		}
 		$response = array("code" => 100, "success" => true, "dailyJson" => $dailyJson, "template" => $template, "filters" => $filters);
 	    
@@ -360,15 +360,14 @@ class ProductivityController extends Controller
 		return $data;
 	}
 
-	public function createJson($structure)
+	public function createJson($structure, $deps)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$deps = $em->getRepository('SEInputBundle:Departement')->getCurrentDepartements();
 		$json = array();
 		$json[0][0] = $structure;
 
 		foreach ($deps as $dep) {
-			$depId = $dep->getId();
+			$depId = $dep->getMasterId();
 			$json[$depId][0] = 	$structure;
 			for ($i=0; $i < $dep->getMaxShiftNb(); $i++) { 
 				$shiftId = $i+1;

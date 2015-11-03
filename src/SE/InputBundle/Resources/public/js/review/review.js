@@ -27,35 +27,12 @@ $('form select').addClass('form-control');
   $('.panel-warning .dataTables_scrollHeadInner').css('padding-left','0px');
   $('.panel-warning .table').css('margin-bottom','0px');
 
-	$('#filters a').click(function(){
-	  	filterColumn( $(this).parents('div').attr('id'), $(this).attr('id') );
-	  	$(this).siblings().removeClass('label-primary').addClass('label-default');
-      $(this).removeClass('label-default').addClass('label-primary');
+  $('#filters a').click(function(){
+    $this = $(this);
+    filterData($this);
+  });
 
-      if ($(this).parent().attr('id') == 1){
-        if($(this).hasClass('allT') || $(this).attr('id') == "Outbound3" || $(this).attr('id') == "Inbound3"){
-          if(!$('#filters .shifts').hasClass('hide')){
-            $('#filters .shifts').addClass('hide');
-          }
-        }else if ($(this).attr('id') == "Adaptation" || $(this).attr('id') == "Taskforce" || $(this).attr('id') == "Releasing"){
-         $('#filters .shifts').removeClass('hide');
-         if(!$('#filters .shifts #3').hasClass('hide')){
-            $('#filters .shifts #3').addClass('hide');
-          } 
-        }else{
-          $('#filters .shifts').removeClass('hide');
-          $('#filters .shifts #3').removeClass('hide');
-        }
-        $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
-        $('#filters .shifts .allS').removeClass('label-default').addClass('label-primary');
-
-        //if filter by team, reset filter shift to all
-        filterColumn( 2, "" );
-      }
-
-	});
-
-    $("*[data-toggle='tooltip']").tooltip();
+  $("*[data-toggle='tooltip']").tooltip();
 
     $(document).on('click', '#ignore', function(e){
       e && e.preventDefault();
@@ -99,15 +76,60 @@ $('form select').addClass('form-control');
           errorTable.clear();
           errorTable.rows.add(r.eTemplate).draw();
           errorTable.draw();
+
+          $('#filters .teams').html(r.filters);//update filters
+          $('#filters a').click(function(){
+            $this = $(this);
+            filterData($this);
+          });
+
         },
       "json");
     });
     
 });
 
-function filterColumn ( i , val) {
-    $('#history').DataTable().column( i ).search(val).draw();
-    $('#errors').DataTable().column( i ).search(val).draw();
+function filterData($this, json){
+  $this.siblings().removeClass('label-primary').addClass('label-default');
+  $this.removeClass('label-default').addClass('label-primary');
+    
+  if ($this.parent().attr('id') == 1){//team
+    if($this.attr('data-max-shift') == 1){
+      if(!$('#filters .shifts').hasClass('hide')){
+        $('#filters .shifts').addClass('hide');
+      }
+    }else if ($this.attr('data-max-shift') == 2){
+     $('#filters .shifts').removeClass('hide');
+     if(!$('#filters .shifts #3').hasClass('hide')){
+        $('#filters .shifts #3').addClass('hide');
+      } 
+    }else{
+      $('#filters .shifts').removeClass('hide');
+      $('#filters .shifts #3').removeClass('hide');
+    }
+    $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
+    $('#filters .shifts #0').removeClass('label-default').addClass('label-primary');
+
+    if($this.attr('id') != 0){
+      $('#history').DataTable().column(1).search($this.text()).draw();
+      $('#errors').DataTable().column(1).search($this.text()).draw();  
+    }else{
+      $('#history').DataTable().column(1).search("").draw();
+      $('#errors').DataTable().column(1).search("").draw();  
+    }
+    //if filter by team, reset filter shift to all
+    $('#history').DataTable().column(2).search("").draw();
+    $('#errors').DataTable().column(2).search("").draw(); 
+  }else{
+   //shift
+   if($this.attr('id') != 0){
+      $('#history').DataTable().column(2).search($this.attr('id')).draw();
+      $('#errors').DataTable().column(2).search($this.attr('id')).draw();  
+    }else{
+      $('#history').DataTable().column(2).search("").draw();
+      $('#errors').DataTable().column(2).search("").draw();    
+    }
+  }
 }
 
 function ignoreClick(id){

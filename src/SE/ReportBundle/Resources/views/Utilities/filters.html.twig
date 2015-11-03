@@ -1,4 +1,10 @@
 <a id="0" data-max-shift="1" class="label label-primary">HubAsia</a>
-{% for d in dp %}
-	<a id="{{d.masterId}}" data-max-shift="{{d.maxShiftNb}}" class="label label-default">{{d.name}}</a>
-{% endfor %}
+{%	if dp is defined %}
+	{% for d in dp %}
+		<a id="{{d.masterId}}" data-max-shift="{{d.maxShiftNb}}" class="label label-default">{{d.name}}</a>
+	{% endfor %}
+{% elseif tm is defined %}
+	{% for t in tm %}
+        <a id="{{t.masterId}}" data-max-shift="{{t.shiftnb}}" class="label label-default">{{t.name}}</a>
+	{% endfor %}
+{% endif %}

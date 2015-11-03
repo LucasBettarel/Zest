@@ -187,7 +187,7 @@ class SAPRFRepository extends EntityRepository
 			->createQueryBuilder('a')
 			->select("a")
 			->where("a.dateImport = :date")
-            ->andWhere("a.recorded is NULL OR a.recorded = 0")
+            ->andWhere("a.recorded is NULL OR a.recorded = 0");
 
  			if($team == 1){	
 		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
@@ -237,7 +237,7 @@ class SAPRFRepository extends EntityRepository
 			->createQueryBuilder('a')
 			->select("a")
 			->where("a.dateImport = :date")
-            ->andWhere("a.recorded = 1")
+            ->andWhere("a.recorded = 1");
 
             if($team == 1){	
 		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")

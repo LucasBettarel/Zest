@@ -40,15 +40,15 @@ $(document).on('change', '.month select', function(e){
       year: yearVal
     }, 
     function(response){
-      createGauge(response.monthlyJson, 0, 0);
-      createProd(response.monthlyJson, 0, 0);
-      replaceTotalData(response.monthlyJson, 0,0);
       $('#filters .teams').html(response.filters);//update filters
       monthlyJson = response.monthlyJson; 
       $('#filters a').click(function(){
         $this = $(this);
-        filterData($this, dailyJson);
+        filterData($this, monthlyJson);
       });
+      createGauge(response.monthlyJson, 0, 0);
+      createProd(response.monthlyJson, 0, 0);
+      replaceTotalData(response.monthlyJson, 0,0);
     },
     "json");
 });
@@ -247,140 +247,17 @@ function createProd(json, team, shift){
           verticalAlign: 'middle',
           borderWidth: 0
       },
-      series: [{
-          name: 'HubAsia',
-          data: json[0][0]['prod']
-      }, {
-          name: 'Outbound 4',
-          data: json[1][0]['prod']
-      }, {
-          name: 'Inbound 4',
-          data: json[2][0]['prod']
-      }, {
-          name: 'Outbound 3',
-          data: json[4][0]['prod']
-      }, {
-          name: 'Inbound 3',
-          data: json[5][0]['prod']
-      }, {
-          name : 'Adaptation',
-          data: json[8][0]['prod']
-      }]
+      series: []
   };
 
-  $('#container-monthly').highcharts(optionsDaily);  
+  $('#container-monthly').highcharts(optionsDaily); 
 
-  /*var optionsTo = {
-    title: {
-        text: 'Daily-to-date TO-Lines',
-        x: -20 //center
-    },
-    xAxis: {
-        categories: json['days'],
-        title: {
-                text: null
-            }
-    },
-    yAxis: {
-        title: {
-            text: ''
-        },
-        plotLines: [{
-            value: 0,
-            width: 1,
-            color: '#808080'
-        }]
-    },
-    credits: {
-        enabled: false
-    },
-    tooltip: {
-        valueSuffix: 'to lines'
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle',
-        borderWidth: 0
-    },
-    series: [{
-        name: 'HubAsia',
-        data: json[0][0]['to']
-    }, {
-        name: 'Outbound 4',
-        data: json[1][0]['to']
-    }, {
-        name: 'Inbound 4',
-        data: json[2][0]['to']
-    }, {
-        name: 'Outbound 3',
-        data: json[4][0]['to']
-    }, {
-        name: 'Inbound 3',
-        data: json[5][0]['to']
-    }, {
-        name : 'Adaptation',
-        data: json[8][0]['to']
-    }]
-  };
+  var containerMonthly = $('#container-monthly').highcharts();
+  var containerProd = $('#container-prod').highcharts();
+  var containerAct = $('#container-activities').highcharts();
 
-  $('#container-to').highcharts(optionsTo); 
-
-  var optionsHours = {
-    title: {
-        text: 'Daily-to-date Working Manhours',
-        x: -20 //center
-    },
-    xAxis: {
-        categories: json['days'],
-        title: {
-                text: null
-            }
-    },
-    yAxis: {
-        title: {
-            text: ''
-        },
-        plotLines: [{
-            value: 0,
-            width: 1,
-            color: '#808080'
-        }]
-    },
-    credits: {
-        enabled: false
-    },
-    tooltip: {
-        valueSuffix: 'h'
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle',
-        borderWidth: 0
-    },
-    series: [{
-        name: 'HubAsia',
-        data: json[0][0]['wh']
-    }, {
-        name: 'Outbound 4',
-        data: json[1][0]['wh']
-    }, {
-        name: 'Inbound 4',
-        data: json[2][0]['wh']
-    }, {
-        name: 'Outbound 3',
-        data: json[4][0]['wh']
-    }, {
-        name: 'Inbound 3',
-        data: json[5][0]['wh']
-    }, {
-        name : 'Adaptation',
-        data: json[8][0]['wh']
-    }]
-  };
-
-  $('#container-hours').highcharts(optionsHours); */
+  loadTeamCharts(json, 0, 0, containerMonthly, containerProd, containerAct);
+ 
 }
 
 function replaceTotalData(j, t, s){
