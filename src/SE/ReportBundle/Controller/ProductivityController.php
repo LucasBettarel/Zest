@@ -131,7 +131,7 @@ class ProductivityController extends Controller
 
 	        		//add manual TO Lines
 	        		$manualTo = $inputToProcessDay->getManualTo();
-	        		$manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->getManualTo($inputDate, $inputTeam->getId());
+	        		$manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->getGeneralManualTo($inputDate, $inputTeam->getMasterId());
 
 	        		if($manualTOlines){
 	        			foreach ($manualTOlines as $manualToLine) {

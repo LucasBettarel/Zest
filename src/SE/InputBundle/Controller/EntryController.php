@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EntryController extends Controller
 {
@@ -137,7 +138,7 @@ class EntryController extends Controller
       
       //reset manual TO Lines
 
-      $manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->resetManualTo($deleteInput->getDateInput(), $deleteInput->getTeam()->getId());
+      $manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->resetGeneralManualTo($deleteInput->getDateInput(), $deleteInput->getTeam()->getId());
       //time definition
       $otStart = $deleteInput->getOtStartTime();
       $otEnd = $deleteInput->getOtEndTime();

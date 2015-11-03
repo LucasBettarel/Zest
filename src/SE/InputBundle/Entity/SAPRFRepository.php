@@ -22,16 +22,6 @@ class SAPRFRepository extends EntityRepository
             ->andWhere("a.recorded is NULL OR a.recorded = 0")
             ->andWhere("a.user = :user");
 
-        /*  later if it is judged good
-            if($team == 1 OR $team == 3 OR $team == 4){	
-		        $qb->andWhere("a.sourceStorageType <> :sType");
-				$qb->setParameter('sType', '902');
-            }elseif ($team == 2 OR $team == 5) {
-             	$qb->andWhere("a.sourceStorageType = :sType");
-				$qb->setParameter('sType', '902');
-            }
-		*/
-
   		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
   		$qb->setParameter('user', $user);
 
@@ -190,4 +180,105 @@ class SAPRFRepository extends EntityRepository
   		
   		return $qb->getQuery()->getResult();
 	}
+
+	public function getGeneralManualTo($date, $team){
+
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			->where("a.dateImport = :date")
+            ->andWhere("a.recorded is NULL OR a.recorded = 0")
+
+ 			if($team == 1){	
+		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
+            	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
+				$qb->setParameter('userA', 'SESI000005');//outbound4
+				$qb->setParameter('userB', 'SESI000006');
+				$qb->setParameter('userC', 'SESI000008');
+				$qb->setParameter('userD', 'SESI000019');//outbound3
+				$qb->setParameter('sTypeA', '901');
+				$qb->setParameter('sTypeB', '902');
+            }elseif ($team == 2) {
+            	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE OR a.user = :userF OR a.user = :userG OR a.user = :userH")
+            	   ->andWhere("a.sourceStorageType = :sTypeA OR a.sourceStorageType = :sTypeB");
+				$qb->setParameter('userA', 'SESI000012');//inbound4
+				$qb->setParameter('userB', 'SESI000013');
+				$qb->setParameter('userC', 'SESI000014');
+				$qb->setParameter('userD', 'SESI000015');
+				$qb->setParameter('userE', 'SESI000030');
+				$qb->setParameter('userF', 'SESI000021');//inbound3
+				$qb->setParameter('userG', 'SESI000022');
+				$qb->setParameter('userH', 'SESI000023');
+				$qb->setParameter('sTypeA', '902');
+				$qb->setParameter('sTypeB', 'X04');
+            }elseif ($team == 3) {
+            	$qb->andWhere("a.user = :userA OR a.user = :userB")
+            	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
+				$qb->setParameter('userA', 'SESI000016');
+				$qb->setParameter('userB', 'SESI000017');
+				$qb->setParameter('sTypeA', '901');
+				$qb->setParameter('sTypeB', '902');
+            }elseif ($team == 8) {
+            	$qb->andWhere("a.user = :userA")
+				   ->andWhere("a.sourceStorageType <> :sType");
+				$qb->setParameter('userA', 'SESI000018');
+				$qb->setParameter('sType', 'O14');
+				$qb->setParameter('sLoc', '4000');
+            }
+
+  		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
+  		
+  		return $qb->getQuery()->getResult();
+	}
+
+	public function resetGeneralManualTo($date, $team){
+
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a")
+			->where("a.dateImport = :date")
+            ->andWhere("a.recorded = 1")
+
+            if($team == 1){	
+		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
+            	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
+				$qb->setParameter('userA', 'SESI000005');//outbound4
+				$qb->setParameter('userB', 'SESI000006');
+				$qb->setParameter('userC', 'SESI000008');
+				$qb->setParameter('userD', 'SESI000019');//outbound3
+				$qb->setParameter('sTypeA', '901');
+				$qb->setParameter('sTypeB', '902');
+            }elseif ($team == 2) {
+            	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE OR a.user = :userF OR a.user = :userG OR a.user = :userH")
+            	   ->andWhere("a.sourceStorageType = :sTypeA OR a.sourceStorageType = :sTypeB");
+				$qb->setParameter('userA', 'SESI000012');//inbound4
+				$qb->setParameter('userB', 'SESI000013');
+				$qb->setParameter('userC', 'SESI000014');
+				$qb->setParameter('userD', 'SESI000015');
+				$qb->setParameter('userE', 'SESI000030');
+				$qb->setParameter('userF', 'SESI000021');//inbound3
+				$qb->setParameter('userG', 'SESI000022');
+				$qb->setParameter('userH', 'SESI000023');
+				$qb->setParameter('sTypeA', '902');
+				$qb->setParameter('sTypeB', 'X04');
+            }elseif ($team == 3) {
+            	$qb->andWhere("a.user = :userA OR a.user = :userB")
+            	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
+				$qb->setParameter('userA', 'SESI000016');
+				$qb->setParameter('userB', 'SESI000017');
+				$qb->setParameter('sTypeA', '901');
+				$qb->setParameter('sTypeB', '902');
+            }elseif ($team == 8) {
+            	$qb->andWhere("a.user = :userA")
+				   ->andWhere("a.sourceStorageType <> :sType");
+				$qb->setParameter('userA', 'SESI000018');
+				$qb->setParameter('sType', 'O14');
+				$qb->setParameter('sLoc', '4000');
+            }
+
+  		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
+  		
+  		return $qb->getQuery()->getResult();
+	}
+
 }
