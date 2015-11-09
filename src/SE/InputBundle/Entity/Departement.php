@@ -246,7 +246,7 @@ class Departement
     }
 
     /**
-     * @ORM\postPersist
+     * @ORM\PostPersist
      */
     public function updateLinkedEntities()
     {
@@ -263,7 +263,7 @@ class Departement
     }
 
     /**
-     * @ORM\prePersist
+     * @ORM\PrePersist
      */
     public function generateMaxShiftNb()
     {

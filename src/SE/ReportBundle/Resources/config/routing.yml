@@ -10,9 +10,15 @@ se_report_hr:
     path:  /hr
     defaults: { _controller: SEReportBundle:Attendance:hr }
 
-se_report_employee_attendance:
+se_report_attendance:
     pattern:  /hr/data
     defaults: { _controller: SEReportBundle:Attendance:attendance }
+    requirements:
+        _method:  GET
+
+se_report_attendance_details:
+    pattern:  /hr/data/details
+    defaults: { _controller: SEReportBundle:Attendance:activitiesDetails }
     requirements:
         _method:  GET
 

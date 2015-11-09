@@ -12,4 +12,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class InputEntryRepository extends EntityRepository
 {
+	public function getEmployeeInputsAtDate($d,$m,$y,$e)
+	{
+		$date = new \DateTime();
+		$date->setDate($y, $m, $d);
+		$date->setTime(0, 0, 0);
+
+		$qb = $this
+		->createQueryBuilder('a')
+		->select("a")
+		->leftJoin('a.employee', 'e')
+		->addSelect('e')
+		->where("e.masterId = :eId")
+		->leftJoin('a.user_input', 'u')
+		->addSelect('u')
+		->andWhere("u.dateInput = :date")
+        ->addOrderBy('a.id', 'DESC');
+        
+  		$qb->setParameter('eId', $e);
+        $qb->setParameter('date', $date->format('Y-m-d H:i:s'));
+		
+		return $qb->getQuery()->getResult();
+	}
 }

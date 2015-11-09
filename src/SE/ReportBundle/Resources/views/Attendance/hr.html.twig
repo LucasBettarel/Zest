@@ -30,16 +30,10 @@
         </form>
       </div>
       <div id="1" class="teams pull-left">
-        <a id="0" class="label label-primary">HubAsia</a>
-        <a id="1" class="label label-default">Outbound4</a>
-        <a id="3" class="label label-default">Local</a>
-        <a id="2" class="label label-default">Inbound4</a>
-        <a id="4" class="label label-default">Outbound3</a>
-        <a id="5" class="label label-default">Inbound3</a>
-        <a id="6" class="label label-default">Releasing</a>
-        <a id="8" class="label label-default">Adaptation</a>
-        <a id="9" class="label label-default">Taskforce</a>
-        <a id="7" class="label label-default">VTeam</a>
+        <a id="0" data-max-shift="1" class="label label-primary">HubAsia</a>
+        {% for t in tm %}
+            <a id="{{t.masterId}}" data-max-shift="{{t.shiftnb}}" class="label label-default">{{t.name}}</a>
+        {% endfor %}
       </div>
       <div id="2" class="shifts hide">
         | 
@@ -63,7 +57,7 @@
               <tbody>
                 <tr>
                   <td><strong>Monthly Attendance rate</strong></td>
-                  <td class="text-right"><span id="mar"></span></td>
+                  <td class="text-right"><strong><span id="mar"></span> %</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Total Hours</strong></td>
@@ -81,11 +75,11 @@
                   <td><strong>Weekend/Holidays Overtime</strong></td>
                   <td class="text-right"><span id="phot"></span></td>
                 </tr>
-                <tr>
+{#                <tr>
                   <td><strong>Overall Headcount</strong></td>
                   <td class="text-right"><span id="hc"></span></td>
                 </tr>
-{#                <tr>
+                <tr>
                   <td><strong># of > 12 consecutive workdays</strong></td>
                   <td class="text-right"><span id="12"></span></td>
                 </tr>
@@ -121,7 +115,7 @@
   </div>
 
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 table-panel">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h4>Monthly Attendance by Employee</h4>
@@ -136,22 +130,7 @@
                     <th>Employees</th>
                     <th>Team</th>
                     <th>Shift</th>
-                    {% for day in calendar %}
-                      {% if day.isHoliday == 1 %}
-                        <th class="holiday">
-                          {{ day.d }}/{{ day.m }}
-                        </th>
-                      {% elseif day.isWeekday == 0 %}
-                        <th class="weekend">
-                          {{ day.d }}/{{ day.m }}
-                        </th>
-                      {% else %}
-                        <th>
-                          {{ day.d }}/{{ day.m }}
-                        </th>
-                      {% endif %}
-                    {% endfor %}
-                    <th>Total</th>
+                    <th id="total">Total</th>
                   </tr>
                 </thead>
                 <tbody id="inject-employee"> 
@@ -162,6 +141,68 @@
         </div>
       </div>
     </div>
+
+    <div class="hide col-md-3 entry-panel">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4><span id="e-name"></span></h4>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-12">
+            <div class="det-content">
+              <em><span id="e-date"></span></em>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <tbody>
+                    <tr>
+                      <td><strong>Total Hours</strong></td>
+                      <td><strong><span id="e-tot"></span></strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Productivity</strong></td>
+                      <td><strong><span id="e-res"></span></strong></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Regular Hours</strong></td>
+                      <td><span id="e-mh"></span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Overtime</strong></td>
+                      <td><span id="e-ot"></span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+                
+              <div id="input-det-table" class="table-responsive">
+                <table class="table table-hover table-striped display">
+                  <thead>
+                    <tr>
+                      <th colspan="3"><a href="" target="_blank"><span id="input-det"> </span> <i class="glyphicon glyphicon-share"> </i></a></th>
+                    </tr>
+                  </thead>
+                  <tbody id="inject-employee"> 
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="alert alert-danger hide" role="alert">
+              <strong><i class="glyphicon glyphicon-exclamation-sign"> </i> Warning!</strong>
+              There are errors in this entry. Please check and notice Lucas to update.<br>
+              <span id="error-msg"></span>
+            </div>
+            <div class="alert alert-success hide" role="alert">
+              <strong><i class="glyphicon glyphicon-ok"> </i> Alright!</strong>
+              Nothing to report.
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel">
@@ -180,7 +221,8 @@
   <script type="text/javascript" src="https://cdn.datatables.net/r/bs/dt-1.10.9,fc-3.1.0/datatables.min.js"></script>
   <script type="text/javascript">
    {% autoescape false %}
-      var ajaxAttendance = '{{path('se_report_employee_attendance')}}';
+      var ajaxAttendance = '{{path('se_report_attendance')}}';
+      var ajaxAttDetails = '{{path('se_report_attendance_details')}}';
    {% endautoescape %}
   </script>
   {% javascripts '@SEReportBundle/Resources/public/js/hr/*' %}

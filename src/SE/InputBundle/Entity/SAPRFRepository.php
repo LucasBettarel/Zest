@@ -191,7 +191,7 @@ class SAPRFRepository extends EntityRepository
 
  			if($team == 1){	
 		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
-            	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
+            	   ->andWhere("a.sourceStorageType <> :sTypeA AND a.sourceStorageType <> :sTypeB");
 				$qb->setParameter('userA', 'SESI000005');//outbound4
 				$qb->setParameter('userB', 'SESI000006');
 				$qb->setParameter('userC', 'SESI000008');
@@ -223,9 +223,10 @@ class SAPRFRepository extends EntityRepository
 				   ->andWhere("a.sourceStorageType <> :sType");
 				$qb->setParameter('userA', 'SESI000018');
 				$qb->setParameter('sType', 'O14');
-				$qb->setParameter('sLoc', '4000');
-            }
-
+	        }else{
+	        	return null;
+	        }
+	        
   		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
   		
   		return $qb->getQuery()->getResult();
@@ -241,7 +242,7 @@ class SAPRFRepository extends EntityRepository
 
             if($team == 1){	
 		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
-            	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
+            	   ->andWhere("a.sourceStorageType <> :sTypeA AND a.sourceStorageType <> :sTypeB");
 				$qb->setParameter('userA', 'SESI000005');//outbound4
 				$qb->setParameter('userB', 'SESI000006');
 				$qb->setParameter('userC', 'SESI000008');
@@ -274,6 +275,8 @@ class SAPRFRepository extends EntityRepository
 				$qb->setParameter('userA', 'SESI000018');
 				$qb->setParameter('sType', 'O14');
 				$qb->setParameter('sLoc', '4000');
+            }else{
+            	return null;
             }
 
   		$qb->setParameter('date', $date->format('Y-m-d H:i:s'));
