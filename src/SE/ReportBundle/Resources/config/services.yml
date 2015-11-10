@@ -1,4 +1,4 @@
 services:
-#    se_report.example:
-#        class: SE\ReportBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    se_report.refresher.attendance:
+        class: SE\ReportBundle\Refresher\AttendanceRefresher
+        arguments: [@doctrine.orm.entity_manager]

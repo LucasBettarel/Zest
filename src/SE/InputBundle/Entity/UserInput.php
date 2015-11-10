@@ -744,4 +744,19 @@ class UserInput
     {
         return $this->totalHeadcount;
     }
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function setRefresher(){
+
+        $lastUpdate = max($this->date, $this->updatedAt);
+
+        $em = $this->getDoctrine()->getManager();
+        $AttendanceData = $em->getRepository('SEReportBundle:AttendanceData')->findOneBy(array('month' => $lastUpdate->format('m'), 'year' => $lastUpdate->format('Y')));
+        $AttendanceData->setRefresher(1);
+
+        $em->flush();
+    }
 }

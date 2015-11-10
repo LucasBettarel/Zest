@@ -8,6 +8,7 @@ use SE\InputBundle\Entity\SapImports;
 use SE\InputBundle\Entity\UserInput;
 use SE\InputBundle\Entity\SAPRF;
 use SE\InputBundle\Entity\InputReview;
+use SE\ReportBundle\Entity\AttendanceData;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,6 +35,44 @@ class AttendanceController extends Controller
 	    $request = $this->get('request');        
 	    $year = $request->get('year');
 	    $month = $request->get('month');
+
+	    /////////////////////////LA SUPER FONCTION//////////////////////////// 
+	    $data = $em->getRepository('SEReportBundle:AttendanceData')->findOneBy(array('year' => $year, 'month' => $month));
+	    if(!$data || $data->getRefresher()){
+	    	//need to refresh -> go to refresher Controller
+	    	$refresher = $this->get('se_report.refresher.attendance');
+	    	$response = $refresher->updateData($year, $month);
+
+	    }else{
+	    	//get the data and send them
+	    	$jsonAttendance = json_decode($data->getJsonAttendance());
+	    	$template = json_decode($data->getTableTemplate());
+	    	$jsonData = json_decode($data->getJsonData());
+	    	//$jsonCharts = json_decode($data->getJsonCharts());
+
+			$response = array(
+				  "jsonAttendance" => $jsonAttendance,
+				  "template" => $template,
+				  "jsonData" => $jsonData//,
+				//  "jsonCharts" => $jsonCharts
+				);
+	    }
+
+	    $tm = $em->getRepository('SEInputBundle:Team')->getHistoricalTeams($year,$month);
+		$filters = $this->render('SEReportBundle:Utilities:filters.html.twig', array('tm' => $tm))->getContent();
+		$response['filters'] = $filters;
+		
+		$days = $em->getRepository('SEReportBundle:Calendar')->getMonth($month, $year);
+		$headers = array();
+		foreach ($days as $d) {$headers[$d->getD()][] = array('id' => $d->getD()."/".$d->getM(), 'wd' => $d->getIsWeekday(), 'hd' => $d->getIsHoliday());}
+		$response['headers'] = $headers;
+
+		$daysNb = sizeof($days);
+		$response['daysNb'] = $daysNb; 
+
+/*
+
+
 	    $hourStructure = array('presence' => 0, 'absence' => 0, 'tothr' => 0, 'reghr' => 0, 'othr' => 0);
 	    $userInputs = $em->getRepository('SEInputBundle:UserInput')->getMonthInputs($month,$year);
    		$employees = $em->getRepository('SEInputBundle:Employee')->getHistoricalEmployees($year, $month);
@@ -145,6 +184,8 @@ class AttendanceController extends Controller
 				}
 			}
 		}
+
+		$res = $this->saveData($year, $month, $jsonAttendance, $jsonData, $template);
 		
 		$response = array("code" => 100,
 						  "success" => true,
@@ -155,7 +196,7 @@ class AttendanceController extends Controller
 						  "headers" => $headers,
 						  "jsonData" => $jsonData
 						);
-	    
+	    */
 	    return new Response(json_encode($response)); 
 	}
 
