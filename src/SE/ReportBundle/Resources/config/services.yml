@@ -1,4 +1,15 @@
 services:
     se_report.refresher.attendance:
         class: SE\ReportBundle\Refresher\AttendanceRefresher
+        arguments: [@doctrine.orm.entity_manager, @se_report.refresher.structurer, @router]
+        scope: request
+
+    se_report.refresher.structurer:
+        class: SE\ReportBundle\Refresher\Structurer
         arguments: [@doctrine.orm.entity_manager]
+
+    se_report.refresher.listener:
+        class: SE\ReportBundle\Refresher\RefresherListener
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postRemove }

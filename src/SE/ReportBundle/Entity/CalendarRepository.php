@@ -3,6 +3,7 @@
 namespace SE\ReportBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * CalendarRepository
@@ -21,6 +22,20 @@ class CalendarRepository extends EntityRepository
             ->orderBy('a.dt', 'ASC')
 			->getQuery()
 			->getResult()
+  		;
+  
+		return $qb;
+	}
+
+	public function getMonthArray($month, $year)
+	{
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a.dt, a.y, a.m, a.d, a.isWeekday, a.isHoliday")
+			->where("a.m = '".$month."' AND a.y = '".$year."'")
+            ->orderBy('a.dt', 'ASC')
+			->getQuery()
+			->getResult(Query::HYDRATE_ARRAY)
   		;
   
 		return $qb;

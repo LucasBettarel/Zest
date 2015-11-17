@@ -47,6 +47,7 @@ class ProductivityController extends Controller
         //var for error recording
    		$toIssue = $em->getRepository('SEInputBundle:TypeIssue')->find(3);
         $missingTO = 0;
+        $flusher = false;
 
 
         //for each inputToProcess(not processed)
@@ -66,6 +67,7 @@ class ProductivityController extends Controller
       
 	        	if($inputDate->format("Y-m-d") == $sapToProcessDay->getDate()->format("Y-m-d")){
 	        		//match: input.date present in sap.date
+	        		$flusher = true;
 	        		foreach ($inputToProcessDay->getInputEntries() as $inputEntry) {
 	        			foreach ($inputEntry->getActivityHours() as $activity) {
 	        				//picking or putaway
@@ -162,7 +164,8 @@ class ProductivityController extends Controller
 			$inputToProcessDay->computeHours();
         }//foreach input
 
-		$em->flush();
+		if($flusher){$em->flush();}
+		$em->clear();
 
 		return $this->redirect($this->generateUrl('se_report_home'));
 	}
