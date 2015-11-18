@@ -33,8 +33,26 @@ class Structurer
 	public function getAttendanceReportStructure($year, $month)
 	{
 		$teams = $this->em->getRepository('SEInputBundle:Team')->getHistoricalTeams($year,$month);
-		$data = array('report' => array('attrate' => 0, 'hc' => 0, 'presence' => 0, 'totalhr' => 0, 'totalreghr' => 0, 'totalothr' => 0, 'wdot' => 0, 'weot' => 0), 'attrate' => array('cat' => array(), 'data' => array()), 'otconso' => array('cat' => array(), 'data' => array()), 'topot' => array('cat' => array(), 'data' => array()),  'dailyot' => array('cat' => array(), 'data' => array()));
-		$data['dailyot']['cat'] = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+		$data = array(
+			'report' => array(
+				'attrate' => 0,
+				'hc' => 0,
+				'presence' => 0,
+				'totalhr' => 0,
+				'totalreghr' => 0,
+				'totalothr' => 0,
+				'wdot' => 0,
+				'weot' => 0
+			),
+			'attrate' => array('cat' => array(), 'data' => array()),
+			'otconso' => array('cat' => array(), 'data' => array()),
+			'topot' => array('cat' => array(), 'data' => array()),
+			'dailyot' => array('cat' => array(), 'data' => array()),
+			'dtemp' => array('pres' => 0, 'hc' => 0)
+		);
+
+		//no need -> will do in js
+		//$data['dailyot']['cat'] = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
 		$json = array();
 		$json[0][0] = $data;
 

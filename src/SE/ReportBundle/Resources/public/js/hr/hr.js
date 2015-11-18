@@ -21,14 +21,13 @@ $.get(
     function(r){
         attJson = r.template;
         createTable(attJson, r.headers, r.daysNb);
-        createCharts(r.jsonData);
+        createCharts(r.jsonData, 0, 0, r.headers, r.daysNb);
+        $('#filters a').click(function(){
+          $this = $(this);
+          filterData($this, attJson, r.jsonData);
+        });
     },
     "json"); 
-
-$('#filters a').click(function(){
-  $this = $(this);
-  filterData($this, attJson);
-});
 
 $('.close').click(function(){$('.table-panel').toggleClass('col-md-12 col-md-9').siblings('.entry-panel').addClass('hide');});
 
@@ -46,14 +45,14 @@ $(document).on('change', '.month select', function(e){
       attJson = r.template; 
       $('#filters a').click(function(){
         $this = $(this);
-        filterData($this, attJson);
+        filterData($this, attJson, r.jsonData);
       });
         var attendanceTable = $('#attendance').DataTable();
         attendanceTable.clear();
         attendanceTable.destroy();
         $('#attendance thead .day-h').remove();
         createTable(attJson, r.headers, r.daysNb);
-        createCharts(r.jsonData);
+        createCharts(r.jsonData, 0, 0, r.headers, r.daysNb);
     },
     "json");
 });
@@ -67,13 +66,18 @@ function initData(){
     $('.yearpick').val(d.getFullYear());
 }
 
-function createCharts(json){
+function createCharts(json, t, s, h, n){
 
-  $('#summary-panel #mar').html(json['report']['attrate']);
-  $('#summary-panel #hr').html(json['report']['totalhr']);
-  $('#summary-panel #ot').html(json['report']['totalothr']);
-  $('#summary-panel #otn').html(json['report']['wdot']);
-  $('#summary-panel #phot').html(json['report']['weot']);
+  $('#summary-panel #mar').html(json[t][s]['report']['attrate']);
+  $('#summary-panel #hr').html(json[t][s]['report']['totalhr']);
+  $('#summary-panel #ot').html(json[t][s]['report']['totalothr']);
+  $('#summary-panel #otn').html(json[t][s]['report']['wdot']);
+  $('#summary-panel #phot').html(json[t][s]['report']['weot']);
+
+  var categories = [];
+  for (var i=1; i <= n; i++) {
+        if(typeof(h[i]) != "undefined" && h[i] !== null) {categories.push(h[i][0]['id']);}
+    };
       
   $('#container-attendance').highcharts({
     title: {
@@ -81,7 +85,7 @@ function createCharts(json){
         x: -20 //center
     },
     xAxis: {
-        categories: json['days'],
+        categories: categories,
         title: {
                 text: null
             }
@@ -128,9 +132,12 @@ function createCharts(json){
 
 }
 
-function filterData($this, json){
+function filterData($this, json, data){
   $this.siblings().removeClass('label-primary').addClass('label-default');
   $this.removeClass('label-default').addClass('label-primary');
+
+  //update charts data
+  var containerAttendance = $('#container-attendance').highcharts();
     
   if ($this.parent().attr('id') == 1){//team
     if($this.attr('id') == 0 || $this.attr('id') == 4 || $this.attr('id') == 5){
@@ -155,6 +162,8 @@ function filterData($this, json){
     }
     //if filter by team, reset filter shift to all
     $('#attendance').DataTable().column(2).search("").draw(); 
+
+    chartsFilter(data, $this.attr('id'), 0, containerAttendance);
   }else{
    //shift
    if($this.attr('id') != 0){
@@ -162,6 +171,7 @@ function filterData($this, json){
     }else{
       $('#attendance').DataTable().column(2).search("").draw();  
     }
+    chartsFilter(data, $('#filters #1').find('.label-primary').attr('id'), $this.attr('id'), containerAttendance);
   }
 }
 
@@ -212,6 +222,15 @@ function createTable(j, h, n){
           }
           displayDetails($this);
     });
+}
+
+function chartsFilter(j, t, s, c){
+    console.log(t,s, j[t][s]);
+  $('#summary-panel #mar').html(j[t][s]['report']['attrate']);
+  $('#summary-panel #hr').html(j[t][s]['report']['totalhr']);
+  $('#summary-panel #ot').html(j[t][s]['report']['totalothr']);
+  $('#summary-panel #otn').html(j[t][s]['report']['wdot']);
+  $('#summary-panel #phot').html(j[t][s]['report']['weot']);
 }
 
 function displayDetails($this){

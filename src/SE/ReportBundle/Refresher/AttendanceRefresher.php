@@ -29,9 +29,9 @@ class AttendanceRefresher
 	    $template = $format['template'];
 	    $jsonAttendance = $format['jsonAttendance'];
 
-	    $jsonData = $this->getTotalData($jsonAttendance, $days);
+	    $jsonData = $this->getTotalData($jsonAttendance, $days, $month, $year);
 
-		$res = $this->saveData($year, $month, $jsonAttendance, $jsonData, $template);
+// debug //	$res = $this->saveData($year, $month, $jsonAttendance, $jsonData, $template);
 		
 		$response = array("jsonAttendance" => $jsonAttendance,  // NO NEED TO SEND
 						  "template" => $template,
@@ -124,71 +124,59 @@ class AttendanceRefresher
 		return array('jsonAttendance' => $att, 'template' => $template);
 	}
 
-	public function getTotalData($att, $days){
+	public function getTotalData($att, $days, $month, $year){
 
 		$data = $this->structurer->getAttendanceReportStructure($year, $month);
-
+		
    		foreach ($days as $d => $day) {
    			$d++; //offset is 1->dayNb on jsonAttendance
    			foreach ($att as $id => $e) {
    				if(isset($e) && isset($e[$d])){
-   					//presence
-	   				if( $e[$d]['presence'] == 1 && $e[$d]['tothr'] > 0 ){
-	   					$data[0][0]['report']['presence'] += 1;
-	   					$data[$e['teamId']][0]['report']['presence'] += 1;
-	   					$data[$e['teamId']][$e['shift']]['report']['presence'] += 1;
-	   				}
+   					$data = $this->setTotalData($data, 0, 0, $d, $day, $id, $e);
+   					$data = $this->setTotalData($data, $e['teamId'], 0, $d, $day, $id, $e);
+   					$data = $this->setTotalData($data, $e['teamId'], $e['shift'], $d, $day, $id, $e);
 
-	   				//total headcount
-	   				if( ( $e[$d]['presence'] == 1  && $e[$d]['tothr'] > 0 ) || ( $e[$d]['presence'] == 0  && isset($e[$d]['absence']) && $e[$d]['absence'] != "0" ) ){
-	   					$data[0][0]['report']['hc'] += 1;
-	   					$data[$e['teamId']][0]['report']['hc'] += 1;
-	   					$data[$e['teamId']][$e['shift']]['report']['hc'] += 1;
-	   				}
-
-	   				//regular hours
-	   				$data[0][0]['report']['totalreghr'] += $e[$d]['reghr'];
-	   				$data[$e['teamId']][0]['report']['totalreghr'] += $e[$d]['reghr'];
-	   				$data[$e['teamId']][$e['shift']]['report']['totalreghr'] += $e[$d]['reghr'];
-
-					//ot hours
-					$data[0][0]['report']['totalothr'] += $e[$d]['othr'];
-					$data[$e['teamId']][0]['report']['totalothr'] += $e[$d]['othr'];
-					$data[$e['teamId']][$e['shift']]['report']['totalothr'] += $e[$d]['othr'];
-
-					//total hours
-					$data[0][0]['report']['totalhr'] += $e[$d]['tothr'];
-					$data[$e['teamId']][0]['report']['totalhr'] += $e[$d]['tothr'];
-					$data[$e['teamId']][$e['shift']]['report']['totalhr'] += $e[$d]['tothr'];
-
-
-					if ( $day['isWeekday'] && !$day['isHoliday'] ){
-						$data[0][0]['report']['wdot'] += $e[$d]['othr'];
-						$data[$e['teamId']][0]['report']['wdot'] += $e[$d]['othr'];
-						$data['report']['wdot'] += $e[$d]['othr'];
-					}else{
-						$data[0][0]['report']['weot'] += $e[$d]['othr'];
-						$data[$e['teamId']][0]['report']['weot'] += $e[$d]['othr'];
-						$data[$e['teamId']][$e['shift']]['report']['weot'] += $e[$d]['othr'];
-					}
+   					//reset temp
+   					if($id == (sizeof($att)-1) ){
+   						foreach ($data as $team => $data_team) {
+   							foreach ($data_team as $shift => $data_shift) {
+								$data_shift['dtemp']['pres'] = 0;
+								$data_shift['dtemp']['hc'] = 0;
+   							}
+   						}
+   					}
    				}
    			}
    		}
 
-		if(	$data['report']['hc'] > 0){ $data['report']['attrate'] = 100 * round( $data['report']['presence'] / $data['report']['hc'] , 2 );}   		
-
 		return $data;					
 	}
 
-	public function getTotalData($att, $days){
+	public function setTotalData($data, $t, $s, $d, $day, $id, $e){
 
-		if( $e[$d]['presence'] == 1 && $e[$d]['tothr'] > 0 ){$data['report']['presence'] += 1;}
-		if( ( $e[$d]['presence'] == 1  && $e[$d]['tothr'] > 0 ) || ( $e[$d]['presence'] == 0  && isset($e[$d]['absence']) && $e[$d]['absence'] != "0" ) ){ $data['report']['hc'] += 1; }
-		$data['report']['totalreghr'] += $e[$d]['reghr'];
-		$data['report']['totalothr'] += $e[$d]['othr'];
-		$data['report']['totalhr'] += $e[$d]['tothr'];
-		if ( $day['isWeekday'] && !$day['isHoliday'] ){$data['report']['wdot'] += $e[$d]['othr'];}
-		else{$data['report']['weot'] += $e[$d]['othr'];}
+		//presence
+		if( $e[$d]['presence'] == 1 && $e[$d]['tothr'] > 0 ){
+			$data[$t][$s]['report']['presence'] += 1;
+			$data[$t][$s]['dtemp']['pres'] += 1;
+		}
+
+		//headcount
+		if( ( $e[$d]['presence'] == 1  && $e[$d]['tothr'] > 0 ) || ( $e[$d]['presence'] == 0  && isset($e[$d]['absence']) && $e[$d]['absence'] != "0" ) ){
+			$data[$t][$s]['report']['hc'] += 1;
+			$data[$t][$s]['dtemp']['hc'] += 1;
+		}
+
+		//hours
+		$data[$t][$s]['report']['totalreghr'] += $e[$d]['reghr'];
+		$data[$t][$s]['report']['totalothr'] += $e[$d]['othr'];
+		$data[$t][$s]['report']['totalhr'] += $e[$d]['tothr'];
+		if ( $day['isWeekday'] && !$day['isHoliday'] ){$data[$t][$s]['report']['wdot'] += $e[$d]['othr'];}
+		else{$data[$t][$s]['report']['weot'] += $e[$d]['othr'];}
+
+		//daily+monthly rates
+		if(	$data[$t][$s]['report']['hc'] > 0){ $data[$t][$s]['report']['attrate'] = 100 * round( $data[$t][$s]['report']['presence'] / $data[$t][$s]['report']['hc'] , 2 );}   		
+		if(	$data[$t][$s]['dtemp']['hc'] > 0){	$data[$t][$s]['attrate']['data'][$d] = 100 * round( ($data[$t][$s]['dtemp']['pres'] / $data[$t][$s]['dtemp']['hc']) , 2 ); }
+		else{ $data[$t][$s]['attrate']['data'][$d] = 0;}
 
 		return $data;					
 	}
