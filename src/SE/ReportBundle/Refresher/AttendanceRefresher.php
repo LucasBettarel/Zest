@@ -86,6 +86,8 @@ class AttendanceRefresher
 
 		$template = array();
 		$templateRow = array();
+		$today = new \DateTime();
+		$today->format( 'Y-m-d' );
     	
     	//TODO : Use foreach like in gettotal data for employees
 		foreach ($att as $j => $e) {
@@ -102,12 +104,14 @@ class AttendanceRefresher
 					if($e[$i]['presence'] == 0){
 						if(isset($e[$i]['absence']) && $e[$i]['absence'] != "0"){//leave
 							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-leave'><i class='glyphicon glyphicon-remove'> </i> <strong>".$e[$i]['absence']."</strong></div>";
+						}elseif($day['isWeekday'] && !$day['isHoliday'] && $day['dt'] < $today){//forgotten
+							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-missing'><i class='glyphicon glyphicon-question-sign'> </i></div>";	
 						}else{//not working
 							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-absent'></div>";	
 						}
 					}elseif($e[$i]['tothr'] > 11 || $e[$i]['othr'] > 8 || $e[$i]['reghr'] > 8){//warning too much hour
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-high'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";
-					}elseif( ( $e[$i]['reghr'] < 8 && $day['isWeekday'] ) || $e[$i]['tothr'] == 0 ){//missing hour
+					}elseif( ( $e[$i]['reghr'] < 8 && $day['isWeekday'] && !$day['isHoliday']) || $e[$i]['tothr'] == 0 ){//missing hour
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-low'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";					
 					}else{//ok
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-ok'><i class='glyphicon glyphicon-ok'> </i> ".$e[$i]['tothr']."</div>";					
@@ -140,14 +144,16 @@ class AttendanceRefresher
    					if($id == (sizeof($att)-1) ){
    						foreach ($data as $team => $data_team) {
    							foreach ($data_team as $shift => $data_shift) {
-								$data_shift['dtemp']['pres'] = 0;
-								$data_shift['dtemp']['hc'] = 0;
+								$data[$team][$shift]['dtemp']['pres'] = 0;
+								$data[$team][$shift]['dtemp']['hc'] = 0;
    							}
    						}
    					}
    				}
    			}
    		}
+
+   		$data = $this->structurer->forgetAttendanceDataKeys($data);
 
 		return $data;					
 	}

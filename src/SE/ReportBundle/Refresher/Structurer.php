@@ -66,4 +66,21 @@ class Structurer
 		}
 		return $json;
 	}
+
+	public function forgetAttendanceDataKeys($data){
+
+		foreach ($data as $t => $team) { 
+			foreach ($team as $s => $shift) {
+			 	if(isset( $data[$t][$s] , $data )){
+					/*foreach ($data[$t][$s]['attrate']['data'] as $d) {
+						if(isset($d)){
+							$d = array_values( $d );
+						}
+					}*/
+					$data[$t][$s]['attrate']['data'] = array_values( $data[$t][$s]['attrate']['data'] );
+				}
+			}
+		}
+		return $data;
+	}
 }

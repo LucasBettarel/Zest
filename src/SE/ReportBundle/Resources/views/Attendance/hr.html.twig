@@ -53,7 +53,7 @@
         </div>
         <div class="panel-body">
           <div class="table-responsive">
-            <table class="table table-hover table-striped">
+            <table class="table">
               <tbody>
                 <tr>
                   <td><strong>Monthly Attendance rate</strong></td>
@@ -74,6 +74,22 @@
                 <tr>
                   <td><strong>Weekend/Holidays Overtime</strong></td>
                   <td class="text-right"><span id="phot"></span></td>
+                </tr>
+                <tr class="orange">
+                  <td><strong><i class="glyphicon glyphicon-exclamation-sign"> </i> Hours Too High</strong></td>
+                  <td class="text-right"><span id="high"></span></td>
+                </tr>
+                <tr class="yellow">
+                  <td><strong><i class="glyphicon glyphicon-exclamation-sign"> </i> Hours Too Low</strong></td>
+                  <td class="text-right"><span id="low"></span></td>
+                </tr>
+                <tr class="marron">
+                  <td><strong><i class="glyphicon glyphicon-question-sign"></i> Possibly Missing</strong></td>
+                  <td class="text-right"><span id="miss"></span></td>
+                </tr>
+                <tr class="blue">
+                  <td><strong><i class="glyphicon glyphicon-remove"></i> Leaves/Absences</strong></td>
+                  <td class="text-right"><span id="leaves"></span></td>
                 </tr>
 {#                <tr>
                   <td><strong>Overall Headcount</strong></td>

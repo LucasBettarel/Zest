@@ -74,12 +74,20 @@ function createCharts(json, t, s, h, n){
   $('#summary-panel #otn').html(json[t][s]['report']['wdot']);
   $('#summary-panel #phot').html(json[t][s]['report']['weot']);
 
+  $('#summary-panel #high').html($('#inject-employee .orange').length);
+  $('#summary-panel #low').html($('#inject-employee .yellow').length);
+  $('#summary-panel #miss').html($('#inject-employee .marron').length);
+  $('#summary-panel #leaves').html($('#inject-employee .blue').length);
+
   var categories = [];
   for (var i=1; i <= n; i++) {
         if(typeof(h[i]) != "undefined" && h[i] !== null) {categories.push(h[i][0]['id']);}
     };
       
   $('#container-attendance').highcharts({
+    chart: {
+            type: 'area'
+        },
     title: {
         text: 'Monthly-to-date attendance rate',
         x: -20 //center
@@ -107,27 +115,15 @@ function createCharts(json, t, s, h, n){
         valueSuffix: '%'
     },
     legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle',
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
         borderWidth: 0
     },
     series: [{
-        name: 'HubAsia',
-        data: [1,2,3,3,5,3,6,3,6,3,3,3,0]
-    /*}, {
-        name: 'Outbound 4',
-        data: jsonAttendance[o4][rate]
-    }, {
-        name: 'Inbound 4',
-        data: jsonAttendance[i4][rate]
-    }, {
-        name: 'Outbound 3',
-        data: jsonAttendance[o3][rate]
-    }, {
-        name: 'Inbound 3',
-        data: jsonAttendance[i3][rate]
-    */}]
+        name: $('#filters .teams').find('.label-primary').text(),
+        data: json[0][0]['attrate']['data']
+    }]
   });
 
 }
@@ -192,7 +188,7 @@ function createTable(j, h, n){
         paging:         false,
         fixedColumns:   true,
         retrieve: true,
-        "dom": 'lrtip',
+        "dom": 'lfrtip',
         "info": false,
         "columnDefs": [
             {
@@ -213,6 +209,7 @@ function createTable(j, h, n){
     $('.e-day-high').closest('td').addClass('orange box');
     $('.e-day-absent').closest('td').addClass('grey box');
     $('.e-day-leave').closest('td').addClass('blue box');
+    $('.e-day-missing').closest('td').addClass('marron text-center');
     $('#attendance .box').not('.grey').append("<div class='overlay'><i class='glyphicon glyphicon-info-sign'></i></div>");
 
     $('#attendance .box').not('.grey').click(function(){
@@ -222,15 +219,31 @@ function createTable(j, h, n){
           }
           displayDetails($this);
     });
+
+    $('#attendance_filter').prependTo('.table-panel .panel-heading').addClass('pull-right').html($('#attendance_filter').html().split("Search:").join("")).find('input').attr('placeholder', 'Search...');
+    $('#attendance_filter input').keyup(function(){
+      attendanceTable.search($(this).val()).draw();
+    })
 }
 
 function chartsFilter(j, t, s, c){
-    console.log(t,s, j[t][s]);
   $('#summary-panel #mar').html(j[t][s]['report']['attrate']);
   $('#summary-panel #hr').html(j[t][s]['report']['totalhr']);
   $('#summary-panel #ot').html(j[t][s]['report']['totalothr']);
   $('#summary-panel #otn').html(j[t][s]['report']['wdot']);
   $('#summary-panel #phot').html(j[t][s]['report']['weot']);
+  $('#summary-panel #high').html($('#inject-employee .orange').length);
+  $('#summary-panel #low').html($('#inject-employee .yellow').length);
+  $('#summary-panel #miss').html($('#inject-employee .marron').length);
+  $('#summary-panel #leaves').html($('#inject-employee .blue').length);
+
+  c.series[0].remove();
+  c.addSeries({
+          name : $('#filters .teams').find('.label-primary').text(),
+          data: j[t][s]['attrate']['data']
+        });
+  
+
 }
 
 function displayDetails($this){

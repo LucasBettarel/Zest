@@ -208,7 +208,7 @@ class EntryController extends Controller
     $request = $this->get('request');        
     $idEmployee = $request->get('idEmployee');
     
-    $addEmployee = $em->getRepository('SEInputBundle:Employee')->findOneBy(array('masterId' => $idEmployee));
+    $addEmployee = $em->getRepository('SEInputBundle:Employee')->findOneBy(array('id' => $idEmployee, 'statusControl' => 1));
     if($addEmployee){
       $sesa = $addEmployee->getSesa();
       $activity = $addEmployee->getDefaultActivity()->getId();
