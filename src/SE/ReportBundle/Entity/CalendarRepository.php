@@ -31,7 +31,7 @@ class CalendarRepository extends EntityRepository
 	{
 		$qb = $this
 			->createQueryBuilder('a')
-			->select("a.dt, a.y, a.m, a.d, a.isWeekday, a.isHoliday")
+			->select("a.dt, a.y, a.m, a.d, a.isWeekday, a.isHoliday, a.dw")
 			->where("a.m = '".$month."' AND a.y = '".$year."'")
             ->orderBy('a.dt', 'ASC')
 			->getQuery()

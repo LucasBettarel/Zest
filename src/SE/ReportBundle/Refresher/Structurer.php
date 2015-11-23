@@ -23,14 +23,19 @@ class Structurer
 		foreach ($employees as $employee) {
 			//create html name cell
 			$eCell = "<div id='".$employee->getMasterId()."' class='e-name' data-toggle='tooltip' data-placement='right' title='<strong>".$employee->getDefaultTeam()->getName()." - Shift ".$employee->getDefaultShift()->getId()."</strong><br>".$employee->getSesa()."<br>".$employee->getDefaultActivity()->getName()."'>".$employee->getName()."</div>";
-			$jsonAttendance[$employee->getMasterId()] = array('employee' => $eCell, 'teamId' => $employee->getDefaultTeam()->getMasterId(), 'team' => $employee->getDefaultTeam()->getName(), 'shift' => $employee->getDefaultShift()->getId(), 'total'=>0);
+			$jsonAttendance[$employee->getMasterId()] = array('employee' => $eCell,
+															  'employee-name' => $employee->getName(),
+															  'teamId' => $employee->getDefaultTeam()->getMasterId(),
+															  'team' => $employee->getDefaultTeam()->getName(),
+															  'shift' => $employee->getDefaultShift()->getId(),
+															  'total'=>0);
 			for ($i=0; $i < $n; $i++) {$jsonAttendance[$employee->getMasterId()][($i+1)] = $hourStructure;}
 		}
 	    
 	    return $jsonAttendance; 
 	}
 
-	public function getAttendanceReportStructure($year, $month)
+	public function getAttendanceReportStructure($year, $month, $n)
 	{
 		$teams = $this->em->getRepository('SEInputBundle:Team')->getHistoricalTeams($year,$month);
 		$data = array(
@@ -47,21 +52,23 @@ class Structurer
 			'attrate' => array('cat' => array(), 'data' => array()),
 			'otconso' => array('cat' => array(), 'data' => array()),
 			'topot' => array('cat' => array(), 'data' => array()),
-			'dailyot' => array('cat' => array(), 'data' => array()),
-			'dtemp' => array('pres' => 0, 'hc' => 0)
+			'dailyot' => array('cat' => array(), 'data' => array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0))
 		);
 
-		//no need -> will do in js
-		//$data['dailyot']['cat'] = array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday');
+		$temp = array('pres' => 0, 'hc' => 0);
+
 		$json = array();
 		$json[0][0] = $data;
+		for ($j=1; $j <= $n ; $j++) {$json[0][0]['attrate']['temp'][$j] = $temp;}
 
 		foreach ($teams as $t) {
 			$tId = $t->getMasterId();
 			$json[$tId][0] = $data;
+			for ($j=1; $j <= $n ; $j++) {$json[$tId][0]['attrate']['temp'][$j] = $temp;}
 			for ($i=0; $i < $t->getShiftNb(); $i++) { 
 				$sId = $i+1;
 				$json[$tId][$sId] = $data;
+				for ($j=1; $j <= $n ; $j++) {$json[$tId][$sId]['attrate']['temp'][$j] = $temp;}
 			}
 		}
 		return $json;
@@ -72,12 +79,9 @@ class Structurer
 		foreach ($data as $t => $team) { 
 			foreach ($team as $s => $shift) {
 			 	if(isset( $data[$t][$s] , $data )){
-					/*foreach ($data[$t][$s]['attrate']['data'] as $d) {
-						if(isset($d)){
-							$d = array_values( $d );
-						}
-					}*/
 					$data[$t][$s]['attrate']['data'] = array_values( $data[$t][$s]['attrate']['data'] );
+					$data[$t][$s]['otconso']['data'] = array_values( $data[$t][$s]['otconso']['data'] );
+					$data[$t][$s]['dailyot']['data'] = array_values( $data[$t][$s]['dailyot']['data'] );
 				}
 			}
 		}

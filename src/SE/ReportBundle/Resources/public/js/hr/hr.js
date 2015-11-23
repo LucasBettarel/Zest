@@ -89,11 +89,71 @@ function createCharts(json, t, s, h, n){
             type: 'area'
         },
     title: {
-        text: 'Monthly-to-date attendance rate',
+        text: 'Monthly attendance rate & Overtime Usage',
         x: -20 //center
     },
     xAxis: {
         categories: categories,
+        title: {
+                text: null
+            }
+    },
+    yAxis: [{
+        title: {
+            text: 'Attendance Rate %'
+        },
+        plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#808080'
+        }],
+        min: 0,
+        max:100
+    },{
+        min: 0,
+        title: {
+            text: 'Overtime Hours'
+        },
+        opposite: true
+    }],
+    credits: {
+        enabled: false
+    },
+    tooltip: {
+        valueSuffix: '%'
+    },
+    legend: {
+        layout: 'horizontal',
+        align: 'right',
+        verticalAlign: 'center',
+        borderWidth: 0
+    },
+    series: [{
+        name: 'Attendance - ' + $('#filters .teams').find('.label-primary').text(),
+        data: json[0][0]['attrate']['data'],
+        tooltip: {
+            valueSuffix: ' %'
+        }
+    },{
+        name: 'Overtime - ' + $('#filters .teams').find('.label-primary').text(),
+        data: json[0][0]['otconso']['data'],
+        tooltip: {
+            valueSuffix: ' h'
+        },
+        yAxis: 1    
+    }]
+  });
+
+$('#container-daily-ot').highcharts({
+    chart: {
+            type: 'column'
+        },
+    title: {
+        text: 'Overtime over the week',
+        x: -20 //center
+    },
+    xAxis: {
+        categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
         title: {
                 text: null
             }
@@ -112,20 +172,19 @@ function createCharts(json, t, s, h, n){
         enabled: false
     },
     tooltip: {
-        valueSuffix: '%'
+        valueSuffix: 'hours'
     },
     legend: {
-        layout: 'horizontal',
-        align: 'center',
-        verticalAlign: 'bottom',
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'center',
         borderWidth: 0
     },
     series: [{
         name: $('#filters .teams').find('.label-primary').text(),
-        data: json[0][0]['attrate']['data']
+        data: json[0][0]['dailyot']['data']
     }]
   });
-
 }
 
 function filterData($this, json, data){
@@ -134,19 +193,21 @@ function filterData($this, json, data){
 
   //update charts data
   var containerAttendance = $('#container-attendance').highcharts();
+  var containerDailyOt = $('#container-daily-ot').highcharts();
     
   if ($this.parent().attr('id') == 1){//team
-    if($this.attr('id') == 0 || $this.attr('id') == 4 || $this.attr('id') == 5){
+    if($this.attr('data-max-shift') == 1){
       if(!$('#filters .shifts').hasClass('hide')){
         $('#filters .shifts').addClass('hide');
       }
-    }else if ( $this.attr('id') == 3 || $this.attr('id') == 6 || $this.attr('id') == 8 || $this.attr('id') == 9){
+    }else if ($this.attr('data-max-shift') == 2){
      $('#filters .shifts').removeClass('hide');
      if(!$('#filters .shifts #3').hasClass('hide')){
         $('#filters .shifts #3').addClass('hide');
       } 
     }else{
-      $('#filters .shifts, #filters .shifts #3').removeClass('hide');
+      $('#filters .shifts').removeClass('hide');
+      $('#filters .shifts #3').removeClass('hide');
     }
     $('#filters .shifts a').removeClass('label-primary').addClass('label-default');
     $('#filters .shifts #0').removeClass('label-default').addClass('label-primary');
@@ -159,7 +220,7 @@ function filterData($this, json, data){
     //if filter by team, reset filter shift to all
     $('#attendance').DataTable().column(2).search("").draw(); 
 
-    chartsFilter(data, $this.attr('id'), 0, containerAttendance);
+    chartsFilter(data, $this.attr('id'), 0, containerAttendance, containerDailyOt);
   }else{
    //shift
    if($this.attr('id') != 0){
@@ -167,7 +228,7 @@ function filterData($this, json, data){
     }else{
       $('#attendance').DataTable().column(2).search("").draw();  
     }
-    chartsFilter(data, $('#filters #1').find('.label-primary').attr('id'), $this.attr('id'), containerAttendance);
+    chartsFilter(data, $('#filters #1').find('.label-primary').attr('id'), $this.attr('id'), containerAttendance, containerDailyOt);
   }
 }
 
@@ -221,12 +282,13 @@ function createTable(j, h, n){
     });
 
     $('#attendance_filter').prependTo('.table-panel .panel-heading').addClass('pull-right').html($('#attendance_filter').html().split("Search:").join("")).find('input').attr('placeholder', 'Search...');
+    $('.panel-body #attendance_filter').addClass('hide');
     $('#attendance_filter input').keyup(function(){
       attendanceTable.search($(this).val()).draw();
     })
 }
 
-function chartsFilter(j, t, s, c){
+function chartsFilter(j, t, s, cAttendance, cDailyOt){
   $('#summary-panel #mar').html(j[t][s]['report']['attrate']);
   $('#summary-panel #hr').html(j[t][s]['report']['totalhr']);
   $('#summary-panel #ot').html(j[t][s]['report']['totalothr']);
@@ -237,12 +299,29 @@ function chartsFilter(j, t, s, c){
   $('#summary-panel #miss').html($('#inject-employee .marron').length);
   $('#summary-panel #leaves').html($('#inject-employee .blue').length);
 
-  c.series[0].remove();
-  c.addSeries({
-          name : $('#filters .teams').find('.label-primary').text(),
-          data: j[t][s]['attrate']['data']
-        });
-  
+  cAttendance.series[0].remove();
+  cAttendance.series[0].remove();
+  cDailyOt.series[0].remove();
+
+  cAttendance.addSeries({
+        name: 'Attendance - ' + $('#filters .teams').find('.label-primary').text(),
+        data: j[t][s]['attrate']['data'],
+        tooltip: {
+            valueSuffix: ' %'
+        }
+    });
+  cAttendance.addSeries({
+        name: 'Overtime - ' + $('#filters .teams').find('.label-primary').text(),
+        data: j[t][s]['otconso']['data'],
+        tooltip: {
+            valueSuffix: ' h'
+        },
+        yAxis: 1    
+    });
+  cDailyOt.addSeries({
+    name : $('#filters .teams').find('.label-primary').text(),
+    data: j[t][s]['dailyot']['data']
+  });
 
 }
 
@@ -292,6 +371,8 @@ function displayDetails($this){
       }else{
         $('.entry-panel .alert-success').removeClass('hide');
       }
+
+      $("*[data-toggle='tooltip']").tooltip({html :'true',container: 'body'});
       
     },
     "json");

@@ -87,6 +87,7 @@ class AttendanceRefresher
 		$template = array();
 		$templateRow = array();
 		$today = new \DateTime();
+		$today->modify( '-1 day' );
 		$today->format( 'Y-m-d' );
     	
     	//TODO : Use foreach like in gettotal data for employees
@@ -130,7 +131,7 @@ class AttendanceRefresher
 
 	public function getTotalData($att, $days, $month, $year){
 
-		$data = $this->structurer->getAttendanceReportStructure($year, $month);
+		$data = $this->structurer->getAttendanceReportStructure($year, $month, sizeof($days));
 		
    		foreach ($days as $d => $day) {
    			$d++; //offset is 1->dayNb on jsonAttendance
@@ -139,16 +140,6 @@ class AttendanceRefresher
    					$data = $this->setTotalData($data, 0, 0, $d, $day, $id, $e);
    					$data = $this->setTotalData($data, $e['teamId'], 0, $d, $day, $id, $e);
    					$data = $this->setTotalData($data, $e['teamId'], $e['shift'], $d, $day, $id, $e);
-
-   					//reset temp
-   					if($id == (sizeof($att)-1) ){
-   						foreach ($data as $team => $data_team) {
-   							foreach ($data_team as $shift => $data_shift) {
-								$data[$team][$shift]['dtemp']['pres'] = 0;
-								$data[$team][$shift]['dtemp']['hc'] = 0;
-   							}
-   						}
-   					}
    				}
    			}
    		}
@@ -163,13 +154,13 @@ class AttendanceRefresher
 		//presence
 		if( $e[$d]['presence'] == 1 && $e[$d]['tothr'] > 0 ){
 			$data[$t][$s]['report']['presence'] += 1;
-			$data[$t][$s]['dtemp']['pres'] += 1;
+			$data[$t][$s]['attrate']['temp'][$d]['pres'] += 1;
 		}
 
 		//headcount
 		if( ( $e[$d]['presence'] == 1  && $e[$d]['tothr'] > 0 ) || ( $e[$d]['presence'] == 0  && isset($e[$d]['absence']) && $e[$d]['absence'] != "0" ) ){
 			$data[$t][$s]['report']['hc'] += 1;
-			$data[$t][$s]['dtemp']['hc'] += 1;
+			$data[$t][$s]['attrate']['temp'][$d]['hc'] += 1;
 		}
 
 		//hours
@@ -179,11 +170,23 @@ class AttendanceRefresher
 		if ( $day['isWeekday'] && !$day['isHoliday'] ){$data[$t][$s]['report']['wdot'] += $e[$d]['othr'];}
 		else{$data[$t][$s]['report']['weot'] += $e[$d]['othr'];}
 
+		//overtime
+		if( !isset($data[$t][$s]['otconso']['data'][$d]) || $data[$t][$s]['otconso']['data'][$d] == 0){$data[$t][$s]['otconso']['data'][$d] = $e[$d]['othr'];}
+		else{ $data[$t][$s]['otconso']['data'][$d] += $e[$d]['othr'];}
+		$data[$t][$s]['dailyot']['data'][$day['dw']] += $e[$d]['othr'];
+
 		//daily+monthly rates
 		if(	$data[$t][$s]['report']['hc'] > 0){ $data[$t][$s]['report']['attrate'] = 100 * round( $data[$t][$s]['report']['presence'] / $data[$t][$s]['report']['hc'] , 2 );}   		
-		if(	$data[$t][$s]['dtemp']['hc'] > 0){	$data[$t][$s]['attrate']['data'][$d] = 100 * round( ($data[$t][$s]['dtemp']['pres'] / $data[$t][$s]['dtemp']['hc']) , 2 ); }
+		if(	$data[$t][$s]['attrate']['temp'][$d]['hc'] > 0){ $data[$t][$s]['attrate']['data'][$d] = 100 * round( ($data[$t][$s]['attrate']['temp'][$d]['pres'] / $data[$t][$s]['attrate']['temp'][$d]['hc']) , 2 ); }
 		else{ $data[$t][$s]['attrate']['data'][$d] = 0;}
 
+		//employee overtime
+		if(!isset($data[$t][$s]['topot']['e-id'])){
+			$data[$t][$s]['topot']['cat'][$id] = $e['name'];
+			$data[$t][$s]['topot']['data'][$id] = 0;
+		}
+		$data[$t][$s]['topot']['data'][$id] += $e[$d]['othr'];
+		
 		return $data;					
 	}
 
@@ -221,6 +224,7 @@ class AttendanceRefresher
 	    $is = $this->em->getRepository('SEInputBundle:InputEntry')->getEmployeeInputsAtDate($d,$m,$y,$e);
 	    $det = array('totot' => 0, 'totreg' => 0, 'tothr' => 0, 'to' => 0, 'res' => 0, 'whr' => 0);
 	    $j = 0;
+	    $transfer =false;
 
 	    foreach ($is as $i) {
 			$regtohr = 0;
@@ -229,18 +233,19 @@ class AttendanceRefresher
 	    	$det['date'] = $i->getUserInput()->getDateInput()->format('d-m-Y');
 	    	$det['tab'][$j]['present'] = $i->getPresent();
 	    	if( !$det['tab'][$j]['present'] ){ $det['tab'][$j]['absence'] = $i->getAbsenceReason()->getName(); }
-	    	$det['tab'][$j]['header'] = $i->getUserInput()->getTeam()->getName()." - Shift ".$i->getUserInput()->getShift()->getId()." - ".$i->getSesa();
 	    	$det['tab'][$j]['link'] = $this->router->generate('se_input_review_details', array('id' => $i->getUserInput()->getId()));
 	    	if( $i->getActivityHours() ){
 	    		foreach ($i->getActivityHours() as $a) {
 	    			if($a->getActivity()->getId() == 13){
 				 		$regtohr = $a->getRegularHours();
 				 		$ottohr = $a->getOtHours();
+				 		$transfer = true;
 					}else{
 						$det['tab'][$j]['row'][] = "<tr><td>".$a->getActivity()->getName()."</td><td>".$a->getRegularHours()."</td><td>".$a->getOtHours()."</td></tr>";
 					}	
 		    	}
 		    }
+		    $det['tab'][$j]['header'] = $transfer ? "<i class='glyphicon glyphicon-log-out text-danger' data-toggle='tooltip' data-placement='top' title='Transfer Out'> </i> ".$i->getUserInput()->getTeam()->getName()." - Shift ".$i->getUserInput()->getShift()->getId()." - ".$i->getSesa() : $i->getUserInput()->getTeam()->getName()." - Shift ".$i->getUserInput()->getShift()->getId()." - ".$i->getSesa();
 	    	$det['totot'] += $i->getTotalOvertime() - $ottohr;
 	    	$det['totreg'] += $i->getTotalHours() - $i->getTotalOvertime() - $regtohr;;
 	    	$det['tothr'] += $i->getTotalHours() - $ottohr - $regtohr;
