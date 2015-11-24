@@ -31,9 +31,9 @@ class AttendanceRefresher
 
 	    $jsonData = $this->getTotalData($jsonAttendance, $days, $month, $year);
 
-// debug //	$res = $this->saveData($year, $month, $jsonAttendance, $jsonData, $template);
+		$res = $this->saveData($year, $month, $jsonAttendance, $jsonData, $template);
 		
-		$response = array("jsonAttendance" => $jsonAttendance,  // NO NEED TO SEND
+		$response = array(//"jsonAttendance" => $jsonAttendance,  // NO NEED TO SEND
 						  "template" => $template,
 						  "jsonData" => $jsonData
 						);
@@ -101,6 +101,7 @@ class AttendanceRefresher
 			 	foreach ($days as $i => $day) {
    					$i++; //offset is 1->dayNb on jsonAttendance
 					$e['total'] += $e[$i]['tothr'];
+					$e['overtime'] += $e[$i]['othr'];
 					//test to identify errors in hours reported
 					if($e[$i]['presence'] == 0){
 						if(isset($e[$i]['absence']) && $e[$i]['absence'] != "0"){//leave
@@ -120,6 +121,7 @@ class AttendanceRefresher
 					$templateRow[] = $dCell;
 				}
 				$templateRow[] = $e['total'];
+				$templateRow[] = $e['overtime'];
 				if($e['total'] > 0){ //if no hours during the month, do not include in table
 					$template[] = $templateRow;
 				}
@@ -179,13 +181,6 @@ class AttendanceRefresher
 		if(	$data[$t][$s]['report']['hc'] > 0){ $data[$t][$s]['report']['attrate'] = 100 * round( $data[$t][$s]['report']['presence'] / $data[$t][$s]['report']['hc'] , 2 );}   		
 		if(	$data[$t][$s]['attrate']['temp'][$d]['hc'] > 0){ $data[$t][$s]['attrate']['data'][$d] = 100 * round( ($data[$t][$s]['attrate']['temp'][$d]['pres'] / $data[$t][$s]['attrate']['temp'][$d]['hc']) , 2 ); }
 		else{ $data[$t][$s]['attrate']['data'][$d] = 0;}
-
-		//employee overtime
-		if(!isset($data[$t][$s]['topot']['e-id'])){
-			$data[$t][$s]['topot']['cat'][$id] = $e['name'];
-			$data[$t][$s]['topot']['data'][$id] = 0;
-		}
-		$data[$t][$s]['topot']['data'][$id] += $e[$d]['othr'];
 		
 		return $data;					
 	}

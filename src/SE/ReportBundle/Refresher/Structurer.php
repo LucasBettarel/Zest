@@ -24,11 +24,11 @@ class Structurer
 			//create html name cell
 			$eCell = "<div id='".$employee->getMasterId()."' class='e-name' data-toggle='tooltip' data-placement='right' title='<strong>".$employee->getDefaultTeam()->getName()." - Shift ".$employee->getDefaultShift()->getId()."</strong><br>".$employee->getSesa()."<br>".$employee->getDefaultActivity()->getName()."'>".$employee->getName()."</div>";
 			$jsonAttendance[$employee->getMasterId()] = array('employee' => $eCell,
-															  'employee-name' => $employee->getName(),
 															  'teamId' => $employee->getDefaultTeam()->getMasterId(),
 															  'team' => $employee->getDefaultTeam()->getName(),
 															  'shift' => $employee->getDefaultShift()->getId(),
-															  'total'=>0);
+															  'total'=>0,
+															  'overtime'=>0);
 			for ($i=0; $i < $n; $i++) {$jsonAttendance[$employee->getMasterId()][($i+1)] = $hourStructure;}
 		}
 	    
@@ -51,7 +51,7 @@ class Structurer
 			),
 			'attrate' => array('cat' => array(), 'data' => array()),
 			'otconso' => array('cat' => array(), 'data' => array()),
-			'topot' => array('cat' => array(), 'data' => array()),
+			//'topot' => array('cat' => array(), 'data' => array()),
 			'dailyot' => array('cat' => array(), 'data' => array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0))
 		);
 

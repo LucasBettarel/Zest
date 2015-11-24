@@ -41,16 +41,14 @@ class AttendanceController extends Controller
 	    	$response = $refresher->updateData($year, $month, $days);
 	    }else{
 	    	//get the data and send them
-	    	$jsonAttendance = json_decode($data->getJsonAttendance());
+	    	//$jsonAttendance = json_decode($data->getJsonAttendance());
 	    	$template = json_decode($data->getTableTemplate());
 	    	$jsonData = json_decode($data->getJsonData());
-	    	//$jsonCharts = json_decode($data->getJsonCharts());
 
 			$response = array(
-				  "jsonAttendance" => $jsonAttendance, // NO NEED
+				  //"jsonAttendance" => $jsonAttendance, // NO NEED
 				  "template" => $template,
-				  "jsonData" => $jsonData//,
-				//  "jsonCharts" => $jsonCharts    NOT READY
+				  "jsonData" => $jsonData
 				);
 	    }
 

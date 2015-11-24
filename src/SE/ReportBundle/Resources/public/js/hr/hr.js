@@ -144,7 +144,7 @@ function createCharts(json, t, s, h, n){
     }]
   });
 
-$('#container-daily-ot').highcharts({
+  $('#container-daily-ot').highcharts({
     chart: {
             type: 'column'
         },

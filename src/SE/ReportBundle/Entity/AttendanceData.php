@@ -74,13 +74,6 @@ class AttendanceData
     /**
      * @var array
      *
-     * @ORM\Column(name="jsonCharts", type="json_array", nullable=true)
-     */
-    private $jsonCharts;
-
-    /**
-     * @var array
-     *
      * @ORM\Column(name="tableTemplate", type="json_array", nullable=true)
      */
     private $tableTemplate;
@@ -244,29 +237,6 @@ class AttendanceData
     public function getMonth()
     {
         return $this->month;
-    }
-
-    /**
-     * Set jsonCharts
-     *
-     * @param array $jsonCharts
-     * @return AttendanceData
-     */
-    public function setJsonCharts($jsonCharts)
-    {
-        $this->jsonCharts = $jsonCharts;
-
-        return $this;
-    }
-
-    /**
-     * Get jsonCharts
-     *
-     * @return array 
-     */
-    public function getJsonCharts()
-    {
-        return $this->jsonCharts;
     }
 
     /**
