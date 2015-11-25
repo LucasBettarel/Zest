@@ -173,8 +173,13 @@ class AttendanceRefresher
 		else{$data[$t][$s]['report']['weot'] += $e[$d]['othr'];}
 
 		//overtime
-		if( !isset($data[$t][$s]['otconso']['data'][$d]) || $data[$t][$s]['otconso']['data'][$d] == 0){$data[$t][$s]['otconso']['data'][$d] = $e[$d]['othr'];}
-		else{ $data[$t][$s]['otconso']['data'][$d] += $e[$d]['othr'];}
+		//if( !isset($data[$t][$s]['otconso']['data'][$d]) || $data[$t][$s]['otconso']['data'][$d] == 0){$data[$t][$s]['otconso']['data'][$d] = $e[$d]['othr'];}
+		//else{ 
+		$data[$t][$s]['otconso']['data'][$d]['y'] += $e[$d]['othr'];
+		$data[$t][$s]['otconso']['data'][$d]['tip'][1] = $data[$t][$s]['attrate']['temp'][$d]['pres'];
+		$data[$t][$s]['otconso']['data'][$d]['tip'][3] += $e[$d]['tothr'];//temp data
+		$data[$t][$s]['otconso']['data'][$d]['tip'][2] = $data[$t][$s]['otconso']['data'][$d]['tip'][3] > 0 ? (100 * round( $data[$t][$s]['otconso']['data'][$d]['y'] / $data[$t][$s]['otconso']['data'][$d]['tip'][3] , 2)) : 0;
+		//}
 		$data[$t][$s]['dailyot']['data'][$day['dw']] += $e[$d]['othr'];
 
 		//daily+monthly rates

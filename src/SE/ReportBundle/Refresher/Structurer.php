@@ -56,19 +56,29 @@ class Structurer
 		);
 
 		$temp = array('pres' => 0, 'hc' => 0);
+		$tip = array('y' => 0, 'tip' => array(1 => 0, 2 => 0, 3 => 0));
 
 		$json = array();
 		$json[0][0] = $data;
-		for ($j=1; $j <= $n ; $j++) {$json[0][0]['attrate']['temp'][$j] = $temp;}
+		for ($j=1; $j <= $n ; $j++) {
+			$json[0][0]['attrate']['temp'][$j] = $temp;
+			$json[0][0]['otconso']['data'][$j] = $tip;
+		}
 
 		foreach ($teams as $t) {
 			$tId = $t->getMasterId();
 			$json[$tId][0] = $data;
-			for ($j=1; $j <= $n ; $j++) {$json[$tId][0]['attrate']['temp'][$j] = $temp;}
+			for ($j=1; $j <= $n ; $j++) {
+				$json[$tId][0]['attrate']['temp'][$j] = $temp;
+				$json[$tId][0]['otconso']['data'][$j] = $tip;
+			}
 			for ($i=0; $i < $t->getShiftNb(); $i++) { 
 				$sId = $i+1;
 				$json[$tId][$sId] = $data;
-				for ($j=1; $j <= $n ; $j++) {$json[$tId][$sId]['attrate']['temp'][$j] = $temp;}
+				for ($j=1; $j <= $n ; $j++) {
+					$json[$tId][$sId]['attrate']['temp'][$j] = $temp;
+					$json[$tId][$sId]['otconso']['data'][$j] = $tip;
+				}
 			}
 		}
 		return $json;

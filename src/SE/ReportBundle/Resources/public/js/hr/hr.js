@@ -120,7 +120,16 @@ function createCharts(json, t, s, h, n){
         enabled: false
     },
     tooltip: {
-        valueSuffix: '%'
+      shared: false,
+      formatter: function() {
+        var text = '';
+        if(this.series.name.match("^Overtime")) {
+            text = '<span style="color:' + this.series.color + '">\u25CF</span><b> ' + this.x + ' - ' + this.series.name + '<br> Overtime: <b>' + Highcharts.numberFormat(this.y, 0) + 'h </b><br>  Headcount: <b>' + this.point.tip[1] + '</b><br> Overtime rate: <b>' + this.point.tip[2] + '%</b>';
+        } else {
+            text = this.x + ' <br>' + '<span style="color:' + this.series.color + '">\u25CF</span> ' + this.series.name + ': <b>' + Highcharts.numberFormat(this.y, 0) + '%</b>';
+        }
+        return text;
+      }
     },
     legend: {
         layout: 'horizontal',
@@ -131,15 +140,9 @@ function createCharts(json, t, s, h, n){
     series: [{
         name: 'Attendance - ' + $('#filters .teams').find('.label-primary').text(),
         data: json[0][0]['attrate']['data'],
-        tooltip: {
-            valueSuffix: ' %'
-        }
     },{
         name: 'Overtime - ' + $('#filters .teams').find('.label-primary').text(),
         data: json[0][0]['otconso']['data'],
-        tooltip: {
-            valueSuffix: ' h'
-        },
         yAxis: 1    
     }]
   });
@@ -172,7 +175,7 @@ function createCharts(json, t, s, h, n){
         enabled: false
     },
     tooltip: {
-        valueSuffix: 'hours'
+        valueSuffix: 'h'
     },
     legend: {
         layout: 'vertical',
@@ -306,16 +309,10 @@ function chartsFilter(j, t, s, cAttendance, cDailyOt){
   cAttendance.addSeries({
         name: 'Attendance - ' + $('#filters .teams').find('.label-primary').text(),
         data: j[t][s]['attrate']['data'],
-        tooltip: {
-            valueSuffix: ' %'
-        }
     });
   cAttendance.addSeries({
         name: 'Overtime - ' + $('#filters .teams').find('.label-primary').text(),
         data: j[t][s]['otconso']['data'],
-        tooltip: {
-            valueSuffix: ' h'
-        },
         yAxis: 1    
     });
   cDailyOt.addSeries({
