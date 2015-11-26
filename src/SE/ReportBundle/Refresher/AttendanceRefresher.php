@@ -201,7 +201,6 @@ class AttendanceRefresher
 			$data->setTableTemplate(json_encode($template));
 			$data->setRefresher(0);
 			
-			//$this->em->persist($data);
 		}else{
 			$newData = new AttendanceData();
 
