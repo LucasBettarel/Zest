@@ -17,20 +17,7 @@ class RefresherListener {
     }
 
     public function setRefresher($args) {
-//        $entity = $args->getEntity();
-//TOTEST        
         $em = $args->getEntityManager();
- 
-/*        if ($entity instanceof UserInput) {
-            $period = array('month' => $entity->getDateInput()->format('m'), 'year' => $entity->getDateInput()->format('Y'));
-            $Attendance = $entityManager->getRepository('SE\ReportBundle\Entity\AttendanceData')->findOneBy($period);
-            if($Attendance && $Attendance->getRefresher() == 0){
-                $Attendance->setRefresher(1);
-                $entityManager->persist($Attendance);
-                //$entityManager->flush();
-            }
-        }
-*/
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityUpdates() as $keyEntity => $entity) {

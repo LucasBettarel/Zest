@@ -1,7 +1,7 @@
 services:
     se_report.refresher.attendance:
         class: SE\ReportBundle\Refresher\AttendanceRefresher
-        arguments: [@doctrine.orm.entity_manager, @se_report.refresher.structurer, @router]
+        arguments: [@doctrine.orm.entity_manager, @se_report.refresher.structurer, @router, @logger]
         scope: request
 
     se_report.refresher.structurer:

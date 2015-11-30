@@ -4,6 +4,7 @@ namespace SE\ReportBundle\Refresher;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\RouterInterface;
+use Monolog\Logger;
 use SE\ReportBundle\Entity\AttendanceData;
 use SE\InputBundle\Entity\UserInput;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -12,9 +13,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class AttendanceRefresher
 {
 	protected $em;
+	private $logger;
 
-    public function __construct(EntityManager $em, Structurer $structurer, RouterInterface $router)
+    public function __construct(EntityManager $em, Structurer $structurer, RouterInterface $router, Logger $logger)
     {
+        $this->logger = $logger;
+    
         $this->em = $em;
         $this->structurer = $structurer;
         $this->router = $router;
@@ -68,6 +72,7 @@ class AttendanceRefresher
 					//update hours
 					$jsonAttendance[$employeeId][$dateInput]['presence'] = 1;
 					$jsonAttendance[$employeeId][$dateInput]['absence'] = 0;
+
 					$jsonAttendance[$employeeId][$dateInput]['othr'] += $inputEntry->getTotalOvertime() - $ottohr;
 					$jsonAttendance[$employeeId][$dateInput]['reghr'] += $inputEntry->getTotalHours() - $inputEntry->getTotalOvertime() - $regtohr;
 					$jsonAttendance[$employeeId][$dateInput]['tothr'] += $inputEntry->getTotalHours() - $ottohr - $regtohr;
@@ -176,7 +181,7 @@ class AttendanceRefresher
 		//if( !isset($data[$t][$s]['otconso']['data'][$d]) || $data[$t][$s]['otconso']['data'][$d] == 0){$data[$t][$s]['otconso']['data'][$d] = $e[$d]['othr'];}
 		//else{ 
 		$data[$t][$s]['otconso']['data'][$d]['y'] += $e[$d]['othr'];
-		$data[$t][$s]['otconso']['data'][$d]['tip'][1] = $data[$t][$s]['attrate']['temp'][$d]['pres'];
+		$data[$t][$s]['otconso']['data'][$d]['tip'][1] = $e[$d]['othr'] > 0 ? ($data[$t][$s]['otconso']['data'][$d]['tip'][1] + 1) : $data[$t][$s]['otconso']['data'][$d]['tip'][1];
 		$data[$t][$s]['otconso']['data'][$d]['tip'][3] += $e[$d]['tothr'];//temp data
 		$data[$t][$s]['otconso']['data'][$d]['tip'][2] = $data[$t][$s]['otconso']['data'][$d]['tip'][3] > 0 ? (100 * round( $data[$t][$s]['otconso']['data'][$d]['y'] / $data[$t][$s]['otconso']['data'][$d]['tip'][3] , 2)) : 0;
 		//}
