@@ -63,7 +63,7 @@ class EmployeeRepository extends EntityRepository
 		$qb = $this
 		->createQueryBuilder('a')
 		->select("a")
-		->where("( a.endDate IS NOT NULL and a.endDate >= '".$end."' ) or ( a.endDate IS NULL and a.statusControl = 1 ) ")
+		->where("( a.endDate IS NOT NULL and a.endDate >= '".$start->format( 'Y-m-d' )."' ) or ( a.endDate IS NULL and a.statusControl = 1 ) ")
         ->andWhere("a.startDate <= '".$end."'")
 	    ->orderBy('a.masterId', 'ASC')
 		->getQuery()
