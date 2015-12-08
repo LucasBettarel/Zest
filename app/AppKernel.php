@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new SE\ZestBundle\SEZestBundle(),
             new SE\InputBundle\SEInputBundle(),
             new SE\ReportBundle\SEReportBundle(),
         );

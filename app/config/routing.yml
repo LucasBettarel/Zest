@@ -5,7 +5,3 @@ se_report:
 se_input:
     resource: "@SEInputBundle/Resources/config/routing.yml"
     prefix:   /
-
-se_zest:
-    resource: "@SEZestBundle/Resources/config/routing.yml"
-    prefix:   /zest
