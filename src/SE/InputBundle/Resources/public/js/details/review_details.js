@@ -1,10 +1,45 @@
 $(document).ready(function() {
 
-	$('#table').DataTable( {
+	var table = $('#table').DataTable( {
 		paging: false,
 	  	"dom": 'lrtip',
-	  	"info": false
-	});
+	  	"info": false,
+        buttons:[{
+            text: "<i class='fa fa-edit' title='Edit this input'></i>",
+            action: function ( e, dt, node, config ) {
+               console.log('edit!');
+               dt.columns([7,8,9]).visible(false);
+               dt.column(10).visible(true);
+            },
+            className: 'btn-info'
+        },{
+            extend: 'excelHtml5',
+            text: "<i class='fa fa-file-excel-o' title='Export in Excel'></i>",
+            className: 'btn-success'
+        },{
+            extend: 'pdfHtml5',
+            text: "<i class='fa fa-file-pdf-o' title='Export in PDF'></i>",
+            className: 'btn-danger'
+        }],
+        "columnDefs": [{
+            "targets": [ 10 ],
+            "visible": false,
+        }]
+    });
+
+    table.buttons().container().prependTo($('#input-details .panel-heading')).addClass('pull-right');
+    $('div.dt-buttons a').each(function(){
+        $(this).attr('data-toggle','tooltip').attr('title',$(this).find('i').attr('title'));
+    });
+
+    $("*[data-toggle='tooltip']").tooltip({container: 'body'});
+
+    $('#formModal').on('show.bs.modal', function (event) {
+      var content = getForm($(event.relatedTarget).data('type'));
+      var modal = $(this);
+
+      //modal.find('.modal-body').val(recipient)
+    })
 
 	$.get(
       ajaxActivities,               
@@ -55,4 +90,16 @@ function createChart(json){
             data: json['data']
         }]
     });
+}
+
+function getForm(type){
+    var ajaxForm = ( type == "@new" ) ? ajaxFormNew : ajaxFormEdit;
+    $.post(
+        ajaxForm,               
+        {id: id},
+        function(response){
+            console.log(response);
+        },
+        "json"
+    ); 
 }

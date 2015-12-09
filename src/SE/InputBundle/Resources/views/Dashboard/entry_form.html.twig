@@ -1,0 +1,85 @@
+{% macro activityCollection(activity) %}
+  <div class="row">
+    <div class="col-md-4">
+    	{{ form_widget(activity.activity, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="col-md-3">
+    	{{ form_widget(activity.regularHours, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    <div class="col-md-3">
+        {{ form_widget(activity.otHours, {'attr': {'class': 'form-control'}}) }}
+    </div>
+    {#
+    <div class="pull-left" data-toggle="tooltip" title="Transfer out">
+      <input class="transfer" type="checkbox" value="0">
+    </div>
+    #}
+    <div class="col-md-2" data-toggle="tooltip" title="Remove activity">
+      <a href=# id="rmv" class="text-danger input-rmv" data-target="activities-prototype">
+        <i class="glyphicon glyphicon-remove"></i>
+      </a>
+    </div>   
+    {{ form_widget(activity) }}
+  </div>
+{% endmacro %}
+
+
+{{ form_start(form) }}
+
+    <div class="col-md-12 hide">
+      <div id="errors" class="alert alert-danger">
+        {{ form_errors(form) }}
+      </div>
+    </div>
+    
+
+    <p><strong>Employee</strong></p>
+    <div id="employee" class="row">
+      <div class="col-md-5">
+        {{ form_widget(form.employee, {'attr': {'class': 'form-control'}}) }}
+      </div>
+      <div class="col-md-3">
+        {{ form_widget(form.sesa, {'attr': {'class': 'form-control'}}) }}
+      </div>
+      <div id="presence" class="col-md-4">
+        <div class="pull-left" data-toggle="tooltip" title="Presence"> 
+          {{ form_widget(form.present, {'attr': {'class': 'input-present '}}) }}
+        </div>
+        <div class="hide toggling">
+          {{ form_widget(form.absence_reason, {'attr': {'class': 'form-control input-reason'}}) }}
+        </div>
+      </div>
+    </div>
+    <br>
+	
+	<div id="activities-label" class="row">
+		<div class="col-md-12">
+			<div class="pull-right">
+				<a href=# id="add" data-target="activities-prototype" data-toggle="tooltip" title="Add an activity">
+		        	<i class="text-success glyphicon glyphicon-plus"></i>
+		    	</a>
+		    </div>
+			<div><strong>Activities Hours</strong></div>
+		</div>
+	</div>
+	<div id="activities" class="row">
+      	<div id="activities-prototype" class="col-md-12"
+	        data-prototype="{{ _self.activityCollection(form.activity_hours.vars.prototype)|e }}">
+	          {% for activity in form.activity_hours %}
+	            {{ _self.activityCollection(activity) }}
+	          {% endfor %}
+	    </div>
+	</div>
+	<br>
+	
+	<div id="comment" class="row">
+		<div class="col-md-3">
+			<p><strong>Comments</strong></p>
+			{{ form_widget(form.comments, {'attr': {'class': 'form-control'}}) }}
+		</div>
+	</div>
+	<br>  		   
+	
+	{{ form_widget(form) }}    
+    {{ form_rest(form) }}
+    {{ form_end(form) }}

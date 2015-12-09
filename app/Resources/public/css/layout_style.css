@@ -17,6 +17,10 @@ body, html {
   padding: 0px;
 }
 
+.header-block{
+  margin: 0px auto 15px;
+}
+
 .line{
   height: 5px;
   background-color: #1ABC9C;
@@ -50,13 +54,14 @@ header.h-employee{background-color: rgba(163, 143, 132, 0.1);}
 
 
 #filters {
-  margin: 0px auto 15px;
   font-size:1.2em;
   background-color: #eee;
   padding: 10px;
   box-shadow: 0px 2px 8px #888;
   height: 44px;
 }
+
+.filters-row{height:44px;}
 
 .date-filter{
   margin-right: 8px;
@@ -69,8 +74,6 @@ header.h-employee{background-color: rgba(163, 143, 132, 0.1);}
     top: 60px;
     z-index: 90;
 }
-
-.filters-row{height:59px;}
 
 .free-me{
   margin-right: 8px;
