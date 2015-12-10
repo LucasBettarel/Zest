@@ -7,7 +7,6 @@ $(document).ready(function() {
         buttons:[{
             text: "<i class='fa fa-edit' title='Edit this input'></i>",
             action: function ( e, dt, node, config ) {
-               console.log('edit!');
                dt.columns([7,8,9]).visible(false);
                dt.column(10).visible(true);
             },
@@ -39,7 +38,20 @@ $(document).ready(function() {
       var modal = $(this);
 
       //modal.find('.modal-body').val(recipient)
-    })
+    });
+
+    $('#formModal').on('hide.bs.modal', function (event) {
+        table.columns([7,8,9]).visible(true);
+        table.column(10).visible(false);
+    });
+
+    $(document).on('click', '#delete-entry', function(e){
+      e && e.preventDefault();
+      if (confirm("Warning ! If you delete this entry, you have to justify why the employee was not at work. Are you sure to continue? ") == true) {
+        var id = $(this).attr('data-id') 
+        deleteClick(id);
+      }
+    });
 
 	$.get(
       ajaxActivities,               
@@ -93,8 +105,18 @@ function createChart(json){
 }
 
 function getForm(type){
-    var ajaxForm = ( type == "@new" ) ? ajaxFormNew : ajaxFormEdit;
-    $.post(
+    if( type == "@new" ){
+        var ajaxForm = ajaxFormNew;
+        $('.modal-title').text('New Entry');
+        $('.modal-body .alert').removeClass('alert-info alert-warning').addClass('alert-info');
+        $('.modal-body .alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Missing Employee ?</strong><br>You can add his details here and validate. It will be added to the input after review. Productivity will be recalculated.');
+    }else{
+        var ajaxForm = ajaxFormEdit;
+        $('.modal-title').text('Edit Entry');
+        $('.modal-body .alert').removeClass('alert-info alert-warning').addClass('alert-warning');
+        $('.modal-body .alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Editing an Employee entry?</strong><br>You can edit the details here and validate. The input Productivity will be updated after review.');
+    }
+/*    $.post(
         ajaxForm,               
         {id: id},
         function(response){
@@ -102,4 +124,20 @@ function getForm(type){
         },
         "json"
     ); 
+*/}
+
+function deleteClick(id){
+    $.post(
+      ajaxDeleteEntry,               
+      {idEntry: id}, 
+      function(response){
+        if(response.code == 100 && response.success){
+          console.log('entry trouve, deleted');
+          $('#table [data-id="'+id+'"]').remove();
+        }
+        else{
+            alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
+        }
+      },
+      "json");    
 }

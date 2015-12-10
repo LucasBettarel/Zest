@@ -5,21 +5,50 @@ $(document).ready(function() {
 
   $(document).on('click', '#presence :checkbox', function(e) {
     $(this).closest('#presence').find('.toggling').toggleClass('hide');
-   // $(this).closest('td').toggleClass('expand-cell');
-    var $actProto = $(this).closest('td').siblings('#activities').find('div:first');
+
     if ($(this).closest('#presence').find('.toggling').hasClass('hide')){
       //add 1st activity
-      addSubElement($actProto);
+      addSubElement($('#activities-prototype'));
       $(this).closest('#presence').find('.input-reason').val(0);
     }
     else{
       //rmv activities
-      $actProto.children().remove();
+      $('#activities-prototype').children().remove();
       $(this).closest('#presence').find('.input-reason').val(1);
     }
   });
 
+  $(document).on('click', '#add[data-target]', function(e) {
+    addSubElement($('#activities-prototype'));
+    e && e.preventDefault(); 
+    return false;
+  });
 
+  $(document).on('click', '#rmv[data-target]', function(e) {
+      target = $(this).attr('data-target');
+      $('*[data-content="'+target+'"]').remove();
+    e && e.preventDefault();
+    return false;
+  });
+
+  $(document).on('click', '#comment', function(e) {
+    $(this).parent().siblings('.txtarea-sm').toggleClass('hide');
+  });
+
+  $(document).on('change', '.input-employee', function(e){
+   //input sesa automatic...
+   var $this =$(this)
+   var id = $this.val(); 
+   $.get(
+    ajaxPopulate,               
+    {idEmployee: id}, 
+    function(response){
+      if(response.code == 100 && response.success){
+       $('.input-sesa').val(response.sesa);
+      }
+    },
+    "json");    
+  });
 
 });
 
@@ -43,15 +72,14 @@ function addSubElement($prototypeHolder){
 
   var $sub = $prototypeHolder.children().last();
   var content = $prototypeHolder.attr('id')+'_'+$prototypeHolder.attr('data-counter');
-  attachData($sub, content);
 
-//  var parentContent = $prototypeHolder.closest('tr').attr('data-content');
-//  var $transfer = $sub.find('.transfer').attr({
-//    'data-sub-target': $prototypeHolder.attr('id'),
-//    'data-target': parentContent,
-//    'data-disabled': 0});
-  $sub.find('.input-regular-hours input').val(8);
-  $sub.find('.input-overtime input').val(0);
+  if (!$sub.attr('data-content')) {
+      $sub.attr('data-content', content);
+    }
+  $sub.find('#rmv:last').attr('data-target', content);
+
+  $sub.find('.input-regular-hours').val(8);
+  $sub.find('.input-overtime').val(0);
 
   $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
 
@@ -68,13 +96,6 @@ function definePrototype($collectionHolder){
   var $form = $prototype.replace(re, $collectionHolder.attr('data-counter')).replace(/time_name/g, parseInt($collectionHolder.attr('data-counter'))+1);
 
   return $form;
-}
-
-function attachData($item, content){
-  if (!$item.attr('data-content')) {
-      $item.attr('data-content', content);
-    }
-  $item.find('#rmv:last').attr('data-target', content);
 }
 
 jQuery.fn.preventDoubleSubmission = function() {

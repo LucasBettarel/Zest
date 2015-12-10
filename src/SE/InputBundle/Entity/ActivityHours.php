@@ -89,52 +89,6 @@ class ActivityHours
     }
 
     /**
-     * Set team
-     *
-     * @param \SE\InputBundle\Entity\Team $team
-     * @return ActivityHours
-     */
-    public function setTeam(\SE\InputBundle\Entity\Team $team)
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
-    /**
-     * Get team
-     *
-     * @return \SE\InputBundle\Entity\Team 
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * Set shift
-     *
-     * @param \SE\InputBundle\Entity\Shift $shift
-     * @return ActivityHours
-     */
-    public function setShift(\SE\InputBundle\Entity\Shift $shift)
-    {
-        $this->shift = $shift;
-
-        return $this;
-    }
-
-    /**
-     * Get shift
-     *
-     * @return \SE\InputBundle\Entity\Shift 
-     */
-    public function getShift()
-    {
-        return $this->shift;
-    }
-
-    /**
      * Set zone
      *
      * @param \SE\InputBundle\Entity\Zone $zone
