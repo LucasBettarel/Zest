@@ -90,6 +90,12 @@ class EditorEntry
     private $userInput;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\InputEntry", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $inputEntry;
+
+    /**
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\EditorStatus", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -384,5 +390,28 @@ class EditorEntry
     public function getEditorStatus()
     {
         return $this->editorStatus;
+    }
+
+    /**
+     * Set inputEntry
+     *
+     * @param \SE\InputBundle\Entity\InputEntry $inputEntry
+     * @return EditorEntry
+     */
+    public function setInputEntry(\SE\InputBundle\Entity\InputEntry $inputEntry = null)
+    {
+        $this->inputEntry = $inputEntry;
+
+        return $this;
+    }
+
+    /**
+     * Get inputEntry
+     *
+     * @return \SE\InputBundle\Entity\InputEntry 
+     */
+    public function getInputEntry()
+    {
+        return $this->inputEntry;
     }
 }

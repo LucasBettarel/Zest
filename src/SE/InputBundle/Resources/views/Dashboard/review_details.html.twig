@@ -106,7 +106,7 @@
                     <th>Total Hours</th>
                     <th>Productivity</th>
                     <th>
-                      <div class="btn btn-success" data-toggle="modal" data-target="#formModal" data-type="@new"><i data-toggle="tooltip" title="Add New Entry" class="glyphicon glyphicon-plus"> </i></div>
+                      <div class="btn btn-success" data-toggle="modal" data-target="#formModal" data-type="@new" data-id=""><i data-toggle="tooltip" title="Add New Entry" class="glyphicon glyphicon-plus"> </i></div>
                     </th>
                   </tr>
                 </thead>
@@ -167,11 +167,14 @@
         </div>
         <div class="modal-body">
           <div class="alert alert-dismissible" role="alert"></div>
+
           {{ include("SEInputBundle:Dashboard:entry_form.html.twig") }}
+
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="saver btn btn-success pull-right"><i class="glyphicon glyphicon-send"> </i> Submit</button>
+          <button type="submit" form="ajaxForm" value="submit" class="btn btn-success pull-right"><i class="glyphicon glyphicon-send"> </i> Submit</button>
         </div>
       </div>
     </div>

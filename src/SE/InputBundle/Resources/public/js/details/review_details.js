@@ -34,7 +34,7 @@ $(document).ready(function() {
     $("*[data-toggle='tooltip']").tooltip({container: 'body'});
 
     $('#formModal').on('show.bs.modal', function (event) {
-      var content = getForm($(event.relatedTarget).data('type'));
+      getForm($(event.relatedTarget).data('type'), $(event.relatedTarget).data('id'));
       var modal = $(this);
 
       //modal.find('.modal-body').val(recipient)
@@ -50,6 +50,9 @@ $(document).ready(function() {
       if (confirm("Warning ! If you delete this entry, you have to justify why the employee was not at work. Are you sure to continue? ") == true) {
         var id = $(this).attr('data-id') 
         deleteClick(id);
+      }else{
+        table.columns([7,8,9]).visible(true);
+        table.column(10).visible(false);
       }
     });
 
@@ -104,27 +107,22 @@ function createChart(json){
     });
 }
 
-function getForm(type){
+function getForm(type, entryId){
     if( type == "@new" ){
-        var ajaxForm = ajaxFormNew;
+//        var ajaxForm = ajaxFormNew;
+        entryId = null;
         $('.modal-title').text('New Entry');
         $('.modal-body .alert').removeClass('alert-info alert-warning').addClass('alert-info');
         $('.modal-body .alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Missing Employee ?</strong><br>You can add his details here and validate. It will be added to the input after review. Productivity will be recalculated.');
+        initAjaxForm(entryId);
     }else{
-        var ajaxForm = ajaxFormEdit;
+//        var ajaxForm = ajaxFormEdit;
         $('.modal-title').text('Edit Entry');
         $('.modal-body .alert').removeClass('alert-info alert-warning').addClass('alert-warning');
         $('.modal-body .alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Editing an Employee entry?</strong><br>You can edit the details here and validate. The input Productivity will be updated after review.');
+        initAjaxForm(entryId);
     }
-/*    $.post(
-        ajaxForm,               
-        {id: id},
-        function(response){
-            console.log(response);
-        },
-        "json"
-    ); 
-*/}
+}
 
 function deleteClick(id){
     $.post(
@@ -140,4 +138,38 @@ function deleteClick(id){
         }
       },
       "json");    
+}
+
+function initAjaxForm(entryId)
+{
+    $('body').on('submit', '.ajaxForm', function (e) {
+ 
+        e.preventDefault();
+ 
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            input: id,
+            entry: entryId
+        })
+        .done(function (data) {
+            if (typeof data.message !== 'undefined') {
+                alert(data.message);
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    $('#form_body').html(jqXHR.responseJSON.form);
+                }
+ 
+                $('.form_error').html(jqXHR.responseJSON.message);
+ 
+            } else {
+                alert(errorThrown);
+            }
+ 
+        });
+    });
 }

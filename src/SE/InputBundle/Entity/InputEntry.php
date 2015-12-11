@@ -94,6 +94,12 @@ class InputEntry
      */
     private $totalProd = 0;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\EditorStatus", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $editorStatus;
+
 
     /**
      * Get id
@@ -402,4 +408,27 @@ class InputEntry
         return $this->totalOvertime;
     }
 
+
+    /**
+     * Set editorStatus
+     *
+     * @param \SE\InputBundle\Entity\EditorStatus $editorStatus
+     * @return InputEntry
+     */
+    public function setEditorStatus(\SE\InputBundle\Entity\EditorStatus $editorStatus = null)
+    {
+        $this->editorStatus = $editorStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get editorStatus
+     *
+     * @return \SE\InputBundle\Entity\EditorStatus 
+     */
+    public function getEditorStatus()
+    {
+        return $this->editorStatus;
+    }
 }
