@@ -166,7 +166,7 @@
           <h4 class="modal-title" id="infoModalLabel"></h4>
         </div>
         <div class="modal-body">
-          <div class="alert alert-dismissible" role="alert"></div>
+          <div id="information-alert" class="alert alert-dismissible" role="alert"></div>
 
           {{ include("SEInputBundle:Dashboard:entry_form.html.twig") }}
 
@@ -187,8 +187,7 @@
   <script type="text/javascript">
     var id = {{ input.id }};
     var ajaxActivities = '{{path('se_input_review_activities')}}';
-    var ajaxFormNew = '{{path('se_input_review_edit_new')}}';
-    var ajaxFormEdit = '{{path('se_input_review_edit_modify')}}';
+    var ajaxEditPopulate = '{{path('se_input_review_edit_populate')}}';
     var ajaxPopulate = '{{path('se_input_populate')}}';
     var ajaxDeleteEntry = '{{path('se_input_review_edit_delete')}}';
   </script>

@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DashboardController extends Controller
 {
@@ -184,8 +185,8 @@ class DashboardController extends Controller
     }
 
     $editorEntry = new EditorEntry();
-    $form = $this->createForm(new EditorEntryType(), $editorEntry, array(
-        'action' => $this->generateUrl('se_input_review_edit'),
+    $form = $this->createForm(new EditorEntryType($id), $editorEntry, array(
+        'action' => $this->generateUrl('se_input_review_edit', array('id' => $id)),
         'method' => 'POST',
     ));
 
@@ -283,37 +284,14 @@ class DashboardController extends Controller
     return new Response(json_encode($response)); 
   }
 
-  public function editNewAction(Request $request)
-  {
-    $em = $this->getDoctrine()->getManager();
-    $id = $request->get('id');
-
-    $listEmployees = $this->getDoctrine()
-      ->getManager()
-      ->getRepository('SEInputBundle:Employee')
-      ->getAlphaCurrentEmployees()
-    ;
-
-    $inputEntry = new InputEntry();
-    $form = $this->createForm(new InputEntryType(), $inputEntry);
-
-    $formView = $this->render('SEInputBundle:Entry:input_entry_form.html.twig', array(
-      'form' => $form->createView(),
-      'listEmployees' => $listEmployees
-    ));
-    
-    $response = array("code" => 100, "success" => true);
-
-    return new Response(json_encode($response)); 
-  }
-
-  public function editModifyAction()
+  public function editPopulateAction()
   {
     $em = $this->getDoctrine()->getManager();
     $request = $this->get('request');        
     $id = $request->get('id');
+    $entry = $em->getRepository('SEInputBundle:InputEntry')->getEntryArray($id);
     
-    $response = array("code" => 100, "success" => true);
+    $response = array("code" => 100, "success" => true, 'entry' => $entry);
 
     return new Response(json_encode($response)); 
   }
@@ -346,7 +324,7 @@ class DashboardController extends Controller
     return new Response(json_encode($response)); 
   }
 
-  public function editorAction(Request $request)
+  public function editorAction(Request $request, $id)
   {
     //This is optional. Do not do this check if you want to call the same action using a regular request.
     if (!$request->isXmlHttpRequest()) {
@@ -354,33 +332,28 @@ class DashboardController extends Controller
     }
 
     $editorEntry = new EditorEntry();
-    $form = $this->createForm(new EditorEntryType(), $editorEntry, array(
-        'action' => $this->generateUrl('se_input_review_edit'),
+    $form = $this->createForm(new EditorEntryType($id), $editorEntry, array(
+        'action' => $this->generateUrl('se_input_review_edit', array('id' => $id)),
         'method' => 'POST',
     ));
     $form->handleRequest($request);
  
     if ($form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $request = $this->get('request');        
-        $idInput = $request->get('input');
-        $idEntry = $request->get('entryId');
+      $em = $this->getDoctrine()->getManager();
 
-        $editorEntry->setUserInput($idInput);
-        ///////////////////////////////////////////////////////////////////////////////////
-        //JEN SUIS LA 
-        ///////////////////////////////////////////////////////////////////////////////////
-        //DE RETOUR LA SEMAINE PROCHAINE APRES LE MASSAGE A DA NANG
-
-        $em->persist($editorEntry);
-        $em->flush();
+      $em->persist($editorEntry);
+      $em->flush();
  
-        return new JsonResponse(array('message' => 'Success!'), 200);
+      return new JsonResponse(array('message' => 'Success!'), 200);
     }
     
+    $validator = $this->get('validator');
+    $errors = $validator->validate($editorEntry);
+    $errorsString = (count($errors) > 0) ? (string) $errors : "No errors detected" ;
+
     $response = new JsonResponse(
       array(
-        'message' => 'Error',
+        'message' => $errorsString,
         'form' => $this->renderView('SEInputBundle:Dashboard:entry_form.html.twig',
                 array(
             'entity' => $editorEntry,

@@ -9,12 +9,21 @@ use Doctrine\ORM\EntityRepository;
 
 class EditorEntryType extends AbstractType
 {
+    protected $id;
+
+    public function __construct ($id)
+    {
+        $this->id = $id;
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $id = $this->id;
+
         $builder
 
             ->add('user', 'entity', array(
@@ -56,6 +65,34 @@ class EditorEntryType extends AbstractType
                 'prototype_name' => 'activity_name',
                 ), array('required' => false))
             ->add('comments', 'textarea', array('required' => false))
+            ->add('userInput', 'entity', array(
+                'class'    => 'SEInputBundle:UserInput',
+                'property' => 'id',
+                'query_builder' => function(EntityRepository $er) use ($id) {
+                    return $er->createQueryBuilder('a')
+                        ->where("a.id = :id")
+                        ->setParameter('id', $id)
+                        ;
+                    },
+                ), array('required' => true))
+            ->add('inputEntry', 'entity', array(
+                'class'    => 'SEInputBundle:InputEntry',
+                'property' => 'id',
+                'query_builder' => function(EntityRepository $er) use ($id) {
+                    return $er->createQueryBuilder('b')
+                        ->leftJoin('b.user_input', 'c')
+                        ->addSelect('c')
+                        ->where("c.id = :id")
+                        ->setParameter('id', $id)
+                        ;
+                    },
+                ), array('required' => true))
+            ->add('editorStatus', 'entity', array(
+                'class'    => 'SEInputBundle:EditorStatus',
+                'property' => 'id', 
+                'multiple' => false,
+                'expanded' => false
+                ), array('required' => true))
             ;
     }
     

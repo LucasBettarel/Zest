@@ -36,13 +36,17 @@ $(document).ready(function() {
     $('#formModal').on('show.bs.modal', function (event) {
       getForm($(event.relatedTarget).data('type'), $(event.relatedTarget).data('id'));
       var modal = $(this);
-
-      //modal.find('.modal-body').val(recipient)
     });
 
     $('#formModal').on('hide.bs.modal', function (event) {
         table.columns([7,8,9]).visible(true);
         table.column(10).visible(false);
+        //reset form
+        $('.modal-body .toggling').addClass('hide');
+        $('#activities-prototype').children().remove();
+        addSubElement($('#activities-prototype'));
+        $('.modal-body form').removeClass('hide');
+        $('.modal-footer button[type="submit"]').prop('disabled', false);
     });
 
     $(document).on('click', '#delete-entry', function(e){
@@ -109,19 +113,74 @@ function createChart(json){
 
 function getForm(type, entryId){
     if( type == "@new" ){
-//        var ajaxForm = ajaxFormNew;
         entryId = null;
         $('.modal-title').text('New Entry');
-        $('.modal-body .alert').removeClass('alert-info alert-warning').addClass('alert-info');
-        $('.modal-body .alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Missing Employee ?</strong><br>You can add his details here and validate. It will be added to the input after review. Productivity will be recalculated.');
-        initAjaxForm(entryId);
+        $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning').addClass('alert-info');
+        $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Missing Employee ?</strong><br>You can add his details here and validate. It will be added to the input after review. Productivity will be recalculated.');
+        $('#se_inputbundle_editorentry_employee').val(null);
+        $('#se_inputbundle_editorentry_sesa').val(null);
     }else{
-//        var ajaxForm = ajaxFormEdit;
         $('.modal-title').text('Edit Entry');
-        $('.modal-body .alert').removeClass('alert-info alert-warning').addClass('alert-warning');
-        $('.modal-body .alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Editing an Employee entry?</strong><br>You can edit the details here and validate. The input Productivity will be updated after review.');
-        initAjaxForm(entryId);
+        $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning').addClass('alert-warning');
+        $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Editing an Employee entry?</strong><br>You can edit the details here and validate. The input Productivity will be updated after review.');
+            $.get(
+              ajaxEditPopulate,               
+              {id: entryId}, 
+              function(r){
+                $('#se_inputbundle_editorentry_employee').val(r.entry[0]['employee']);
+                $('#se_inputbundle_editorentry_sesa').val(r.entry[0]['sesa']);
+                $('#se_inputbundle_editorentry_present').val(r.entry[0]['present']);
+                $('#se_inputbundle_editorentry_absence_reason').val(r.entry[0]['absence']);
+                $('#se_inputbundle_editorentry_comments').val(r.entry[0]['comments']);
+
+                if(r.entry[0]['comments'] != null){$('.modal-body .txtarea-sm').removeClass('hide');}
+
+                for (var i = 0; i < r.entry.length; i++) {
+                    if(i>0){addSubElement($('#activities-prototype'));}
+                    console.log(i, r.entry[i]['activity'],  $('#activities-prototype').children('div').last().find('.input-activity'));
+                    $('#activities-prototype').children('div').last().find('.input-activity').val(r.entry[i]['activity']);
+                    $('#activities-prototype').children('div').last().find('.input-regular-hours').val(r.entry[i]['regularHours']);
+                    $('#activities-prototype').children('div').last().find('.input-overtime').val(r.entry[i]['otHours']);
+                };
+              },
+              "json")
+            ; 
     }
+
+    $('#se_inputbundle_editorentry_inputEntry').val(entryId);
+
+    $('body').on('submit', '.ajaxForm', function (e) {
+ 
+        e.preventDefault();
+        $('.modal-footer button[type="submit"]').prop('disabled', true);
+ 
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+        })
+        .done(function (data) {
+            if (typeof data.message !== 'undefined') {
+                $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning').addClass('alert-success');
+                $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Entry saved successfully!</strong><br>The input will be updated as soon as the changes will be reviewed.');
+                $('.modal-body form').addClass('hide');
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    //$('#ajaxForm').html(jqXHR.responseJSON.form);
+                }
+                console.log($('form #errors'));
+                $('form #errors').html(jqXHR.responseJSON.message).parent(".col-md-12").removeClass('hide');
+                $('.modal-footer button[type="submit"]').prop('disabled', false);
+ 
+            } else {
+                alert(errorThrown);
+            }
+ 
+        });
+    });
 }
 
 function deleteClick(id){
@@ -138,38 +197,4 @@ function deleteClick(id){
         }
       },
       "json");    
-}
-
-function initAjaxForm(entryId)
-{
-    $('body').on('submit', '.ajaxForm', function (e) {
- 
-        e.preventDefault();
- 
-        $.ajax({
-            type: $(this).attr('method'),
-            url: $(this).attr('action'),
-            data: $(this).serialize(),
-            input: id,
-            entry: entryId
-        })
-        .done(function (data) {
-            if (typeof data.message !== 'undefined') {
-                alert(data.message);
-            }
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            if (typeof jqXHR.responseJSON !== 'undefined') {
-                if (jqXHR.responseJSON.hasOwnProperty('form')) {
-                    $('#form_body').html(jqXHR.responseJSON.form);
-                }
- 
-                $('.form_error').html(jqXHR.responseJSON.message);
- 
-            } else {
-                alert(errorThrown);
-            }
- 
-        });
-    });
 }
