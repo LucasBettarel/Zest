@@ -349,11 +349,11 @@ class DashboardController extends Controller
     
     $validator = $this->get('validator');
     $errors = $validator->validate($editorEntry);
-    $errorsString = (count($errors) > 0) ? (string) $errors : "No errors detected" ;
+    $errorsString = (count($errors) > 0) ? $this->render('SEInputBundle:Utilities:validation.html.twig', array('errors' => $errors)) : "";
 
     $response = new JsonResponse(
       array(
-        'message' => $errorsString,
+        'message' => strstr((string) $errorsString, '<h4>'),
         'form' => $this->renderView('SEInputBundle:Dashboard:entry_form.html.twig',
                 array(
             'entity' => $editorEntry,

@@ -47,6 +47,8 @@ $(document).ready(function() {
         addSubElement($('#activities-prototype'));
         $('.modal-body form').removeClass('hide');
         $('.modal-footer button[type="submit"]').prop('disabled', false);
+        $('form #errors').html("").parent(".col-md-12").addClass('hide');
+        $('form').find('.has-error').removeClass('has-error');
     });
 
     $(document).on('click', '#delete-entry', function(e){
@@ -171,7 +173,6 @@ function getForm(type, entryId){
                 if (jqXHR.responseJSON.hasOwnProperty('form')) {
                     //$('#ajaxForm').html(jqXHR.responseJSON.form);
                 }
-                console.log($('form #errors'));
                 $('form #errors').html(jqXHR.responseJSON.message).parent(".col-md-12").removeClass('hide');
                 $('.modal-footer button[type="submit"]').prop('disabled', false);
  
