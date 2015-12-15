@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new SE\InputBundle\SEInputBundle(),
             new SE\ReportBundle\SEReportBundle(),
+            new SE\AdminBundle\SEAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

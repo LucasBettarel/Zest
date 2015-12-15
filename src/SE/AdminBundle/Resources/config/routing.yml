@@ -1,0 +1,7 @@
+se_admin_index:
+    path:     /
+    defaults: { _controller: SEAdminBundle:Admin:index }
+
+se_admin_editor:
+    path:     /editor
+    defaults: { _controller: SEAdminBundle:Editor:editor }

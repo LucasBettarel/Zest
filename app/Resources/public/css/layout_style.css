@@ -53,6 +53,19 @@ header.h-activity{background-color: rgba(147, 101, 184, 0.1);}
 header.h-employee{background-color: rgba(163, 143, 132, 0.1);}
 
 
+.lock-zest{
+  color:#EB7260;
+  padding: 10px;
+  margin-right: 5px;
+  border-radius: 50%;
+  transition: background-color 0.4s;
+}
+
+.lock-zest:hover{
+  background-color: #009530;
+  transition: background-color 0.4s;
+}
+
 #filters {
   font-size:1.2em;
   background-color: #eee;
