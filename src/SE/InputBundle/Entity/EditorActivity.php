@@ -29,6 +29,7 @@ class EditorActivity
     private $editorEntry;
 
     /**
+     * @Assert\NotBlank(message = "Hey! You think you ain't doin nothin? Insert dat activity faster lah!")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -36,7 +37,10 @@ class EditorActivity
 
     /**
      * @var string
-     *
+     * @Assert\Range(
+     *     max = 8.00,
+     *     maxMessage = "More than 8 regular hours ??? Are you sure ??"
+     * )
      * @ORM\Column(name="regular_hours", type="decimal", precision=11, scale=2)
      */
     private $regularHours;
@@ -178,5 +182,17 @@ class EditorActivity
     public function getZone()
     {
         return $this->zone;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh careful ! This is the Weekend!! No regular hours on the weekend !!")
+     */
+    public function isRegularHoursOnWeekend()
+    {   
+        $date = $this->editorEntry->getUserInput()->getDateInput();
+        if($date->format('N') >= 6  && $this->regularHours > 0){
+            return false;
+        }
+        return true;
     }
 }

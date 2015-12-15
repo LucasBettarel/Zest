@@ -24,13 +24,14 @@ class InputEntry
     private $id;
 
     /**
+     * @Assert\NotBlank(message = "Choose an employee for this edition, it won't work so good otherwise.")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Employee", inversedBy="inputs", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $employee;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "Hey! No SESA = No Lines, No Lines = Bad Productivity ! No good lah!")
      * @ORM\Column(name="sesa", type="string", length=255, nullable=true)
      */
     private $sesa;
@@ -430,5 +431,17 @@ class InputEntry
     public function getEditorStatus()
     {
         return $this->editorStatus;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh no! I think that more than 11 hours a day is too much for a man... let the man sleep!")
+     */
+    public function isTooManyHours()
+    {   
+        $total = 0;
+        foreach ($this->activity_hours as $a) {
+            $total += $a->getRegularHours() + $a->getOtHours();
+        }
+        return $total < 11;
     }
 }

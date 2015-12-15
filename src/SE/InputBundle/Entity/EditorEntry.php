@@ -38,19 +38,21 @@ class EditorEntry
     private $updatedAt;
 
     /**
+     * @Assert\NotBlank(message = "Choose your name in the user list.")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
+     * @Assert\NotBlank(message = "Choose an employee for this edition, it won't work so good otherwise.")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Employee", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $employee;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "Hey! No SESA = No Lines, No Lines = Bad Productivity ! No good lah!")
      * @ORM\Column(name="sesa", type="string", length=255, nullable=true)
      */
     private $sesa;
@@ -413,5 +415,32 @@ class EditorEntry
     public function getInputEntry()
     {
         return $this->inputEntry;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh careful ! You better input a comment for this kind of activity!")
+     */
+    public function isExcludedActivityCommented()
+    {
+        foreach ($this->editorActivities as $a){
+            $i = $a->getActivity()->getId();
+            //COMMENT PROPERTY NEEDED IN ACTIVITIES
+            if( ($i == 13 || $i == 11 || $i == 7) && $this->comments === null){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh no! I think that more than 11 hours a day is too much for a man... let the man sleep!")
+     */
+    public function isTooManyHours()
+    {   
+        $total = 0;
+        foreach ($this->editorActivities as $a) {
+            $total += $a->getRegularHours() + $a->getOtHours();
+        }
+        return $total < 11;
     }
 }
