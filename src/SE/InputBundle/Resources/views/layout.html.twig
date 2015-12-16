@@ -8,6 +8,10 @@
   {{ render(controller("SEInputBundle:Entry:menu")) }}
 {% endblock %}
 
+{% block logo %}
+  <li class="logo-zest"><img alt="Zest" src="{{ asset('bundles/sereport/images/zest.png') }}"></li>
+{% endblock %}
+
 {% block body %}
 
   <div class="header-block">

@@ -15,6 +15,10 @@
 	{{ render(controller("SEReportBundle:Productivity:menu")) }}
 {% endblock %}
 
+{% block logo %}
+  <li class="logo-zest"><img alt="Zest" src="{{ asset('bundles/sereport/images/zest.png') }}"></li>
+{% endblock %}
+
 {% block body %}
 
   {% block sereport_body %}
