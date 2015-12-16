@@ -1,39 +1,38 @@
-{% extends "SEInputBundle::layout.html.twig" %}
+{% extends "SEAdminBundle::layout.html.twig" %}
 
 {% block title %}
-  SAP Import Settings- {{ parent() }}
+  SAP Import - {{ parent() }}
 {% endblock %}
 
-{% block seinput_header %}
+{% block seadmin_header %}
   
   <header class="h-sap">
   	<div class="line"></div>
-  	<h2><i class="glyphicon glyphicon-cloud"> </i> SAP import</h2>
+  	<h2><i class="glyphicon glyphicon-cloud"> </i> SAP Import</h2>
   </header>
 
 {% endblock %}
 
-{% block seinput_body %}
+{% block seadmin_body %}
 
-	<div class="well col-md-10">
+	<div class="well well-black col-md-12">
 		<form class="form-inline" method="post" action="http://localhost/SE/Import/Import.php"> 
    			<div class="form-group">
 			    <label for="dateinput">Date of confirmation : </label>
 			    <div class="input-group">
 			    	<input type="date" class="form-control" id="dateinput" value="{{ 'now'|date_modify("-1 day")|date('d/m/Y') }}" name="date">
-				    <span class="input-group-addon">
-	          			<span id="overtime" class="glyphicon glyphicon-time"></span>
+				    <span class="input-group-addon btn btn-primary" type="submit">
+	          			<span class="glyphicon glyphicon-download"></span> Import
 			        </span>
 			    </div>
 			</div>
-			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Import</button>
 		</form>
 	</div>
 
-	<div class="well col-md-10">
+	<div class="well well-black col-md-12">
 		<h3>Last SAP Imports</h3>
 		<div class="table-responsive">
-			<table id="imports" class="table table-hover table-striped">
+			<table id="imports" class="table">
 				<thead>
 					<tr>
 						<th>#</th>

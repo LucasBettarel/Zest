@@ -18,14 +18,6 @@ se_input_activities_add:
     path:     /input/activities/add
     defaults: { _controller: SEInputBundle:Settings:activities_add }
 
-se_input_import_sap:
-    path:     /input/import
-    defaults: { _controller: SEInputBundle:Import:sap }
-
-se_input_set_import:
-    path:     /input/extimport
-    defaults: { _controller: SEInputBundle:Import:set }
-
 se_input_welcome:
     path:     /
     defaults: { _controller: SEInputBundle:Entry:welcome }

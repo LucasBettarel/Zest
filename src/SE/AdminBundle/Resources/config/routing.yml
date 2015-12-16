@@ -5,3 +5,7 @@ se_admin_index:
 se_admin_editor:
     path:     /editor
     defaults: { _controller: SEAdminBundle:Editor:editor }
+
+se_admin_import_sap:
+    path:     /import
+    defaults: { _controller: SEAdminBundle:Import:sap }
