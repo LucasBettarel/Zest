@@ -1,0 +1,100 @@
+  <h4 class="text-danger">Requested changes</h4>
+  {% if request is not null %}
+  	<div id="request-table" class="table-responsive">
+	    <table class="table table-hover table-striped display">
+	      <thead>
+	        <tr>
+				<th>Employee</th>
+				<th>SESA</th>
+				<th>Present</th>
+				<th>Activities</th>
+				<th>Regular</th>
+				<th>Overtime</th>
+				<th>Comments</th>
+	        </tr>
+	      </thead>
+	      <tbody id="inject-request">
+			<tr data-id="{{request.id}}">
+				<td>{{ request.employee.name }}</td>
+				<td>{{ request.sesa }}</td>
+				<td>{% if request.present == 1 %}
+				    <i class="glyphicon glyphicon-ok text-success"></i></td>
+				  {% else %}
+				    <i class="glyphicon glyphicon-remove text-warning"> </i> {{ request.absencereason.name }}</td>
+				  {% endif %}
+				<td>
+				{% for a in request.editorActivities %}
+				  {{ a.activity.name }} </br>
+				{% endfor %}
+				</td>
+				<td>
+				{% for a in request.editorActivities %}
+				  {{ a.regularHours }} </br>
+				{% endfor %}
+				</td>
+				<td>
+				{% for a in request.editorActivities %}
+				  {{ a.otHours }} </br>
+				{% endfor %}
+				</td>
+				<td>{{ request.comments }}</td>
+			</tr> 
+	      </tbody>
+	    </table>
+    </div>
+{% else %}
+  	<div class="alert alert-warning">
+  		<strong><i class="glyphicon glyphicon-alert"></i> Impossible to retrieve the request data!</strong>
+  	</div>
+{% endif %}
+
+<h4 class="text-warning">Current Entry</h4>
+{% if entry is not null %}
+  	<div id="current-table" class="table-responsive">
+	    <table class="table table-hover table-striped display">
+			<thead>
+				<tr>
+					<th>Employee</th>
+					<th>SESA</th>
+					<th>Present</th>
+					<th>Activities</th>
+					<th>Regular</th>
+					<th>Overtime</th>
+					<th>Comments</th>
+					<th>TO</th>
+				</tr>
+			</thead>
+			<tbody id="inject-current">
+                <tr data-id="{{entry.id}}">
+					<td>{{ entry.employee.name }}</td>
+					<td>{{ entry.sesa }}</td>
+					<td>{% if entry.present == 1 %}
+					    <i class="glyphicon glyphicon-ok text-success"></i></td>
+					  {% else %}
+					    <i class="glyphicon glyphicon-remove text-warning"> </i> {{ entry.absencereason.name }}</td>
+					  {% endif %}
+					<td>
+					{% for a in entry.activityHours %}
+					  {{ a.activity.name }} </br>
+					{% endfor %}
+					</td>
+					<td>
+					{% for a in entry.activityHours %}
+					  {{ a.regularHours }} </br>
+					{% endfor %}
+					</td>
+					<td>
+					{% for a in entry.activityHours %}
+					  {{ a.otHours }} </br>
+					{% endfor %}
+					</td>
+					<td>{{ entry.comments }}</td>
+					<td>{{ entry.totalTo }}</td>
+			</tbody>
+	    </table>
+  	</div>
+{% else %}
+  	<div class="alert alert-warning">
+  		<strong><i class="glyphicon glyphicon-alert"></i> Impossible to retrieve the entry data!</strong>
+  	</div>
+{% endif %}

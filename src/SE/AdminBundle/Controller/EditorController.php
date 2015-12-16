@@ -3,6 +3,7 @@
 namespace SE\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class EditorController extends Controller
 {
@@ -14,5 +15,20 @@ class EditorController extends Controller
                 'requests' => $requests,
             ));
     }
+
+    public function currentEntryAction()
+  	{ 
+    $em = $this->getDoctrine()->getManager();
+    $request = $this->get('request');        
+    $current = $request->get('current'); 
+    $request = $request->get('request');
+    
+   	$entry = $em->getRepository('SEInputBundle:InputEntry')->find($current);
+   	$editor = $em->getRepository('SEInputBundle:EditorEntry')->find($request);
+	
+	$response = array('table' => $this->render('SEAdminBundle:Editor:editor-details.html.twig', array('request' => $editor, 'entry' => $entry))->getContent());
+    
+    return new Response(json_encode($response)); 
+  }
 
 }

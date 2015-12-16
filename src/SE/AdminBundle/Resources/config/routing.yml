@@ -9,3 +9,9 @@ se_admin_editor:
 se_admin_import_sap:
     path:     /import
     defaults: { _controller: SEAdminBundle:Import:sap }
+
+se_admin_editor_currentEntry:
+    pattern:  /editor/currentEntry
+    defaults: { _controller: SEAdminBundle:Editor:currentEntry }
+    requirements:
+        _method:  GET

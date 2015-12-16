@@ -58,3 +58,5 @@ li.active{
     color: #333;
     cursor: pointer;
 }
+
+#request-panel .panel-footer{height: 35px;}
