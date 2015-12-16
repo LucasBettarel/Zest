@@ -1,7 +1,97 @@
 {% extends "SEAdminBundle::layout.html.twig" %}
 
-{% block title %}SEAdminBundle:Editor:editor{% endblock %}
+{% block title %}Editor - {{ parent() }}{% endblock %}
 
-{% block body %}
-<h1>Welcome to the Editor:editor page</h1>
+{% block seadmin_header %}
+	<header class="h-weight">
+		<div class="line"></div>
+		<h2><i class="glyphicon glyphicon-edit"> </i> Editor</h2>
+	</header>
+{% endblock %}
+
+{% block seadmin_body %}
+
+  <div class="row">
+    <div id="editor-panel" class="col-md-12">
+      <div class="panel well-black panel-default">
+        <div class="panel-heading well-blacklight">
+          <h4>Last Requests</h4>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-12">
+            <!-- Table -->
+            <div class="table-responsive">
+              <table id="editor" class="table table-hover table-striped display">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Date</th>
+                    <th>Input</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="inject-editor">
+                	{% for r in requests %}
+                		<tr>
+                			<td>{{r.user.name}}</td>
+                			<td>{{r.createdAt|date('Y-m-d')}}</td>
+                			<td><a id="view" href="{{ path('se_input_review_details', {'id': r.userInput.id}) }}">{{r.userInput.team.name}} - {{r.userInput.shift.id}} <i class="glyphicon glyphicon-share"></i></a></td>
+                			<td>{% if r.editorStatus.id == 1 %}
+                					<i class="text-warning glyphicon glyphicon-time"></i>
+                				{% elseif r.editorStatus.id == 2 %}
+                					<i class="text-success glyphicon glyphicon-ok"></i>
+                				{% elseif r.editorStatus.id == 3 %}
+                					<i class="text-danger glyphicon glyphicon-remove"></i>
+                				{% else %}
+                					<i class="text-info glyphicon glyphicon-question-sign"></i>
+                				{% endif %}
+                			</td>
+                		</tr>
+                	{% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hide col-md-3 request-panel">
+      <div class="panel well-black panel-default">
+        <div class="panel-heading well-blacklight">
+          <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4><span id="e-user"></span></h4>
+          <div id="request-status" class="pull-right"></div>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-12">
+            <div class="det-content">
+              <p>
+              	<strong><span id="e-date"></span>
+              	<span id="e-team"></span><span id="e-shift"></span></strong>
+              </p>
+                
+              <div id="request-det-table" class="table-responsive">
+                <table class="table table-hover table-striped display">
+                  <thead>
+                    <tr>
+                      <th colspan="3"><a href="" target="_blank"><span id="request-det"> </span> <i class="glyphicon glyphicon-share"> </i></a></th>
+                    </tr>
+                  </thead>
+                  <tbody id="inject-request"> 
+                  </tbody>
+                </table>
+              </div>
+            </div>
+        </div>
+        <div class="panel-footer well-blacklight">
+        	<button class="btn btn-success"><i class="glyphicon glyphicon-ok"> </i> ACCEPT</button>
+        	<button class="btn btn-danger"><i class="glyphicon glyphicon-remove"> </i> REJECT</button>
+        	<button class="btn btn-default"><i class="glyphicon glyphicon-question-sign"> </i> IGNORE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

@@ -1,50 +1,60 @@
-body{background-color: #333;}
+body{
+	background-color: #333;
+	color: white;
+}
 
 .gn-menu-main,
 .gn-menu-main ul {
     background: #3dcd58;
-    color: #333;
+    color: white;
 }
 
-.gn-menu-main a {color: #333;}
+.gn-menu-main a {color: white;}
 
-/*.no-touch .gn-menu-main a:hover,
+.no-touch .gn-menu-main a:hover,
 .no-touch .gn-menu li.gn-search-item:hover,
 .no-touch .gn-menu li.gn-search-item:hover a {
-    background: #444;
-    color: #eee;
-}*/
+    background: #009530;
+    color: white;
+}
 
-.gn-menu-wrapper {background: #3dcd58;}
+.gn-menu-wrapper {
+	background: #3dcd58;
+    border-top: 1px solid #3dcd58;
+}
 
 .gn-icon-menu::before {
-	background: #333;
-	box-shadow: 0 3px #3dcd58, 0 -6px #333, 0 -9px #3dcd58, 0 -12px #333;
+	background: white;
+	box-shadow: 0 3px #3dcd58, 0 -6px white, 0 -9px #3dcd58, 0 -12px white;
 }
 
 .no-touch .gn-icon-menu:hover::before,
 .no-touch .gn-icon-menu.gn-selected:hover::before {
-	background: #333;
-	box-shadow: 0 3px #3dcd58, 0 -6px #333, 0 -9px #3dcd58, 0 -12px #333;
+	background: white;
+	box-shadow: 0 3px #009530, 0 -6px white, 0 -9px #009530, 0 -12px white;
 }
 
-/******************CUSTOM THEME*********************/
-
-.gn-menu a.glyphicon-pencil:hover, .gn-menu li.active a {color:#1ABC9C;}
-.gn-menu a.glyphicon-cloud:hover, .gn-menu a.glyphicon-refresh:hover, .gn-menu li.active a{color:#77C5F7;}
-.gn-menu a.glyphicon-scale:hover, .gn-menu a.glyphicon-file:hover, .gn-menu li.active a {color:#FAC51C;}
-.gn-menu a.glyphicon-dashboard:hover, .gn-menu a.glyphicon-flag:hover, .gn-menu li.active a{color:#EB7260;}
-.gn-menu a.glyphicon-user:hover, .gn-menu li.active a {color:#A38F84;}
-.gn-menu a.glyphicon-briefcase:hover, .gn-menu a.glyphicon-usd:hover, .gn-menu li.active a {color:#9365B8;}
-
-.dashboard{background-color: #EB7260;}
-.manhours{background-color: #1ABC9C;}
-.sap{background-color: #77C5F7;}
-.weight{background-color: #FAC51C;}
-.employee{background-color: #A38F84;}
-.activity{background-color: #9365B8;}
+.gn-menu a.glyphicon-cloud:hover, .gn-menu li.active a{color:#77C5F7;}
+.gn-menu a.glyphicon-edit:hover, .gn-menu li.active a {color:#FAC51C;}
+.gn-menu a.glyphicon-home:hover, .gn-menu li.active a{color:#EB7260;}
 
 li.active{
-    background: #444;
+    background: #009630;
 }
 
+.well-blacklight{
+	background-color: rgba(255,255,255,0.3)!important;
+	color: white!important;
+}
+
+.well-black{background-color: rgba(255,255,255,0.1)!important;}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: rgba(255,255,255,0.05);
+}
+
+.table-hover>tbody>tr:hover {
+    background-color: rgba(255,255,255,0.8);
+    color: #333;
+    cursor: pointer;
+}

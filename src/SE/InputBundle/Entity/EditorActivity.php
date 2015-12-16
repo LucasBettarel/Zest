@@ -23,7 +23,7 @@ class EditorActivity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\EditorEntry", inversedBy="editoractivities", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\EditorEntry", inversedBy="editorActivities", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $editorEntry;

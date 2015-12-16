@@ -16,6 +16,13 @@
 	{{ render(controller("SEAdminBundle:Admin:menu")) }}
 {% endblock %}
 
+{% block logo %}
+  <li class="logo-zest">
+    <img alt="Zest" src="{{ asset('bundles/seadmin/images/zest.png') }}">
+    <i class='glyphicon glyphicon-lock lock-zest'></i>
+  </li>
+{% endblock %}
+
 {% block body %}
 
   <div class="header-block">
@@ -35,14 +42,7 @@
   <script src="http://code.highcharts.com/highcharts-more.js"></script>
   <script src="http://code.highcharts.com/modules/solid-gauge.js"></script>
   {% javascripts '@SEAdminBundle/Resources/public/js/*' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
+    <script src="{{ asset_url }}"></script>
   {% endjavascripts %}
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('.logo-zest img').attr('src','{{ asset('bundles/seadmin/images/logo-white.png') }}');
-      $('#gn-menu .logo-zest').append("<i class='glyphicon glyphicon-lock lock-zest'></i>")
-    });
-  </script>
 
 {% endblock %}
