@@ -104,6 +104,12 @@ class EditorEntry
     private $editorStatus;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\EditorType", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $editorType;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -442,5 +448,28 @@ class EditorEntry
             $total += $a->getRegularHours() + $a->getOtHours();
         }
         return $total < 11;
+    }
+
+    /**
+     * Set editorType
+     *
+     * @param \SE\InputBundle\Entity\EditorType $editorType
+     * @return EditorEntry
+     */
+    public function setEditorType(\SE\InputBundle\Entity\EditorType $editorType)
+    {
+        $this->editorType = $editorType;
+
+        return $this;
+    }
+
+    /**
+     * Get editorType
+     *
+     * @return \SE\InputBundle\Entity\EditorType 
+     */
+    public function getEditorType()
+    {
+        return $this->editorType;
     }
 }

@@ -32,14 +32,8 @@
             <table class="table table-hover table-striped display">
               <tbody>
                 <tr>
-                  <td><strong>Input processed by</strong></td>
-                  <td class="text-right"><strong>{{ input.user.name }}</strong></td>
-                  <td></td><td></td>
-                </tr>
-                <tr>
-                  <td><strong>Productivity</strong></td>
-                  <td class="text-right"><strong>{{ input.totalProdInput }}</strong></td>
-                  <td></td><td></td>
+                  <td colspan="2"><strong>Input processed by</strong></td>
+                  <td colspan="2" class="text-right"><strong>{{ input.user.name }}</strong></td>
                 </tr>
                 <tr>
                   <td><strong>Headcount</strong></td>
@@ -66,7 +60,7 @@
                     {% if input.totalOvertimeInput != 0 %}
                       <br><strong>{{ input.otStartTime|date('H:i') }}</strong> to <strong>{{ input.otEndTime|date('H:i') }}</strong>
                     {% else %}
-                      (no overtime recorded)
+                      <br>(no overtime recorded)
                     {% endif %}
                   </td>
                   <td><strong>Training</strong></td>
@@ -79,7 +73,11 @@
       </div>
     </div>
 
-    <div class="col-md-6 col-md-offset-1">
+    <div class="col-md-2">
+      <div id="container-productivity" style="height: 300px; margin: 0 auto"></div>
+    </div>
+
+    <div class="col-md-5">
       <div id="container-activities" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
     </div>
   </div>
@@ -112,8 +110,29 @@
                 </thead>
                 <tbody>
                   {% for entry in input.inputEntries %}
-                    <tr data-id="{{entry.id}}">
-                      <td>{{ entry.employee.name }}</td>
+                    <tr data-id="{{entry.id}}"
+                      {% if entry.editorStatus is not null %}
+                        {% if entry.editorStatus.id == 1 %} class="status-back-wait"
+                        {% elseif entry.editorStatus.id == 2 %} class="status-back-ok" 
+                        {% elseif entry.editorStatus.id == 3 %} class="status-back-nok" 
+                        {% elseif entry.editorStatus.id == 4 %} class="status-back-ignore" 
+                        {% endif %}
+                      {% endif %}
+                    >
+                      <td>
+                        {{ entry.employee.name }}
+                        {% if entry.editorStatus is not null %}
+                          {% if entry.editorStatus.id == 1 %}
+                            <i data-toggle="tooltip" title="Edition pending for approval" class="text-warning glyphicon glyphicon-time"></i> 
+                          {% elseif entry.editorStatus.id == 2 %}
+                           <i data-toggle="tooltip" title="Edition approved, input updated" class="text-success glyphicon glyphicon-ok"></i> 
+                          {% elseif entry.editorStatus.id == 3 %}
+                           <i data-toggle="tooltip" title="Edition rejected" class="text-danger glyphicon glyphicon-remove"></i> 
+                          {% elseif entry.editorStatus.id == 4 %}
+                           <i data-toggle="tooltip" title="Edition ignored" class="glyphicon glyphicon-question-sign"></i> 
+                          {% endif %}
+                        {% endif %}
+                        </td>
                       <td>{{ entry.sesa }}</td>
                       <td>{% if entry.present == 1 %}
                             <i class="glyphicon glyphicon-ok text-success"></i></td>
@@ -145,7 +164,7 @@
                       </td>
                       <td>
                         <a href=# data-toggle="modal" data-target="#formModal" data-type="@edit" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Edit Entry" class="glyphicon glyphicon-edit"> </i></a>
-                        <a href=# id="delete-entry" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Delete Entry" class="glyphicon glyphicon-trash text-danger"> </i></a></div>
+                        <a href=# data-toggle="modal" data-target="#formModal" data-type="@delete" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Delete Entry" class="glyphicon glyphicon-trash text-danger"> </i></a></div>
                       </td>
                     </tr>
                   {% endfor %}               
@@ -167,9 +186,12 @@
         </div>
         <div class="modal-body">
           <div id="information-alert" class="alert alert-dismissible" role="alert"></div>
+          <div id="override-alert" class="alert alert-danger hide alert-dismissible" role="alert">
+            <strong><i class="glyphicon text-danger glyphicon-alert"></i> An edition is already pending for this input!</strong>
+            <p>If you edit again, the previous request will be overrided!</p>
+          </div>
 
           {{ include("SEInputBundle:Dashboard:entry_form.html.twig") }}
-
 
         </div>
         <div class="modal-footer">
@@ -184,8 +206,11 @@
 
 {% block javascripts %}
   {{ parent() }}
+  <script src="http://code.highcharts.com/highcharts-more.js"></script>
+  <script src="http://code.highcharts.com/modules/solid-gauge.js"></script>
   <script type="text/javascript">
     var id = {{ input.id }};
+    var prod = {{ input.totalProdInput }};
     var ajaxActivities = '{{path('se_input_review_activities')}}';
     var ajaxEditPopulate = '{{path('se_input_review_edit_populate')}}';
     var ajaxPopulate = '{{path('se_input_populate')}}';

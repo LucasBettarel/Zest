@@ -93,6 +93,12 @@ class EditorEntryType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => true))
+            ->add('editorType', 'entity', array(
+                'class'    => 'SEInputBundle:EditorType',
+                'property' => 'id', 
+                'multiple' => false,
+                'expanded' => false
+                ), array('required' => true))
             ;
     }
     

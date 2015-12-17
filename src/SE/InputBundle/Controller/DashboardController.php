@@ -290,8 +290,9 @@ class DashboardController extends Controller
     $request = $this->get('request');        
     $id = $request->get('id');
     $entry = $em->getRepository('SEInputBundle:InputEntry')->getEntryArray($id);
+    $request = $em->getRepository('SEInputBundle:EditorEntry')->getEditorEntryId($id);
     
-    $response = array("code" => 100, "success" => true, 'entry' => $entry);
+    $response = array("code" => 100, "success" => true, 'entry' => $entry, 'request' => $request);
 
     return new Response(json_encode($response)); 
   }
@@ -340,8 +341,20 @@ class DashboardController extends Controller
  
     if ($form->isValid()) {
       $em = $this->getDoctrine()->getManager();
-
       $em->persist($editorEntry);
+      
+      //add status to associated entry 
+      if($editorEntry->getInputEntry()){
+        $editorEntry->getInputEntry()->setEditorStatus($editorEntry->getEditorStatus());
+
+        //remove duplicate old version of edition request
+        $override = $em->getRepository('SEInputBundle:EditorEntry')->getOverride($editorEntry->getInputEntry()->getId());
+        if($override){
+          foreach ($override->getEditorActivities() as $a){$em->remove($a);}
+          $em->remove($override);
+        }
+      }
+
       $em->flush();
  
       return new JsonResponse(array('message' => 'Success!'), 200);
