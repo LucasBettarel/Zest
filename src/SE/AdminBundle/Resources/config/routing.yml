@@ -15,3 +15,21 @@ se_admin_editor_currentEntry:
     defaults: { _controller: SEAdminBundle:Editor:currentEntry }
     requirements:
         _method:  GET
+
+se_admin_editor_accept:
+    pattern:  /editor/accept
+    defaults: { _controller: SEAdminBundle:Editor:accept }
+    requirements:
+        _method:  GET
+
+se_admin_editor_reject:
+    pattern:  /editor/reject
+    defaults: { _controller: SEAdminBundle:Editor:reject }
+    requirements:
+        _method:  GET
+
+se_admin_editor_ignore:
+    pattern:  /editor/ignore
+    defaults: { _controller: SEAdminBundle:Editor:ignore }
+    requirements:
+        _method:  GET

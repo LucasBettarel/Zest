@@ -38,9 +38,7 @@ body{
 .gn-menu a.glyphicon-edit:hover, .gn-menu li.active a {color:#FAC51C;}
 .gn-menu a.glyphicon-home:hover, .gn-menu li.active a{color:#EB7260;}
 
-li.active{
-    background: #009630;
-}
+li.active{background: #009530;}
 
 .well-blacklight{
 	background-color: rgba(255,255,255,0.3)!important;
@@ -59,4 +57,7 @@ li.active{
     cursor: pointer;
 }
 
-#request-panel .panel-footer{height: 35px;}
+#request-panel .panel-footer{
+	padding:0px;
+	height: 35px;
+}

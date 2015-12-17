@@ -5,36 +5,36 @@ $(document).ready(function() {
 	  	"dom": 'rtip',
 	  	"info": false,
 	  	"aoColumnDefs": [
-	      { "sType": "string", "aTargets": [ 3 ] }
+	      { "sType": "string", "aTargets": [ 4 ] }
 	    ],
         buttons:[{
             text: "<i class='glyphicon glyphicon-th'></i>",
             action: function ( e, dt, node, config ) {
-            	dt.column(3).search("").draw(); 
+            	dt.column(4).search("").draw(); 
             },
             className: 'btn-default'
         },{
             text: "<i class='glyphicon glyphicon-time'></i>",
             action: function ( e, dt, node, config ) {
-            	dt.column(3).search("time").draw(); 
+            	dt.column(4).search("time").draw(); 
             },
             className: 'btn-warning'
         },{
             text: "<i class='glyphicon glyphicon-ok'></i>",
             action: function ( e, dt, node, config ) {
-            	dt.column(3).search("ok").draw(); 
+            	dt.column(4).search("ok").draw(); 
             },
             className: 'btn-success'
         },{
             text: "<i class='glyphicon glyphicon-remove'></i>",
             action: function ( e, dt, node, config ) {
-            	dt.column(3).search("remove").draw(); 
+            	dt.column(4).search("remove").draw(); 
             },
             className: 'btn-danger'
         },{
             text: "<i class='glyphicon glyphicon-question-sign'></i>",
             action: function ( e, dt, node, config ) {
-            	dt.column(3).search("question").draw(); 
+            	dt.column(4).search("question").draw(); 
             },
             className: 'btn-default'
         }]
@@ -49,6 +49,12 @@ $(document).ready(function() {
       }
       entryRequest($this);
     });
+
+    $('#choice button').click(function(){
+      $this = $(this);
+      editorChoice($this.attr('data-path'), $('#r-id').html());
+    });
+
 
     $('.close').click(function(){$('#editor-panel').toggleClass('col-md-12 col-md-5').siblings('#request-panel').addClass('hide');});
 
@@ -73,4 +79,29 @@ function entryRequest($this){
 	    },
 	    "json"
 	);
+}
+
+function editorChoice(path, id){
+	$.ajax({
+            type: 'GET',
+            url: path,
+            data: {
+            	id: id
+            },
+        })
+        .done(function (data) {
+            if (typeof data.message !== 'undefined') {
+                alert("ok");
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    //$('#ajaxForm').html(jqXHR.responseJSON.form);
+                }
+            } else {
+                alert(errorThrown);
+            }
+ 
+        });
 }

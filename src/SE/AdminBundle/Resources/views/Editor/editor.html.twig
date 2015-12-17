@@ -27,16 +27,27 @@
                     <th>User</th>
                     <th>Request Date</th>
                     <th>Input</th>
+                    <th>Type</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody id="inject-editor">
                 	{% for r in requests %}
-                		<tr id="{{r.id}}" data-current="{{r.inputEntry.id}}">
+                		<tr id="{{r.id}}" data-current="{% if r.inputEntry is not null %}{{r.inputEntry.id}}{% else %}null{% endif %}">
                 			<td class="r-user">{{r.user.name}}</td>
                 			<td class="r-createdAt">{{r.createdAt|date('Y-m-d')}}</td>
                 			<td class="r-input"><a id="view" href="{{ path('se_input_review_details', {'id': r.userInput.id}) }}">{{r.userInput.team.name}} - Shift {{r.userInput.shift.id}} - {{r.userInput.dateInput|date('Y-m-d')}} <i class="glyphicon glyphicon-share"></i></a></td>
-                			<td class="r-status">{% if r.editorStatus.id == 1 %}
+                			<td class="r-type">
+                				{% if r.editorType.id == 1 %}
+                					<i class="text-success glyphicon glyphicon-plus"></i>
+                				{% elseif r.editorType.id == 2 %}
+                					<i class="text-warning glyphicon glyphicon-edit"></i>
+                				{% elseif r.editorType.id == 3 %}
+                					<i class="text-danger glyphicon glyphicon-remove"></i>
+                				{% endif %}
+                			</td>
+                			<td class="r-status">
+                				{% if r.editorStatus.id == 1 %}
                 					<i class="text-warning glyphicon glyphicon-time"></i>
                 				{% elseif r.editorStatus.id == 2 %}
                 					<i class="text-success glyphicon glyphicon-ok"></i>
@@ -76,9 +87,9 @@
         </div>
         <div class="panel-footer well-blacklight">
         	<div id="choice">
-	        	<button class="btn btn-success col-md-4"><i class="glyphicon glyphicon-ok"> </i> ACCEPT</button>
-	        	<button class="btn btn-danger col-md-4"><i class="glyphicon glyphicon-remove"> </i> REJECT</button>
-	        	<button class="btn btn-default col-md-4"><i class="glyphicon glyphicon-question-sign"> </i> IGNORE</button>
+	        	<button id="accept" data-path="{{ path('se_admin_editor_accept') }}" class="btn btn-success col-md-4"><i class="glyphicon glyphicon-ok"> </i> ACCEPT</button>
+	        	<button id="reject" data-path="{{ path('se_admin_editor_reject') }}" class="btn btn-danger col-md-4"><i class="glyphicon glyphicon-remove"> </i> REJECT</button>
+	        	<button id="ignore" data-path="{{ path('se_admin_editor_ignore') }}" class="btn btn-default col-md-4"><i class="glyphicon glyphicon-question-sign"> </i> IGNORE</button>
 	        </div>
         </div>
       </div>
