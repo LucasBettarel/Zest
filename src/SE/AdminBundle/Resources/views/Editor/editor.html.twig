@@ -39,22 +39,22 @@
                 			<td class="r-input"><a id="view" href="{{ path('se_input_review_details', {'id': r.userInput.id}) }}">{{r.userInput.team.name}} - Shift {{r.userInput.shift.id}} - {{r.userInput.dateInput|date('Y-m-d')}} <i class="glyphicon glyphicon-share"></i></a></td>
                 			<td class="r-type">
                 				{% if r.editorType.id == 1 %}
-                					<i class="text-success glyphicon glyphicon-plus"></i>
+                					<i id="1" class="text-success glyphicon glyphicon-plus"></i>
                 				{% elseif r.editorType.id == 2 %}
-                					<i class="text-warning glyphicon glyphicon-edit"></i>
+                					<i id="2" class="glyphicon glyphicon-edit"></i>
                 				{% elseif r.editorType.id == 3 %}
-                					<i class="text-danger glyphicon glyphicon-remove"></i>
+                					<i id="3" class="text-danger glyphicon glyphicon-remove"></i>
                 				{% endif %}
                 			</td>
                 			<td class="r-status">
                 				{% if r.editorStatus.id == 1 %}
-                					<i class="text-warning glyphicon glyphicon-time"></i>
+                					<i id="1" class="text-warning glyphicon glyphicon-time"></i>
                 				{% elseif r.editorStatus.id == 2 %}
-                					<i class="text-success glyphicon glyphicon-ok"></i>
+                					<i id="2" class="text-success glyphicon glyphicon-ok-sign"></i>
                 				{% elseif r.editorStatus.id == 3 %}
-                					<i class="text-danger glyphicon glyphicon-remove"></i>
+                					<i id="3" class="text-danger glyphicon glyphicon-remove-sign"></i>
                 				{% else %}
-                					<i class="text-info glyphicon glyphicon-question-sign"></i>
+                					<i id="4" class="glyphicon glyphicon-question-sign"></i>
                 				{% endif %}
                 			</td>
                 		</tr>
@@ -83,6 +83,7 @@
 				<div id="inject-info">
 				</div>
             </div>
+          	<div class="alert alert-success text-success hide" id="alert-result"></div>
           </div>
         </div>
         <div class="panel-footer well-blacklight">

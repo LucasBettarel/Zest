@@ -52,7 +52,7 @@ $(document).ready(function() {
 
     $('#choice button').click(function(){
       $this = $(this);
-      editorChoice($this.attr('data-path'), $('#r-id').html());
+      editorChoice($this.attr('data-path'), $('#r-id').html(), $this.attr('id'));
     });
 
 
@@ -79,29 +79,33 @@ function entryRequest($this){
 	    },
 	    "json"
 	);
+
+	if($this.children().last().find('i').attr('id') == 2){$('#choice button').attr('disabled', true);}
+	else{$('#choice button').attr('disabled', false);}
 }
 
-function editorChoice(path, id){
+function editorChoice(path, id, type){
 	$.ajax({
-            type: 'GET',
+            type: 'POST',
             url: path,
             data: {
             	id: id
             },
         })
         .done(function (data) {
-            if (typeof data.message !== 'undefined') {
-                alert("ok");
-            }
+            $('#alert-result').html(data.message).removeClass('hide');
+            window.setTimeout(updateDisplay(id, type), 2000);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            if (typeof jqXHR.responseJSON !== 'undefined') {
-                if (jqXHR.responseJSON.hasOwnProperty('form')) {
-                    //$('#ajaxForm').html(jqXHR.responseJSON.form);
-                }
-            } else {
-                alert(errorThrown);
-            }
- 
+            console.log(jqXHR.responseJSON);
+            $('#alert-result').text(jqXHR.responseJSON).removeClass('hide');
         });
+}
+
+function updateDisplay(id, type){
+	$('#editor-panel').toggleClass('col-md-12 col-md-5').siblings('#request-panel').addClass('hide').find('#alert-result').addClass('hide');
+	var status = $("#editor-panel tr[id='"+id+"']").children().last();
+	if (type == 2){status.html("<i id='2' class='text-success glyphicon glyphicon-ok-sign'></i>");}
+	else if (type == 3){status.html("<i id='3' class='text-danger glyphicon glyphicon-remove-sign'></i>");}
+	else if (type == 4){status.html("<i id='2' class='glyphicon glyphicon-question-sign'></i>");}
 }
