@@ -442,6 +442,6 @@ class InputEntry
         foreach ($this->activity_hours as $a) {
             $total += $a->getRegularHours() + $a->getOtHours();
         }
-        return $total < 11;
+        return $total <= 11;
     }
 }

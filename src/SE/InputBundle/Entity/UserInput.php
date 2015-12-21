@@ -752,10 +752,10 @@ class UserInput
     public function isExcludedActivityCommented()
     {
         foreach ($this->input_entries as $e){
-            foreach ($e->getActivityHours as $a) {
+            foreach ($e->getActivityHours() as $a) {
                 $i = $a->getActivity()->getId();
                 //COMMENT PROPERTY NEEDED IN ACTIVITIES
-                if( ($i == 13 || $i == 11 || $i == 7) && $e->getComments === null){
+                if( ($i == 13 || $i == 11 || $i == 7) && $e->getComments() === null){
                     return false;
                 }
             }
