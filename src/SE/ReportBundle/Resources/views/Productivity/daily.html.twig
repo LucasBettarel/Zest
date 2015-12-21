@@ -2,7 +2,8 @@
 
 {% block title %}Daily Productivity - {{ parent() }}{% endblock %}
 
-{% block sereport_body %}
+{% block sereport_header %}
+
   <header class="h-input">
     <div class="line"></div>
     <div class="pull-left">
@@ -34,6 +35,10 @@
       </div>
     </div>
   </div>
+
+{% endblock %}
+
+{% block sereport_body %}
 
   <div id="data-panel" class="row">
     <div class="col-md-3">
