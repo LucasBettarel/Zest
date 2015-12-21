@@ -94,7 +94,7 @@ function editorChoice(path, id, type){
         })
         .done(function (data) {
             $('#alert-result').html(data.message).removeClass('hide');
-            window.setTimeout(updateDisplay(id, type), 2000);
+            window.setTimeout(updateDisplay(id, type), 5000);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR.responseJSON);
@@ -105,6 +105,7 @@ function editorChoice(path, id, type){
 function updateDisplay(id, type){
 	$('#editor-panel').toggleClass('col-md-12 col-md-5').siblings('#request-panel').addClass('hide').find('#alert-result').addClass('hide');
 	var status = $("#editor-panel tr[id='"+id+"']").children().last();
+    console.log(status, id, type);
 	if (type == 2){status.html("<i id='2' class='text-success glyphicon glyphicon-ok-sign'></i>");}
 	else if (type == 3){status.html("<i id='3' class='text-danger glyphicon glyphicon-remove-sign'></i>");}
 	else if (type == 4){status.html("<i id='2' class='glyphicon glyphicon-question-sign'></i>");}

@@ -1,4 +1,4 @@
 services:
-    se_admin.editor:
-        class: SE\AdminBundle\Editor
+    se_admin.editor.editor:
+        class: SE\AdminBundle\Editor\Editor
         arguments: [@doctrine.orm.entity_manager]
