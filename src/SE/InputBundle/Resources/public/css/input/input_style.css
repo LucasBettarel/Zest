@@ -23,27 +23,27 @@
 }
 
 .input-sesa{
-	width: 115px; 
+	width: 115px !important; 
 }
 
 .input-employee{
-	width: 160px;
+	width: 160px !important;
 }
 
 .input-reason, .input-manual input{
-	width: 75px;
+	width: 75px !important;
 }
 
 .input-activity{
-	width: 140px; 
+	width: 140px !important; 
 }
 
 .input-regular-hours, .input-overtime{
-	width: 70px;
+	width: 70px !important;
 }
 
 .input-ot-time>.input-group{
-	width: 105px; 
+	width: 105px !important; 
 }
 
 #presence>div{
@@ -72,7 +72,7 @@
 }
 
 .th-activity{
-	min-width:600px; 
+	min-width:500px; 
 }
 
 .th-options{
@@ -117,19 +117,6 @@
 	max-width: 86%;
 }
 
-.round{
-	border-radius: 50% 50%;
-	background-color: #FAC51C;
-	height: 150px;
-	width: 150px;
-	text-align: center;
-    display: table-cell;
-    overflow: hidden;
-    vertical-align:middle;
+.modal-input-lg{
+	width: 1000px;
 }
-
-.round-container{
-	margin-top: 4%;
-	min-width: 180px;
-}
-

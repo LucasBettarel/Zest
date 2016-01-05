@@ -1,16 +1,15 @@
 <?php
 
-namespace SE\InputBundle\Controller;
+namespace SE\AdminBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use SE\InputBundle\Extensions\SapConnection;
 use SE\InputBundle\Entity\SAPRF;
 use SE\InputBundle\Entity\SapImports;
 
 
 class ImportController extends Controller
 {
-	public function sapAction()
+	public function sapnwrfcAction()
 	{
     $connection = new SapConnection();
    // $connection->setUp();
@@ -28,12 +27,12 @@ class ImportController extends Controller
         ->findAll()
       ;
 
-    return $this->render('SEInputBundle:Import:sap_import.html.twig', array(
+    return $this->render('SEAdminBundle:Import:sapnwrfc_import.html.twig', array(
         'listImport' => $listImport
         ));
 	}
 
-    public function setAction()
+    public function sapAction()
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -49,7 +48,7 @@ class ImportController extends Controller
         }
         $em->flush();
 
-        return $this->render('SEInputBundle:Import:set_import.html.twig', array(
+        return $this->render('SEAdminBundle:Import:sap_import.html.twig', array(
             'listSapImport' => $listSapImport
             ));
     }

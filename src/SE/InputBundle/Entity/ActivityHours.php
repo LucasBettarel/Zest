@@ -29,6 +29,7 @@ class ActivityHours
     private $input;
 
     /**
+     * @Assert\NotBlank(message = "Hey! You think you ain't doin nothin? Insert dat activity faster lah!")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Activity")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -36,7 +37,10 @@ class ActivityHours
 
     /**
      * @var string
-     *
+     * @Assert\Range(
+     *     max = 8.00,
+     *     maxMessage = "More than 8 regular hours ??? Are you sure ??"
+     * )
      * @ORM\Column(name="regular_hours", type="decimal", precision=11, scale=2)
      */
     private $regularHours;
@@ -86,52 +90,6 @@ class ActivityHours
     public function getActivity()
     {
         return $this->activity;
-    }
-
-    /**
-     * Set team
-     *
-     * @param \SE\InputBundle\Entity\Team $team
-     * @return ActivityHours
-     */
-    public function setTeam(\SE\InputBundle\Entity\Team $team)
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
-    /**
-     * Get team
-     *
-     * @return \SE\InputBundle\Entity\Team 
-     */
-    public function getTeam()
-    {
-        return $this->team;
-    }
-
-    /**
-     * Set shift
-     *
-     * @param \SE\InputBundle\Entity\Shift $shift
-     * @return ActivityHours
-     */
-    public function setShift(\SE\InputBundle\Entity\Shift $shift)
-    {
-        $this->shift = $shift;
-
-        return $this;
-    }
-
-    /**
-     * Get shift
-     *
-     * @return \SE\InputBundle\Entity\Shift 
-     */
-    public function getShift()
-    {
-        return $this->shift;
     }
 
     /**
@@ -224,5 +182,17 @@ class ActivityHours
     public function getOtHours()
     {
         return $this->otHours;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh careful ! This is the Weekend!! No regular hours on the weekend !!")
+     */
+    public function isRegularHoursOnWeekend()
+    {   
+        $date = $this->input->getUserInput()->getDateInput();
+        if($date->format('N') >= 6  && $this->regularHours > 0){
+            return false;
+        }
+        return true;
     }
 }

@@ -50,7 +50,6 @@ class InputEntryType extends AbstractType
                 'prototype_name' => 'activity_name',
                 ), array('required' => false))
             ->add('comments', 'textarea', array('required' => false))
-            ->add('totalTo', 'integer', array('required' => false))
         ;
     }
     

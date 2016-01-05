@@ -2,39 +2,44 @@
 
 {% block title %}Review - {{ parent() }}{% endblock %}
 
+{% block seinput_header %}
+
+   <header class="h-review">
+      <div class="line"></div>
+      <div class="pull-left">
+        <h2><i class="glyphicon glyphicon-dashboard"> </i> Inputs dashboard</h2>
+      </div>
+    </header>
+
+    <div class="row filters-row">
+      <div id="filters">
+        <div class="month pull-left date-filter">
+          <form name="test" class="form-inline">
+            <div class="form-group">
+              <input type="text" id="monthpicker" class="pull-left">
+            </div>
+          </form>
+        </div>
+        <div id="1" class="teams pull-left">
+          <a id="0" data-max-shift="1" class="label label-primary">HubAsia</a>
+          {% for t in tm %}
+              <a id="{{t.masterId}}" data-max-shift="{{t.shiftnb}}" class="label label-default">{{t.name}}</a>
+          {% endfor %}
+        </div>
+        <div id="2" class="shifts hide">
+          | 
+          <a id="0" class="label label-primary">All</a>
+          <a id="1" class="label label-default">Shift1</a>
+          <a id="2" class="label label-default">Shift2</a>
+          <a id="3" class="label label-default">Shift3</a>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
 {% block seinput_body %}
-  <header class="h-review">
-    <div class="line"></div>
-    <div class="pull-left">
-      <h2><i class="glyphicon glyphicon-dashboard"> </i> Inputs dashboard</h2>
-    </div>
-  </header>
-
-  <div class="row filters-row">
-    <div id="filters">
-      <div class="month pull-left date-filter">
-        <form name="test" class="form-inline">
-          <div class="form-group">
-            <input type="text" id="monthpicker" class="pull-left">
-          </div>
-        </form>
-      </div>
-      <div id="1" class="teams pull-left">
-        <a id="0" data-max-shift="1" class="label label-primary">HubAsia</a>
-        {% for t in tm %}
-            <a id="{{t.masterId}}" data-max-shift="{{t.shiftnb}}" class="label label-default">{{t.name}}</a>
-        {% endfor %}
-      </div>
-      <div id="2" class="shifts hide">
-        | 
-        <a id="0" class="label label-primary">All</a>
-        <a id="1" class="label label-default">Shift1</a>
-        <a id="2" class="label label-default">Shift2</a>
-        <a id="3" class="label label-default">Shift3</a>
-      </div>
-    </div>
-  </div>
-
+  
   <div class="row">
     <div class="col-md-6">
       <div class="panel panel-default">
@@ -186,8 +191,6 @@
     var ajaxMi = '{{path('se_input_review_mi')}}';
     var ajaxDash = '{{path('se_input_review_time')}}';
   </script>
-  <script type="text/javascript" src="https://cdn.datatables.net/r/bs/dt-1.10.9,fc-3.1.0/datatables.min.js"></script>
-  <script src="http://code.highcharts.com/highcharts.js"></script>
   {% javascripts '@SEInputBundle/Resources/public/js/review/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
   {% endjavascripts %}

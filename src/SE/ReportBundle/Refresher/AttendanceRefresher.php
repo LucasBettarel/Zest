@@ -116,7 +116,7 @@ class AttendanceRefresher
 						}else{//not working
 							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-absent'></div>";	
 						}
-					}elseif($e[$i]['tothr'] > 11 || $e[$i]['othr'] > 8 || $e[$i]['reghr'] > 8){//warning too much hour
+					}elseif($e[$i]['tothr'] > 11 || $e[$i]['othr'] > 11 || $e[$i]['reghr'] > 8){//warning too much hour
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-high'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";
 					}elseif( ( $e[$i]['reghr'] < 8 && $day['isWeekday'] && !$day['isHoliday']) || $e[$i]['tothr'] == 0 ){//missing hour
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-low'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";					

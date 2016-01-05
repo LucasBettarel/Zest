@@ -35,6 +35,7 @@
     color: white;
     text-decoration: none;
     cursor: pointer;
+    transition: background 0.4s;
 }
 
 .no-touch .gn-menu-main a:hover,
@@ -42,6 +43,7 @@
 .no-touch .gn-menu li.gn-search-item:hover a {
     background: #444;
     color: #eee;
+    transition: background 0.4s;
 }
 
 .gn-menu-main > li {
@@ -239,6 +241,7 @@ input.gn-search:focus {
 
 .gn-menu-wrapper.gn-open-all .gn-submenu li {
     height: 60px;
+    transition: background 0.4s;
 }
 
 @media screen and (max-width: 422px) { 
@@ -297,6 +300,7 @@ input.gn-search:focus {
 .activity{background-color: #9365B8;}
 
 li.active{
-    background: #444;
+  background: #444;
+  transition: background 0.4s;
 }
 

@@ -1,35 +1,36 @@
-{% extends "SEInputBundle::layout.html.twig" %}
+{% extends "SEAdminBundle::layout.html.twig" %}
 
 {% block title %}
-  SAP Import Settings- {{ parent() }}
+  SAP Import - {{ parent() }}
 {% endblock %}
 
-{% block seinput_body %}
-
+{% block seadmin_header %}
+  
   <header class="h-sap">
   	<div class="line"></div>
-  	<h2><i class="glyphicon glyphicon-cloud"> </i> SAP import</h2>
+  	<h2><i class="glyphicon glyphicon-cloud"> </i> SAP Import</h2>
   </header>
 
-	<div class="well col-md-6">
+{% endblock %}
+
+{% block seadmin_body %}
+
+	<div class="well well-black col-md-12">
 		<form class="form-inline" method="post" action="http://localhost/SE/Import/Import.php"> 
    			<div class="form-group">
 			    <label for="dateinput">Date of confirmation : </label>
-			    <div class="input-group">
-			    	<input type="date" class="form-control" id="dateinput" value="{{ 'now'|date('d/m/Y') }}" name="date">
-				    <span class="input-group-addon">
-	          			<span id="overtime" class="glyphicon glyphicon-time"></span>
-			        </span>
-			    </div>
+			    <input type="date" class="form-control" id="dateinput" value="{{ 'now'|date_modify("-1 day")|date('d/m/Y') }}" name="date">
 			</div>
-			<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-download"></i> Import</button>
+			<button class="btn btn-primary" type="submit">
+	          	<i class="glyphicon glyphicon-download"></i> Import
+			</button>
 		</form>
 	</div>
 
-	<div class="well col-md-10">
+	<div class="well well-black col-md-12">
 		<h3>Last SAP Imports</h3>
 		<div class="table-responsive">
-			<table id="imports" class="table table-hover table-striped">
+			<table id="imports" class="table">
 				<thead>
 					<tr>
 						<th>#</th>
@@ -77,14 +78,13 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.js"></script>
   <script type="text/javascript">
   	$('#imports').DataTable( {
 		"paging": true,
-	  	"dom": 'lrtip',
-	  	"info": false
+	  	"dom": 'rtip',
+	  	"info": false,
+	  	"order": [[ 0, "desc" ]]
 	});
-
   </script>
   
 {% endblock %}

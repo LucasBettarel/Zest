@@ -3,6 +3,7 @@
 namespace SE\InputBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * InputEntryRepository
@@ -33,5 +34,27 @@ class InputEntryRepository extends EntityRepository
         $qb->setParameter('date', $date->format('Y-m-d H:i:s'));
 		
 		return $qb->getQuery()->getResult();
+	}
+
+	public function getEntryArray($id)
+	{
+		$qb = $this
+			->createQueryBuilder('a')
+			->select("a.sesa, a.present, a.comments")
+			->leftJoin('a.employee', 'e')
+			->addSelect('e.id as employee')
+			->leftJoin('a.absence_reason', 'ar')
+			->addSelect('ar.id as absence')
+			->leftJoin('a.activity_hours', 'ah')
+			->addSelect('ah.id as activity_hours, ah.regularHours, ah.otHours')
+			->leftJoin('ah.activity', 'act')
+			->addSelect('act.id as activity')
+			->where("a.id = :id")
+			->setParameter('id', $id)
+			->getQuery()
+			->getResult(Query::HYDRATE_ARRAY)
+  		;
+  
+		return $qb;
 	}
 }

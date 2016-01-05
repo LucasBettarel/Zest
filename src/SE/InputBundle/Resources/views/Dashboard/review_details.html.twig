@@ -1,0 +1,222 @@
+{% extends "SEInputBundle::layout.html.twig" %}
+
+{% block title %}Review input details - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/s/bs/jszip-2.5.0,pdfmake-0.1.18,dt-1.10.10,b-1.1.0,b-html5-1.1.0,b-print-1.1.0/datatables.min.css"/>
+
+  {% stylesheets 'bundles/seinput/css/input/*' %}
+    <link rel="stylesheet" type="text/css" charset="UTF-8" media="all" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+
+{% endblock %}
+
+{% block seinput_header %}
+  <header class="h-review">
+    <div class="line"></div>
+    <h2><i class="glyphicon glyphicon-dashboard"> </i> Input details : {{ input.team.name }} - shift {{ input.shift.id }}, on {{ input.dateInput|date('d-m-Y') }}</h2>
+  </header>
+{% endblock %}
+
+{% block seinput_body %}
+  <div class="row">
+    <div class="col-md-5">
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+          <h4>Informations</h4>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-hover table-striped display">
+              <tbody>
+                <tr>
+                  <td colspan="2"><strong>Input processed by</strong></td>
+                  <td colspan="2" class="text-right"><strong>{{ input.user.name }}</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Headcount</strong></td>
+                  <td class="text-right">{{ input.inputEntries|length }}</td>
+                  <td><strong>Absences</strong></td>
+                  <td class="text-right">{{ input.totalAbsence }}</td>
+                </tr>
+                <tr>
+                  <td><strong>TO lines</strong></td>
+                  <td class="text-right">{{ input.totalToInput }}</td>
+                  <td><strong>Manual TO lines</strong></td>
+                  <td class="text-right">{{ input.manualTo }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Total Hours</strong></td>
+                  <td class="text-right">{{ input.totalHoursInput }}</td>
+                  <td><strong>Included Hours</strong></td>
+                  <td class="text-right">{{ input.totalWorkingHoursInput }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Overtime</strong></td>
+                  <td class="text-right">
+                    {{ input.totalOvertimeInput }}
+                    {% if input.totalOvertimeInput != 0 %}
+                      <br><strong>{{ input.otStartTime|date('H:i') }}</strong> to <strong>{{ input.otEndTime|date('H:i') }}</strong>
+                    {% else %}
+                      <br>(no overtime recorded)
+                    {% endif %}
+                  </td>
+                  <td><strong>Training</strong></td>
+                  <td class="text-right">{{ input.totalTrainingHours }}</td>
+                </tr>   
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div id="container-productivity" style="height: 300px; margin: 0 auto"></div>
+    </div>
+
+    <div class="col-md-5">
+      <div id="container-activities" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div id="input-details" class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Input Details</h4>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+              <table id="table" class="table table-hover table-striped display">
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>SESA</th>
+                    <th>Present</th>
+                    <th>Activities</th>
+                    <th>Regular Hours</th>
+                    <th>Overtime</th>
+                    <th>Comments</th>
+                    <th>TO lines</th>
+                    <th>Total Hours</th>
+                    <th>Productivity</th>
+                    <th>
+                      <div class="btn btn-success" data-toggle="modal" data-target="#formModal" data-type="@new" data-id=""><i data-toggle="tooltip" title="Add New Entry" class="glyphicon glyphicon-plus"> </i></div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for entry in input.inputEntries %}
+                    <tr data-id="{{entry.id}}"
+                      {% if entry.editorStatus is not null %}
+                        {% if entry.editorStatus.id == 1 %} class="status-back-wait"
+                        {% elseif entry.editorStatus.id == 2 %} class="status-back-ok" 
+                        {% elseif entry.editorStatus.id == 3 %} class="status-back-nok" 
+                        {% elseif entry.editorStatus.id == 4 %} class="status-back-ignore" 
+                        {% endif %}
+                      {% endif %}
+                    >
+                      <td>
+                        {{ entry.employee.name }}
+                        {% if entry.editorStatus is not null %}
+                          {% if entry.editorStatus.id == 1 %}
+                            <i data-toggle="tooltip" title="Edition pending for approval" class="text-warning glyphicon glyphicon-time"></i> 
+                          {% elseif entry.editorStatus.id == 2 %}
+                           <i data-toggle="tooltip" title="Edition approved, input updated" class="text-success glyphicon glyphicon-ok"></i> 
+                          {% elseif entry.editorStatus.id == 3 %}
+                           <i data-toggle="tooltip" title="Edition rejected" class="text-danger glyphicon glyphicon-remove"></i> 
+                          {% elseif entry.editorStatus.id == 4 %}
+                           <i data-toggle="tooltip" title="Edition ignored" class="glyphicon glyphicon-question-sign"></i> 
+                          {% endif %}
+                        {% endif %}
+                        </td>
+                      <td>{{ entry.sesa }}</td>
+                      <td>{% if entry.present == 1 %}
+                            <i class="glyphicon glyphicon-ok text-success"></i></td>
+                          {% else %}
+                            <i class="glyphicon glyphicon-remove text-warning"> </i> {{ entry.absencereason.name }}</td>
+                          {% endif %}
+                      <td>
+                        {% for a in entry.activityHours %}
+                          {{ a.activity.name }} </br>
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for a in entry.activityHours %}
+                          {{ a.regularHours }} </br>
+                        {% endfor %}
+                      </td>
+                      <td>
+                        {% for a in entry.activityHours %}
+                          {{ a.otHours }} </br>
+                        {% endfor %}
+                      </td>
+                      <td>{{ entry.comments }}</td>
+                      <td>{{ entry.totalTo }}</td> 
+                      <td>{{ entry.totalHours }}</td>
+                      <td>
+                        {% if entry.totalProd != 0 %}
+                          {{ entry.totalProd }}
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href=# data-toggle="modal" data-target="#formModal" data-type="@edit" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Edit Entry" class="glyphicon glyphicon-edit"> </i></a>
+                        <a href=# data-toggle="modal" data-target="#formModal" data-type="@delete" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Delete Entry" class="glyphicon glyphicon-trash text-danger"> </i></a></div>
+                      </td>
+                    </tr>
+                  {% endfor %}               
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel">
+    <div class="modal-dialog modal-input-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="infoModalLabel"></h4>
+        </div>
+        <div class="modal-body">
+          <div id="information-alert" class="alert alert-dismissible" role="alert"></div>
+          <div id="override-alert" class="alert alert-danger hide alert-dismissible" role="alert">
+            <strong><i class="glyphicon text-danger glyphicon-alert"></i> An edition is already pending for this input!</strong>
+            <p>If you edit again, the previous request will be overrided!</p>
+          </div>
+
+          {{ include("SEInputBundle:Dashboard:entry_form.html.twig") }}
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" form="ajaxForm" value="submit" class="btn btn-success pull-right"><i class="glyphicon glyphicon-send"> </i> Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="http://code.highcharts.com/highcharts-more.js"></script>
+  <script src="http://code.highcharts.com/modules/solid-gauge.js"></script>
+  <script type="text/javascript">
+    var id = {{ input.id }};
+    var prod = {{ input.totalProdInput }};
+    var ajaxActivities = '{{path('se_input_review_activities')}}';
+    var ajaxEditPopulate = '{{path('se_input_review_edit_populate')}}';
+    var ajaxPopulate = '{{path('se_input_populate')}}';
+    var ajaxDeleteEntry = '{{path('se_input_review_edit_delete')}}';
+  </script>
+  {% javascripts '@SEInputBundle/Resources/public/js/details/*' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+  {% endjavascripts %}
+{% endblock %}

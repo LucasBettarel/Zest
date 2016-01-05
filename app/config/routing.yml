@@ -1,3 +1,7 @@
+se_admin:
+    resource: "@SEAdminBundle/Resources/config/routing.yml"
+    prefix:   /makan
+
 se_report:
     resource: "@SEReportBundle/Resources/config/routing.yml"
     prefix:   /report

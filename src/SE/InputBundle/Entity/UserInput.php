@@ -64,6 +64,7 @@ class UserInput
     private $updatedAt;
 
     /**
+     * @Assert\NotBlank(message = "Choose your name in the user list.")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -743,5 +744,22 @@ class UserInput
     public function getTotalHeadcount()
     {
         return $this->totalHeadcount;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh careful ! You better input a comment for this kind of activity!")
+     */
+    public function isExcludedActivityCommented()
+    {
+        foreach ($this->input_entries as $e){
+            foreach ($e->getActivityHours() as $a) {
+                $i = $a->getActivity()->getId();
+                //COMMENT PROPERTY NEEDED IN ACTIVITIES
+                if( ($i == 13 || $i == 11 || $i == 7) && $e->getComments() === null){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

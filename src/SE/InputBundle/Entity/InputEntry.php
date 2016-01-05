@@ -24,13 +24,14 @@ class InputEntry
     private $id;
 
     /**
+     * @Assert\NotBlank(message = "Choose an employee for this edition, it won't work so good otherwise.")
      * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\Employee", inversedBy="inputs", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $employee;
 
     /**
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message = "Hey! No SESA = No Lines, No Lines = Bad Productivity ! No good lah!")
      * @ORM\Column(name="sesa", type="string", length=255, nullable=true)
      */
     private $sesa;
@@ -93,6 +94,12 @@ class InputEntry
      * @ORM\Column(name="total_prod", type="decimal", nullable=true, precision=11, scale=2)
      */
     private $totalProd = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SE\InputBundle\Entity\EditorStatus", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $editorStatus;
 
 
     /**
@@ -402,4 +409,39 @@ class InputEntry
         return $this->totalOvertime;
     }
 
+
+    /**
+     * Set editorStatus
+     *
+     * @param \SE\InputBundle\Entity\EditorStatus $editorStatus
+     * @return InputEntry
+     */
+    public function setEditorStatus(\SE\InputBundle\Entity\EditorStatus $editorStatus = null)
+    {
+        $this->editorStatus = $editorStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get editorStatus
+     *
+     * @return \SE\InputBundle\Entity\EditorStatus 
+     */
+    public function getEditorStatus()
+    {
+        return $this->editorStatus;
+    }
+
+    /**
+     * @Assert\IsTrue(message = "Oooh no! I think that more than 11 hours a day is too much for a man... let the man sleep!")
+     */
+    public function isTooManyHours()
+    {   
+        $total = 0;
+        foreach ($this->activity_hours as $a) {
+            $total += $a->getRegularHours() + $a->getOtHours();
+        }
+        return $total <= 11;
+    }
 }

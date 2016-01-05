@@ -18,31 +18,23 @@ se_input_activities_add:
     path:     /input/activities/add
     defaults: { _controller: SEInputBundle:Settings:activities_add }
 
-se_input_import_sap:
-    path:     /input/import
-    defaults: { _controller: SEInputBundle:Import:sap }
-
-se_input_set_import:
-    path:     /input/extimport
-    defaults: { _controller: SEInputBundle:Import:set }
-
 se_input_welcome:
     path:     /
     defaults: { _controller: SEInputBundle:Entry:welcome }
 
 se_input_review:
     path:     /review
-    defaults: { _controller: SEInputBundle:Entry:review }
+    defaults: { _controller: SEInputBundle:Dashboard:review }
 
 se_input_ignore:
     pattern:  /review/input/ignore
-    defaults: { _controller: SEInputBundle:Entry:ignore }
+    defaults: { _controller: SEInputBundle:Dashboard:ignore }
     requirements:
         _method:  POST
 
 se_input_delete:
     pattern:  /review/input/delete
-    defaults: { _controller: SEInputBundle:Entry:delete }
+    defaults: { _controller: SEInputBundle:Dashboard:delete }
     requirements:
         _method:  POST
 
@@ -54,24 +46,43 @@ se_input_populate:
 
 se_input_review_details:
     path:     /review/{id}
-    defaults: { _controller: SEInputBundle:Entry:reviewDetails }
+    defaults: { _controller: SEInputBundle:Dashboard:reviewDetails }
     requirements:
         id:   \d+
 
 se_input_review_activities:
     pattern:  /review/activities
-    defaults: { _controller: SEInputBundle:Entry:activities }
+    defaults: { _controller: SEInputBundle:Dashboard:activities }
     requirements:
         _method:  GET
 
 se_input_review_mi:
     pattern:  /review/mi
-    defaults: { _controller: SEInputBundle:Entry:missingInput }
+    defaults: { _controller: SEInputBundle:Dashboard:missingInput }
     requirements:
         _method:  GET
 
 se_input_review_time:
     pattern:  /review/time
-    defaults: { _controller: SEInputBundle:Entry:timeReview }
+    defaults: { _controller: SEInputBundle:Dashboard:timeReview }
     requirements:
         _method:  GET
+
+se_input_review_edit_populate:
+    pattern:  /edit/populate
+    defaults: { _controller: SEInputBundle:Dashboard:editPopulate }
+    requirements:
+        _method:  GET
+
+se_input_review_edit_delete:
+    pattern:  /edit/delete
+    defaults: { _controller: SEInputBundle:Dashboard:editDelete }
+    requirements:
+        _method:  POST
+
+se_input_review_edit:
+    pattern:  review/edit/{id}
+    defaults: { _controller: SEInputBundle:Dashboard:editor }
+    requirements:
+        _method:  POST
+        id:  \d+

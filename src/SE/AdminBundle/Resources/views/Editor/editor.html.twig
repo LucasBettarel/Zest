@@ -1,0 +1,116 @@
+{% extends "SEAdminBundle::layout.html.twig" %}
+
+{% block title %}Editor - {{ parent() }}{% endblock %}
+
+{% block seadmin_header %}
+	<header class="h-weight">
+		<div class="line"></div>
+		<h2><i class="glyphicon glyphicon-edit"> </i> Editor</h2>
+	</header>
+{% endblock %}
+
+{% block seadmin_body %}
+
+  <div class="row">
+    <div id="editor-panel" class="col-md-12">
+      <div class="panel well-black panel-default">
+        <div class="panel-heading well-blacklight">
+          <h4>Last Requests</h4>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-12">
+            <!-- Table -->
+            <div class="table-responsive">
+              <table id="editor" class="table table-hover table-striped display">
+                <thead>
+                  <tr>
+                    <th>Request Date</th>
+                    <th>User</th>
+                    <th>Input</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="inject-editor">
+                	{% for r in requests %}
+                		<tr id="{{r.id}}" data-current="{% if r.inputEntry is not null %}{{r.inputEntry.id}}{% else %}null{% endif %}">
+                      <td class="r-createdAt">{{r.createdAt|date('Y-m-d')}}</td>
+                			<td class="r-user">{{r.user.name}}</td>
+                			<td class="r-input"><a id="view" href="{{ path('se_input_review_details', {'id': r.userInput.id}) }}">{{r.userInput.team.name}} - Shift {{r.userInput.shift.id}} - {{r.userInput.dateInput|date('Y-m-d')}} <i class="glyphicon glyphicon-share"></i></a></td>
+                			<td class="r-type">
+                				{% if r.editorType.id == 1 %}
+                					<i id="1" class="text-success glyphicon glyphicon-plus"></i>
+                				{% elseif r.editorType.id == 2 %}
+                					<i id="2" class="glyphicon glyphicon-edit"></i>
+                				{% elseif r.editorType.id == 3 %}
+                					<i id="3" class="text-danger glyphicon glyphicon-remove"></i>
+                				{% endif %}
+                			</td>
+                			<td class="r-status">
+                				{% if r.editorStatus.id == 1 %}
+                					<i id="1" class="text-warning glyphicon glyphicon-time"></i>
+                				{% elseif r.editorStatus.id == 2 %}
+                					<i id="2" class="text-success glyphicon glyphicon-ok-sign"></i>
+                				{% elseif r.editorStatus.id == 3 %}
+                					<i id="3" class="text-danger glyphicon glyphicon-remove-sign"></i>
+                				{% else %}
+                					<i id="4" class="glyphicon glyphicon-question-sign"></i>
+                				{% endif %}
+                			</td>
+                		</tr>
+                	{% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="request-panel" class="hide col-md-7">
+      <div class="panel well-black panel-default">
+        <div class="panel-heading well-blacklight">
+          <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+          <h4><span id="r-status"></span> <span id="r-id"></span> - <span id="r-user"></span></h4>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-12">
+            <div class="r-content">
+				<p>
+					<strong><span id="r-createdAt"></span><br>
+					<span id="r-input"></span></strong>
+				</p>
+				<div id="inject-info">
+				</div>
+            </div>
+          	<div class="alert alert-success text-success hide" id="alert-result"></div>
+          </div>
+        </div>
+        <div class="panel-footer well-blacklight">
+        	<div id="choice">
+	        	<button id="accept" data-path="{{ path('se_admin_editor_accept') }}" class="btn btn-success col-md-4"><i class="glyphicon glyphicon-ok"> </i> ACCEPT</button>
+	        	<button id="reject" data-path="{{ path('se_admin_editor_reject') }}" class="btn btn-danger col-md-4"><i class="glyphicon glyphicon-remove"> </i> REJECT</button>
+	        	<button id="ignore" data-path="{{ path('se_admin_editor_ignore') }}" class="btn btn-default col-md-4"><i class="glyphicon glyphicon-question-sign"> </i> IGNORE</button>
+	        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel">
+    <div class="modal-dialog load-icon" role="document">
+      <div class="spinner">
+        <div class="dot1"></div>
+        <div class="dot2"></div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script type="text/javascript">
+    var ajaxCurrentEntry = '{{path('se_admin_editor_currentEntry')}}';
+  </script>
+{% endblock %}

@@ -12,7 +12,8 @@
   {% endstylesheets %}
 {% endblock %}
 
-{% block sereport_body %}
+{% block sereport_header %}
+
   <header class="h-employee">
     <div class="line"></div>
     <div class="pull-left">
@@ -44,6 +45,10 @@
       </div>
     </div>
   </div>
+  
+{% endblock %}
+
+{% block sereport_body %}
 
   <div class="row">
     <div id="summary-panel" class="col-md-3">

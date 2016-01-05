@@ -190,12 +190,14 @@ class SAPRFRepository extends EntityRepository
             ->andWhere("a.recorded is NULL OR a.recorded = 0");
 
  			if($team == 1){	
-		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
+		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE OR a.user = :userF")
             	   ->andWhere("a.sourceStorageType <> :sTypeA AND a.sourceStorageType <> :sTypeB");
-				$qb->setParameter('userA', 'SESI000005');//outbound4
-				$qb->setParameter('userB', 'SESI000006');
-				$qb->setParameter('userC', 'SESI000008');
-				$qb->setParameter('userD', 'SESI000019');//outbound3
+				$qb->setParameter('userA', 'SESI000004');
+				$qb->setParameter('userB', 'SESI000005');//outbound4
+				$qb->setParameter('userC', 'SESI000006');
+				$qb->setParameter('userD', 'SESI000007');
+				$qb->setParameter('userE', 'SESI000019');
+				$qb->setParameter('userF', 'SESI000020');//outbound3
 				$qb->setParameter('sTypeA', '901');
 				$qb->setParameter('sTypeB', '902');
             }elseif ($team == 2) {
@@ -212,10 +214,13 @@ class SAPRFRepository extends EntityRepository
 				$qb->setParameter('sTypeA', '902');
 				$qb->setParameter('sTypeB', 'X04');
             }elseif ($team == 3) {
-            	$qb->andWhere("a.user = :userA OR a.user = :userB")
+            	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE")
             	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
-				$qb->setParameter('userA', 'SESI000016');
-				$qb->setParameter('userB', 'SESI000017');
+            	$qb->setParameter('userA', 'SESI000002');
+				$qb->setParameter('userB', 'SESI000008');
+				$qb->setParameter('userC', 'SESI000016');
+				$qb->setParameter('userD', 'SESI000017');
+				$qb->setParameter('userE', 'SESI000028');
 				$qb->setParameter('sTypeA', '901');
 				$qb->setParameter('sTypeB', '902');
             }elseif ($team == 8) {
@@ -241,12 +246,14 @@ class SAPRFRepository extends EntityRepository
             ->andWhere("a.recorded = 1");
 
             if($team == 1){	
-		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD")
+		        $qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE OR a.user = :userF")
             	   ->andWhere("a.sourceStorageType <> :sTypeA AND a.sourceStorageType <> :sTypeB");
-				$qb->setParameter('userA', 'SESI000005');//outbound4
-				$qb->setParameter('userB', 'SESI000006');
-				$qb->setParameter('userC', 'SESI000008');
-				$qb->setParameter('userD', 'SESI000019');//outbound3
+				$qb->setParameter('userA', 'SESI000004');
+				$qb->setParameter('userB', 'SESI000005');//outbound4
+				$qb->setParameter('userC', 'SESI000006');
+				$qb->setParameter('userD', 'SESI000007');
+				$qb->setParameter('userE', 'SESI000019');
+				$qb->setParameter('userF', 'SESI000020');//outbound3
 				$qb->setParameter('sTypeA', '901');
 				$qb->setParameter('sTypeB', '902');
             }elseif ($team == 2) {
@@ -263,10 +270,13 @@ class SAPRFRepository extends EntityRepository
 				$qb->setParameter('sTypeA', '902');
 				$qb->setParameter('sTypeB', 'X04');
             }elseif ($team == 3) {
-            	$qb->andWhere("a.user = :userA OR a.user = :userB")
+            	$qb->andWhere("a.user = :userA OR a.user = :userB OR a.user = :userC OR a.user = :userD OR a.user = :userE")
             	   ->andWhere("a.sourceStorageType <> :sTypeA OR a.sourceStorageType <> :sTypeB");
-				$qb->setParameter('userA', 'SESI000016');
-				$qb->setParameter('userB', 'SESI000017');
+            	$qb->setParameter('userA', 'SESI000002');
+				$qb->setParameter('userB', 'SESI000008');
+				$qb->setParameter('userC', 'SESI000016');
+				$qb->setParameter('userD', 'SESI000017');
+				$qb->setParameter('userE', 'SESI000028');
 				$qb->setParameter('sTypeA', '901');
 				$qb->setParameter('sTypeB', '902');
             }elseif ($team == 8) {

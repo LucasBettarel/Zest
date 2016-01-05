@@ -9,12 +9,16 @@
 
 {% block title %}{{ parent() }}{% endblock %}
 
-{% block seinput_body %}
-
+{% block seinput_header %}
+  
   <header class="h-input">
-  	<div class="line"></div>
-  	<h2><i class="glyphicon glyphicon-pencil"> </i> Manhours Input</h2>
+    <div class="line"></div>
+    <h2><i class="glyphicon glyphicon-pencil"> </i> Manhours Input</h2>
   </header>
+
+{% endblock %}
+
+{% block seinput_body %}
 
   {% block seinput_form %}
   {% endblock %}
