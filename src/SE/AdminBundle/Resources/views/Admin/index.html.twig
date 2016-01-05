@@ -29,6 +29,10 @@
 
 	gapi.analytics.ready(function() {
 
+		ga(function(tracker) {
+		  var clientId = tracker.get('clientId');
+		});
+
 	  /**
 	   * Authorize the user immediately if the user has already granted access.
 	   * If no access has been created, render an authorize button inside the
@@ -36,7 +40,7 @@
 	   */
 	  gapi.analytics.auth.authorize({
 	    container: 'embed-api-auth-container',
-	    clientid: 'UA-71467645-1'
+	    clientid: clientId
 	  });
 
 

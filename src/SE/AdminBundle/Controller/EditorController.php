@@ -53,8 +53,10 @@ class EditorController extends Controller
 	   			//deletion
 	   			elseif($editorType == 3){$response = $editor->deleteRequest($request);}
 
-	   			if($response['code'] == 100){$res = $editor->editStatus($requestId, 2);}
-	   			$response['message'] .= " - ".$res['message']; 
+	   			if($response['code'] == 100){
+	   				$res = $editor->editStatus($requestId, 2);
+	   				$response['message'] .= " - ".$res['message'];
+	   			}
 	   			//[RECALCULATE HERE]
 	   			return new JsonResponse($response);
 	   		}

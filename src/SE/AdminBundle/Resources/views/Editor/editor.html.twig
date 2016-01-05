@@ -24,8 +24,8 @@
               <table id="editor" class="table table-hover table-striped display">
                 <thead>
                   <tr>
-                    <th>User</th>
                     <th>Request Date</th>
+                    <th>User</th>
                     <th>Input</th>
                     <th>Type</th>
                     <th>Status</th>
@@ -34,8 +34,8 @@
                 <tbody id="inject-editor">
                 	{% for r in requests %}
                 		<tr id="{{r.id}}" data-current="{% if r.inputEntry is not null %}{{r.inputEntry.id}}{% else %}null{% endif %}">
+                      <td class="r-createdAt">{{r.createdAt|date('Y-m-d')}}</td>
                 			<td class="r-user">{{r.user.name}}</td>
-                			<td class="r-createdAt">{{r.createdAt|date('Y-m-d')}}</td>
                 			<td class="r-input"><a id="view" href="{{ path('se_input_review_details', {'id': r.userInput.id}) }}">{{r.userInput.team.name}} - Shift {{r.userInput.shift.id}} - {{r.userInput.dateInput|date('Y-m-d')}} <i class="glyphicon glyphicon-share"></i></a></td>
                 			<td class="r-type">
                 				{% if r.editorType.id == 1 %}

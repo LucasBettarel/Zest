@@ -1,11 +1,11 @@
 <nav class="gn-menu-wrapper">
     <div class="gn-scroller">
 		<ul class="gn-menu">
-			<li class="gn-search-item">
+{#			<li class="gn-search-item">
 			 	<input placeholder="Search" type="search" class="gn-search">
 			  	<a class="gn-icon glyphicon glyphicon-search"><span>Search</span></a>
 			</li>
-			<li>
+#}			<li>
 				<span class="indicator sap"></span>
 				<a href="{{ path('se_report_refresh') }}" class="gn-icon glyphicon glyphicon-calendar">Monthly Productivity</a>
 			</li>
@@ -13,7 +13,7 @@
 				<span class="indicator manhours"></span>
 				<a href="{{ path('se_report_daily') }}" class="gn-icon glyphicon glyphicon-time"></i>Daily Productivity</a>
 			</li>
-			<li>
+{#			<li>
 				<span class="indicator weight"></span>
 				<a class="gn-icon glyphicon glyphicon-file">SPS</a>
 			</li>
@@ -21,13 +21,13 @@
 				<span class="indicator dashboard"></span>
 				<a class="gn-icon glyphicon glyphicon-flag">Zoning</a>
 			</li>
-			<li>
+#}			<li>
 				<span class="indicator employee"></span>
-				<a href="{{ path('se_report_hr') }}" class="gn-icon glyphicon glyphicon-user">HR - Attendance</a>
+				<a href="{{ path('se_report_hr') }}" class="gn-icon glyphicon glyphicon-user">Attendance</a>
 			</li>
-			<li>
+{#			<li>
 				<span class="indicator activity"></span><a class="gn-icon glyphicon glyphicon-usd"></i>Finances</a>
 			</li>
-		</ul>
+#}		</ul>
 	</div><!-- /gn-scroller -->
 </nav>

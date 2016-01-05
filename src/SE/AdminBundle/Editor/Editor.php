@@ -127,7 +127,7 @@ class Editor
 
 		if($request->getInputEntry()){
 
-			$deleteEntry = $em->getRepository('SEInputBundle:InputEntry')->findOneBy(array('id' => $editor->getInputEntry()->getId()));
+			$deleteEntry = $em->getRepository('SEInputBundle:InputEntry')->findOneBy(array('id' => $request->getInputEntry()->getId()));
 		    if($deleteEntry){
 
 		      $deleteActivityHours = $em->getRepository('SEInputBundle:ActivityHours')->findBy(array('input' => $deleteEntry));
@@ -146,6 +146,9 @@ class Editor
 	          //reset User Input
 		      $deleteEntry->getUserInput()->setProcess(0);
 
+		      //unset editor entry
+		      $request->setInputEntry(null);
+		      
 		      //delete entry
 		      $em->remove($deleteEntry);
 		      $em->flush();

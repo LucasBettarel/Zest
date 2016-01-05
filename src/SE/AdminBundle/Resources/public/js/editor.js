@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     table.buttons().container().prependTo($('#editor-panel .panel-heading')).addClass('pull-right');
 
-    $('#editor tbody tr').click(function(){
+    $(document).on('click', '#editor tbody tr', function(e){
       $this = $(this);
       if($('#editor-panel').hasClass('col-md-12')){
           $('#editor-panel').toggleClass('col-md-12 col-md-5').siblings('#request-panel').removeClass('hide');
