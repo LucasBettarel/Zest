@@ -134,10 +134,14 @@
                         {% endif %}
                         </td>
                       <td>{{ entry.sesa }}</td>
-                      <td>{% if entry.present == 1 %}
-                            <i class="glyphicon glyphicon-ok text-success"></i></td>
+                      <td>{% if entry.present == 1 and entry.halfday == 0 %}
+                            <i class="glyphicon glyphicon-ok-circle text-success"></i></td>
+                          {% elseif entry.present == 1 and entry.halfday == 1 %}
+                            <i class="glyphicon glyphicon-adjust text-info"> </i> {{ entry.absencereason.name }}</td>
+                          {% elseif entry.present == 0 and entry.halfday == 0 %}
+                            <i class="glyphicon glyphicon-remove-circle text-warning"> </i> {{ entry.absencereason.name }}</td>
                           {% else %}
-                            <i class="glyphicon glyphicon-remove text-warning"> </i> {{ entry.absencereason.name }}</td>
+                            <i class="glyphicon glyphicon-ban-circle text-danger"> </i> {{ entry.absencereason.name }}</td>
                           {% endif %}
                       <td>
                         {% for a in entry.activityHours %}

@@ -12,16 +12,7 @@ $(document).ready(function() {
     $('#formModal').on('hide.bs.modal', function (event) {
         table.columns([7,8,9]).visible(true);
         table.column(10).visible(false);
-        //reset form
-        $('.modal-body .toggling').addClass('hide');
-        $('#activities-prototype').children().remove();
-        addSubElement($('#activities-prototype'));
-        $('.modal-body form').removeClass('hide');
-        $('.modal-footer button[type="submit"]').prop('disabled', false);
-        $('form #errors').html("").parent(".col-md-12").addClass('hide');
-        $('form').find('.has-error').removeClass('has-error');
-        $('#entry-details input, #entry-details select').prop('disabled', false);
-        $('.modal-body #override-alert').addClass('hide');
+        formResetter();
     });
 });
 
@@ -165,6 +156,8 @@ function getForm(type, entryId){
         $('#se_inputbundle_editorentry_editorType').val(1);
     }else{
         $('#entry-details input, #entry-details select').prop('disabled', true);
+        //new
+        $('#presence-container').attr('disabled','disabled');
         if( type == "@edit" ){
             $('.modal-title').text('Edit Entry');
             $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-warning');
@@ -182,22 +175,35 @@ function getForm(type, entryId){
           function(r){
             $('#se_inputbundle_editorentry_employee').val(r.entry[0]['employee']);
             $('#se_inputbundle_editorentry_sesa').val(r.entry[0]['sesa']);
-            $('#se_inputbundle_editorentry_present').val(r.entry[0]['present']);
+            $('#se_inputbundle_editorentry_present').val($('#se_inputbundle_editorentry_present').prop('checked', r.entry[0]['present']));
+            $('#se_inputbundle_editorentry_halfday').val($('#se_inputbundle_editorentry_halfday').prop('checked', r.entry[0]['halfday']));
             $('#se_inputbundle_editorentry_absence_reason').val(r.entry[0]['absence']);
             $('#se_inputbundle_editorentry_comments').val(r.entry[0]['comments']);
+
+            updatePresenceToggler(r.entry[0]['present'], r.entry[0]['halfday']);
 
             if(r.request[0] != null){$('.modal-body #override-alert').removeClass('hide');}
             if(r.entry[0]['comments'] != null || type == "@delete"){$('.modal-body .txtarea-sm').removeClass('hide');}
 
             for (var i = 0; i < r.entry.length; i++) {
                 if(i>0){addSubElement($('#activities-prototype'));}
-                $('#activities-prototype').children('div').last().find('.input-activity').val(r.entry[i]['activity']);
-                $('#activities-prototype').children('div').last().find('.input-regular-hours').val(r.entry[i]['regularHours']);
-                $('#activities-prototype').children('div').last().find('.input-overtime').val(r.entry[i]['otHours']);
+                if(r.entry[i]['activity']){
+                    $('#activities-prototype').children('div').last().find('.input-activity').val(r.entry[i]['activity']);
+                    $('#activities-prototype').children('div').last().find('.input-regular-hours').val(r.entry[i]['regularHours']);
+                    $('#activities-prototype').children('div').last().find('.input-overtime').val(r.entry[i]['otHours']);
+                }else{
+                    $('#activities-prototype').children('div').last().remove();
+                }
             };
             //relieve form
-            if( type == "@edit"){$('#entry-details input, #entry-details select').prop('disabled', false);}
-            if( type == "@delete"){$('#entry-details input, #entry-details select').prop('disabled', true);}
+            if( type == "@edit"){
+                $('#entry-details input, #entry-details select').prop('disabled', false);
+                $('#presence-container').removeAttr('disabled');
+            }
+            if( type == "@delete"){
+                $('#entry-details input, #entry-details select').prop('disabled', true);
+                $('#presence-container').attr('disabled','disabled');
+            }
           },
           "json")
         ; 
@@ -210,6 +216,7 @@ function getForm(type, entryId){
         e.preventDefault();
         $('.modal-footer button[type="submit"]').prop('disabled', true);
         $('#entry-details input, #entry-details select').prop('disabled', false);
+        $('#presence-container').removeAttr('disabled');
 
         $.ajax({
             type: $(this).attr('method'),
@@ -284,4 +291,34 @@ function initialize(){
         createChart(response.jsonActivities);
       },
       "json"); 
+}
+
+function formResetter(){
+    $('.modal-body .toggling').addClass('hide');
+    $('#activities-prototype').children().remove();
+    addSubElement($('#activities-prototype'));
+    $('.modal-body form').removeClass('hide');
+    $('.modal-footer button[type="submit"]').prop('disabled', false);
+    $('form #errors').html("").parent(".col-md-12").addClass('hide');
+    $('form').find('.has-error').removeClass('has-error');
+    $('#entry-details input, #entry-details select').prop('disabled', false);
+    //new
+    $('#presence-container').removeAttr('disabled');
+    $('.modal-body #override-alert').addClass('hide');
+}
+
+function updatePresenceToggler(p,h){
+    if( p && !h ){//present
+        $('.presence-gauge').css('top','0px');
+        $('#presence-container').attr('data-state', 'Present').attr('data-original-title','Present');
+         $('.toggling').addClass('hide').find('.input-reason').val(0);
+    }else if( !p && !h ){//absent
+        $('.presence-gauge').css('top','15px');
+        $('#presence-container').attr('data-state', 'Absent').attr('data-original-title','Absent');
+        $('.toggling').removeClass('hide');
+    }else if( p && h ){//half
+        $('.presence-gauge').css('top','7px');
+        $('#presence-container').attr('data-state', 'Halfday').attr('data-original-title','Halfday');
+        $('.toggling').removeClass('hide');
+    }
 }

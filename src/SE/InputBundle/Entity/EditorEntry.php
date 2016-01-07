@@ -110,6 +110,14 @@ class EditorEntry
     private $editorType;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="halfday", type="boolean")
+     * @Assert\NotNull()
+     */
+    private $halfday;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -471,5 +479,28 @@ class EditorEntry
     public function getEditorType()
     {
         return $this->editorType;
+    }
+
+    /**
+     * Set halfday
+     *
+     * @param boolean $halfday
+     * @return EditorEntry
+     */
+    public function setHalfday($halfday)
+    {
+        $this->halfday = $halfday;
+
+        return $this;
+    }
+
+    /**
+     * Get halfday
+     *
+     * @return boolean 
+     */
+    public function getHalfday()
+    {
+        return $this->halfday;
     }
 }

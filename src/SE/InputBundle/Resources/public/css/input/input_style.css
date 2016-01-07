@@ -118,7 +118,7 @@
 }
 
 .modal-input-lg{
-	width: 1000px;
+	width: 1010px;
 }
 
 
@@ -143,4 +143,8 @@
   left:0px;
   overflow: hidden;
   background: #555;
+}
+
+#presence-container[disabled],  {
+    pointer-events: none;
 }

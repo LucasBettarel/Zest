@@ -65,6 +65,8 @@ $(document).ready(function() {
 
     $(document).on('click', '#presence-container, presence-container *', function(e) {
       presenceToggler($(this).closest("#presence-container"));
+      e && e.preventDefault();
+      return false;
     });
 
   $(document).on('click', '#comment', function(e) {
