@@ -18,11 +18,15 @@
 				<tr data-id="{{request.id}}">
 					<td>{{ request.employee.name }}</td>
 					<td>{{ request.sesa }}</td>
-					<td>{% if request.present == 1 %}
-					    <i class="glyphicon glyphicon-ok text-success"></i></td>
-					  {% else %}
-					    <i class="glyphicon glyphicon-remove text-warning"> </i> {{ request.absencereason.name }}</td>
-					  {% endif %}
+					<td>{% if request.present == 1 and request.halfday == 0 %}
+	                      <i class="glyphicon glyphicon-ok-circle text-success"></i></td>
+	                    {% elseif request.present == 1 and request.halfday == 1 %}
+	                      <i class="glyphicon glyphicon-adjust text-info"> </i> {{ request.absencereason.name }}</td>
+	                    {% elseif request.present == 0 and request.halfday == 0 %}
+	                      <i class="glyphicon glyphicon-remove-circle text-warning"> </i> {{ request.absencereason.name }}</td>
+	                    {% else %}
+	                      <i class="glyphicon glyphicon-ban-circle text-danger"> </i> {{ request.absencereason.name }}</td>
+	                    {% endif %}
 					<td>
 					{% for a in request.editorActivities %}
 					  {{ a.activity.name }} </br>
@@ -74,11 +78,15 @@
                 <tr data-id="{{entry.id}}">
 					<td>{{ entry.employee.name }}</td>
 					<td>{{ entry.sesa }}</td>
-					<td>{% if entry.present == 1 %}
-					    <i class="glyphicon glyphicon-ok text-success"></i></td>
-					  {% else %}
-					    <i class="glyphicon glyphicon-remove text-warning"> </i> {{ entry.absencereason.name }}</td>
-					  {% endif %}
+					<td>{% if entry.present == 1 and entry.halfday == 0 %}
+	                      <i class="glyphicon glyphicon-ok-circle text-success"></i></td>
+	                    {% elseif entry.present == 1 and entry.halfday == 1 %}
+	                      <i class="glyphicon glyphicon-adjust text-info"> </i> {{ entry.absencereason.name }}</td>
+	                    {% elseif entry.present == 0 and entry.halfday == 0 %}
+	                      <i class="glyphicon glyphicon-remove-circle text-warning"> </i> {{ entry.absencereason.name }}</td>
+	                    {% else %}
+	                      <i class="glyphicon glyphicon-ban-circle text-danger"> </i> {{ entry.absencereason.name }}</td>
+	                    {% endif %}
 					<td>
 					{% for a in entry.activityHours %}
 					  {{ a.activity.name }} </br>
