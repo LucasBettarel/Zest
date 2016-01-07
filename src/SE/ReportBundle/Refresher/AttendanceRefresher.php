@@ -72,6 +72,7 @@ class AttendanceRefresher
 					//update hours
 					$jsonAttendance[$employeeId][$dateInput]['presence'] = 1;
 					$jsonAttendance[$employeeId][$dateInput]['absence'] = 0;
+					$jsonAttendance[$employeeId][$dateInput]['halfday'] = $inputEntry->getHalfday();
 
 					$jsonAttendance[$employeeId][$dateInput]['othr'] += $inputEntry->getTotalOvertime() - $ottohr;
 					$jsonAttendance[$employeeId][$dateInput]['reghr'] += $inputEntry->getTotalHours() - $inputEntry->getTotalOvertime() - $regtohr;
@@ -116,10 +117,14 @@ class AttendanceRefresher
 						}else{//not working
 							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-absent'></div>";	
 						}
-					}elseif($e[$i]['tothr'] > 11 || $e[$i]['othr'] > 11 || $e[$i]['reghr'] > 8){//warning too much hour
+					}elseif( ( $e[$i]['tothr'] > 11 || $e[$i]['othr'] > 11 || $e[$i]['reghr'] > 8 ) || ( $e[$i]['halfday'] == 1  && $e[$i]['reghr'] > 4 ) ){//warning too much hour
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-high'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";
 					}elseif( ( $e[$i]['reghr'] < 8 && $day['isWeekday'] && !$day['isHoliday']) || $e[$i]['tothr'] == 0 ){//missing hour
-						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-low'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";					
+						if( $e[$i]['halfday'] == 0 || ( $e[$i]['halfday'] == 1  && $e[$i]['reghr'] < 4 ) ){ //really missing hour
+							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-low'><i class='glyphicon glyphicon-exclamation-sign'> </i> ".$e[$i]['tothr']."</div>";					
+						}else{ //halfday
+							$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-half'><i class='glyphicon glyphicon-adjust'> </i> ".$e[$i]['tothr']."</div>";
+						}
 					}else{//ok
 						$dCell = "<div data-d='".$i."' data-m='".$month."' data-y='".$year."' data-e='".$j."' class='e-day-ok'><i class='glyphicon glyphicon-ok'> </i> ".$e[$i]['tothr']."</div>";					
 					}

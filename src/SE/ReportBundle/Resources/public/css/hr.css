@@ -9,6 +9,7 @@
 .blue{background-color: rgba(51, 122, 183, 0.3); cursor:pointer;}
 .marron{background-color: #A38F84;}
 .grey{background: repeating-linear-gradient( -45deg, rgba(204, 204, 204, 0.5), rgba(204, 204, 204, 0.5) 0px, rgba(153, 153, 153, 0.5) 5px, rgba(153, 153, 153, 0.5) 5px );}
+.bluegreen{background: repeating-linear-gradient( -45deg, rgba(51, 122, 183, 0.3), rgba(51, 122, 183, 0.3) 50%, rgba(97, 189, 109, 0.6) 50%, rgba(97, 189, 109, 0.6) 100% ); cursor:pointer;}
 .box{position:relative;}
 .overlay{width: 100%;height: 100%;position: absolute;top:0;left:0;color: white; background:rgba(0, 0, 0, .75);opacity:0;text-align: center;
     -webkit-transition: all 0.3s ease-in-out;
