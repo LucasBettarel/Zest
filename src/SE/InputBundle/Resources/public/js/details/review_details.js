@@ -304,6 +304,7 @@ function formResetter(){
     $('#entry-details input, #entry-details select').prop('disabled', false);
     //new
     $('#presence-container').removeAttr('disabled');
+    updatePresenceToggler(true, false);
     $('.modal-body #override-alert').addClass('hide');
 }
 
