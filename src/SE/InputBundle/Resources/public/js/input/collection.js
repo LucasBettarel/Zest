@@ -109,7 +109,9 @@ function addElement($prototypeHolder, values){
 
 function removeElement($element){
   target = $element.attr('data-target');
+  $proto = $('*[data-content="'+target+'"]').parent();
   $('*[data-content="'+target+'"]').remove();
+  preventNullActivity($proto);
 }
 
 function definePrototype($collectionHolder, level){
@@ -141,6 +143,8 @@ function addSubElement($prototypeHolder){
   $sub.find('.input-overtime input').val(0);
   //$sub.find('.input-zone select').val(0);
   $prototypeHolder.attr('data-counter', Number($prototypeHolder.attr('data-counter')) + 1);
+
+  preventNullActivity($prototypeHolder);
 
   return $sub;
 }
@@ -264,5 +268,14 @@ function presenceToggler($this){
     $main.find('.input-reason').val(0);
     $actProto.children().last().find('.input-regular-hours input').val(8);
   
+  }
+}
+
+function preventNullActivity($proto){
+  //test to disable deleting the last activity from user (if not absent)
+  if ($proto.children().length == 1){
+    $proto.find('#rmv').attr('disabled','disabled');
+  }else{
+    $proto.find('#rmv').removeAttr('disabled');
   }
 }
