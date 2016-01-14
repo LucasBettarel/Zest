@@ -30,7 +30,12 @@ class EditorEntryType extends AbstractType
                 'class'    => 'SEInputBundle:User',
                 'property' => 'name', 
                 'multiple' => false,
-                'expanded' => false
+                'expanded' => false,
+                'query_builder' => function(EntityRepository $er) {
+                  return $er->createQueryBuilder('u')
+                            ->select('u')
+                            ->orderBy("u.name", "ASC");
+                  }
                 ), array('required' => true))
             ->add('employee', 'entity', array(
                 'class'    => 'SEInputBundle:Employee',
@@ -56,6 +61,8 @@ class EditorEntryType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => false))
+            
+            ->add('halfday', 'checkbox', array('required' => false))
             ->add('editorActivities', 'collection', array(
                 'type'         => new EditorActivityType(),
                 'allow_add'    => true,

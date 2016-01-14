@@ -118,5 +118,33 @@
 }
 
 .modal-input-lg{
-	width: 1000px;
+	width: 1010px;
+}
+
+
+/*super bouton halfday*/
+#presence-container {
+  width: 15px;
+  height: 15px;
+  position: relative;
+  margin: 8px;
+  border-radius: 50%;
+  background-color:#eee;
+  box-shadow: -1px 1px 4px 1px #aaa inset;
+  cursor: pointer;
+  overflow: hidden;
+  border:1px solid #ccc;
+}
+.presence-gauge {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top:0px;
+  left:0px;
+  overflow: hidden;
+  background: #555;
+}
+
+#presence-container[disabled],  {
+    pointer-events: none;
 }

@@ -40,7 +40,7 @@ class InputEntryRepository extends EntityRepository
 	{
 		$qb = $this
 			->createQueryBuilder('a')
-			->select("a.sesa, a.present, a.comments")
+			->select("a.sesa, a.present, a.halfday, a.comments")
 			->leftJoin('a.employee', 'e')
 			->addSelect('e.id as employee')
 			->leftJoin('a.absence_reason', 'ar')

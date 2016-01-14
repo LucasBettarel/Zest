@@ -11,11 +11,16 @@
         {{ form_widget(entry.sesa, {'attr': {'class': 'form-control'}}) }}
       </div>
       <div id="presence">
-        <div class="pull-left" data-toggle="tooltip" title="Presence"> 
-          {{ form_widget(entry.present, {'attr': {'class': 'input-present '}}) }}
+        <div id="presence-container" class="pull-left" data-state="Present" data-toggle="tooltip" title="Present" >
+          <div class="presence-gauge">
+          </div>
         </div>
         <div class="hide toggling">
           {{ form_widget(entry.absence_reason, {'attr': {'class': 'form-control input-reason'}}) }}
+        </div>
+        <div id="present" class="hide"> 
+          {{ form_widget(entry.present, {'attr': {'class': 'input-present' }}) }}
+          {{ form_widget(entry.halfday, {'attr': {'class': 'input-halfday' }}) }}
         </div>
       </div>
     </td>

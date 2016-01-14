@@ -16,7 +16,7 @@ class Structurer
 	public function getAttendanceStructure($year, $month, $n)
 	{ 
 	    $jsonAttendance = array();
-   		$hourStructure = array('presence' => 0, 'absence' => 0, 'tothr' => 0, 'reghr' => 0, 'othr' => 0);
+   		$hourStructure = array('presence' => 0, 'absence' => 0, 'halfday' => 0, 'tothr' => 0, 'reghr' => 0, 'othr' => 0);
    		$employees = $this->em->getRepository('SEInputBundle:Employee')->getHistoricalEmployees($year, $month);
 
 		//create employee-array structure

@@ -31,7 +31,12 @@ class UserInputType extends AbstractType
                 'class'    => 'SEInputBundle:User',
                 'property' => 'name', 
                 'multiple' => false,
-                'expanded' => false
+                'expanded' => false,
+                'query_builder' => function(EntityRepository $er) {
+                  return $er->createQueryBuilder('u')
+                            ->select('u')
+                            ->orderBy("u.name", "ASC");
+                  }
                 ), array('required' => true))
             ->add('team', 'entity', array(
                 'class'    => 'SEInputBundle:Team',

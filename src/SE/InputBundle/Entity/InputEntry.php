@@ -101,6 +101,14 @@ class InputEntry
      */
     private $editorStatus;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="halfday", type="boolean")
+     * @Assert\NotNull()
+     */
+    private $halfday;
+
 
     /**
      * Get id
@@ -443,5 +451,28 @@ class InputEntry
             $total += $a->getRegularHours() + $a->getOtHours();
         }
         return $total <= 11;
+    }
+
+    /**
+     * Set halfday
+     *
+     * @param boolean $halfday
+     * @return InputEntry
+     */
+    public function setHalfday($halfday)
+    {
+        $this->halfday = $halfday;
+
+        return $this;
+    }
+
+    /**
+     * Get halfday
+     *
+     * @return boolean 
+     */
+    public function getHalfday()
+    {
+        return $this->halfday;
     }
 }

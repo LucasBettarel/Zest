@@ -273,6 +273,7 @@ function createTable(j, h, n){
     $('.e-day-high').closest('td').addClass('orange box');
     $('.e-day-absent').closest('td').addClass('grey box');
     $('.e-day-leave').closest('td').addClass('blue box');
+    $('.e-day-half').closest('td').addClass('bluegreen box');
     $('.e-day-missing').closest('td').addClass('marron text-center');
     $('#attendance .box').not('.grey').append("<div class='overlay'><i class='glyphicon glyphicon-info-sign'></i></div>");
 

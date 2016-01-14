@@ -34,6 +34,7 @@ class Editor
     		$entry->setEmployee($request->getEmployee());
     		$entry->setSesa($request->getSesa());
     		$entry->setPresent($request->getPresent());
+    		$entry->setHalfday($request->getHalfday());
     		$entry->setAbsenceReason($request->getAbsenceReason());
     		$entry->setComments($request->getComments());
     		$entry->setTotalHours(0);
@@ -93,6 +94,7 @@ class Editor
 		        if($editEntry->getEmployee() != $request->getEmployee()){$editEntry->setEmployee($request->getEmployee());}
 				if($editEntry->getSesa() != $request->getSesa()){$editEntry->setSesa($request->getSesa());}
 				if($editEntry->getPresent() != $request->getPresent()){$editEntry->setPresent($request->getPresent());}
+				if($editEntry->getHalfday() != $request->getHalfday()){$editEntry->setHalfday($request->getHalfday());}
 				if($editEntry->getAbsenceReason() != $request->getAbsenceReason()){$editEntry->setAbsenceReason($request->getAbsenceReason());}
 				if($editEntry->getComments() != $request->getComments()){$editEntry->setComments($request->getComments());}
 				$editEntry->setTotalHours(0);

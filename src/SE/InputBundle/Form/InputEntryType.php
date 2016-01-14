@@ -41,6 +41,7 @@ class InputEntryType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
                 ), array('required' => false))
+            ->add('halfday', 'checkbox', array('required' => false))
             ->add('activity_hours', 'collection', array(
                 'type'         => new ActivityHoursType(),
                 'allow_add'    => true,

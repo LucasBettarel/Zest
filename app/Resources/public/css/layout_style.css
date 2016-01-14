@@ -8,6 +8,10 @@ body, html {
  	position: relative;
 }
 
+a[disabled] {
+    pointer-events: none;
+}
+
 .logo-zest{
   float:right!important;
   margin-right: 5px;
