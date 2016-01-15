@@ -14,6 +14,12 @@ $(document).ready(function() {
         table.column(10).visible(false);
         formResetter();
     });
+
+    $('#details-tabs a').click(function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    })
+
 });
 
 function createChart(json){

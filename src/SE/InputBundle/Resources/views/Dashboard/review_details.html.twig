@@ -85,95 +85,136 @@
   <div class="row">
     <div class="col-md-12">
       <div id="input-details" class="panel panel-default">
-        <div class="panel-heading">
-          <h4>Input Details</h4>
+        <div id="details-tabs" class="panel-heading">
+          <ul role="tablist" class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Input Details</a></li>
+            <li role="presentation"><a href="#to" aria-controls="to" role="tab" data-toggle="tab">TO Lines</a></li>
+          </ul>
         </div>
         <div class="panel-body">
-          <div class="table-responsive">
-              <table id="table" class="table table-hover table-striped display">
-                <thead>
-                  <tr>
-                    <th>Employee</th>
-                    <th>SESA</th>
-                    <th>Present</th>
-                    <th>Activities</th>
-                    <th>Regular Hours</th>
-                    <th>Overtime</th>
-                    <th>Comments</th>
-                    <th>TO lines</th>
-                    <th>Total Hours</th>
-                    <th>Productivity</th>
-                    <th>
-                      <div class="btn btn-success" data-toggle="modal" data-target="#formModal" data-type="@new" data-id=""><i data-toggle="tooltip" title="Add New Entry" class="glyphicon glyphicon-plus"> </i></div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for entry in input.inputEntries %}
-                    <tr data-id="{{entry.id}}"
-                      {% if entry.editorStatus is not null %}
-                        {% if entry.editorStatus.id == 1 %} class="status-back-wait"
-                        {% elseif entry.editorStatus.id == 2 %} class="status-back-ok" 
-                        {% elseif entry.editorStatus.id == 3 %} class="status-back-nok" 
-                        {% elseif entry.editorStatus.id == 4 %} class="status-back-ignore" 
-                        {% endif %}
-                      {% endif %}
-                    >
-                      <td>
-                        {{ entry.employee.name }}
-                        {% if entry.editorStatus is not null %}
-                          {% if entry.editorStatus.id == 1 %}
-                            <i data-toggle="tooltip" title="Edition pending for approval" class="text-warning glyphicon glyphicon-time"></i> 
-                          {% elseif entry.editorStatus.id == 2 %}
-                           <i data-toggle="tooltip" title="Edition approved, input updated" class="text-success glyphicon glyphicon-ok"></i> 
-                          {% elseif entry.editorStatus.id == 3 %}
-                           <i data-toggle="tooltip" title="Edition rejected" class="text-danger glyphicon glyphicon-remove"></i> 
-                          {% elseif entry.editorStatus.id == 4 %}
-                           <i data-toggle="tooltip" title="Edition ignored" class="glyphicon glyphicon-question-sign"></i> 
-                          {% endif %}
-                        {% endif %}
-                        </td>
-                      <td>{{ entry.sesa }}</td>
-                      <td>{% if entry.present == 1 and entry.halfday == 0 %}
-                            <i class="glyphicon glyphicon-ok-circle text-success"></i></td>
-                          {% elseif entry.present == 1 and entry.halfday == 1 %}
-                            <i class="glyphicon glyphicon-adjust text-info"> </i> {{ entry.absencereason.name }}</td>
-                          {% elseif entry.present == 0 and entry.halfday == 0 %}
-                            <i class="glyphicon glyphicon-remove-circle text-warning"> </i> {{ entry.absencereason.name }}</td>
-                          {% else %}
-                            <i class="glyphicon glyphicon-ban-circle text-danger"> </i> {{ entry.absencereason.name }}</td>
-                          {% endif %}
-                      <td>
-                        {% for a in entry.activityHours %}
-                          {{ a.activity.name }} </br>
-                        {% endfor %}
-                      </td>
-                      <td>
-                        {% for a in entry.activityHours %}
-                          {{ a.regularHours }} </br>
-                        {% endfor %}
-                      </td>
-                      <td>
-                        {% for a in entry.activityHours %}
-                          {{ a.otHours }} </br>
-                        {% endfor %}
-                      </td>
-                      <td>{{ entry.comments }}</td>
-                      <td>{{ entry.totalTo }}</td> 
-                      <td>{{ entry.totalHours }}</td>
-                      <td>
-                        {% if entry.totalProd != 0 %}
-                          {{ entry.totalProd }}
-                        {% endif %}
-                      </td>
-                      <td>
-                        <a href=# data-toggle="modal" data-target="#formModal" data-type="@edit" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Edit Entry" class="glyphicon glyphicon-edit"> </i></a>
-                        <a href=# data-toggle="modal" data-target="#formModal" data-type="@delete" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Delete Entry" class="glyphicon glyphicon-trash text-danger"> </i></a></div>
-                      </td>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="details">
+              <div class="table-responsive">
+                <table id="table" class="table table-hover table-striped display">
+                  <thead>
+                    <tr>
+                      <th>Employee</th>
+                      <th>SESA</th>
+                      <th>Present</th>
+                      <th>Activities</th>
+                      <th>Regular Hours</th>
+                      <th>Overtime</th>
+                      <th>Comments</th>
+                      <th>TO lines</th>
+                      <th>Total Hours</th>
+                      <th>Productivity</th>
+                      <th>
+                        <div class="btn btn-success" data-toggle="modal" data-target="#formModal" data-type="@new" data-id=""><i data-toggle="tooltip" title="Add New Entry" class="glyphicon glyphicon-plus"> </i></div>
+                      </th>
                     </tr>
-                  {% endfor %}               
-                </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {% for entry in input.inputEntries %}
+                      <tr data-id="{{entry.id}}"
+                        {% if entry.editorStatus is not null %}
+                          {% if entry.editorStatus.id == 1 %} class="status-back-wait"
+                          {% elseif entry.editorStatus.id == 2 %} class="status-back-ok" 
+                          {% elseif entry.editorStatus.id == 3 %} class="status-back-nok" 
+                          {% elseif entry.editorStatus.id == 4 %} class="status-back-ignore" 
+                          {% endif %}
+                        {% endif %}
+                      >
+                        <td>
+                          {{ entry.employee.name }}
+                          {% if entry.editorStatus is not null %}
+                            {% if entry.editorStatus.id == 1 %}
+                              <i data-toggle="tooltip" title="Edition pending for approval" class="text-warning glyphicon glyphicon-time"></i> 
+                            {% elseif entry.editorStatus.id == 2 %}
+                             <i data-toggle="tooltip" title="Edition approved, input updated" class="text-success glyphicon glyphicon-ok"></i> 
+                            {% elseif entry.editorStatus.id == 3 %}
+                             <i data-toggle="tooltip" title="Edition rejected" class="text-danger glyphicon glyphicon-remove"></i> 
+                            {% elseif entry.editorStatus.id == 4 %}
+                             <i data-toggle="tooltip" title="Edition ignored" class="glyphicon glyphicon-question-sign"></i> 
+                            {% endif %}
+                          {% endif %}
+                          </td>
+                        <td>{{ entry.sesa }}</td>
+                        <td>{% if entry.present == 1 and entry.halfday == 0 %}
+                              <i class="glyphicon glyphicon-ok-circle text-success"></i></td>
+                            {% elseif entry.present == 1 and entry.halfday == 1 %}
+                              <i class="glyphicon glyphicon-adjust text-info"> </i> {{ entry.absencereason.name }}</td>
+                            {% elseif entry.present == 0 and entry.halfday == 0 %}
+                              <i class="glyphicon glyphicon-remove-circle text-warning"> </i> {{ entry.absencereason.name }}</td>
+                            {% else %}
+                              <i class="glyphicon glyphicon-ban-circle text-danger"> </i> {{ entry.absencereason.name }}</td>
+                            {% endif %}
+                        <td>
+                          {% for a in entry.activityHours %}
+                            {{ a.activity.name }} </br>
+                          {% endfor %}
+                        </td>
+                        <td>
+                          {% for a in entry.activityHours %}
+                            {{ a.regularHours }} </br>
+                          {% endfor %}
+                        </td>
+                        <td>
+                          {% for a in entry.activityHours %}
+                            {{ a.otHours }} </br>
+                          {% endfor %}
+                        </td>
+                        <td>{{ entry.comments }}</td>
+                        <td>{{ entry.totalTo }}</td> 
+                        <td>{{ entry.totalHours }}</td>
+                        <td>
+                          {% if entry.totalProd != 0 %}
+                            {{ entry.totalProd }}
+                          {% endif %}
+                        </td>
+                        <td>
+                          <a href=# data-toggle="modal" data-target="#formModal" data-type="@edit" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Edit Entry" class="glyphicon glyphicon-edit"> </i></a>
+                          <a href=# data-toggle="modal" data-target="#formModal" data-type="@delete" data-id="{{entry.id}}"><i data-toggle="tooltip" title="Delete Entry" class="glyphicon glyphicon-trash text-danger"> </i></a></div>
+                        </td>
+                      </tr>
+                    {% endfor %}               
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade active" id="to">
+              <div class="table-responsive">
+                <table id="table-to" class="table table-hover table-striped display">
+                  <thead>
+                    <tr>
+                      <th>Transfer Order</th>
+                      <th>Material</th>
+                      <th>Date Conf</th>
+                      <th>Time Conf</th>
+                      <th>User</th>
+                      <th>Assigned</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for l in lines %}
+                      <tr>
+                        <td>{{ l.transferOrder }}</td>
+                        <td>{{ l.material }}</td>
+                        <td>{{ l.dateConfirmation|date('d-m-Y') }}</td>
+                        <td>{{ l.timeConfirmation|date('H:m:s') }}</td>
+                        <td>{{ l.user }}</td>
+                        <td>
+                          {% if l.recorded == 1 %}
+                            <i class="glyphicon glyphicon-ok-circle text-success"></i>
+                          {% else %}
+                            <i class="glyphicon glyphicon-remove-circle text-danger"></i>
+                          {% endif %}
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

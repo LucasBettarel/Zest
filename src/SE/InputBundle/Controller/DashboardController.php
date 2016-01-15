@@ -184,6 +184,8 @@ class DashboardController extends Controller
       throw new NotFoundHttpException("The manhours input ".$id." was not found. Sorry lah.");
     }
 
+    $lines = $em->getRepository('SEInputBundle:SAPRF')->getDayLines($userInput->getDateInput());
+
     $editorEntry = new EditorEntry();
     $form = $this->createForm(new EditorEntryType($id), $editorEntry, array(
         'action' => $this->generateUrl('se_input_review_edit', array('id' => $id)),
@@ -192,6 +194,7 @@ class DashboardController extends Controller
 
     return $this->render('SEInputBundle:Dashboard:review_details.html.twig', array(
       'input' => $userInput,
+      'lines' => $lines,
       'form' => $form->createView()
     ));
   }
