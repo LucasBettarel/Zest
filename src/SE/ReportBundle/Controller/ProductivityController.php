@@ -281,7 +281,7 @@ class ProductivityController extends Controller
 	        }
 	    }
 
-	    $support = array_search("Support (Admin, CCMP)", $data[$t][$s]['activities']['cat']);
+	    $support = array_search("Admin", $data[$t][$s]['activities']['cat']);
 	    if ($support !== false && $data[$t][$s]['report']['wh'] != 0){
 	    	$data[$t][$s]['report']['ksr'] = round( ( $data[$t][$s]['report']['wh'] - $data[$t][$s]['activities']['data'][$support] )*100 / $data[$t][$s]['report']['wh'] , 1);
 	    }
@@ -343,7 +343,7 @@ class ProductivityController extends Controller
 	        }
 	    }
 
-	    $support = array_search("Support (Admin, CCMP)", $data[$t][$s]['activities']['cat']);
+	    $support = array_search("Admin", $data[$t][$s]['activities']['cat']);
 	    if ($support !== false && $data[$t][$s]['report']['wh'] > 0){
 	    	$data[$t][$s]['report']['ksr'] = round( ( $data[$t][$s]['report']['wh'] - $data[$t][$s]['activities']['data'][$support] )*100 / $data[$t][$s]['report']['wh'] , 1);
 	    }

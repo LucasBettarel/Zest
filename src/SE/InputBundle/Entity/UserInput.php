@@ -465,16 +465,18 @@ class UserInput
 
             foreach ($i->getActivityHours() as $a) {
                 
-                $totH += $a->getRegularHours();
-                $totO += $a->getOtHours();
-                if ($a->getActivity()->getProductive()){
-                    $totWH += $a->getRegularHours() + $a->getOtHours();
-                }
-                if ($a->getActivity()->getTrackable() and $a->getActivity()->getProductive()){
-                    $prodH += $a->getRegularHours() + $a->getOtHours();
-                }
-                if($a->getActivity()->getId() == 7){
-                    $totTH += $a->getRegularHours() + $a->getOtHours();
+                if (!$a->getIgnore()){ //remove transfer out
+                    $totH += $a->getRegularHours();
+                    $totO += $a->getOtHours();
+                    if ($a->getActivity()->getProductive()){ //remove excluded hours
+                        $totWH += $a->getRegularHours() + $a->getOtHours();
+                    }
+                    if ($a->getActivity()->getTrackable() and $a->getActivity()->getProductive()){ //putaway + picking
+                        $prodH += $a->getRegularHours() + $a->getOtHours();
+                    }
+                    if($a->getActivity()->getId() == 7){ // training
+                        $totTH += $a->getRegularHours() + $a->getOtHours();
+                    }
                 }
             }
 
