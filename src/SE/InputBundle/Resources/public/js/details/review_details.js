@@ -18,9 +18,15 @@ $(document).ready(function() {
     $('#details-tabs a').click(function (e) {
       e.preventDefault();
       $(this).tab('show');
-      $('#details-tabs .dt-buttons').toggleClass('hide');
-      $('#details-tabs #table-to_filter').toggleClass('hide');
-    })
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        if(e.target !== e.relatedTarget){
+            console.log(e.target, e.relatedTarget);
+            $('#details-tabs .dt-buttons').toggleClass('hide');
+            $('#details-tabs #table-to_filter').toggleClass('hide');
+        }
+    });
 
 });
 
@@ -292,8 +298,7 @@ function initialize(){
 
     var tableTo = $('#table-to').DataTable( {
         paging: true,
-        "dom": 'lrftip'//,
-//        "info": false
+        "dom": 'lrftip'
     });
 
     $('#table-to_paginate').addClass('pull-right');
@@ -302,8 +307,6 @@ function initialize(){
     $('#table-to_filter input').keyup(function(){
         tableTo.search($(this).val()).draw();
     })
-
-//    panelHeaderControls($('#tab-details'));
 
     $("*[data-toggle='tooltip']").tooltip({container: 'body'});
 
