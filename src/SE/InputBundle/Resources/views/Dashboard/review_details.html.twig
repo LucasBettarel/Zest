@@ -87,8 +87,8 @@
       <div id="input-details" class="panel panel-default">
         <div id="details-tabs" class="panel-heading">
           <ul role="tablist" class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Input Details</a></li>
-            <li role="presentation"><a href="#to" aria-controls="to" role="tab" data-toggle="tab">TO Lines</a></li>
+            <li role="presentation" class="active"><a id="tab-details" href="#details" aria-controls="details" role="tab" data-toggle="tab">Input Details</a></li>
+            <li role="presentation"><a id="tab-to" href="#to" aria-controls="to" role="tab" data-toggle="tab">TO Lines</a></li>
           </ul>
         </div>
         <div class="panel-body">
@@ -204,9 +204,9 @@
                         <td>{{ l.user }}</td>
                         <td>
                           {% if l.recorded == 1 %}
-                            <i class="glyphicon glyphicon-ok-circle text-success"></i>
+                            Yes <i class="glyphicon glyphicon-ok-circle text-success"></i>
                           {% else %}
-                            <i class="glyphicon glyphicon-remove-circle text-danger"></i>
+                            No <i class="glyphicon glyphicon-remove-circle text-danger"></i>
                           {% endif %}
                         </td>
                       </tr>
