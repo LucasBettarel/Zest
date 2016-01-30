@@ -102,6 +102,37 @@ class UserInput
     private $totalOvertimeInput = 0;
 
     /**
+     * @ORM\Column(name="total_replenishment_input", type="decimal", nullable=false, precision=11, scale=2)
+     */
+    private $totalReplenishmentInput = 0;
+
+    /**
+     * @ORM\Column(name="total_replenishment_overtime_input", type="decimal", nullable=false, precision=11, scale=2)
+     */
+    private $totalReplenishmentOvertimeInput = 0;
+
+    /**
+     * @ORM\Column(name="total_cycle_count_input", type="decimal", nullable=false, precision=11, scale=2)
+     */
+    private $totalCycleCountInput = 0;
+
+    /**
+     * @ORM\Column(name="total_cycle_count_overtime_input", type="decimal", nullable=false, precision=11, scale=2)
+     */
+    private $totalCycleCountOvertimeInput = 0;
+
+    /**
+     * @ORM\Column(name="total_transfer_out_input", type="decimal", nullable=false, precision=11, scale=2)
+     */
+    private $totalTransferOutInput = 0;
+
+    /**
+     * @ORM\Column(name="total_transfer_out_overtime_input", type="decimal", nullable=false, precision=11, scale=2)
+     */
+    private $totalTransferOutOvertimeInput = 0;
+
+
+    /**
      * @ORM\Column(name="total_to_input", type="integer", nullable=true)
      */
     private $totalToInput = 0;
@@ -454,6 +485,17 @@ class UserInput
         $totHC = 0;
         $totTH = 0;
         $totABS = 0;
+        //fictive hours:
+        $totRPL = 0;
+        $totRPLOT = 0;
+        $totCC = 0;
+        $totCCOT = 0;
+        $totTR = 0;
+        $totTROT = 0;
+
+        /////////////////////////  RULES  //////////////////////////////
+        //the entry/input total hours (reg + ot) includes everthing but TRANSFER OUT
+        //the entry/input total working hours (productivity) includes every non-fictive and non-excluded hours
 
         foreach ($this->getInputEntries() as $i) {
             
@@ -463,19 +505,38 @@ class UserInput
             $prodH = 0;
 
 
-            foreach ($i->getActivityHours() as $a) {
-                
-                if (!$a->getIgnore()){ //remove transfer out
-                    $totH += $a->getRegularHours();
-                    $totO += $a->getOtHours();
+            foreach ($i->getActivityHours() as $a) { //getting Activities by ID is not the best, need to standardize dat shit
+
+                //include everything ... but transfer out
+                $totH += $a->getRegularHours();
+                $totO += $a->getOtHours();
+
+                if (!$a->getFictive()){ //remove transfer out, cc and replenishment
                     if ($a->getActivity()->getProductive()){ //remove excluded hours
                         $totWH += $a->getRegularHours() + $a->getOtHours();
                     }
-                    if ($a->getActivity()->getTrackable() and $a->getActivity()->getProductive()){ //putaway + picking
+                    if ($a->getActivity()->getTrackable() || $a->getActivity()->getProductive()){ //putaway + picking
                         $prodH += $a->getRegularHours() + $a->getOtHours();
                     }
                     if($a->getActivity()->getId() == 7){ // training
                         $totTH += $a->getRegularHours() + $a->getOtHours();
+                    }
+                }else{
+                    //fictive hours
+                    if($a->getActivity()->getId() == 10){ // Replenishment
+                        $totRPLOT += $a->getOtHours();
+                        $totRPL += $a->getRegularHours() + $totRPLOT;
+                    }
+                    if($a->getActivity()->getId() == 8){ // Cycle Count
+                        $totCCOT += $a->getOtHours();
+                        $totCC += $a->getRegularHours() + $totCCOT;                    
+                    }
+                    if($a->getActivity()->getId() == 13){ // Transfer Out
+                        $totTROT += $a->getOtHours();
+                        $totTR += $a->getRegularHours() + $totTROT;
+                        //these hours aren't counted nowhere : remove them
+                        $totH -= $a->getRegularHours();
+                        $totO -= $a->getOtHours();                    
                     }
                 }
             }
@@ -488,10 +549,10 @@ class UserInput
 
             //pour input entry
             $i->setTotalHours($totH + $totO);
-            $i->setTotalWorkingHours($totWH);
+            $i->setTotalWorkingHours($totWH); //non-fictive + productive
             $i->setTotalOvertime($totO);
 
-            if( $i->getTotalTo() > 0 and $prodH > 0){
+            if( $i->getTotalTo() > 0 || $prodH > 0){
                 $i->setTotalProd($i->getTotalTo() / $prodH);
             }
 
@@ -511,8 +572,15 @@ class UserInput
         $this->totalTrainingHours = $totTH;
         $this->totalHeadcount = $totHC;
         $this->totalAbsence = $totABS;
+
+        $this->totalReplenishmentInput = $totRPL;
+        $this->totalReplenishmentOvertimeInput = $totRPLOT;
+        $this->totalCycleCountInput = $totCC;
+        $this->totalCycleCountOvertimeInput = $totCCOT;
+        $this->totalTransferOutInput = $totTR;
+        $this->totalTransferOutOvertimeInput = $totTROT;
     
-        if( $this->totalToInput > 0 and $this->totalWorkingHoursInput > 0){
+        if( $this->totalToInput > 0 || $this->totalWorkingHoursInput > 0){
             $this->totalProdInput = $this->totalToInput / $this->totalWorkingHoursInput;
         }
     }
@@ -763,5 +831,143 @@ class UserInput
             }
         }
         return true;
+    }
+
+    /**
+     * Set totalReplenishmentInput
+     *
+     * @param string $totalReplenishmentInput
+     * @return UserInput
+     */
+    public function setTotalReplenishmentInput($totalReplenishmentInput)
+    {
+        $this->totalReplenishmentInput = $totalReplenishmentInput;
+
+        return $this;
+    }
+
+    /**
+     * Get totalReplenishmentInput
+     *
+     * @return string 
+     */
+    public function getTotalReplenishmentInput()
+    {
+        return $this->totalReplenishmentInput;
+    }
+
+    /**
+     * Set totalReplenishmentOvertimeInput
+     *
+     * @param string $totalReplenishmentOvertimeInput
+     * @return UserInput
+     */
+    public function setTotalReplenishmentOvertimeInput($totalReplenishmentOvertimeInput)
+    {
+        $this->totalReplenishmentOvertimeInput = $totalReplenishmentOvertimeInput;
+
+        return $this;
+    }
+
+    /**
+     * Get totalReplenishmentOvertimeInput
+     *
+     * @return string 
+     */
+    public function getTotalReplenishmentOvertimeInput()
+    {
+        return $this->totalReplenishmentOvertimeInput;
+    }
+
+    /**
+     * Set totalCycleCountInput
+     *
+     * @param string $totalCycleCountInput
+     * @return UserInput
+     */
+    public function setTotalCycleCountInput($totalCycleCountInput)
+    {
+        $this->totalCycleCountInput = $totalCycleCountInput;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCycleCountInput
+     *
+     * @return string 
+     */
+    public function getTotalCycleCountInput()
+    {
+        return $this->totalCycleCountInput;
+    }
+
+    /**
+     * Set totalCycleCountOvertimeInput
+     *
+     * @param string $totalCycleCountOvertimeInput
+     * @return UserInput
+     */
+    public function setTotalCycleCountOvertimeInput($totalCycleCountOvertimeInput)
+    {
+        $this->totalCycleCountOvertimeInput = $totalCycleCountOvertimeInput;
+
+        return $this;
+    }
+
+    /**
+     * Get totalCycleCountOvertimeInput
+     *
+     * @return string 
+     */
+    public function getTotalCycleCountOvertimeInput()
+    {
+        return $this->totalCycleCountOvertimeInput;
+    }
+
+    /**
+     * Set totalTransferOutInput
+     *
+     * @param string $totalTransferOutInput
+     * @return UserInput
+     */
+    public function setTotalTransferOutInput($totalTransferOutInput)
+    {
+        $this->totalTransferOutInput = $totalTransferOutInput;
+
+        return $this;
+    }
+
+    /**
+     * Get totalTransferOutInput
+     *
+     * @return string 
+     */
+    public function getTotalTransferOutInput()
+    {
+        return $this->totalTransferOutInput;
+    }
+
+    /**
+     * Set totalTransferOutOvertimeInput
+     *
+     * @param string $totalTransferOutOvertimeInput
+     * @return UserInput
+     */
+    public function setTotalTransferOutOvertimeInput($totalTransferOutOvertimeInput)
+    {
+        $this->totalTransferOutOvertimeInput = $totalTransferOutOvertimeInput;
+
+        return $this;
+    }
+
+    /**
+     * Get totalTransferOutOvertimeInput
+     *
+     * @return string 
+     */
+    public function getTotalTransferOutOvertimeInput()
+    {
+        return $this->totalTransferOutOvertimeInput;
     }
 }
