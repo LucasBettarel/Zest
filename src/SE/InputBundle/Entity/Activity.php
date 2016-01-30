@@ -60,9 +60,9 @@ class Activity
     /**
      * @var boolean
      *
-     * @ORM\Column(name="ignore", type="boolean")
+     * @ORM\Column(name="fictive", type="boolean")
      */
-    private $ignore = false;
+    private $fictive = false;
 
     /**
      * @ORM\OneToMany(targetEntity="SE\InputBundle\Entity\ActivityZone", mappedBy="activity", cascade={"persist"})
@@ -344,26 +344,26 @@ class Activity
 
 
     /**
-     * Set ignore
+     * Set fictive
      *
-     * @param boolean $ignore
+     * @param boolean $fictive
      * @return Activity
      */
-    public function setIgnore($ignore)
+    public function setFictive($fictive)
     {
-        $this->ignore = $ignore;
+        $this->fictive = $fictive;
 
         return $this;
     }
 
     /**
-     * Get ignore
+     * Get fictive
      *
      * @return boolean 
      */
-    public function getIgnore()
+    public function getFictive()
     {
-        return $this->ignore;
+        return $this->fictive;
     }
 
     /**
