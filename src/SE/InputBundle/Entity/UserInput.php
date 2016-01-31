@@ -505,38 +505,39 @@ class UserInput
             $prodH = 0;
 
 
-            foreach ($i->getActivityHours() as $a) { //getting Activities by ID is not the best, need to standardize dat shit
+            foreach ($i->getActivityHours() as $ah) { //getting Activities by ID is not the best, need to standardize dat shit
 
                 //include everything ... but transfer out
-                $totH += $a->getRegularHours();
-                $totO += $a->getOtHours();
+                $totH += $ah->getRegularHours();
+                $totO += $ah->getOtHours();
+                $a = $ah->getActivity();
 
                 if (!$a->getFictive()){ //remove transfer out, cc and replenishment
-                    if ($a->getActivity()->getProductive()){ //remove excluded hours
-                        $totWH += $a->getRegularHours() + $a->getOtHours();
+                    if ($a->getProductive()){ //remove excluded hours
+                        $totWH += $ah->getRegularHours() + $ah->getOtHours();
                     }
-                    if ($a->getActivity()->getTrackable() || $a->getActivity()->getProductive()){ //putaway + picking
-                        $prodH += $a->getRegularHours() + $a->getOtHours();
+                    if ($a->getTrackable() && $a->getProductive()){ //putaway + picking
+                        $prodH += $ah->getRegularHours() + $ah->getOtHours();
                     }
-                    if($a->getActivity()->getId() == 7){ // training
-                        $totTH += $a->getRegularHours() + $a->getOtHours();
+                    if($a->getId() == 7){ // training
+                        $totTH += $ah->getRegularHours() + $ah->getOtHours();
                     }
                 }else{
                     //fictive hours
-                    if($a->getActivity()->getId() == 10){ // Replenishment
-                        $totRPLOT += $a->getOtHours();
-                        $totRPL += $a->getRegularHours() + $totRPLOT;
+                    if($a->getId() == 10){ // Replenishment
+                        $totRPLOT += $ah->getOtHours();
+                        $totRPL += $ah->getRegularHours() + $totRPLOT;
                     }
-                    if($a->getActivity()->getId() == 8){ // Cycle Count
-                        $totCCOT += $a->getOtHours();
-                        $totCC += $a->getRegularHours() + $totCCOT;                    
+                    if($a->getId() == 8){ // Cycle Count
+                        $totCCOT += $ah->getOtHours();
+                        $totCC += $ah->getRegularHours() + $totCCOT;                    
                     }
-                    if($a->getActivity()->getId() == 13){ // Transfer Out
-                        $totTROT += $a->getOtHours();
-                        $totTR += $a->getRegularHours() + $totTROT;
+                    if($a->getId() == 13){ // Transfer Out
+                        $totTROT += $ah->getOtHours();
+                        $totTR += $ah->getRegularHours() + $totTROT;
                         //these hours aren't counted nowhere : remove them
-                        $totH -= $a->getRegularHours();
-                        $totO -= $a->getOtHours();                    
+                        $totH -= $ah->getRegularHours();
+                        $totO -= $ah->getOtHours();                    
                     }
                 }
             }
@@ -552,7 +553,7 @@ class UserInput
             $i->setTotalWorkingHours($totWH); //non-fictive + productive
             $i->setTotalOvertime($totO);
 
-            if( $i->getTotalTo() > 0 || $prodH > 0){
+            if( $i->getTotalTo() > 0 && $prodH > 0){
                 $i->setTotalProd($i->getTotalTo() / $prodH);
             }
 
@@ -580,7 +581,7 @@ class UserInput
         $this->totalTransferOutInput = $totTR;
         $this->totalTransferOutOvertimeInput = $totTROT;
     
-        if( $this->totalToInput > 0 || $this->totalWorkingHoursInput > 0){
+        if( $this->totalToInput > 0 && $this->totalWorkingHoursInput > 0){
             $this->totalProdInput = $this->totalToInput / $this->totalWorkingHoursInput;
         }
     }
