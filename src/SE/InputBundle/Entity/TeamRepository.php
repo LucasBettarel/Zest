@@ -30,7 +30,7 @@ class TeamRepository extends EntityRepository
 		->createQueryBuilder('a')
 		->select("a")
 		->where("a.statusControl = 1")
-	    ->orderBy('a.masterId', 'ASC')
+	    ->orderBy('a.displayOrder', 'ASC')
 		->getQuery()
 		->getResult()
 		;
@@ -49,7 +49,7 @@ class TeamRepository extends EntityRepository
 		->select("a")
 		->where("( a.endDate IS NOT NULL and a.endDate >= '".$end."' ) or ( a.endDate IS NULL and a.statusControl = 1 ) ")
         ->andWhere("a.startDate <= '".$start->format("Y-m-d")."'")
-	    ->orderBy('a.masterId', 'ASC')
+	    ->orderBy('a.displayOrder', 'ASC')
 		->getQuery()
 		->getResult()
 		;
