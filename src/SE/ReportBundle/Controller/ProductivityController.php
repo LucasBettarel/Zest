@@ -283,10 +283,45 @@ class ProductivityController extends Controller
 
 		foreach ($u->getInputEntries() as $e) {
 	    	foreach ($e->getActivityHours() as $a) {
-	    		//////////////////////EXCLUDE SHIT TO EXCLUDE//////////////////
-	    		if($a->getActivity()->getId() != 8 && $a->getActivity()->getId() != 10 && $a->getActivity()->getId() != 13){
-	    		///////////////////////////////////////////////////////////////
-		        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+	    		//////////////////////EXCLUDE SHIT TO EXCLUDE if rep and cc exist//////////////////
+	    		if( isset($data[$repId]) && isset($data[$ccId]) ){
+		    		if( $a->getActivity()->getId() != 8 && $a->getActivity()->getId() != 10 && $a->getActivity()->getId() != 13 ){
+		    		///////////////////////////////////////////////////////////////
+			        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+			            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 10){
+			        	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$repId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$repId][$s]['activities']['data'])){
+			            	$data[$repId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$repId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 8){
+			        	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$ccId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$ccId][$s]['activities']['data'])){
+			            	$data[$ccId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$ccId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }
+			    }else{
+			    	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
 		        	if($k === false){
 		            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
 		            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
@@ -296,29 +331,7 @@ class ProductivityController extends Controller
 		          	}else{
 		            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
 		          	}
-		        }elseif($a->getActivity()->getId() == 10){
-		        	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
-		        	if($k === false){
-		            	$data[$repId][$s]['activities']['cat'][] = $a->getActivity()->getName();
-		            	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
-		          	}
-		          	if(array_key_exists($k, $data[$repId][$s]['activities']['data'])){
-		            	$data[$repId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-		          	}else{
-		            	$data[$repId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-		          	}
-		        }elseif($a->getActivity()->getId() == 8){
-		        	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
-		        	if($k === false){
-		            	$data[$ccId][$s]['activities']['cat'][] = $a->getActivity()->getName();
-		            	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
-		          	}
-		          	if(array_key_exists($k, $data[$ccId][$s]['activities']['data'])){
-		            	$data[$ccId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-		          	}else{
-		            	$data[$ccId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-		          	}
-		        }   
+			    }   
 	        }
 	    }
 
@@ -384,10 +397,45 @@ class ProductivityController extends Controller
 
 		foreach ($u->getInputEntries() as $e) {
 	    	foreach ($e->getActivityHours() as $a) {
-	    		//////////////////////EXCLUDE SHIT TO EXCLUDE//////////////////
-	    		if($a->getActivity()->getId() != 8 && $a->getActivity()->getId() != 10 && $a->getActivity()->getId() != 13){
-	    		///////////////////////////////////////////////////////////////
-		        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+	    		//////////////////////EXCLUDE SHIT TO EXCLUDE if rep and cc exist//////////////////
+	    		if( isset($data[$repId]) && isset($data[$ccId]) ){
+		    		if( $a->getActivity()->getId() != 8 && $a->getActivity()->getId() != 10 && $a->getActivity()->getId() != 13 ){
+		    		///////////////////////////////////////////////////////////////
+			        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+			            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 10){
+			        	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$repId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$repId][$s]['activities']['data'])){
+			            	$data[$repId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$repId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 8){
+			        	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$ccId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$ccId][$s]['activities']['data'])){
+			            	$data[$ccId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$ccId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }
+			    }else{
+			    	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
 		        	if($k === false){
 		            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
 		            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
@@ -397,29 +445,7 @@ class ProductivityController extends Controller
 		          	}else{
 		            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
 		          	}
-		        }elseif($a->getActivity()->getId() == 10){
-		        	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
-		        	if($k === false){
-		            	$data[$repId][$s]['activities']['cat'][] = $a->getActivity()->getName();
-		            	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
-		          	}
-		          	if(array_key_exists($k, $data[$repId][$s]['activities']['data'])){
-		            	$data[$repId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-		          	}else{
-		            	$data[$repId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-		          	}
-		        }elseif($a->getActivity()->getId() == 8){
-		        	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
-		        	if($k === false){
-		            	$data[$ccId][$s]['activities']['cat'][] = $a->getActivity()->getName();
-		            	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
-		          	}
-		          	if(array_key_exists($k, $data[$ccId][$s]['activities']['data'])){
-		            	$data[$ccId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-		          	}else{
-		            	$data[$ccId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-		          	}
-		        }  
+			    }   
 	        }
 	    }
 
