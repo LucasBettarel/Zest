@@ -184,6 +184,8 @@ class DashboardController extends Controller
       throw new NotFoundHttpException("The manhours input ".$id." was not found. Sorry lah.");
     }
 
+    $lines = $em->getRepository('SEInputBundle:SAPRF')->getDayLines($userInput->getDateInput());
+
     $editorEntry = new EditorEntry();
     $form = $this->createForm(new EditorEntryType($id), $editorEntry, array(
         'action' => $this->generateUrl('se_input_review_edit', array('id' => $id)),
@@ -192,6 +194,7 @@ class DashboardController extends Controller
 
     return $this->render('SEInputBundle:Dashboard:review_details.html.twig', array(
       'input' => $userInput,
+      'lines' => $lines,
       'form' => $form->createView()
     ));
   }
@@ -294,34 +297,6 @@ class DashboardController extends Controller
     
     $response = array("code" => 100, "success" => true, 'entry' => $entry, 'request' => $request);
 
-    return new Response(json_encode($response)); 
-  }
-
-  public function editDeleteAction()
-  { 
-    $em = $this->getDoctrine()->getManager();
-    $request = $this->get('request');        
-    $idInput = $request->get('idEntry');
-    
-    $deleteEntry = $em->getRepository('SEInputBundle:InputEntry')->findOneBy(array('id' => $idEntry));
-    if($deleteEntry){
-      $deleteActivityHours = $em->getRepository('SEInputBundle:ActivityHours')->findBy(array('input' => $deleteEntry));
-      if ($deleteActivityHours) {
-        foreach ($deleteActivityHours as $deleteActivityHour) {
-          // un-record to lines too
-          foreach ($em->getRepository('SEInputBundle:SAPRF')->getRecordedTo($deleteEntry->getUserInput()->getDateInput(), $deleteEntry->getSesa()) as $recordedTo) {
-            $recordedTo->setRecorded(0);
-          }
-          $em->remove($deleteActivityHour);
-        }
-      }
-      $deleteEntry->getUserInput()->setProcess(0);
-      $em->remove($deleteEntry);  
-      $em->flush();
-      $response = array("code" => 100, "success" => true);
-    }else{
-      $response = array("code" => 400, "success" => false);
-    }
     return new Response(json_encode($response)); 
   }
 

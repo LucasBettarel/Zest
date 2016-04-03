@@ -14,6 +14,20 @@ $(document).ready(function() {
         table.column(10).visible(false);
         formResetter();
     });
+
+    $('#details-tabs a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        if(e.target !== e.relatedTarget){
+            console.log(e.target, e.relatedTarget);
+            $('#details-tabs .dt-buttons').toggleClass('hide');
+            $('#details-tabs #table-to_filter').toggleClass('hide');
+        }
+    });
+
 });
 
 function createChart(json){
@@ -281,6 +295,18 @@ function initialize(){
     $('div.dt-buttons a').each(function(){
         $(this).attr('data-toggle','tooltip').attr('title',$(this).find('i').attr('title'));
     });
+
+    var tableTo = $('#table-to').DataTable( {
+        paging: true,
+        "dom": 'lrftip'
+    });
+
+    $('#table-to_paginate').addClass('pull-right');
+    $('#table-to_length').appendTo($('#table-to_wrapper'));
+    $('#table-to_filter').prependTo($('#input-details .panel-heading')).addClass('pull-right hide').html($('#table-to_filter').html().split("Search:").join("")).find('input').attr('placeholder', 'Search...');
+    $('#table-to_filter input').keyup(function(){
+        tableTo.search($(this).val()).draw();
+    })
 
     $("*[data-toggle='tooltip']").tooltip({container: 'body'});
 

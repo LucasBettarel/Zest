@@ -74,12 +74,6 @@ se_input_review_edit_populate:
     requirements:
         _method:  GET
 
-se_input_review_edit_delete:
-    pattern:  /edit/delete
-    defaults: { _controller: SEInputBundle:Dashboard:editDelete }
-    requirements:
-        _method:  POST
-
 se_input_review_edit:
     pattern:  review/edit/{id}
     defaults: { _controller: SEInputBundle:Dashboard:editor }

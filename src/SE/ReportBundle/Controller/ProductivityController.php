@@ -249,6 +249,7 @@ class ProductivityController extends Controller
 
 	public function loadMonthlyData($data, $dp, $s, $d, $u)
 	{
+	    $em = $this->getDoctrine()->getManager();
 		$t=is_int($dp)?0:$dp->getMasterId();
 
 		$data[$t][$s]['report']['to'] += $u->getTotalToInput();
@@ -261,6 +262,20 @@ class ProductivityController extends Controller
 		$data[$t][$s]['report']['ot'] += $u->getTotalOvertimeInput();
 		$data[$t][$s]['report']['prod'] = $data[$t][$s]['report']['wh'] != 0 ? round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1) : 0;
 
+		//transfer replenishment and cycle count hours to dedicated departement : replenishment[id] = 14 and cc[id] = 13
+		$repId = ($t == 0) ? 0 : 14; //to dynamize
+		$ccId = ($t == 0) ? 0 : 13; //to dynamize
+		if(isset($data[$repId])){
+			$data[$repId][$s]['report']['mh'] += $u->getTotalReplenishmentInput(); 
+			$data[$repId][$s]['report']['wh'] += $u->getTotalReplenishmentInput(); 
+			$data[$repId][$s]['report']['ot'] += $u->getTotalReplenishmentOvertimeInput(); 
+		}
+		if(isset($data[$ccId])){
+			$data[$ccId][$s]['report']['mh'] += $u->getTotalCycleCountInput(); 
+			$data[$ccId][$s]['report']['wh'] += $u->getTotalCycleCountInput(); 
+			$data[$ccId][$s]['report']['ot'] += $u->getTotalCycleCountOvertimeInput(); 
+		}
+
 		//logistic efficiency
 		if(is_int($dp)){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
 		}else{$ut = ( $dp->getLet() / 36 );}
@@ -268,25 +283,63 @@ class ProductivityController extends Controller
 
 		foreach ($u->getInputEntries() as $e) {
 	    	foreach ($e->getActivityHours() as $a) {
-	        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
-	        	if($k === false){
-	            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
-	            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
-	          	}
-	          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
-	            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-	          	}else{
-	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-	          	}       
+	    		//////////////////////EXCLUDE SHIT TO EXCLUDE if rep and cc exist//////////////////
+	    		if( isset($data[$repId]) && isset($data[$ccId]) ){
+		    		if( $a->getActivity()->getId() != 8 && $a->getActivity()->getId() != 10 && $a->getActivity()->getId() != 13 ){
+		    		///////////////////////////////////////////////////////////////
+			        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+			            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 10){
+			        	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$repId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$repId][$s]['activities']['data'])){
+			            	$data[$repId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$repId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 8){
+			        	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$ccId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$ccId][$s]['activities']['data'])){
+			            	$data[$ccId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$ccId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }
+			    }else{
+			    	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+		        	if($k === false){
+		            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+		            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+		          	}
+		          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+		            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+		          	}else{
+		            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+		          	}
+			    }   
 	        }
 	    }
 
-	    $support = array_search("Support (Admin, CCMP)", $data[$t][$s]['activities']['cat']);
+	    $support = array_search("Admin", $data[$t][$s]['activities']['cat']);
 	    if ($support !== false && $data[$t][$s]['report']['wh'] != 0){
 	    	$data[$t][$s]['report']['ksr'] = round( ( $data[$t][$s]['report']['wh'] - $data[$t][$s]['activities']['data'][$support] )*100 / $data[$t][$s]['report']['wh'] , 1);
 	    }
 
-	    $em = $this->getDoctrine()->getManager();
 	    for ($i=0; $i < sizeof($data[$t][$s]['activities']['cat']); $i++) { 
 	    	//load/refresh ke
 	    	$tar = $em->getRepository('SEInputBundle:Activity')->findOneBy(array('name' => $data[$t][$s]['activities']['cat'][$i]));
@@ -323,6 +376,20 @@ class ProductivityController extends Controller
 		$data[$t][$s]['report']['ot'] += $u->getTotalOvertimeInput();
 		$data[$t][$s]['report']['prod'] = $data[$t][$s]['report']['wh'] != 0 ? round($data[$t][$s]['report']['to'] / $data[$t][$s]['report']['wh'] , 1) : 0;
 
+		//transfer replenishment and cycle count hours to dedicated departement : replenishment[id] = 14 and cc[id] = 13
+		$repId = ($t == 0) ? 0 : 14; //to dynamize
+		$ccId = ($t == 0) ? 0 : 13; //to dynamize
+		if(isset($data[$repId])){
+			$data[$repId][$s]['report']['mh'] += $u->getTotalReplenishmentInput(); 
+			$data[$repId][$s]['report']['wh'] += $u->getTotalReplenishmentInput(); 
+			$data[$repId][$s]['report']['ot'] += $u->getTotalReplenishmentOvertimeInput(); 
+		}
+		if(isset($data[$ccId])){
+			$data[$ccId][$s]['report']['mh'] += $u->getTotalCycleCountInput(); 
+			$data[$ccId][$s]['report']['wh'] += $u->getTotalCycleCountInput(); 
+			$data[$ccId][$s]['report']['ot'] += $u->getTotalCycleCountOvertimeInput(); 
+		}
+
 		//logistic efficiency
 		if(is_int($dp)){$ut = (80 / 36);  // global UT = avg (ut in & out) = 80 s/to
 		}else{$ut = ( $dp->getLet() / 36 );}
@@ -330,20 +397,59 @@ class ProductivityController extends Controller
 
 		foreach ($u->getInputEntries() as $e) {
 	    	foreach ($e->getActivityHours() as $a) {
-	        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
-	        	if($k === false){
-	            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
-	            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
-	          	}
-	          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
-	            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
-	          	}else{	
-	            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
-	          	}   
+	    		//////////////////////EXCLUDE SHIT TO EXCLUDE if rep and cc exist//////////////////
+	    		if( isset($data[$repId]) && isset($data[$ccId]) ){
+		    		if( $a->getActivity()->getId() != 8 && $a->getActivity()->getId() != 10 && $a->getActivity()->getId() != 13 ){
+		    		///////////////////////////////////////////////////////////////
+			        	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+			            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 10){
+			        	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$repId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$repId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$repId][$s]['activities']['data'])){
+			            	$data[$repId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$repId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }elseif($a->getActivity()->getId() == 8){
+			        	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			        	if($k === false){
+			            	$data[$ccId][$s]['activities']['cat'][] = $a->getActivity()->getName();
+			            	$k = array_search($a->getActivity()->getName(), $data[$ccId][$s]['activities']['cat']);
+			          	}
+			          	if(array_key_exists($k, $data[$ccId][$s]['activities']['data'])){
+			            	$data[$ccId][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+			          	}else{
+			            	$data[$ccId][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+			          	}
+			        }
+			    }else{
+			    	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+		        	if($k === false){
+		            	$data[$t][$s]['activities']['cat'][] = $a->getActivity()->getName();
+		            	$k = array_search($a->getActivity()->getName(), $data[$t][$s]['activities']['cat']);
+		          	}
+		          	if(array_key_exists($k, $data[$t][$s]['activities']['data'])){
+		            	$data[$t][$s]['activities']['data'][$k] += $a->getRegularHours() + $a->getOtHours();
+		          	}else{
+		            	$data[$t][$s]['activities']['data'][$k] = $a->getRegularHours() + $a->getOtHours();
+		          	}
+			    }   
 	        }
 	    }
 
-	    $support = array_search("Support (Admin, CCMP)", $data[$t][$s]['activities']['cat']);
+	    $support = array_search("Admin", $data[$t][$s]['activities']['cat']);
 	    if ($support !== false && $data[$t][$s]['report']['wh'] > 0){
 	    	$data[$t][$s]['report']['ksr'] = round( ( $data[$t][$s]['report']['wh'] - $data[$t][$s]['activities']['data'][$support] )*100 / $data[$t][$s]['report']['wh'] , 1);
 	    }
@@ -381,8 +487,8 @@ class ProductivityController extends Controller
 	}
 
 	public function forgetKeys($data){
-
-		for ($t=0; $t < 10; $t++) { 
+		///////BAD BAD BAD rethink dat shite///////
+		for ($t=0; $t < 16; $t++) { 
 			for ($s=0; $s < 4; $s++) { 
 				if(isset( $data[$t][$s] , $data )){
 					foreach ($data[$t][$s]['prod'] as $d) {

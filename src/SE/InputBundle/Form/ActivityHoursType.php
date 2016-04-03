@@ -5,6 +5,7 @@ namespace SE\InputBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class ActivityHoursType extends AbstractType
 {
@@ -19,7 +20,13 @@ class ActivityHoursType extends AbstractType
                 'class'    => 'SEInputBundle:Activity',
                 'property' => 'name', 
                 'multiple' => false,
-                'expanded' => false
+                'expanded' => false,
+                'query_builder' => function(EntityRepository $er) {
+                    return $er->createQueryBuilder('a')
+                            ->select('a')
+                            ->where("a.statusControl = 1")
+                            ->orderBy('a.name', 'ASC');
+                    }
                 ), array('required' => true))
             ->add('regularHours', 'number')
             ->add('otHours', 'number')

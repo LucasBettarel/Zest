@@ -299,7 +299,7 @@ input.gn-search:focus {
 .employee{background-color: #A38F84;}
 .activity{background-color: #9365B8;}
 
-li.active{
+.gn-menu li.active{
   background: #444;
   transition: background 0.4s;
 }

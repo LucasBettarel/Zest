@@ -118,9 +118,9 @@ function createGauge(json, team, shift){
             }
         }
     }
-};
+  };
   // The speed gauge
-$('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
+  $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
         max: 10,
@@ -145,9 +145,9 @@ $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
             valueSuffix: 'to line/h'
         }
     }]
-}));
+  }));
 
-$('#container-activities').highcharts({
+    $('#container-activities').highcharts({
         chart: {
             type: 'column'
         },
@@ -313,7 +313,7 @@ function loadTeamCharts(j, t, s, m, p, a){
   }
 
   if (t == 0){
-    for (var i = 0; i <= 8; i++) {
+    for (var i = 0; i <= 16; i++) { //16 is bad, better json.lentgh (undefined right now)
       if(typeof(j[i]) != "undefined" && j[i] !== null && i != 6) {
         m.addSeries({
           name : $('#filters .teams a#'+i).html(),
