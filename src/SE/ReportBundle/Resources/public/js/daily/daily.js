@@ -114,7 +114,7 @@ function createGauge(json, team, shift){
     }
   };
   // The speed gauge
-$('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
+  $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
     yAxis: {
         min: 0,
         max: 10,
@@ -139,9 +139,9 @@ $('#container-prod').highcharts(Highcharts.merge(gaugeOptions, {
             valueSuffix: 'to line/h'
         }
     }]
-}));
+  }));
 
-$('#container-activities').highcharts({
+  $('#container-activities').highcharts({
         chart: {
             type: 'column'
         },
