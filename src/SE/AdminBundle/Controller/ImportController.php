@@ -60,14 +60,46 @@ class ImportController extends Controller
     $request = $this->get('request');        
     $idImport = $request->get('idImport');
 
+    $consoleNB=0;
+
     $deleteImport = $em->getRepository('SEInputBundle:SapImports')->findOneBy(array('id' => $idImport));
     if($deleteImport){
+        $dateImport = $deleteImport->getDate();
         //look for duplicate
-        $duplicateImport = $em->getRepository('SEInputBundle:SapImports')->findBy(array('date' => $deleteImport->getDate()));
+        $duplicateImport = $em->getRepository('SEInputBundle:SapImports')->findBy(array('date' => $dateImport));
+        $allSAProws - $em->getRepository('SEInputBundle:saprf')->findBy(array('date_import') => $dateImport));
+
         if(sizeof($duplicateImport)>1){
-            $response = array("code" => 100, "success" => "duplicate found : "+sizeof($duplicateImport));
+            //find duplicaterows in saprf and delete them
+            foreach ($allSAProws as $SapRow) {
+                foreach ($allSAProws as $duplicateSearch) {
+                    if($SapRow->getTransferOrder() == $duplicateSearch->getTransferOrder() &&
+                        $SapRow->getMaterial() == $duplicateSearch->getMaterial() &&
+                        $SapRow->getDateConfirmation() == $duplicateSearch->getDateConfirmation() &&
+                        $SapRow->getTimeConfirmation() == $duplicateSearch->getTimeConfirmation() &&
+                        $SapRow->getUser() == $duplicateSearch->getUser() &&
+                        $SapRow->getSourceStorageBin() == $duplicateSearch->getSourceStorageBin() &&
+                        $SapRow->getDestinationStorageType() == $duplicateSearch->getDestinationStorageType() &&
+                        $SapRow->getId() != $duplicateSearch->getId()){
+
+                        $consoleNB+=1;
+ //                       $em->remove($duplicateSearch);
+                    }
+                }    
+            }
+
+            $response = array("code" => 100, "success" => true, "comment" => "Duplicate(s) found : number = "+sizeof($duplicateImport)+" - "+$consoleNB+" rows deleted");
         }else{
-            $response = array("code" => 100, "success" => "no duplicate");
+            foreach ($allSAProws as $SapRow) {
+                $consoleNB+=1;
+ //               $em->remove($SapRow);  
+            }
+            $response = array("code" => 100, "success" => true, "comment" => "No Duplicate found - "+$consoleNB+" rows deleted");
+        }
+/*
+        $resetInputs = $em->getRepository('SEInputBundle:UserInput')->findBy(array('date_input') => $dateImport));
+        foreach ($resetInputs as $i) {
+            $i->setProcess(0);   
         }
 /*
 
