@@ -67,7 +67,7 @@ class ImportController extends Controller
         $dateImport = $deleteImport->getDate();
         //look for duplicate
         $duplicateImport = $em->getRepository('SEInputBundle:SapImports')->findBy(array('date' => $dateImport));
-        $allSAProws - $em->getRepository('SEInputBundle:saprf')->findBy(array('date_import') => $dateImport));
+        $allSAProws = $em->getRepository('SEInputBundle:SAPRF')->getDayLines($dateImport);
 
         if(sizeof($duplicateImport)>1){
             //find duplicaterows in saprf and delete them
@@ -88,13 +88,13 @@ class ImportController extends Controller
                 }    
             }
 
-            $response = array("code" => 100, "success" => true, "comment" => "Duplicate(s) found : number = "+sizeof($duplicateImport)+" - "+$consoleNB+" rows deleted");
+            $response = array("code" => 100, "success" => true, "comment" => "Duplicate(s) found : number = ".sizeof($duplicateImport)." - ".$consoleNB." rows deleted");
         }else{
             foreach ($allSAProws as $SapRow) {
                 $consoleNB+=1;
  //               $em->remove($SapRow);  
             }
-            $response = array("code" => 100, "success" => true, "comment" => "No Duplicate found - "+$consoleNB+" rows deleted");
+            $response = array("code" => 100, "success" => true, "comment" => "No duplicate".sizeof($allSAProws)." found - ".$consoleNB." rows deleted");
         }
 /*
         $resetInputs = $em->getRepository('SEInputBundle:UserInput')->findBy(array('date_input') => $dateImport));
