@@ -60,99 +60,49 @@ class ImportController extends Controller
     $request = $this->get('request');        
     $idImport = $request->get('idImport');
 
-    $consoleNB=0;
+    $rowsNB=0;
+    $importsNB=0;
+    $inputsNB=0;
+    $entriesNB=0;
 
     $deleteImport = $em->getRepository('SEInputBundle:SapImports')->findOneBy(array('id' => $idImport));
     if($deleteImport){
         $dateImport = $deleteImport->getDate();
-        //look for duplicate
+        
+        // if duplicate import, take all of them
         $duplicateImport = $em->getRepository('SEInputBundle:SapImports')->findBy(array('date' => $dateImport));
         $allSAProws = $em->getRepository('SEInputBundle:SAPRF')->getDayLines($dateImport);
-
-        if(sizeof($duplicateImport)>1){
-            //find duplicaterows in saprf and delete them
-            foreach ($allSAProws as $SapRow) {
-                foreach ($allSAProws as $duplicateSearch) {
-                    if($SapRow->getTransferOrder() == $duplicateSearch->getTransferOrder() &&
-                        $SapRow->getMaterial() == $duplicateSearch->getMaterial() &&
-                        $SapRow->getDateConfirmation() == $duplicateSearch->getDateConfirmation() &&
-                        $SapRow->getTimeConfirmation() == $duplicateSearch->getTimeConfirmation() &&
-                        $SapRow->getUser() == $duplicateSearch->getUser() &&
-                        $SapRow->getSourceStorageBin() == $duplicateSearch->getSourceStorageBin() &&
-                        $SapRow->getDestinationStorageType() == $duplicateSearch->getDestinationStorageType() &&
-                        $SapRow->getId() != $duplicateSearch->getId()){
-
-                        $consoleNB+=1;
- //                       $em->remove($duplicateSearch);
-                    }
-                }    
-            }
-
-            $response = array("code" => 100, "success" => true, "comment" => "Duplicate(s) found : number = ".sizeof($duplicateImport)." - ".$consoleNB." rows deleted");
-        }else{
-            foreach ($allSAProws as $SapRow) {
-                $consoleNB+=1;
- //               $em->remove($SapRow);  
-            }
-            $response = array("code" => 100, "success" => true, "comment" => "No duplicate".sizeof($allSAProws)." found - ".$consoleNB." rows deleted");
+        
+        //delete all that shit
+        foreach ($allSAProws as $r) {
+            $rowsNB+=1;
+ //           $em->remove($r);
         }
-/*
-        $resetInputs = $em->getRepository('SEInputBundle:UserInput')->findBy(array('date_input') => $dateImport));
+        foreach ($duplicateImport as $d) {
+            $importsNB+=1;
+ //           $em->remove($d);
+        }
+        $resetInputs = $em->getRepository('SEInputBundle:UserInput')->findBy(array('dateInput' => $dateImport));
         foreach ($resetInputs as $i) {
-            $i->setProcess(0);   
-        }
-/*
-
-
-
-
-      $deleteSAPImport = $em->getRepository('SEInputBundle:SA')->findBy(array('user_input' => $idInput));
-      if($deleteEntries){
-        foreach ($deleteEntries as $deleteEntry) {
-          $deleteActivityHours = $em->getRepository('SEInputBundle:ActivityHours')->findBy(array('input' => $deleteEntry));
-          if ($deleteActivityHours) {
-            foreach ($deleteActivityHours as $deleteActivityHour) {
-              // un-record to lines too
-              foreach ($em->getRepository('SEInputBundle:SAPRF')->getRecordedTo($deleteInput->getDateInput(), $deleteEntry->getSesa()) as $recordedTo) {
-                $recordedTo->setRecorded(0);
-              }
-              $em->remove($deleteActivityHour);
+            /*
+            $i->setTotalToInput(0);
+            $i->setManualTo(0);
+            $i->setAutoTo(0);
+            $i->setProcess(0);
+            */   
+            $inputsNB+=1;
+            foreach ($i->getInputEntries() as $e) {
+                 /*
+                $e->setTotalTo(0);
+                */   
+                $entriesNB+=1;
             }
-          }
-          $em->remove($deleteEntry);
         }
-      }
-      
-      //reset manual TO Lines
-
-      $manualTOlines = $em->getRepository('SEInputBundle:SAPRF')->resetGeneralManualTo($deleteInput->getDateInput(), $deleteInput->getTeam()->getId());
-      //time definition
-      $otStart = $deleteInput->getOtStartTime();
-      $otEnd = $deleteInput->getOtEndTime();
-      $start = $deleteInput->getShift()->getStartTime();
-      $end = $deleteInput->getShift()->getEndTime();
-      $regularReverse = ($start < $end ? true : false);
-      $otReverse = ($otStart > $otEnd ? true : false);
-
-      if($manualTOlines){
-        foreach ($manualTOlines as $manualToLine) {
-          $timeConf = $manualToLine->getTimeConfirmation(); 
-          //if inside right time interval + to line not already affected
-          if($manualToLine->getRecorded() == 1){ 
-            if( ( $regularReverse and ($timeConf <= $end) and ($timeConf >= $start) ) or ( !$regularReverse and ( ( $timeConf >= $start ) or ( $timeConf <= $end ) ) ) ) { //regular hours
-              $manualToLine->setRecorded(null);  
-            }
-          }
-        }
-      }
-
-      $em->remove($deleteInput);
-      $em->flush();
-
-      $response = array("code" => 100, "success" => true);
-*/
+        
+        $response = array("code" => 100, "success" => true, "comment" => "Import(s) deleted: ".$importsNB." - SAP Lines deleted: ".$rowsNB." - Inputs resetted: ".$inputsNB." - Entries resetted: ".$entriesNB);
+        
     }else{
-      $response = array("code" => 400, "success" => false);
+      $response = array("code" => 400, "success" => false, "comment" => "Import not found");
     }
 
     return new Response(json_encode($response)); 

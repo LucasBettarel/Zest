@@ -1,16 +1,27 @@
 $(document).ready(function() {
 
 var id;
+var modal = $('.modal');
 
-    $(document).on('click', '#confirmDelete', function(e){
-      e && e.preventDefault();
-      deleteImport(id);
-    });
+  $(document).on('click', '#confirmDelete', function(e){
+    e && e.preventDefault();
+    modal.find('button').addClass('disabled');
+    $(this).text('Wait...')
+    deleteImport(id);
+  });
 
-    $(document).on('click', '#deleteImport', function(e){
-      e && e.preventDefault();
-      id = $(this).attr('data-id');
-    });
+  $(document).on('click', '#deleteImport', function(e){
+    e && e.preventDefault();
+    id = $(this).attr('data-id');
+  });
+
+  $('#deleteModal').on('shown.bs.modal', function (e) {
+    e && e.preventDefault();
+    modal.find('.modal-title').html("<i class='glyphicon glyphicon-alert'> </i> Warning!");
+    modal.find('.modal-body').html('This function must be used only when an undesired behavior created a duplicate record !<br>It will reset the productivity associated and delete the TO Lines imported.');
+    modal.find('#confirmDelete').show();
+    modal.find('.modal-footer button:first').text('Cancel');
+  })
 
 });
 
@@ -19,14 +30,18 @@ function deleteImport(id){
       ajaxDeleteImport,               
       {idImport: id}, 
       function(response){
-        console.log(response);
-/*        if(response.code == 100 && response.success){
-          console.log('import found, deleted', $('#imports [data-id="'+id+'"]').closest('tr'));
+        if(response.code == 100 && response.success){
+          $('.modal .modal-title').text('Import deleted !');
+          $('.modal .modal-body').text(response.comment);
           $('#imports [data-id="'+id+'"]').closest('tr').remove();
         }
         else{
-            alert('Sorry, a strange error occurred... Please try again or contact Lucas !');
-        }*/
+          $('.modal .modal-title').text('Sorry, a strange error occured...');
+          $('.modal .modal-body').text(response.comment);
+        }
+        $('.modal #confirmDelete').hide();
+        $('.modal-footer button:first').text('Close');
+        $('.modal button').removeClass('disabled');
       },
       "json");    
 }
