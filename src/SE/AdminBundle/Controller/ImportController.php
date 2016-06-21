@@ -76,28 +76,26 @@ class ImportController extends Controller
         //delete all that shit
         foreach ($allSAProws as $r) {
             $rowsNB+=1;
- //           $em->remove($r);
+            $em->remove($r);
         }
         foreach ($duplicateImport as $d) {
             $importsNB+=1;
- //           $em->remove($d);
+            $em->remove($d);
         }
         $resetInputs = $em->getRepository('SEInputBundle:UserInput')->findBy(array('dateInput' => $dateImport));
         foreach ($resetInputs as $i) {
-            /*
             $i->setTotalToInput(0);
             $i->setManualTo(0);
             $i->setAutoTo(0);
             $i->setProcess(0);
-            */   
             $inputsNB+=1;
             foreach ($i->getInputEntries() as $e) {
-                 /*
-                $e->setTotalTo(0);
-                */   
+                $e->setTotalTo(0);  
                 $entriesNB+=1;
             }
         }
+
+        $em->flush();
         
         $response = array("code" => 100, "success" => true, "comment" => "Import(s) deleted: ".$importsNB." - SAP Lines deleted: ".$rowsNB." - Inputs resetted: ".$inputsNB." - Entries resetted: ".$entriesNB);
         

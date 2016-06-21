@@ -19,7 +19,7 @@ var modal = $('.modal');
     e && e.preventDefault();
     modal.find('.modal-title').html("<i class='glyphicon glyphicon-alert'> </i> Warning!");
     modal.find('.modal-body').html('This function must be used only when an undesired behavior created a duplicate record !<br>It will reset the productivity associated and delete the TO Lines imported.');
-    modal.find('#confirmDelete').show();
+    modal.find('#confirmDelete').text('Delete import').show();
     modal.find('.modal-footer button:first').text('Cancel');
   })
 
