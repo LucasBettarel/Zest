@@ -148,3 +148,7 @@
 #presence-container[disabled],  {
     pointer-events: none;
 }
+
+#details-tabs{
+	padding-bottom: 0px;
+}

@@ -58,9 +58,12 @@ class AttendanceRefresher
 				$ottohr = 0;
 				$employeeId = $inputEntry->getEmployee()->getMasterId();
 				if($inputEntry->getPresent() == 1 ){
-					//go into activities to remove this fucking transfer out mess...
-					//TODO : update when this transfer out fuck will be better
-					if($inputEntry->getActivityHours()){
+
+/////////////////////////////////UPDATE 25/02/16
+// From 01/02/16 onwards, TRANSFER OUT hours are removed from inputentry->totalhours directly in the Entity->userInput->computeHours() function
+// no need to remove them here anymore.
+
+/*					if($inputEntry->getActivityHours()){
 						foreach ($inputEntry->getActivityHours() as $activityHour) {
 						 	if($activityHour->getActivity()->getId() == 13){
 						 		$regtohr = $activityHour->getRegularHours();
@@ -69,14 +72,14 @@ class AttendanceRefresher
 						 	}
 						}
 					}
-					//update hours
+*/					//update hours
 					$jsonAttendance[$employeeId][$dateInput]['presence'] = 1;
 					$jsonAttendance[$employeeId][$dateInput]['absence'] = 0;
 					$jsonAttendance[$employeeId][$dateInput]['halfday'] = $inputEntry->getHalfday();
 
-					$jsonAttendance[$employeeId][$dateInput]['othr'] += $inputEntry->getTotalOvertime() - $ottohr;
-					$jsonAttendance[$employeeId][$dateInput]['reghr'] += $inputEntry->getTotalHours() - $inputEntry->getTotalOvertime() - $regtohr;
-					$jsonAttendance[$employeeId][$dateInput]['tothr'] += $inputEntry->getTotalHours() - $ottohr - $regtohr;
+					$jsonAttendance[$employeeId][$dateInput]['othr'] += $inputEntry->getTotalOvertime(); // - $ottohr;
+					$jsonAttendance[$employeeId][$dateInput]['reghr'] += $inputEntry->getTotalHours() - $inputEntry->getTotalOvertime(); // - $regtohr;
+					$jsonAttendance[$employeeId][$dateInput]['tothr'] += $inputEntry->getTotalHours(); // - $ottohr - $regtohr;
 				}else{
 					$jsonAttendance[$employeeId][$dateInput]['presence'] = 0;
 					//TODO : Update when halfdays will be managed
@@ -246,8 +249,10 @@ class AttendanceRefresher
 	    	if( $i->getActivityHours() ){
 	    		foreach ($i->getActivityHours() as $a) {
 	    			if($a->getActivity()->getId() == 13){
-				 		$regtohr = $a->getRegularHours();
-				 		$ottohr = $a->getOtHours();
+//UPDATE 25/02 
+//same here : the counting of transfer out hours has already been done in entity->userinput->computeHours()
+//				 		$regtohr = $a->getRegularHours();
+//				 		$ottohr = $a->getOtHours();
 				 		$transfer = true;
 					}else{
 						$det['tab'][$j]['row'][] = "<tr><td>".$a->getActivity()->getName()."</td><td>".$a->getRegularHours()."</td><td>".$a->getOtHours()."</td></tr>";
@@ -255,9 +260,9 @@ class AttendanceRefresher
 		    	}
 		    }
 		    $det['tab'][$j]['header'] = $transfer ? "<i class='glyphicon glyphicon-log-out text-danger' data-toggle='tooltip' data-placement='top' title='Transfer Out'> </i> ".$i->getUserInput()->getTeam()->getName()." - Shift ".$i->getUserInput()->getShift()->getId()." - ".$i->getSesa() : $i->getUserInput()->getTeam()->getName()." - Shift ".$i->getUserInput()->getShift()->getId()." - ".$i->getSesa();
-	    	$det['totot'] += $i->getTotalOvertime() - $ottohr;
-	    	$det['totreg'] += $i->getTotalHours() - $i->getTotalOvertime() - $regtohr;;
-	    	$det['tothr'] += $i->getTotalHours() - $ottohr - $regtohr;
+	    	$det['totot'] += $i->getTotalOvertime();// - $ottohr;
+	    	$det['totreg'] += $i->getTotalHours() - $i->getTotalOvertime();// - $regtohr;
+	    	$det['tothr'] += $i->getTotalHours();// - $ottohr - $regtohr;
 	    	$det['to'] += $i->getTotalTo();
 	    	$det['whr'] += $i->getTotalWorkingHours();
 	    	if ( $det['whr'] != 0 ){ $det['res'] = round( $det['to'] / $det['whr'] , 2); }
