@@ -33,3 +33,9 @@ se_admin_editor_ignore:
     defaults: { _controller: SEAdminBundle:Editor:ignore }
     requirements:
         _method:  POST
+
+se_admin_import_delete:
+    pattern:  /import/delete
+    defaults: { _controller: SEAdminBundle:Import:delete }
+    requirements:
+        _method:  POST
