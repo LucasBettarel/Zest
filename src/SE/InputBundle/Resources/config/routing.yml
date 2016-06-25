@@ -80,3 +80,10 @@ se_input_review_edit:
     requirements:
         _method:  POST
         id:  \d+
+
+se_input_review_edit_overtime:
+    pattern:  review/edit/overtime/{id}
+    defaults: { _controller: SEInputBundle:Dashboard:overtimeEdit }
+    requirements:
+        _method:  POST
+        id:  \d+

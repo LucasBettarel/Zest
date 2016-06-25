@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
     initialize();
+    $('.clockpicker').clockpicker();
 
     var table = $('#table').DataTable();
 
@@ -15,6 +16,14 @@ $(document).ready(function() {
         formResetter();
     });
 
+    $('#overtimeModal').on('show.bs.modal', function (event) {
+        $(this).find('#result-alert').hide();
+        $(this).find('#form-content').show();
+        $(this).find('#cancel-overtime').text('Cancel');
+        $('#overtimeModal .modal-footer button[type="submit"]').prop('disabled', false).show();
+        $(this).find('#se_inputbundle_userinput_editovertime_process').val(0).prop('checked', false);
+    });
+
     $('#details-tabs a').click(function (e) {
       e.preventDefault();
       $(this).tab('show');
@@ -26,6 +35,41 @@ $(document).ready(function() {
             $('#details-tabs .dt-buttons').toggleClass('hide');
             $('#details-tabs #table-to_filter').toggleClass('hide');
         }
+    });
+
+    $('body').on('submit', '.overtimeForm', function (e) {
+ 
+        e.preventDefault();
+        $('#overtimeModal .overtime-submit').prop('disabled', true);
+    
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+        })
+        .done(function (data) {
+            if (typeof data.message !== 'undefined') {
+                $('#overtimeModal #result-alert').show();
+                $('#overtimeModal #form-content').hide();
+                $('#overtimeModal #cancel-overtime').text('Close');
+                $('#overtimeModal .modal-footer button[type="submit"]').hide();
+                $('.panel #ot-start-time').text( $('#overtimeModal #se_inputbundle_userinput_editovertime_otStartTime ').val() );
+                $('.panel #ot-end-time').text( $('#overtimeModal #se_inputbundle_userinput_editovertime_otEndTime ').val() );
+            }
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            if (typeof jqXHR.responseJSON !== 'undefined') {
+                if (jqXHR.responseJSON.hasOwnProperty('form')) {
+                    //$('#ajaxForm').html(jqXHR.responseJSON.form);
+                }
+                $('#overtimeModal form #errors').html(jqXHR.responseJSON.message).parent(".col-md-12").removeClass('hide');
+                $('#overtimeModal .modal-footer button[type="submit"]').prop('disabled', false);
+ 
+            } else {
+                alert(errorThrown);
+            }
+ 
+        });
     });
 
 });
@@ -162,9 +206,9 @@ function createGauge(){
 function getForm(type, entryId){
     if( type == "@new" ){
         entryId = null;
-        $('.modal-title').text('New Entry');
-        $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-info');
-        $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Missing Employee ?</strong><br>You can add his details here and validate. It will be added to the input after review. Productivity will be recalculated.');
+        $('#formModal .modal-title').text('New Entry');
+        $('#formModal .modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-info');
+        $('#formModal .modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Missing Employee ?</strong><br>You can add his details here and validate. It will be added to the input after review. Productivity will be recalculated.');
         $('#se_inputbundle_editorentry_employee').val(null);
         $('#se_inputbundle_editorentry_sesa').val(null);
         $('#se_inputbundle_editorentry_editorType').val(1);
@@ -173,14 +217,14 @@ function getForm(type, entryId){
         //new
         $('#presence-container').attr('disabled','disabled');
         if( type == "@edit" ){
-            $('.modal-title').text('Edit Entry');
-            $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-warning');
-            $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Editing an Employee entry?</strong><br>You can edit the details here and validate. The input Productivity will be updated after review.');
+            $('#formModal .modal-title').text('Edit Entry');
+            $('#formModal .modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-warning');
+            $('#formModal .modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Editing an Employee entry?</strong><br>You can edit the details here and validate. The input Productivity will be updated after review.');
             $('#se_inputbundle_editorentry_editorType').val(2);
         } else if ( type == "@delete"){
-            $('.modal-title').text('Delete Entry');
-            $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-danger');
-            $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Delete Employee ?</strong><br>If you delete this entry, you have to justify why the employee was not at work. Please submit to continue.');
+            $('#formModal .modal-title').text('Delete Entry');
+            $('#formModal .modal-body #information-alert').removeClass('alert-info alert-success alert-warning alert-danger').addClass('alert-danger');
+            $('#formModal .modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Delete Employee ?</strong><br>If you delete this entry, you have to justify why the employee was not at work. Please submit to continue.');
             $('#se_inputbundle_editorentry_editorType').val(3);
         }
         $.get(
@@ -196,8 +240,8 @@ function getForm(type, entryId){
 
             updatePresenceToggler(r.entry[0]['present'], r.entry[0]['halfday']);
 
-            if(r.request[0] != null){$('.modal-body #override-alert').removeClass('hide');}
-            if(r.entry[0]['comments'] != null || type == "@delete"){$('.modal-body .txtarea-sm').removeClass('hide');}
+            if(r.request[0] != null){$('#formModal .modal-body #override-alert').removeClass('hide');}
+            if(r.entry[0]['comments'] != null || type == "@delete"){$('#formModal .modal-body .txtarea-sm').removeClass('hide');}
 
             for (var i = 0; i < r.entry.length; i++) {
                 if(i>0){addSubElement($('#activities-prototype'));}
@@ -228,7 +272,7 @@ function getForm(type, entryId){
     $('body').on('submit', '.ajaxForm', function (e) {
  
         e.preventDefault();
-        $('.modal-footer button[type="submit"]').prop('disabled', true);
+        $('#formModal .modal-footer button[type="submit"]').prop('disabled', true);
         $('#entry-details input, #entry-details select').prop('disabled', false);
         $('#presence-container').removeAttr('disabled');
 
@@ -239,10 +283,10 @@ function getForm(type, entryId){
         })
         .done(function (data) {
             if (typeof data.message !== 'undefined') {
-                $('.modal-body #information-alert').removeClass('alert-info alert-success alert-warning').addClass('alert-success');
-                $('.modal-body #override-alert').addClass('hide');
-                $('.modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Entry saved successfully!</strong><br>The input will be updated as soon as the changes will be reviewed.');
-                $('.modal-body form').addClass('hide');
+                $('#formModal .modal-body #information-alert').removeClass('alert-info alert-success alert-warning').addClass('alert-success');
+                $('#formModal .modal-body #override-alert').addClass('hide');
+                $('#formModal .modal-body #information-alert').html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Entry saved successfully!</strong><br>The input will be updated as soon as the changes will be reviewed.');
+                $('#formModal .modal-body form').addClass('hide');
             }
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
@@ -251,7 +295,7 @@ function getForm(type, entryId){
                     //$('#ajaxForm').html(jqXHR.responseJSON.form);
                 }
                 $('form #errors').html(jqXHR.responseJSON.message).parent(".col-md-12").removeClass('hide');
-                $('.modal-footer button[type="submit"]').prop('disabled', false);
+                $('#formModal .modal-footer button[type="submit"]').prop('disabled', false);
  
             } else {
                 alert(errorThrown);

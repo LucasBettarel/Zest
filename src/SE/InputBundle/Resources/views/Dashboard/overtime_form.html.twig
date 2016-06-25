@@ -1,0 +1,26 @@
+{{ form_start(overtimeForm, {'attr': {'class': 'form-inline overtimeForm', 'id' : 'overtimeForm'}}) }}
+
+  	<div class="col-md-12 hide">
+    	<div id="errors" class="alert alert-danger">
+      		{{ form_errors(overtimeForm) }}
+    	</div>
+	</div>
+
+    <div class="input-ot-time">
+        <div class="pull-left input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true" data-toggle="tooltip" title="Start overtime">
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+          </span>
+          {{ form_widget(overtimeForm.otStartTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
+        </div>
+        <div class="input-group clockpicker" data-placement="bottom" data-align="top" data-autoclose="true" data-toggle="tooltip" title="End overtime">
+          {{ form_widget(overtimeForm.otEndTime, {'attr': {'class': 'form-control', 'type' : 'text'}}) }}
+          <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+          </span>
+        </div>
+      </div>
+
+  {{ form_widget(overtimeForm) }}    
+  {{ form_rest(overtimeForm) }}
+  {{ form_end(overtimeForm) }}

@@ -57,8 +57,9 @@
                   <td><strong>Overtime</strong></td>
                   <td class="text-right">
                     {{ input.totalOvertimeInput }}
+                    <a href="" id="overtime-edit" data-toggle="modal" data-target="#overtimeModal"><i class="glyphicon glyphicon-edit text-warning"></i></a>
                     {% if input.totalOvertimeInput != 0 %}
-                      <br><strong>{{ input.otStartTime|date('H:i') }}</strong> to <strong>{{ input.otEndTime|date('H:i') }}</strong>
+                      <br><strong id="ot-start-time">{{ input.otStartTime|date('H:i') }}</strong> to <strong id="ot-end-time">{{ input.otEndTime|date('H:i') }}</strong>
                     {% else %}
                       <br>(no overtime recorded)
                     {% endif %}
@@ -242,6 +243,35 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" form="ajaxForm" value="submit" class="btn btn-success pull-right"><i class="glyphicon glyphicon-send"> </i> Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="overtimeModal" tabindex="-1" role="dialog" aria-labelledby="overtimeModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Edit overtime timings</h4>
+        </div>
+        <div class="modal-body">
+          <div id="result-alert" class="alert alert-dismissible" role="alert">
+            <i class="glyphicon glyphicon-ok text-success"> </i> 
+            Your update has been transmitted successfully!<br>
+            You will see the updated results on productivity by the next refresh.
+          </div>
+          <div id="form-content">
+            Please select the new overtime timings:<br>
+            
+            {{ include("SEInputBundle:Dashboard:overtime_form.html.twig") }}
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="cancel-overtime" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="submit" form="overtimeForm" value="submit" class="btn btn-success pull-right"><i class="glyphicon glyphicon-send"> </i> Submit</button>
+
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ use SE\InputBundle\Form\EditorEntryType;
 use SE\InputBundle\Form\UserInputType;
 use SE\InputBundle\Form\InputEntryType;
 use SE\InputBundle\Entity\InputReview;
+use SE\InputBundle\Form\UserInputEditOvertimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -192,10 +193,16 @@ class DashboardController extends Controller
         'method' => 'POST',
     ));
 
+    $overtimeForm = $this->createForm(new UserInputEditOvertimeType($id), $userInput, array(
+        'action' => $this->generateUrl('se_input_review_edit_overtime', array('id' => $id)),
+        'method' => 'POST',
+    ));
+
     return $this->render('SEInputBundle:Dashboard:review_details.html.twig', array(
       'input' => $userInput,
       'lines' => $lines,
-      'form' => $form->createView()
+      'form' => $form->createView(),
+      'overtimeForm' =>$overtimeForm->createView()
     ));
   }
 
@@ -346,6 +353,42 @@ class DashboardController extends Controller
                 array(
             'entity' => $editorEntry,
             'form' => $form->createView(),
+        ))), 400);
+ 
+    return $response; 
+  }
+
+  public function overtimeEditAction($id, Request $request)
+  {
+    $em = $this->getDoctrine()->getManager();
+
+    $userInput = $em->getRepository('SEInputBundle:UserInput')->find($id);
+
+    if (null === $userInput) {
+      throw new NotFoundHttpException("User Input ".$id." not found");
+    }
+
+    $form = $this->createForm(new UserInputEditOvertimeType(), $userInput);
+
+    if ($form->handleRequest($request)->isValid()) {
+      $em->flush();
+
+      $request->getSession()->getFlashBag()->add('notice', 'UserInput updated.');
+
+      return new JsonResponse(array('message' => 'Success!'), 200);
+    }
+
+    $validator = $this->get('validator');
+    $errors = $validator->validate($userInput);
+    $errorsString = (count($errors) > 0) ? $this->render('SEInputBundle:Utilities:validation.html.twig', array('errors' => $errors)) : "";
+
+    $response = new JsonResponse(
+      array(
+        'message' => strstr((string) $errorsString, '<h4>'),
+        'form' => $this->renderView('SEInputBundle:Dashboard:overtime_form.html.twig',
+                array(
+            'entity' => $userInput,
+            'overtimeForm' => $form->createView(),
         ))), 400);
  
     return $response; 
