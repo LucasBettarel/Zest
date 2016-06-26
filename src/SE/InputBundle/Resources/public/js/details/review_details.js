@@ -204,6 +204,7 @@ function createGauge(){
 }
 
 function getForm(type, entryId){
+    $('#se_inputbundle_editorentry').hide();
     if( type == "@new" ){
         entryId = null;
         $('#formModal .modal-title').text('New Entry');
